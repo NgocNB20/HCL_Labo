@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml"
+	  xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+	  lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="regist">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"/>
+	<main class="l-page">
+        <div th:replace="~{include/header_member_regist}"></div>
+
+		<div class="l-section">
+			<div class="l-section__inner">
+				<h2 class="c-title-page"><strong>新規会員登録</strong></h2>
+				<div class="p-regist__area">
+					<h3 class="c-title-line">ご利用規約</h3>
+					<p class="c-text--m">当ショップをご利用になられるお客様は、下の「ご利用規約」を必ずお読みください。<br>ご利用規約を確認していただき、同意される方は下の「同意して送信する」ボタンを押してください。</p>
+                    <div class="p-regist__rule c-margin--s">
+    					<div class="p-regist__rule-scroll c-scroll" data-simplebar data-simplebar-auto-hide="false">
+
+                            <!--/* ご利用規約 */-->
+                            <hm:freearea key="guide_agreement"/>
+                        </div>
+                    </div>
+				</div>
+
+                <form id="indexForm" th:action="@{/interim/}" th:object="${interimModel}" method="POST" novalidate>
+                    <div class="l-form">
+                        <div class="l-form__area">
+                            <h3 class="c-title-line">仮登録メールアドレス入力</h3>
+                            <p class="c-text--m">当ショップでは、メールアドレスをIDとしてご利用いただきます。<br>会員登録されるメールアドレスを入力していただき、｢同意して送信する｣を押してください。<br>入力していただいたメールアドレスに会員登録URLを送信いたします。<br>受け取られたメールより、会員登録を進めてください。</p>
+
+                            <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m-block'}">
+                                <ul th:each="message : ${allMessages}">
+                                    <li th:utext="${message}"></li>
+                                </ul>
+                            </div>
+                            <dl class="l-form__list c-margin--s">
+                                <dt>メールアドレス <span class="l-form__list-memo">（半角英数字）</span><span class="c-require">必須</span></dt>
+                                <dd>
+                                    <input type="email" th:field="*{memberInfoMail}" name="email" autocomplete="email" placeholder="ここに入力してください" class="c-input c-input--width-l" th:errorclass="field-error" maxlength="160">
+									<p th:if="${#fields.hasErrors('memberInfoMail')}" th:errors="*{memberInfoMail}" class="c-field-error"></p>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="c-button-wrap">
+                            <a th:href="@{/}" class="c-button c-button--primary-line c-button--width-l">同意しない</a>
+                            <button name="doOnceTempMemberInfoRegist" type="submit" class="c-button c-button--primary c-button--width-l">同意して送信する</button>
+                        </div>
+    				</div>
+                </form>
+			</div>
+		</div>
+	</main>
+	<div th:replace="~{include/footer}" ></div>
+</div>
+
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+<script>
+	if(document.getElementsByClassName("c-field-error").length > 0 ||
+	 document.getElementsByClassName("global-info-message").length > 0 ||
+	 document.getElementsByClassName("c-global-error c-global-error--margin-m").length > 0) {
+		document.getElementById("indexForm").scrollIntoView();
+	}
+</script>
+</body></html>

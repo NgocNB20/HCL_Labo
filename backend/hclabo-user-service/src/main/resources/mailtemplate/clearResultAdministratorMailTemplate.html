@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>結果レポート</title>
+</head>
+<body>
+<div>
+    <div>
+        <span th:text="${admin.get('SYSTEM')} + 'の' + ${admin.get('BATCH_NAME')} + 'が終了しました。'"></span>
+        <br>
+        <br>
+        <span>-----</span>
+        <br>
+        <br>
+    </div>
+    <div>
+        <div>
+            <div>
+                <span>▼テンポラリファイル削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('FILE_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除成功ファイル数　</span>
+                <span th:text="${admin.get('FILE_CLEAR_COUNT')}"></span>
+            </div>
+            <div th:each="delete_fail_file, stat : ${deleteFailFiles}">
+                <span>　　</span>
+                <span th:text="${stat.index + 1}"></span>
+                <span> </span>
+                <span th:text="${delete_fail_file}"></span>
+                <span> の削除に失敗しました</span>
+            </div>
+            <div>
+                <span>-----</span>
+            </div>
+        </div>
+        <div>
+            <div>
+                <span>▼確認メールレコード削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('CONFIRMMAIL_RECORD_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除レコード数　</span>
+                <span th:text="${admin.get('CONFIRMMAIL_RECORD_CLEAR_COUNT')}"></span>
+            </div>
+            <br>
+        </div>
+        <div>
+            <div>
+                <span>▼プレビューアクセス制御レコード削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('PREVIEWACCESS_RECORD_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除レコード数　</span>
+                <span th:text="${admin.get('PREVIEWACCESS_RECORD_CLEAR_COUNT')}"></span>
+            </div>
+            <br>
+        </div>
+        <div>
+            <div>
+                <span>▼カート情報レコード削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('GOODSCART_RECORD_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除レコード数　</span>
+                <span th:text="${admin.get('GOODSCART_RECORD_CLEAR_COUNT')}"></span>
+            </div>
+            <br>
+        </div>
+        <div>
+            <div>
+                <span>▼あしあと情報レコード削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('FOOTPRINT_RECORD_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除レコード数　</span>
+                <span th:text="${admin.get('FOOTPRINT_RECORD_CLEAR_COUNT')}"></span>
+            </div>
+            <br>
+        </div>
+        <div>
+            <div>
+                <span>▼運営者用確認メールレコード削除</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('ADMINCONFIRMMAIL_RECORD_CLEAR_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・削除レコード数　</span>
+                <span th:text="${admin.get('ADMINCONFIRMMAIL_RECORD_CLEAR_COUNT')}"></span>
+            </div>
+            <span>-----</span>
+            <br>
+        </div>
+        
+        <div>
+            <div>
+                <span>▼アクセス情報件数通知</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('ACCESSINFO_RECORD_REPORT_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・総レコード件数　</span>
+                <span th:text="${admin.get('ACCESSINFO_ALL_RECORD_COUNT')}"></span>
+            </div>
+            <div>
+                <span>　・指定日数経過レコード件数　</span>
+                <span th:text="${admin.get('ACCESSINFO_RECORD_COUNT')}"></span>
+            </div>
+            <br>
+        </div>
+        <div>
+            <div>
+                <span>▼アクセスキーワード情報件数通知</span>
+            </div>
+            <div>
+                <span>　・処理状態　</span>
+                <span th:text="${admin.get('ACCESSSEARCHKEYWORD_RECORD_REPORT_STATUS')}"></span>
+            </div>
+            <div>
+                <span>　・総レコード件数　</span>
+                <span th:text="${admin.get('ACCESSSEARCHKEYWORD_ALL_RECORD_COUNT')}"></span>
+            </div>
+            <div>
+                <span>　・指定日数経過レコード件数　</span>
+                <span th:text="${admin.get('ACCESSSEARCHKEYWORD_RECORD_COUNT')}"></span>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+    <span>以上</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="https://www.thymeleaf.org"
+	  lang="ja">
+
+<head>
+	<th:block th:with="canonical='true'">
+		<meta th:replace="~{include/head}" />
+	</th:block>
+</head>
+
+<body id="gotop" class="p-login-user">
+	<div class="l-mainwrap">
+        <div th:replace="~{include/header-small}" />
+
+		<main class="l-page">
+
+            <div class="l-breadcrumbs">
+                <div class="l-breadcrumbs__inner">
+                    <div class="l-breadcrumbs__list">
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">ログイン</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="memberForm" th:action="@{'/signin'}" th:object="${loginModel}" method="post">
+                <div class="l-section">
+                    <div class="l-section__inner">
+                        <h2 class="c-title-page"><strong>ログイン</strong></h2>
+                        <div th:if="${param.error} and ${session.SPRING_SECURITY_LAST_EXCEPTION} != null" class="c-global-error c-global-error--margin-m">
+                            <div th:if="${param.error} and ${session.SPRING_SECURITY_LAST_EXCEPTION} != null"
+                                 th:utext="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">
+                            </div>
+                            <div th:if="${allMessages}">
+                                <ul th:each="message : ${allMessages}">
+                                    <li th:utext="${message}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="p-login-user__col2">
+                            <div class="p-login-user__member">
+                                <div class="p-login-user__member-input">
+                                    <dl class="p-login-user__list">
+                                        <dt>メールアドレス</dt>
+                                        <dd><input type="email" name="memberInfoId" id="memberInfoId"
+                                               th:field="*{memberInfoId}"
+                                               placeholder="ここに入力してください" title="ご登録メールアドレス" maxlength="160"
+                                               class="c-input"></dd>
+                                    </dl>
+                                    <dl class="p-login-user__list">
+                                        <dt>パスワード</dt>
+                                        <dd>
+                                            <div class="password-wrap">
+                                                <input type="password" name="memberInfoPassWord" id="memberInfoPassWord"
+                                                    th:field="*{memberInfoPassWord}" title="パスワード" maxlength="20"
+                                                    placeholder="ここに入力してください" class="c-input js-password-input">
+                                                <button name="" type="button" class="l-form__password js-password-btn">
+                                                    <span></span><p>パスワードを表示</p>
+                                                </button>
+                                            </div>
+                                            <a th:href="@{/reset/}" class="c-textlink c-textlink--text">
+                                                <p>パスワードをお忘れですか？</p>
+                                            </a>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div class="p-login-user__check">
+                                    <label class="c-checkbox">
+                                        <span class="c-checkbox__box">
+                                            <input name="autoLoginFlg" id="autoLoginFlg" type="checkbox" th:field="*{autoLoginFlg}" checked>
+                                            <span></span>
+                                        </span>
+                                        <p>メールアドレスの入力を省略</p>
+                                    </label>
+                                </div>
+                                <button name="" type="submit" class="c-button c-button--primary c-button--width-l"
+                                    th:text="${@environment.getProperty('two-factor-authentication.switch')} ? '認証コードを送信する' : 'ログイン'">ログイン</button>
+                            </div>
+                            <div class="p-login-user__beginner">
+                                <h3>はじめてご利用の方</h3>
+                                <p>ご利用には会員登録が必要です。</p>
+                                <a th:href="@{/interim/}" class="c-button c-button--primary-line c-button--width-l">会員登録</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+		</main>
+		<div th:replace="~{include/footer-small}" ></div>
+	</div>
+
+	<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body>
+
+</html>

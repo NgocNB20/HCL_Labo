@@ -1,0 +1,228 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+# adminSpring-web.properties
+server:
+  tomcat:
+    remoteip:
+      # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+      # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # サーバポート
+  port: ${SERVER_PORT:8580}
+  servlet:
+    # コンテキストパス
+    context-path: ${CONTEXT_PATH:/payment-service}
+    session:
+      # web.xml
+      #
+      # セッションタイムアウト（分）
+      # PCIDSS準拠対象外の場合は15分でなくてもOK
+      timeout: 15m
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    # ファイル（CSV・ZIP等）アップロード時の制御
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  mvc:
+    # spring.mvc.async.request-timeout=3m
+    async:
+      request-timeout: -1
+    # 新デザイン組み込を実施する際にThymeleaf上のcheckboxが上手くレンダリングできない事象を解決するための設定
+  thymeleaf:
+    cache: false
+    render-hidden-markers-before-checkboxes: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # 新しいconnectionが生成され、Poolに追加される前に実行されるSQL query
+      connection-init-sql: SELECT 1
+      # コネクションタイムアウト（ミリ秒）
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      # アイドルタイムアウト（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # コネクション 最大ライフタイム（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大Life Time
+      max-lifetime: 1800000
+      # connection Poolで使用する最大のconnection数
+      maximum-pool-size: 15
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+      read-only: false
+    # 接続情報
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_payment}
+    username: ${POSTGRESQL_USER:hclabo_payment}
+    password: ${POSTGRESQL_PASS:password}
+  # Rabbit Message Queue configuration
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+    # ログにユニークIDのコンフィグレーション
+  sleuth:
+    async:
+      enabled: false
+    enabled: true
+    sampler:
+      probability: 1.0
+      rate: 10
+    # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: true
+    base-url: http://localhost:9411/
+    sender:
+      type: web
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  dialect: postgres
+  fetch-size: 100
+  sql-file-repository: NO_CACHE
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 物流サービス
+base-path-logistic-service: http://localhost:18080/logistic-service
+# 受注サービス
+base-path-order-service: http://localhost:18080/order-service
+# 販売企画サービス
+base-path-price-planning-service: http://localhost:18080/price-planning-service
+# ユーザーサービス
+base-path-user-service: http://localhost:18080/user-service
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: http://localhost:18080/customize-service
+queue:
+  # オーソリ期限間近注文警告通知
+  authnotification:
+    direct: payment-auth-notification-direct
+    routing: payment-auth-notification-routing
+  # クリアバッチ
+  clear:
+    direct: payment-clear-direct
+    routing: payment-clear-routing
+  # 与信枠解放
+  creditlinerelease:
+    direct: payment-creditline-release-direct
+    routing: payment-creditline-release-routing
+  linkpaycancelforget:
+    direct: payment-link-pay-cancel-forget-direct
+    routing: payment-link-pay-cancel-forget-routing
+#
+# Log用プロパティファイル
+#
+logging:
+  config: classpath:config/hitmall/log/logback-lo.xml
+# システム名称
+system:
+  name: みんなの郵送検査室
+##########################
+## 端末識別番号暗号化キー
+accessUidEncryptKey: 2f84c3f982d9d4c4881c86f5a95988ca
+# アラートメールの設定
+# メールに記載するシステム名
+alert:
+  mail:
+    system: みんなの郵送検査室 開発環境
+# オーソリ保持期間（日）
+authory:
+  hold:
+    period: 60
+linkpay:
+  # リンク決済 決済可能期限(分)
+  expire:
+    time: 60
+  leftdays:
+    # リンク決済後日払い 支払期限切れ(キャンセル)猶予期間
+    expire: 1
+    # リンク決済後日払い 督促猶予期間
+    remind: 2
+  # その他リンク決済決済手段名
+  method:
+    other: その他
+  # リンク決済リクエスト先URL
+  request:
+    link:
+      url: 'https://pt01.mul-pay.jp/payment/GetLinkplusUrlPayment.json'
+  # リンク決済 設定ID
+  setting:
+    id: '001'
+##ショップ別最大決済金額（とりあえず１００万円）
+order:
+  max:
+    amount: 1000000
+# 商品画像相対パス(HTML, JSONで表示する場合に利用)
+images:
+  path:
+    goods: /g_images
+##自動登録用カード会社名
+##マスタに登録されていないカード会社がGMOより返却された際に
+##登録するカードブランド情報に設定
+auto:
+  regist:
+    cardbrandname: 不明カード会社
+##クレジットカードの有効期限（年）を今年から何年分出すか
+expiration:
+  date:
+    year: 20
+## バッチ設定
+batch:
+  credit:
+    limit:
+      release:
+        # 与信枠解放バッチのelapsedTime
+        elapsedTime: 20
+        # 与信枠解放バッチのspecifiedDays
+        specifiedDays: -5
+##############
+period-time-clear-batch: 70
+# メール送信開始期間（日）
+mail:
+  send:
+    start:
+      period: 14
+########### HIT-MALL独自設定 ###########
+########### 外部サービス ###########
+gmo:
+  # 3Dセキュア2.0未対応時の扱い（1:3DS1.0での認証を実施、2:エラーとして処理終了、3:通常オーソリを実施）
+  # 3DS1.0認証はサポート終了済であるため、1以外を指定すること
+  3dsecure20:
+    unsupport:
+      treatment: 3
+  # GMOの会員IDのプレフィックス文字列
+  # GMOの会員IDがプレフィックス文字列+会員SEQで生成されるので、
+  # バッティングしないように各位適当に設定してください
+  member:
+    prefix: 自分のiTECイニシャルマンNoに修正
+# 通信内容のログ出力用Interceptor
+# true=セキュリティコードなど特定のパラメータはログ出力時にマスキングする（@see paymentclient.dicon）
+paymentclient:
+  log:
+    mask: false
+########### 外部サービス ###########

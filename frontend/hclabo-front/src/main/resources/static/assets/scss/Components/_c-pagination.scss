@@ -1,0 +1,132 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-pagination {
+  $this: &;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  margin-top: 45px;
+
+  // 中間
+  &--abb {
+    display: grid;
+    place-content: center;
+    width: 20px;
+    margin: 2px 8px 0;
+
+    svg {
+      width: 100%;
+      fill: $color-ccc;
+    }
+  }
+
+  // 前へ / 次へ
+  &--prev,
+  &--next {
+    display: grid;
+    place-content: center;
+    text-align: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: $color-ccc;
+
+    svg {
+      width: 8px;
+      fill: $color-fff;
+      opacity: .5;
+    }
+  }
+
+  a#{$this}--prev,
+  a#{$this}--next {
+    background: $color-primary;
+    transition: opacity $comMS $comES;
+
+    svg {
+      opacity: 1;
+    }
+
+    &:hover {
+      @include media(lg) {
+        opacity: .5;
+      }
+    }
+  }
+
+  &--prev {
+    margin-right: 27px;
+
+    svg {
+      margin-right: 2px;
+    }
+  }
+
+  &--next {
+    margin-left: 27px;
+  }
+
+  // ページ
+  &--page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 14px;
+    transition: opacity $comMS $comES;
+    @include font-style(24, 25, 500);
+    color: $color-ccc;
+
+    &.is-current {
+      color: $color-primary;
+    }
+  }
+
+  a#{$this}--page:hover {
+    @include media(lg) {
+      opacity: .5;
+      text-decoration: underline;
+      text-underline-offset: 8px;
+    }
+  }
+
+  @include media(sm) {
+
+    margin-top: vwset(30);
+  
+    // 中間
+    &--abb {
+      width: vwset(16);
+      margin: 2px vwset(6) 0;  
+    }
+  
+    // 前へ / 次へ
+    &--prev,
+    &--next {
+      width: vwset(40);
+      height: vwset(40);
+  
+      svg {
+        width: vwset(8);
+      }
+    }
+  
+    &--prev {
+      margin-right: vwset(5);
+    }
+  
+    &--next {
+      margin-left: vwset(5);
+    }
+  
+    // ページ
+    &--page {
+      margin: 0 vwset(12);
+      @include font-sp-style(20, 20);
+    }
+  }
+}

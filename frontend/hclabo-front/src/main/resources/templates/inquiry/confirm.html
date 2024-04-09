@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<meta th:replace="~{include/head}" />
+<head>
+</head>
+
+<body id="gotop" class="p-inquiry">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page">
+      <div th:replace="~{include/headerinquiry :: headerinquiry('inquiry')}"></div>
+
+      <div class="l-section">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>お問い合わせ</strong></h2>
+          <form th:action="@{/inquiry/confirm}" th:object="${inquiryModel}" method="POST">
+
+            <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+              <ul th:each="message : ${allMessages}">
+                <li th:utext="${message}"></li>
+              </ul>
+            </div>
+
+            <div class="l-form">
+              <div class="l-form__area">
+                <p class="c-text--m">お問い合わせ内容をご確認いただき、問題なければ「送信する」ボタンを押してください。</p>
+                <h3 class="c-title-line">お問い合わせ内容の確認</h3>
+                <dl class="l-form__list">
+                  <dt>お問い合わせ分類</dt>
+                  <dd>
+                    <p class="c-text--m" th:text="*{inquiryGroupName}"></p>
+                  </dd>
+                </dl>
+                <dl class="l-form__list">
+                  <dt>氏名</dt>
+                  <dd>
+                    <p class="c-text--m" th:text="*{inquiryLastName + ' ' + inquiryFirstName}"></p>
+                  </dd>
+                </dl>
+                <dl class="l-form__list">
+                  <dt>フリガナ</dt>
+                  <dd>
+                    <p class="c-text--m" th:text="*{inquiryLastKana + ' ' + inquiryFirstKana}"></p>
+                  </dd>
+                </dl>
+                <dl class="l-form__list">
+                  <dt>メールアドレス</dt>
+                  <dd>
+                    <p class="c-text--m" th:text="*{inquiryMail}"></p>
+                  </dd>
+                </dl>
+                <dl class="l-form__list">
+                  <dt>電話番号</dt>
+                  <dd>
+                    <p class="c-text--m" th:text="*{inquiryTel}"></p>
+                  </dd>
+                </dl>
+                <dl class="l-form__list">
+                  <dt>お問い合わせ内容</dt>
+                  <dd>
+                    <p class="c-text--m" th:utext="*{#pre.convert(inquiryBody)}"></p>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="c-button-wrap">
+              <button name="doIndex" type="submit" class="c-button c-button--primary-line c-button--width-l">修正する</button>
+              <button name="doOnceRegist" type="submit" class="c-button c-button--primary c-button--width-l">送信する</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

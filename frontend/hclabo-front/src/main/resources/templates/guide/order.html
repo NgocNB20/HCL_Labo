@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+  <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-guide">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('order')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>ご注文について</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="#anchor-guide-order01" class="js-anchor" data-scroll="">ご注文方法</a>
+          <a href="#anchor-guide-order02" class="js-anchor" data-scroll="">ご注文の確認について</a>
+          <a href="#anchor-guide-order03" class="js-anchor" data-scroll="">商品の返品について</a>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-order01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">ご注文方法</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text p-guide__text--large"><strong>みんなの郵送検査室で商品をご注文するには、会員登録（無料）が必要です。</strong></p>
+
+              <div class="p-guide__flow c-margin--m">
+                <h5 class="p-guide__flow-title"><span>STEP <em>1</em></span><strong>商品を探す</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">カテゴリー別のメニューや商品検索により、商品を探してください。<br>「商品画像」または、「商品名」を押して詳細ページをご覧ください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step01-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step01-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>2</em></span><strong>カートに入れる</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">商品詳細ページで、商品情報や在庫などをご確認の上、購入される数量を入力して、「カートに入れる」ボタンを押してください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step02-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step02-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>3</em></span><strong>ショッピングカート</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">ショッピングカートページに遷移し、商品が追加されていることをご確認ください。<br>全てのご購入商品が決まりましたら、ご購入手続きにお進みください。</p>
+                      <p class="p-guide__text c-margin--xs">※ログインされていない、もしくは会員登録がお済みでない場合は、ログイン画面が表示されます。</p>
+                      <p class="p-guide__text c-margin--xs">※まことに恐れ入りますが、現在のところカートへは、３種類の商品まで投入制限をかけさせていただいております。また、同一商品につきましては、２個まで購入可とさせていただいております。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step03-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step03-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>4</em></span><strong>ご注文内容の確認</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">ご注文される商品、料金、お届け先・お支払い方法など全てご確認ください。</p>
+                      <p class="p-guide__text c-margin--xs">※変更がある場合は各項目の「変更」ボタンを押して、修正してください。<br>※お支払い方法は未選択となっております。必ずご確認ください。</p>
+                      <p class="p-guide__text c-margin--xs">よろしければ、「注文を確定する」ボタンを押してください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step04-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step04-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>5</em></span><strong>ご注文完了</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">ご注文される商品、料金、お届け先・お支払い方法など全てご確認ください。</p>
+                      <p class="p-guide__text c-margin--xs">※変更がある場合は各項目の「変更」ボタンを押して、修正してください。<br>※お支払い方法は未選択となっております。必ずご確認ください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step05-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step05-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-order02">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">ご注文の確認について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">ご注文手続きが完了すると、ご注文完了画面にて「注文番号」が表示され、ご登録のメールアドレスに＜minken_support@hc-labo.co.jp＞より「ご注文確認のご連絡」が送信されます<br>※メールはご登録アドレスに送信いたします。</p>
+              <div class="p-guide__title-inner c-margin--xs">「ご注文確認のご連絡」メールが届かない場合は、以下の内容をご確認ください。</div>
+              <ul class="p-guide__bullet-point">
+                <li>ご登録メールアドレスに間違いがないか</li>
+                <li>メールソフトの自動振り分け機能でゴミ箱フォルダー等に振り分けられてないか</li>
+                <li>携帯電話の場合、ドメイン指定受信の設定で受信制限をかけてないか</li>
+                <li>携帯電話で受信制限をしている場合は、各種メールが受信できるよう、携帯メールの下記ドメイン指定受信の設定をお願いします。<br>【ドメイン指定：@hc-labo.co.jp】</li>
+              </ul>
+              <p class="p-guide__text c-margin--xs">「ご注文確認のご連絡メール」受信後、会員の方は「マイページ」の「注文履歴」か「ご注文確認のご連絡メール」内のURLよりご注文の詳細、発送状況などをご確認いただけます。</p>
+              <p class="p-guide__text c-margin--xs">※上記の方法でご注文が確認ができない場合は、エラーによりご注文手続きが正常に完了しておりません。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="l-section p-guide__title-section" id="anchor-guide-order03">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">商品の返品について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">お届けした商品がご注文内容と異なっている場合や、不良品の場合についてのみ検査キットの交換・返品を承ります。<br>
+                検査キット交換・返品をご希望の場合は、必ず商品到着後7日以内に、みんなの郵送検査室まで、お電話にてご連絡ください。<br>
+                事前のご連絡がない返送商品のご対応はお受けできませんのでご注意ください。<br>
+                当社責任による検査キットの交換・ご返品の際の配送料金は当社負担とさせていただきます。</p>
+                <div class="p-guide__title-inner c-margin--xs">【次の場合、返品はお受けできませんので、ご注意ください。】</div>
+                <ol class="p-guide__ordered-list01">
+                  <li>返品受付期間（商品到着後7日以内のご連絡）が経過した商品</li>
+                  <li>お客様都合による返品（イメージと異なる、注文違い等）</li>
+                  <li>一度ご使用になった商品</li>
+                  <li>お客様のもとで、検査キットの付属品を紛失・破損してしまった商品</li>
+                  <li>事前のご連絡がなく返送されてきた商品</li>
+                  <li>返品受付後、10日以上経過して返品先住所に届いた商品</li>
+                </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

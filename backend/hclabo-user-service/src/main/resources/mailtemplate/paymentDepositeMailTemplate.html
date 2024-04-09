@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>ご入金ありがとうございました</title>
+</head>
+<body>
+<div>
+    <div>
+        <div>
+            <span>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
+        <div>
+            <span>■　</span><span th:text="${shopName}"></span>
+        </div>
+        <div>
+            <span>■　ご入金完了のご連絡</span>
+        </div>
+        <div>
+            <span>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
+    </div>
+    <br>
+    <div>
+        <span th:text="${mailContentsMap.get('O_ORDER_LAST_NAME')}"></span><span>　</span><span th:text="${mailContentsMap.get('O_ORDER_FIRST_NAME')}"></span><span> 様</span>
+    </div>
+    <br>
+    <div>
+        <span>このたびは、みんなの郵送検査室 を</span>
+    </div>
+    <div>
+        <span>ご利用いただき、誠にありがとうございます。</span>
+    </div>
+    <br>
+    <div>
+        <span>【ご注文番号: </span><span th:text="${mailContentsMap.get('O_ORDER_CODE')}"></span><span>】のご入金を確認させていただきました。</span>
+    </div>
+    <div>
+        <span>これより商品発送の準備を進めてまいります。</span>
+    </div>
+    <div th:if="${mailContentsMap.get('overFlag')}">
+        <br>
+        <span>なお、ご購入金額を超える入金を確認しております。</span>
+        <br>
+        <span>超過分について、追って担当者よりご連絡差し上げます。</span>
+    </div>
+    <br>
+    <div>
+        <span>ご不明点がございましたら、お気軽にお問い合わせください。</span>
+    </div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

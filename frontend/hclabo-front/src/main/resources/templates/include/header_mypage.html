@@ -1,0 +1,41 @@
+<th:block id="header_mypage" th:fragment="headermypage(current)">
+  <div class="l-breadcrumbs">
+    <div class="l-breadcrumbs__inner">
+      <div class="l-breadcrumbs__list">
+        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+        <div class="l-breadcrumbs__item">
+            <span th:if="${current} == ''">
+                <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">マイページ</span></div>
+            </span>
+            <span th:if="${current} != ''">
+                <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a th:href="@{/member/}" class="c-textlink c-textlink--hover">マイページ</a></span></div>
+            </span>
+        </div>
+        <span th:if="${current} == 'history'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">注文履歴</span></div>
+        </span>
+        <span th:if="${current} == 'abook'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">アドレス帳</span></div>
+        </span>
+        <span th:if="${current} == 'wishlist'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">お気に入り</span></div>
+        </span>
+        <span th:if="${current} == 'change'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">会員情報の変更</span></div>
+        </span>
+        <span th:if="${current} == 'mail'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">メールアドレスの変更</span></div>
+        </span>
+        <span th:if="${current} == 'pass'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">パスワードの変更</span></div>
+        </span>
+        <span th:if="${current} == 'inquiry'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">お問い合わせ履歴</span></div>
+        </span>
+        <span th:if="${current} == 'delete'">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">退会手続き</span></div>
+        </span>
+      </div>
+    </div>
+  </div>
+</th:block>

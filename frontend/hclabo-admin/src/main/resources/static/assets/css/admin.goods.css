@@ -1,0 +1,11 @@
+#stockCustomTitle h4{
+	float: left;
+	margin-left: 10px;
+}
+#stockCustomTitle h4:first-child{
+	margin-left: 0;
+}
+
+#confirmStockDisp {
+	margin-bottom:10px;
+}

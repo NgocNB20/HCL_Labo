@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "9161658a-7b4a-44a7-8082-852d650f726b",
+		"name": "hclabo-impossible-area-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "配送不可能エリア登録(regist) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.deliveryMethodSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"zipCode\": \"7700002\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1004/impossible-areas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1004",
+						"impossible-areas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送不可能エリア一覧取得(getByDeliveryMethodSeq) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1008/impossible-areas?page=1&limit=10&orderBy=deliveryMethodSeq&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1008",
+						"impossible-areas"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "orderBy",
+							"value": "deliveryMethodSeq"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送不可能エリア一覧取得(getByDeliveryMethodSeq)- Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-Error\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1001/impossible-areas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1001",
+						"impossible-areas"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "orderBy",
+							"value": "deliveryMethodSeq",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送不可能エリア削除(delete) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1005/impossible-areas?deleteList=8808510",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1005",
+						"impossible-areas"
+					],
+					"query": [
+						{
+							"key": "deleteList",
+							"value": "8808510"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送不可能エリア削除(delete) - BAD REQUEST NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1005/impossible-areas?deleteList=8808510",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1005",
+						"impossible-areas"
+					],
+					"query": [
+						{
+							"key": "deleteList",
+							"value": "8808510"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送不可能エリア削除(delete) - BAD REQUEST DeleteList isEmpty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1005/impossible-areas?deleteList=8808510",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1005",
+						"impossible-areas"
+					],
+					"query": [
+						{
+							"key": "deleteList",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

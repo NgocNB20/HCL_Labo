@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>検査結果のお知らせ</title>
+</head>
+<body>
+<div>
+    <div>
+        <span>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+    <div>
+        <span>■　</span><span th:text="${shopName}"></span>
+    </div>
+    <div>
+        <span>■　検査結果のお知らせ</span>
+    </div>
+    <div>
+        <span>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span th:text="${mailContentsMap.get('O_ORDER_LAST_NAME')}"></span><span>　</span><span th:text="${mailContentsMap.get('O_ORDER_FIRST_NAME')}"></span><span> 様</span>
+    </div>
+    <br>
+    <div>
+        <span>みんなの郵送検査室 をご利用いただきありがとうございます。</span>
+    </div>
+    <br>
+    <div>
+        <span>検査が完了いたしました。</span>
+    </div>
+    <br>
+    <div>
+        <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+    </div>
+    <div>
+        <span>■ご注文内容</span>
+    </div>
+    <div>
+        <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+    </div>
+    <div>
+        <span>ご注文番号：</span><span th:text="${mailContentsMap.get('O_ORDER_CODE')}"></span><span>　※お問い合わせの際に必要となります。</span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+    <div>
+        <span>◆検査結果の詳細は、以下のURLよりログイン後、ご確認ください。</span>
+    </div>
+    <div>
+        <span><a th:href="${hostUrl} + 'member/history/detail/?ocd=' + ${mailContentsMap.get('O_ORDER_CODE')}" th:text="${hostUrl} + 'member/history/detail/?ocd=' + ${mailContentsMap.get('O_ORDER_CODE')}"></a></span>
+    </div>
+    <br>
+    <div>
+        <span>※このメールはご登録いただいたお客様のメールアドレスに自動送信しております｡ </span>
+    </div>
+    <div>
+        <span>※本メールに直接返信はできません。</span>
+    </div>
+    <div>
+        <span>※お心当たりのない方は、誠に恐れ入りますが、</span>
+    </div>
+    <div>
+        <span><a th:href="'mailto:' + ${shopInfoMail}" th:text="${shopInfoMail}"></a> までご連絡ください。</span>
+    </div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

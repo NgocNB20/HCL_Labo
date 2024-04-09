@@ -1,0 +1,64 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-customer-input {
+  background-color: rgba($color: $color-orange-lightGray, $alpha: .8);
+  border-radius: 5px;
+  padding: 40px 60px;
+
+  .c-text-area__count {
+    max-width: 100%;
+  }
+
+  &__title {
+    @include font-style(16,27,500);
+  }
+
+  &__button {
+    display: grid;
+    grid-auto-flow: column;
+    place-content: center;
+    gap: 30px;
+
+    .c-button {
+      @include font-style(18);
+    }
+  }
+
+
+  textarea {
+    margin: 15px 0 0 0;
+    height: 150px;
+  }
+
+  @include media(sm) {
+    width: 100%;
+    height: auto;
+    padding: vwset(30) vwset(20);
+
+    &__title {
+      @include font-sp-style(16,27,500);
+    }
+
+    &__button {
+      grid-auto-flow: row;
+      gap: vwset(20);
+
+      .c-button {
+        @include font-sp-style(16);
+      }
+
+      .c-button:first-child {
+        order: 2;
+      }
+    }
+
+
+  }
+
+
+
+}

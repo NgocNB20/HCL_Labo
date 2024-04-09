@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>問い合わせ検索｜店舗管理</title>
+    <script>
+        jQuery(function($){
+            //文字カット
+            convertShortendString("span[id^='resultCooperationMemo']");
+
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+    </script>
+</head>
+
+<body id="shop">
+<div id="inquiryShop" class="l-mainwrap">
+    <!--/* side */-->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!--/* header */-->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!--/* contents */-->
+            <div class="l-main">
+                <form th:action="@{/inquiry/}" th:object="${inquiryModel}" method="post">
+                    <input type="hidden" name="limit" value="100"/>
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">問い合わせ検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                            <ul>
+                                <li>
+                                    <input class="c-btn btn_move w155px" type="submit" value = "問い合わせ分類設定" id="doInquiryGroup" name="doInquiryGroup"/>
+                                </li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!--/* 検索 */-->
+                    <div class="l-section" id="allItemsSearch">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>問い合わせ番号</dt>
+                                            <dd><input th:field="*{searchInquiryCode}" maxlength="12" th:errorclass="error" type="text" class="c-form-control w240px" placeholder="ここに入力してください"></dd>
+                                            <div th:if="${#fields.hasErrors('searchInquiryCode')}" th:errors="*{searchInquiryCode}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                        <dl>
+                                            <dt>問い合わせ状態</dt>
+                                            <dd>
+                                                <select class="c-form-control" id="searchInquiryStatus" title="問い合わせ状態"  name="searchInquiryStatus" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{searchInquiryStatusItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{searchInquiryStatus}">選択してください
+                                                    </option>
+                                                </select>
+                                                <div th:if="${#fields.hasErrors('searchInquiryGroupSeq')}" th:errors="*{searchInquiryGroupSeq}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>問い合わせ分類名</dt>
+                                            <dd>
+                                                <select class="c-form-control" id="searchInquiryGroupSeq" title="問い合わせ分類名"  name="searchInquiryGroupSeq" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{searchInquiryGroupSeqItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{searchInquiryGroupSeq}">選択してください
+                                                    </option>
+                                                </select>
+                                                <div th:if="${#fields.hasErrors('searchInquiryGroupSeq')}" th:errors="*{searchInquiryGroupSeq}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <div class="flex_grow">
+                                            <dl>
+                                                <dt>問い合わせ日</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <div class="search_open_sml wrap_flex_center">
+                                                        <label class="c-datepicker">
+                                                            <input autocomplete="off" th:field="*{searchInquiryTimeFrom}" maxlength="10" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日"></label>
+                                                        <span class="ml10">〜</span>
+                                                    </div>
+                                                    <div class="search_close_sml">
+                                                        <label class="c-datepicker">
+                                                            <input autocomplete="off" th:field="*{searchInquiryTimeTo}" maxlength="10" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日"></label>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <ul class="c-list-left list_sp5 mt10 w100p">
+                                                <li><button id="targetDate_today_searchInquiryTime" class="c-btn-small" type="button">今日</button></li>
+                                                <li><button id="targetDate_yesterday_searchInquiryTime" class="c-btn-small" type="button">昨日</button></li>
+                                                <li><button id="targetDate_crrentMonth_searchInquiryTime" class="c-btn-small" type="button">今月</button></li>
+                                                <li><button id="targetDate_prevMonth_searchInquiryTime" class="c-btn-small" type="button">先月</button></li>
+                                                <li><button id="targetDate_clear_searchInquiryTime" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                            </ul>
+                                            <div th:if="${#fields.hasErrors('searchInquiryTimeFrom')}" th:errors="*{searchInquiryTimeFrom}" class="c-error-txt mt5"></div>
+                                            <div th:if="${#fields.hasErrors('searchInquiryTimeTo')}" th:errors="*{searchInquiryTimeTo}" class="c-error-txt mt5"></div>
+                                        </div>
+                                    </div>
+
+                                    <!--/* 詳細検索 */-->
+                                    <div class="c-detail-warp search mt10">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <dl>
+                                                        <dt>会員ID（メールアドレス）</dt>
+                                                        <dd>
+                                                            <input th:field="*{searchMemberInfoMail}" maxlength="160" th:errorclass="error" type="text" class="c-form-control w240px" placeholder="ここに入力してください">
+                                                            <div th:if="${#fields.hasErrors('searchMemberInfoMail')}" th:errors="*{searchMemberInfoMail}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>氏名</dt>
+                                                        <dd>
+                                                            <input th:field="*{searchInquiryName}" maxlength="80" th:errorclass="error" type="text" class="c-form-control w240px" placeholder="ここに入力してください">
+                                                            <div th:if="${#fields.hasErrors('searchInquiryName')}" th:errors="*{searchInquiryName}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>電話番号</dt>
+                                                        <dd>
+                                                            <input th:field="*{searchInquiryTel}" maxlength="11" th:errorclass="error" type="text" class="c-form-control number w160px" placeholder="ここに入力してください">
+                                                            <div th:if="${#fields.hasErrors('searchInquiryTel')}" th:errors="*{searchInquiryTel}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>担当者</dt>
+                                                        <dd>
+                                                            <input th:field="*{searchLastRepresentative}" maxlength="18" th:errorclass="error" type="text" class="c-form-control number w240px" placeholder="ここに入力してください">
+                                                            <div th:if="${#fields.hasErrors('searchLastRepresentative')}" th:errors="*{searchLastRepresentative}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <span class="as_end" id="allItemsSearchKeywords"></span>
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top">
+                                            <button name="doInquirySearch" class="c-btn btn_regular" type="submit">検索する</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--/* 検索結果 */-->
+                        <article th:if="*{isResult}" class="l-article">
+                            <!--/*
+                                ページ番号:valueはjsで動的に設定するため、
+                                意図的に静的タグにしてます（th:fieldはワザと使わない）
+                            */-->
+                            <input type="hidden" id="pageNumber" name="pageNumber" />
+                            <input type="hidden" id="orderField" th:field="*{orderField}" />
+                            <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="l-conttitle_wrap">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true,duplicateSelectFlag=true)}"></div>
+                                    </div>
+                                    <th:block th:if="*{resultItems.size()} != 0">
+                                        <table id="search_result" class="c-tbl tbl_search_inquiry">
+                                            <thead>
+                                            <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                                <th class="number">#</th>
+                                                <th class="status w150px">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerInquiryStatus">問い合わせ状態
+                                                        <th:block th:if="*{orderField} == 'inquiryStatus'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="contact_number">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerInquiryCode">問い合わせ番号
+                                                        <th:block th:if="*{orderField} == 'inquiryCode'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="name">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerInquiryName">問い合わせ者氏名
+                                                        <th:block th:if="*{orderField} == 'inquiryName'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="times">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerFirstInquiryTime">初回問い合わせ日時
+                                                        <th:block th:if="*{orderField} == 'firstInquiryTime'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="times">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerLastUserInquiryTime">最終お客様問い合わせ日時
+                                                        <th:block th:if="*{orderField} == 'lastUserInquiryTime'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th>
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerInquiryGroupName">問い合わせ分類
+                                                        <th:block th:if="*{orderField} == 'inquiryGroupName'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="name">
+                                                    <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerLastRepresentative">最終担当者
+                                                        <th:block th:if="*{orderField} == 'lastRepresentative'">
+                                                            <span th:remove="tag" th:text="${sortStr}"></span>
+                                                        </th:block>
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="resultItems">
+                                            <tr th:each="item: *{resultItems}">
+                                                <td class="number">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-0">
+                                                        <span th:remove="tag" id="resultNo" th:text="${item.resultNo}" />
+                                                    </a>
+                                                </td>
+                                                <td class="status">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-1">
+                                                        <span th:remove="tag" id="inquiryStatus" th:text="${#enumtype.getLabel('HTypeInquiryStatus',item.inquiryStatus)}" />
+                                                    </a>
+                                                </td>
+                                                <td class="inquiry_number">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-2">
+                                                        <span th:remove="tag" th:text="${item.inquiryCode}" />
+                                                    </a>
+                                                </td>
+                                                <td class="name">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-4">
+                                                        <span th:remove="tag" th:text="${item.inquiryLastName}" />&nbsp;<span th:remove="tag" th:text="${item.inquiryFirstName}" />
+                                                    </a>
+                                                </td>
+                                                <td class="times">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-5">
+                                                        <span th:remove="tag" th:text="${#date.convert(item.resultFirstInquiryTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                                    </a>
+                                                </td>
+                                                <td class="times">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-6">
+                                                        <span th:remove="tag" id="resultLastUserInquiryTime" th:text="${#date.convert(item.resultLastUserInquiryTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-7">
+                                                    <span th:remove="tag" id="inquiryGroupName" th:text="${item.inquiryGroupName}" /></a></td>
+                                                <td class="name">
+                                                    <a th:href="@{/inquiry/update(inquiryCode=${item.inquiryCode})}" id="goInquiry-8">
+                                                        <span th:remove="tag" id="resultLastRepresentative" th:text="${item.resultLastRepresentative}" />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--/* ページネーション */-->
+                                        <div th:replace="~{include/pager::pager1}"></div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>エラー通知</title>
+</head>
+<body>
+<div>
+	<span th:text="${error.get('SYSTEM')} + ' の非同期処理が異常終了しました。'"></span>
+	<br>
+	<span>詳しくは、RabbitMQ及びサーバログを参照してください。</span>
+	<br>
+	<br>
+	<span>-----</span>
+	<br>
+	<br>
+	<span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(error.get('RESULT')),'\n','&lt;br /&gt;'))}"></span>
+	<br>
+	【追加情報】
+	<br>
+	<div th:if="${placeHolders != null && !placeHolders.empty}">
+		<div th:each=" holders : ${placeHolders}">
+			<span class="spanOrderMail" th:text="${holders.key}">　</span> <span>：</span>
+			<span th:text="${holders.value}"></span>
+		</div>
+	</div>
+	<br>
+	<span>以上</span>
+</div>
+</body>
+</html>

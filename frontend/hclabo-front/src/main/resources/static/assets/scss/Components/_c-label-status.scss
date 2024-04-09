@@ -1,0 +1,95 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+.c-label-status {
+  width: 100px;
+  height: 30px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include media(sm) {
+    width: vwset(100);
+    height: vwset(30);
+  }
+
+  &--primary {
+    color: $color-primary;
+    border: solid 1px $color-primary;
+    background: $color-fff;
+  }
+
+  &--secondary {
+    color: $color-secondary;
+    border: solid 1px $color-secondary;
+    background: $color-fff;
+  }
+
+  &--orange {
+    color: $color-orange;
+    border: solid 1px $color-orange;
+    background: $color-fff;
+  }
+
+  &--red {
+    color: #E31616;
+    border: solid 1px #E31616;
+  }
+  
+  &--black {
+    color: $color-70;
+    border: solid 1px $color-70;
+    background: $color-fff;
+  }
+}
+
+
+.c-label-status2 {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 8px;
+
+  &--primary {
+    color: $color-primary;
+    border: solid 1px $color-primary;
+    background: $color-fff;
+  }
+
+  &--secondary {
+    color: $color-fff;
+    background: $color-secondary;
+  }
+
+  &--orange {
+    color: $color-fff;
+    background: $color-orange;
+  }
+
+  &--green {
+    color: $color-fff;
+    background: $color-green;
+  }
+
+  &--red {
+    color: #E31616;
+    border: solid 1px #E31616;
+  }
+
+  &--gray {
+    color: $color-fff;
+    background: #c2beb7;
+  }
+  
+  &--black {
+    color: $color-fff;
+    background: $color-70;
+  }
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ja">
+<head>
+	<th:block th:with="canonical='true', addType='website'">
+		<meta th:replace="~{include/head}"/>
+	</th:block>
+	<script type="text/javascript" th:src="@{/assets/js/goodsIcon.js}"></script>
+	<script type="text/javascript" th:src="@{/common/js/hogan-3.0.2.min.js}"></script>
+	<script type="text/javascript" th:src="@{/common/js/swiper.min.js}"></script>
+	<script type="text/javascript" th:src="@{/common/js/multipleCategory.js}"></script>
+</head>
+
+<body id="gotop" class="p-top">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+
+	<!-- main -->
+	<main class="l-page">
+	    <!--/* トップ画面スライダー */-->
+	    <hm:freearea key="top_mv"/>
+	    <!--/* トップ画面ポイント */-->
+        <hm:freearea key="top_point"/>
+
+		<div class="l-container">
+			<div class="l-main" th:object="${indexModel}">
+				<div th:if="${allMessages}" class="c-global-error c-global-error--margin-m">
+					<ul th:each="message : ${allMessages}">
+						<li th:text="${message}"></li>
+					</ul>
+				</div>
+				<th:block th:if="*{isNewsExists()}">
+				    <div class="l-section p-top__news">
+                        <div class="l-section__inner p-top__news-inner">
+                            <h2 class="p-top__title-contents p-top__title-contents--en"><strong>NEWS</strong><small>お知らせ</small></h2>
+                            <div class="p-top__news-contents c-scroll" data-simplebar data-simplebar-auto-hide="false">
+                                <div class="p-top__news-unit" th:each="item : *{newsItems}">
+                                    <th:block th:if="${item.isNewsLinkPC()}">
+                                        <div class="p-top__news-date">
+                                            <p><time th:text="${#date.convert(item.newsTime)}" th:remove="tag"></time></p>
+                                        </div>
+                                        <a th:href="@{${item.newsUrlPC}}" class="p-top__news-link">
+                                            <div class="p-top__news-article">
+                                                <p th:utext="${item.newsTitlePC}" class="p-top__news-title"></p>
+											    <th:block th:if="${item.isNewsBodyPCExists()}">
+                                                    <div th:utext="${item.newsBodyPC}" class="p-top__news-text"></div>
+											    </th:block>
+                                            </div>
+                                        </a>
+                                    </th:block>
+                                    <th:block th:if="${!item.isNewsLinkPC()}">
+                                        <th:block th:if="${item.isNewsDetailsLinkPC()}">
+                                            <div class="p-top__news-date">
+                                                <p><time th:text="${#date.convert(item.newsTime)}" th:remove="tag"></time></p>
+                                            </div>
+                                            <a th:href="@{/news(nseq=${item.nseq})}" class="p-top__news-link">
+                                                <div class="p-top__news-article">
+                                                    <p th:utext="${item.newsTitlePC}" class="p-top__news-title"></p>
+											        <th:block th:if="${item.isNewsBodyPCExists()}">
+                                                        <div th:utext="${item.newsBodyPC}" class="p-top__news-text"></div>
+											        </th:block>
+                                                </div>
+                                            </a>
+                                        </th:block>
+                                        <th:block th:if="${!item.isNewsDetailsLinkPC()}">
+                                            <div class="p-top__news-date">
+                                                <p><time th:text="${#date.convert(item.newsTime)}" th:remove="tag"></time></p>
+                                            </div>
+                                            <div class="p-top__news-nolink">
+                                                <div class="p-top__news-article">
+                                                    <p th:utext="${item.newsTitlePC}" class="p-top__news-title"></p>
+                                                    <th:block th:if="${item.isNewsBodyPCExists()}">
+                                                        <div th:utext="${item.newsBodyPC}" class="p-top__news-text"></div>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</th:block>
+				<!--/* トップ画面検査キットを選ぶ */-->
+				<hm:freearea key="top_select"/>
+				<!--/* おすすめの商品の表示 */-->
+				<span id="specialCategory" cc="recommend" seq="normal" limit="5" pricefrom="" priceto="" stock="false" viewtype="thumbnail" style="display:none"></span>
+				<div id="specialCategoryAreaHide" class="l-section p-top__recommend">
+				    <div class="l-section__inner p-top__recommend-inner">
+					    <h2 class="p-top__title-contents"><strong>おすすめの検査キット</strong></h2>
+					    <div class="c-product c-product--slider">
+                            <div class="c-product-swiper js-product-swiper">
+                                <div id="specialCategoryArea" class="swiper-wrapper"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+					        </div>
+					    </div>
+				    </div>
+				</div>
+				<!--/* 	トップ画面検査ステップ */-->
+                <hm:freearea key="top_step"/>
+				<!--/* 	トップ画面よくある質問 */-->
+                <hm:freearea key="top_faq"/>
+				<!--/* 	トップ画面コラム */-->
+                <hm:freearea key="top_column"/>
+			</div>
+		</div>
+	</main>
+	<div th:replace="~{include/footer}"></div>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<link rel="stylesheet" th:href="@{/assets/css/swiper-hcl.css}">
+
+<script type="text/template" id="goods_display_tmpl">
+	<th:block id="categoryGoodsData">
+		{{#category_goods_items}} {{#swiperSlide}}
+		<div>{{/swiperSlide}}
+		    <div class="swiper-slide c-product__item">
+		        <a th:href="@{/goods/detail?ggcd={{ggcd}}}">
+                    <div class="c-product__item-image">
+                        <img src="{{goodsGroupImageThumbnail}}" srcset="{{goodsGroupImageThumbnailSrcset}}" alt="{{goodsGroupName}}" height="219" width="219" decoding="async" loading="lazy">
+                    </div>
+                    <div class="c-product__item-icon">
+                        {{#goodsIconItems}}
+                        <span style="background: {{{iconColorCode}}}; color: {{iconCharColor}};">{{{iconName}}}</span>
+                        {{/goodsIconItems}}
+                    </div>
+                    <div class="c-product__item-title">{{goodsGroupName}}</div>
+                    <div class="c-product__item-price">
+                        <div class="c-product__item-price-unit">
+                            {{{goodsPriceInTax}}}<span>円 (税込)</span>
+                        </div>
+                    </div>
+                    {{#stockStatusDisplay}} {{#stockNoSaleDisp}}
+                    <div class="c-product__item-stock">販売しておりません</div>
+                    {{/stockNoSaleDisp}} {{#stockSoldOutIconDisp}}
+                    <div class="c-product__item-stock">販売終了しました</div>
+                    {{/stockSoldOutIconDisp}} {{#stockBeforeSaleIconDisp}}
+                    <div class="c-product__item-stock">販売開始前</div>
+                    {{/stockBeforeSaleIconDisp}} {{#stockNoStockIconDisp}}
+                    <div class="c-product__item-stock">完売しました</div>
+                    {{/stockNoStockIconDisp}} {{#stockFewIconDisp}}
+                    <div class="c-product__item-stock">残りわずか</div>
+                    {{/stockFewIconDisp}}
+                    <!--/*  在庫あり コメント化　表示させたい場合は、コメントを解除してください。
+                        <span id="stockPossibleSalesIconDisp">
+                            <img th:src="@{/images/icon/stock_m.gif}" alt="在庫あり" class="icon" />
+                	    </span>
+                    */-->
+                    {{/stockStatusDisplay}}
+                </a>
+            </div> {{#swiperSlide}}
+		</div>
+		{{/swiperSlide}} {{/category_goods_items}}
+	</th:block>
+</script>
+
+<!--/* カテゴリ別ランキング用テンプレート */-->
+<script type="text/template" id="category_display_tmpl">
+	{{#category_items}}
+	<section>
+		<h3 class="c-title--line">{{categoryName}}</h3>
+		<div class="c-product-list--ranking {{cid}}">
+			<div id="cate_goods_tmpl_{{cid}}" class="swiper-wrapper"></div>
+			<div class="swiper-pagination {{cid}}--pagination"></div>
+		</div>
+		<nav>
+			<a th:href="@{/search/?stype=new&asc=false&condCid={{cid}}}" class="c-btn--readmore">
+				<p>もっと見る</p>
+			</a>
+		</nav>
+	</section>	{{/category_items}}
+</script>
+</body>
+</html>

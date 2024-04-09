@@ -1,0 +1,311 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+  # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  ### Spring Web/MVC用プロパティファイル
+  # --------------------
+  # サーバポート
+  # --------------------
+  port: ${SERVER_PORT:8080}
+  # --------------------
+  # サーバコンテキストパス
+  # --------------------
+  # URL上のコンテキストパス
+  servlet:
+    context-path: ${CONTEXT_PATH:/}
+    # サーブレットセッションタイムアウト
+    session:
+      timeout: 15m
+  contextPath: ${CONTEXT_PATH:/}
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    # ファイル（CSV・ZIP等）アップロード時の制御
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  mvc:
+    static-path-pattern: /**
+    async:
+      # 非同期リクエスト処理がタイムアウトするまでの時間
+      # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+      # spring.mvc.async.request-timeout=3m
+      request-timeout: '-1'
+  ### Thymeleaf用プロパティファイル
+  # テンプレートキャッシュは行わない（html修正が即画面反映される）
+  thymeleaf:
+    cache: 'false'
+    # 新デザイン組み込を実施する際にThymeleaf上のcheckboxが上手くレンダリングできない事象を解決するための設定
+    render-hidden-markers-before-checkboxes: 'true'
+  sleuth:
+    sampler:
+      rate: 10
+      probability: 1.0
+    enabled: 'true'
+    async:
+      enabled: 'false'
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: false
+    sender:
+      type: web
+    base-url:
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+## 補完するURL
+# アプリケーション
+app:
+  complement:
+    url:
+########### Spring設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 分析サービス
+base-path-analytics-service: ${BASE_PATH_ANALYTICS_SERVICE}
+# 物流サービス
+base-path-logistic-service: ${BASE_PATH_LOGISTIC_SERVICE}
+# 受注サービス
+base-path-order-service: ${BASE_PATH_ORDER_SERVICE}
+# 決済サービス
+base-path-payment-service: ${BASE_PATH_PAYMENT_SERVICE}
+# 販売企画サービス
+base-path-price-planning-service: ${BASE_PATH_PRICE_PLANNING_SERVICE}
+# 商品サービス
+base-path-product-service: ${BASE_PATH_PRODUCT_SERVICE}
+# プロモーションサービス
+base-path-promotion-service: ${BASE_PATH_PROMOTION_SERVICE}
+# ショップ管理サービス
+base-path-shop-management-service: ${BASE_PATH_SHOP_MANAGEMENT_SERVICE}
+# ユーザーサービス
+base-path-user-service: ${BASE_PATH_USER_SERVICE}
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: ${BASE_PATH_CUSTOMIZE_SERVICE}
+# Log用プロパティファイル
+logging:
+  config: classpath:config/hitmall/log/logback-pr.xml
+# HIT-MALLVer3.6.1 encryptKey.properties
+## 端末識別番号暗号化キー
+accessUidEncryptKey: 2f84c3f982d9d4c4881c86f5a95988ca
+## 顧客ID暗号化キー
+customerIdEncryptKey: b6d23eb1d67a1a6cab00946cbef8542c
+## 非同期処理設定
+# 【参考】スレッド設定の流れ ====================================
+#    [corePoolSize]までThreadを作る
+#    [corePoolSize]が一杯になると[queueCapacity]までキューイングする
+#    [queueCapacity]を越えると[maxPoolSize]までThreadを増やす
+#    [maxPoolSize]を越えるとrejectされる
+# ========================================================
+async:
+  executor:
+    max:
+      pool:
+        size: '25'
+    thread:
+      name:
+        prefix: AsyncTask-
+    core:
+      pool:
+        size: '25'
+    queue:
+      capacity: '25'
+# 共通Cookie保存先パス
+common:
+  cookies:
+    save:
+      path: /
+## コンビニ決済「お支払い手順」表示パス
+conveni:
+  payment:
+    procedure:
+      complete:
+        ##===== ローソン =====
+        '10001': order/conveni/includelawsonpaymentprocedurecomplete2.html
+        ##===== ファミリーマート=====
+        '10002': order/conveni/includefamilymartpaymentprocedurecomplete2.html
+        #===== ミニストップ =====
+        '10005': order/conveni/includeministoppaymentprocedurecomplete2.html
+        ##===== セイコーマート =====
+        '10008': order/conveni/includeseicomartpaymentprocedurecomplete2.html
+        ##===== セブンイレブン =====
+        '00007': order/conveni/includesevenelevenpaymentprocedurecomplete.html
+      confirm:
+        ##===== セブンイレブン =====
+        '00007': order/conveni/include_seveneleven_payment_procedure_confirm.html
+        ##===== セイコーマート =====
+        '10008': order/conveni/include_seicomart_payment_procedure_confirm2.html
+        ##===== ファミリーマート=====
+        '10002': order/conveni/include_familymart_payment_procedure_confirm2.html
+        #===== ミニストップ =====
+        '10005': order/conveni/include_lawson_ministop_payment_procedure_confirm2.html
+        ##===== ローソン =====
+        '10001': order/conveni/include_lawson_ministop_payment_procedure_confirm2.html
+# 無料お支払い決済方法SEQ
+# 初期登録データの決済方法SEQと同じ値を設定
+free:
+  settlement:
+    method:
+      seq: '5000'
+# サイト判定用
+# HTypeSiteType#FRONT_SITE_PATH
+hTypeSiteType:
+  site:
+    path: front
+# 商品詳細画面からお問い合わせする際の初期遷移時のお問い合わせ分類
+inquiry:
+  inquiryGroup:
+    goods: '1001'
+# 静的なresourcesはSecurityチェック対象外とする
+quad:
+  static:
+    resource: /assets/**,/common/**,/images/**,/xover
+# 参照ファイル
+static:
+  complement:
+    url:
+## お気に入り登録商品最大数 PC/MB兼用
+wishlist:
+  goods:
+    max: '20'
+## トップカテゴリID
+category:
+  id:
+    top: top
+# 全額クーポン決済方法SEQ
+# 初期登録データの決済方法SEQと同じ値を設定
+coupon:
+  settlement:
+    method:
+      seq: '3000'
+## カテゴリ表示階層数 商品検索画面 検索条件
+goods:
+  search:
+    category:
+      view:
+        level: '3'
+#会員でない顧客の名称
+guest:
+  firstname: !!binary |-
+    w6PCgsK/w6PCg8Ktw6PCgsKm
+  lastname: !!binary |-
+    w6PCgsKyw6PCgsK5w6PCg8KI
+link:
+  payment:
+    return:
+      ## リンク決済戻り先URL
+      url: https://minken.hc-labo.co.jp/order/linkpay-callback
+## ショップSEQ
+## ※各画面やロジックから直接参照しない CommonInfo, Applicationutil から参照する
+## ※ショップSEQの設定方法は、変更される可能性がある為
+shopseq: '1001'
+## デフォルトカテゴリ表示階層数 サイドメニュー
+sidemenu:
+  category:
+    view:
+      level: '3'
+# 商品画像ファイル名区切り文字
+goodsimage:
+  name:
+    separator: _
+## サイドメニューカテゴリ画像相対パス(HTMLで表示する場合に利用)
+images:
+  path:
+    goods: /g_images
+      # 商品画像のリサイズパターン
+    goods.resize:
+      # パターン②の高解像度：商品詳細の大画像（2倍）
+      p2x2: /resize/p2x2
+      # パターン①の高解像度：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像（2倍）
+      p1x2: /resize/p1x2
+      # パターン①：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像
+      p1: /resize/p1
+      # パターン②：商品詳細の大画像
+      p2: /resize/p2
+    lnav_category: /d_images/lnav_category
+    # 商品画像相対パス(HTML, JSONで表示する場合に利用)
+## サイドメニューカテゴリ画像のファイル名規則
+#  命名）　lnav_ + [カテゴリID] + .gif
+#  例）　設定値：lnav_ カテゴリID:okaimono
+#    lnav_okaimono.gif / lnav_okaimono_o.gif
+lnav_category:
+  name: lnav_
+# OGPタグのog:imageに設定するデフォルト画像
+ogp:
+  image:
+    content: /images/shop_thumbnail.jpg
+## 新着商品画像の表示期間
+## 登録されている期間からこの日数を経過するまでが期間になる。
+whatsnew:
+  view:
+    days: '7'
+credit:
+  td:
+    result:
+      receive:
+        ##３D本人認証結果受け取り用URL（外部からの遷移用の為、フルパス）
+        url: https://minken.hc-labo.co.jp/order/secureredirect
+        ##３D本人認証結果受け取り用URL（SpringSecuriry用の為、相対パス）
+        relative:
+          url: /order/secureredirect
+      ##３D本人認証結果コールバック方法（1：通常（POST方式）（デフォルト）、2：直接受ける、3：通常（GET方式））
+      callback:
+        type: '1'
+##クレジットカードの有効期限（年）を今年から何年分出すか
+expiration:
+  date:
+    year: '20'
+# 非同期処理対象ファイル出力パス
+batch:
+  file:
+    path: /app/common/tmp
+## アドレス帳最大登録件数 PC/MB兼用
+addressbook:
+  max: '1000'
+# 二要素認証
+two-factor-authentication:
+  # 機能切り替え（true:ON、false:OFF）
+  switch: true
+########### HIT-MALL独自設定 ###########
+########### 外部サービス ###########
+gmo:
+  # GMOトークン決済JavaScriptのURL
+  token:
+    js:
+      src: https://stg.static.mul-pay.jp/ext/js/token.js
+facebook:
+  # Facebook アプリケーションID
+  app:
+    id:
+  # Facebook 利用する/しない(true/false)
+  use: 'false'
+# Line 利用する/しない(true/false)
+line:
+  use: 'true'
+twitter:
+  # Twitter 利用する/しない(true/false)
+  use: 'true'
+  # Twitter アカウント名
+  via:
+#google tagmanager ID
+google:
+  tagmanager:
+    id: GTM-FVTRPJ8
+########### 外部サービス ###########

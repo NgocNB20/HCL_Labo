@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    SHIPPINGSLIP
+WHERE
+        SHIPPINGSLIPID = /*shippingSlipId*/'1001'

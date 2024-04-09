@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <title>メール送信完了｜受注管理</title>
+    <meta th:replace="~{include/head}"/>
+</head>
+
+<body id="order">
+<div id="searchOrder">
+<div id="page" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/mailtemplate/send/complete}"
+                      th:object="${mailtemplateSendModel}" method="post">
+
+                    <div class="l-pagetitle_wrap">
+                        <h1 th:text="${mailtemplateSendModel.mailSendDto.displayName}" class="c-pagetitle_h1"></h1>
+                        <h1 class="c-pagetitle_h1">メール送信完了</h1>
+                    </div>
+                    <!--エラーメッセージ-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-complete">
+                                        <th:block th:if="*{!isFailure()}">
+                                            <div class="async-success">メール送信処理の受付が完了しました。</div>
+                                        </th:block>
+                                        <th:block th:if="*{isFailure()}">
+                                            <div class="async-err">エラーが発生したため、メール送信処理は行われませんでした。</div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" name="doPreviousPage"
+                                        class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</div>
+</body>
+</html>

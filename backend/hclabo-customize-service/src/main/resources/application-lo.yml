@@ -1,0 +1,151 @@
+########### 変更指標 ###########
+#
+# システム設定
+#
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  tomcat:
+    remoteip:
+      # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+      # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # サーバポート
+  port: ${SERVER_PORT:58080}
+  servlet:
+    session:
+      # web.xml
+      #
+      # セッションタイムアウト（分）
+      # PCIDSS準拠対象外の場合は15分でなくてもOK
+      timeout: 30000
+    # --------------------
+    # サーバコンテキストパス
+    # --------------------
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/customize-service}
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  # spring.mvc.async.request-timeout=3m
+  mvc:
+    async:
+      request-timeout: '-1'
+  datasource:
+    hikari:
+      # 読み取り専用モードでオープンするか否か（true=する／false=しない）
+      read-only: false
+      # アイドルタイムアウト（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # 新しいconnectionが生成され、Poolに追加される前に実行されるSQL query
+      connection-init-sql: SELECT 1
+      maximum-pool-size: 15
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # コネクションタイムアウト（ミリ秒）
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      # connection Poolで使用する最大のconnection数
+      max-lifetime: 1800000
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+    # 接続情報
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_customize}
+    username: ${POSTGRESQL_USER:hclabo_customize}
+    password: ${POSTGRESQL_PASS:password}
+  # Rabbit Message Queue configuration
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  sleuth:
+    async:
+      enabled: false
+    enabled: true
+    sampler:
+      probability: 1.0
+      rate: 10
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: true
+    base-url: http://localhost:9411/
+    sender:
+      type: web
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  sql-file-repository: NO_CACHE
+  fetch-size: 100
+  dialect: postgres
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# ユーザーサービス
+base-path-user-service: http://localhost:18080/user-service
+# 受注サービス
+base-path-order-service: http://localhost:18080/order-service
+# 分析サービス
+base-path-analytics-service: http://localhost:18080/analytics-service
+# メッセージキュー定義
+queue:
+  # 検査キット受領登録バッチ
+  examkitreceivedentry:
+    routing: customize-examkitreceivedentry-routing
+    direct: customize-examkitreceivedentry-direct
+  # 検査結果登録バッチ
+  examresultsentry:
+    routing: customize-examresultsentry-routing
+    direct: customize-examresultsentry-direct
+# Log用プロパティファイル
+logging:
+  config: classpath:config/hitmall/log/logback-lo.xml
+# 非同期処理対象ファイル出力パス
+batch:
+  file:
+    path: C:/var/home/hclabo/common/tmp
+########### HIT-MALL独自設定 ###########
+###########カスタマイズ設定 ###########
+# 検査結果
+examresults:
+  # 検査結果PDF
+  pdf:
+    # 格納場所
+    storage:
+      path: C:/var/home/hclabo/contents/services/customize-service/examresults/
+#「診療・診察時のお願い」PDF
+examinationrulepdf:
+  path: C:/var/home/hclabo/public_html/d_images/examinationrule.pdf
+# 検査キット番号
+examkitcode:
+  # 複数番号検索用
+  list:
+    # 最大数
+    length: 100
+    # 選択肢区切り文字
+    divchar: "\r\n|\r|\n"
+###########カスタマイズ設定 ###########

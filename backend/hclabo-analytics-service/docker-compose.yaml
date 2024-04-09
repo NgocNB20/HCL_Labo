@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+
+  mongo:
+    image: mongo:5.0
+    container_name: hclabo_mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: analytics
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_HOST: 127.0.0.1
+      TZ: Asia/Tokyo
+    volumes:
+      - hclabo_mongo_data:/data/db
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    container_name: hclabo_mongo-express
+    restart: always
+    ports:
+      - 28081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: 'true'
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      TZ: Asia/Tokyo
+    depends_on:
+      - mongo
+volumes:
+  hclabo_mongo_data:

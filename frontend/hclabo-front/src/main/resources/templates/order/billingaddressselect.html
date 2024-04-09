@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-order p-order-address">
+<div class="l-mainwrap">
+    <div th:replace="~{include/header-small}"></div>
+    <main class="l-page">
+        <div class="l-section">
+            <div class="l-section__inner">
+                <h2 class="c-title-page"><strong>ご請求先住所の選択</strong></h2>
+                <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                    <ul th:each="message : ${allMessages}">
+                        <li th:utext="${message}"></li>
+                    </ul>
+                </div>
+                <form id="sender-select" th:action="@{/order/billingaddressselect}" th:object="${billingAddressModel}" method="post">
+                    <th:block id="isAddressBookFull" th:if="*{isAddressBookFull()}">
+                        <p class="c-global-error c-global-error--margin-m">※アドレス帳が最大件数に達している為、登録できません。</p>
+                    </th:block>
+                    <div class="l-form__area c-text--m">
+                        <dl th:each="item, stat : *{addressBookModelList}" class="l-form__list">
+                            <dt>
+                                <input th:value="${item.billingAddressId}" th:id="${'billing-address_'+ stat.index}" name="billingAddressId" type="radio" th:checked="${item.billingAddressId} == *{billingAddressId}" class="c-radio" data-relation-inputs="parent">
+                                <label th:for="${'billing-address_'+ stat.index}"></label>
+                            </dt>
+                            <dd>
+                                <label th:for="${'billing-address_'+ stat.index}">
+                                    <span th:remove="tag" th:text="${item.addressName}"></span><br>
+                                    <span th:remove="tag" th:text="${item.lastName} + ' ' + ${item.firstName} + ', '+ ${item.lastKana} + ' ' + ${item.firstKana}"></span><br>
+                                    <span th:remove="tag" th:text="'〒' + ${#strings.substring(item.zipCode,0,3)} + '-' + ${#strings.substring(item.zipCode,3,7)}"></span><br>
+                                    <span th:remove="tag" th:text="${item.prefecture} + ${item.address1} + ' ' + ${item.address2} + ' ' + ${item.address3}"></span><br>
+                                    <span th:remove="tag" th:text="'TEL: ' + ${item.tel}"></span><br>
+                                </label>
+                            </dd>
+                        </dl>
+                        <th:block id="isNotAddressBookFull" th:if="*{!isAddressBookFull()}">
+                            <div class="address-add">
+                                <input hidden="hidden" type="submit" id="doAdd" name="doAdd" />
+                                <a onClick="onClickAddAddress()" class="c-button c-button--primary-line">
+                                    <svg viewBox="0 0 18 18" width="14"><use xlink:href="/assets/images/icon/plus.svg#plus"></use></svg><p>新しい住所を登録する</p>
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                    <nav class="l-form__sender__navigation">
+                        <div class="c-button-wrap">
+                            <div>
+                                <button type="submit" class="c-button c-button--primary c-button--width-l" id="doConfirm" name="doConfirm">選択した住所を使用する</button>
+                                <div class="c-button-wrap__memo c-margin--s">
+                                    <a th:href="@{/order/confirm}" class="c-textlink c-textlink--left c-text--size-s"><p>ご注文内容の確認へ戻る</p></a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </form>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{include/footer-small}" ></div>
+
+    <script type="text/javascript">
+        function onClickAddAddress() {
+            document.getElementById("doAdd").click();
+        }
+    </script>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

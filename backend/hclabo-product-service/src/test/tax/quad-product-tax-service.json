@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "60fba75a-26b2-48f7-8fe0-37ecdaf2b4a6",
+		"name": "hclabo-product-tax-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "商品税率MAP取得(get)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getListTax\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/taxes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"taxes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

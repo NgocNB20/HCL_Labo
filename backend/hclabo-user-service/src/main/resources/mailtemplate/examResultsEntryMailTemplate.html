@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>エラー通知</title>
+</head>
+<body>
+<div>
+    <span th:text="${error.get('SYSTEM')} + ' の' + ${error.get('BATCH_NAME')} + 'が異常終了しました。'"></span>
+    <br>
+    <span>検査結果登録バッチが終了しました。</span>
+    <br>
+    <br>
+    <span>-----</span>
+    <br>
+    <br>
+    <th:block th:if="${error.get('UPLOAD_TYPE') == '1'}">
+        <span>【エラーとなった検査結果PDF】</span>
+    <br>
+    </th:block>
+    <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(error.get('LIST')),'\n','&lt;br /&gt;'))}"></span>
+    <br>
+    <br>
+    <span>上記、検査キット番号をご確認ください。</span>
+    <br>
+    <br>
+    <span>以上</span>
+</div>
+</body>
+</html>

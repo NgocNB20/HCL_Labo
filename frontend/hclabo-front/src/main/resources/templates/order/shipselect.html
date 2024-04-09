@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+  <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-order">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header-small}"></div>
+
+    <main class="l-page">
+      <div class="l-section">
+        <div class="l-section__inner">
+        <h2 class="c-title-page"><strong>ご配送方法の選択</strong></h2>
+          <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+            <ul th:each="message : ${allMessages}">
+              <li th:utext="${message}"></li>
+            </ul>
+          </div>
+          <th:block th:if="${not #lists.isEmpty(shipSelectModel.selectableShippingMethodList)}">
+          <form th:action="@{/order/shipselect}" class="receiver-form" th:object="${shipSelectModel}" method="post">
+            <div class="l-form__area">
+              <dl class="l-form__list">
+                <dt class="l-form__title-start">ご配送方法<span class="c-require">必須</span></dt>
+                <dd class="l-form__complex">
+                  <th:block th:each="item,stat : *{selectableShippingMethodList}">
+                    <div class="l-form__complex-block" data-relation-inputs="el">
+                      <div class="c-radio-group">
+                        <input th:id="${'delivery-company_'+ stat.index}" type="radio" class="c-radio" name="shippingMethodId" data-relation-inputs="parent" th:value="${item.shippingMethodId}" th:checked="${item.shippingMethodId} == *{shippingMethodId}">
+                        <label th:for="${'delivery-company_'+ stat.index}" class="c-text--l c-font-bold" th:text="${item.shippingMethodName}"></label>
+                      </div>
+                      <!--/* 配送方法説明文、お届け希望日リスト、お届け希望時間帯リストが未設定の場合は未表示 */-->
+                      <th:block th:if="${!#strings.isEmpty(item.shippingMethodNote) || !#lists.isEmpty(item.receiverDateList) || !#lists.isEmpty(item.receiverTimeZoneList)}">
+                          <div class="l-form__complex-inner" data-relation-inputs="child">
+                            <p class="c-text--xs u-mb25" th:utext="${#pre.convert(item.shippingMethodNote, false)}"></p>
+                            <th:block th:if="${not #lists.isEmpty(item.receiverDateList)}">
+                              <div class="l-form__text-select">
+                                <p>お届け希望日</p>
+                                <div class="delivery-wrap">
+                                  <div class="c-select">
+                                    <select class="c-select__inner" name="receiverDate" title="お届け希望日">
+                                      <option th:each="itemReceiverDate : ${item.receiverDateList}" th:value="${itemReceiverDate}" th:text="${itemReceiverDate}"  th:selected="${itemReceiverDate} == *{receiverDate}" th:unless="${#lists.isEmpty(item.receiverDateList)}"></option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </th:block>
+                            <th:block th:if="${not #lists.isEmpty(item.receiverTimeZoneList)}">
+                              <div class="l-form__text-select">
+                                <p>お届け時間帯</p>
+                                <div class="delivery-wrap">
+                                  <div class="c-select">
+                                    <select class="c-select__inner" name="receiverTimeZone" title="お届け時間帯">
+                                      <option th:each="itemReceiverTimeZone : ${item.receiverTimeZoneList}" th:value="${itemReceiverTimeZone}" th:text="${itemReceiverTimeZone}"  th:selected="${itemReceiverTimeZone} == *{receiverTimeZone}" th:unless="${#lists.isEmpty(item.receiverTimeZoneList)}"></option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </th:block>
+                          </div>
+                      </th:block>
+                    </div>
+                  </th:block>
+                </dd>
+              </dl>
+            </div>
+            <nav class="l-form__sender__navigation">
+              <div class="c-button-wrap">
+                <div>
+                  <button type="submit" class="c-button c-button--primary c-button--width-l" name="doConfirm" id="doConfirm">この配送方法を使用する</button>
+                  <div class="c-button-wrap__memo c-margin--s">
+                    <a th:href="@{/order/confirm}" class="c-textlink c-textlink--left c-text--size-s"><p>ご注文内容の確認へ戻る</p></a>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </form>
+          </th:block>
+          <th:block th:if="${!not #lists.isEmpty(shipSelectModel.selectableShippingMethodList)}">
+            <nav class="l-form__sender__navigation">
+              <div class="c-button-wrap">
+                <div>
+                  <div class="c-button-wrap__memo c-margin--s">
+                    <a th:href="@{/order/confirm}" class="c-textlink c-textlink--left c-text--size-s"><p>ご注文内容の確認へ戻る</p></a>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </th:block>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{include/footer-small}" ></div>
+  </div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+<script th:src="@{/assets/js/hm4.js}" defer="defer"></script>
+</body></html>

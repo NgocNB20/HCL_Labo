@@ -1,0 +1,699 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+// form input & comfirm 
+// ----------------------------------------------------------
+
+.l-form__area {
+  @include media(sm) {
+    margin-inline: vwset(20);
+  }
+}
+
+.l-form__list {
+  border-top: 1px solid rgba($color: $color-ccc, $alpha: .8);
+  display: flex;
+
+  &:last-of-type {
+    border-bottom: 1px solid rgba($color: $color-ccc, $alpha: .8);
+  }
+
+  dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 17px 27px;
+    background: rgba($color: $color-orange-lightGray, $alpha: .8);
+    min-width: 300px;
+    @include font-style(15,30,500);
+
+    .l-form__list-memo {
+      @include font-style(13,30,normal);
+    }
+
+    .c-require {
+      margin-left: auto;
+    }
+
+    &.l-form__title-start {
+      align-items: flex-start;
+      padding-top: 27px;
+
+      @include media(lg) {
+        .c-require {
+          margin-top: 6px;
+        }
+      }
+
+      @include media(sm) {
+        align-items: center;
+        padding: vwset(17) vwset(16);
+      }
+    }
+
+  }
+
+  dd {
+    padding: 20px 30px;
+    width: 100%;
+    word-break: break-all;
+
+    // 注釈
+    .l-form__list-note {
+      margin-top: 8px;
+      @include font-style(14,28);
+    }
+
+    // フォームとセットになる文
+    .l-form__list-settext {
+
+      &--margin-right {
+        margin-right: 10px;
+      }
+
+      &--margin-left {
+        margin-left: 10px;
+      }
+
+      &--margin {
+        margin-inline: 10px
+      }
+    }
+
+    // 氏名 
+    &.name-wrap {
+
+      @include media(lg) {
+        display: flex;
+        align-items: baseline;
+
+        .last-name-wrap {
+          margin-right: 25px;
+        }
+
+        input {
+          max-width: 250px;
+          width: 100%;
+        }
+
+      }
+
+      .last-name-wrap,
+      .first-name-wrap {
+        display: flex;
+        word-break: keep-all;
+      }
+
+      .l-form__list-settext {
+        line-height: 60px;
+        margin-right: 10px;
+      }
+    }
+
+    // 生年月日
+    &.birth-wrap {
+
+      display: flex;
+      align-items: baseline;
+
+      .birth-year-wrap,
+      .birth-month-wrap {
+        margin-right: 25px;
+      }
+
+      .c-select::before {
+        right: 15px;
+        width: 12px;
+        height: 7px;
+      }
+
+      .c-select__inner {
+        width: 100px;
+      }
+    }
+
+    // 郵便番号
+    &.post-wrap {
+
+      display: flex;
+      align-items: baseline;
+
+      .post-input,
+      .post-input input {
+        max-width: 140px;
+        width: 100%;
+      }
+
+      .post-input:last-of-type {
+        margin-right: 15px;
+      }
+
+      .c-button {
+        // width: 96px;
+        white-space: nowrap;
+      }
+
+    }
+  
+    // 都道府県
+    .pref-wrap {
+
+      .c-select__inner {
+        width: 250px;
+
+        @include media(sm) {
+          width: vwset(200);
+        }
+      }
+    }
+
+    // 配送方法
+    .delivery-wrap {
+
+      .c-select__inner {
+        width: 250px;
+
+        @include media(sm) {
+          width: vwset(170);
+        }
+      }
+    }
+
+
+ }
+
+
+
+  // パスワード表示
+  .password-wrap {
+
+    @include media(lg) {
+      input {
+        width: 350px;
+        margin-right: 20px;
+      }
+    }
+
+  }
+
+  @include media(sm) {
+    flex-direction: column;
+
+    dt {
+      min-width: 100%;
+      padding: vwset(13) vwset(10);
+      width: 100%;
+      @include font-sp-style(14, 26);
+
+      .l-form__list-memo {
+        @include font-sp-style(12,26);
+      }
+
+    }
+
+    dd {
+      padding: vwset(18) vwset(10);
+      @include font-sp-style(14, 26);
+
+      // 注釈
+      .l-form__list-note {
+        margin-top: vwset(5);
+        @include font-sp-style(13,26);
+      }
+
+    // フォームとセットになる文
+    .l-form__list-settext {
+
+      &--margin-right {
+        margin-right: vwset(6);
+      }
+
+      &--margin-left {
+        margin-left: vwset(6);
+      }
+
+      &--margin {
+        margin-inline: vwset(6);
+      }
+    }
+
+
+      // 氏名 
+      &.name-wrap {
+
+        .name-input,
+        .name-input input {
+          width: 100%;
+        }
+
+        .first-name-wrap {
+          margin-top: vwset(10);
+        }
+
+        .l-form__list-settext {
+          line-height: vwset(50);
+        }
+
+      }
+
+    // 生年月日
+    &.birth-wrap {
+
+      .birth-year-wrap,
+      .birth-month-wrap {
+        margin-right: vwset(8);
+      }
+
+      .c-select::before {
+        right: 10px;
+        width: vwset(10.5);
+        height: vwset(6);
+      }
+
+      .c-select__inner {
+        width: vwset(75);
+        padding-left: vwset(10);
+      }
+
+      .birth-month-wrap .c-select__inner,
+      .birth-day-wrap .c-select__inner {
+        width: vwset(70);
+      }
+    }
+
+    // 郵便番号
+    &.post-wrap {
+
+      flex-wrap: wrap;
+
+      .post-input,
+      .post-input input {
+        width: vwset(90);
+      }
+
+      .post-input:last-of-type {
+        margin-right: vwset(10);
+      }
+
+    }
+
+
+
+
+    }
+
+    // パスワード表示
+    .password-wrap {
+
+      input {
+        width: 100%;
+        margin-bottom: vwset(8);
+      }
+    }
+
+
+  }
+
+}
+
+
+//左タイトル1行　右コンテンツ複数行
+.l-form__complex {
+
+  padding: 0 !important;
+
+  &-block {
+    border-bottom: 1px solid rgba($color: $color-ccc, $alpha: .8);
+    padding: 30px;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &-inner {
+    margin-top: 25px;
+    padding: 0 28px;
+
+    .l-form__text-select + .l-form__text-select {
+      margin-top: 20px;
+    }
+  }
+
+  &-text {
+    margin-bottom: 20px;
+  }
+
+  @include media(sm) {
+
+    &-block {
+      padding: vwset(24) vwset(12) vwset(27);
+    }
+
+    &-inner {
+      margin-top: vwset(15);
+      padding: 0 0 0 vwset(25);
+    }
+
+  }
+}
+
+
+.l-form {
+
+  // パスワード
+  &__password {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      display: block;
+      width: 20px;
+      height: 20px;
+      transition: border-color $comMS $comES, background-color $comMS $comES;
+      background-image: url(/assets/images/icon/check.svg);
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin-right: 8px;
+    }
+
+    p {
+      margin-bottom: 3px;
+      line-height: 1.25;
+    }
+
+    &.is-show {
+
+      span {
+        background-image: url(/assets/images/icon/check-checked.svg);
+      }
+    }
+
+    // @include media(sm) {
+    //   width: vwset(32);
+    //   height: vwset(32);
+
+    //   svg {
+    //     &:nth-of-type(1) {
+    //       width: vwset(16);
+    //     }
+    //     &:nth-of-type(2) {
+    //       width: vwset(18);
+    //     }
+    //   }
+
+    // }
+  }
+
+  // カード情報  
+  &__card {
+    width: fit-content;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1.6vw;
+    padding: 2.1vw 2.6vw;
+    background: rgba($color: $color-orange-lightGray, $alpha: .8);
+    border-radius: 5px;
+    
+
+    //カード番号
+    &-number {
+
+      input {
+        min-width: 190px;
+        width: 18vw;
+        max-width: 240px;
+      }
+
+    }
+
+    //有効期限
+    &-date {
+
+      .c-select::before {
+        right: 15px;
+        width: 12px;
+        height: 7px;
+      }
+
+
+      .c-select__inner {
+        min-width: 80px;
+        width: 7.5vw;
+        max-width: 100px;
+      }
+    }
+
+    &-date-contents {
+      display: flex;
+    }
+
+    .l-form__list-settext {
+      line-height: 60px;
+    }
+
+    //セキュリティコード
+    &-code {
+      input {
+        width: 120px;
+      }
+    }
+
+
+    @include media(sm) {
+      display: block;
+      padding: vwset(24) vwset(20);
+
+      //カード番号
+      &-number {
+
+        input {
+          width: 100%;
+        }
+      }
+
+      //有効期限
+      &-date {
+        margin-top: vwset(16);
+
+        .c-select__inner {
+          width: vwset(100);
+        }
+      }
+
+      //セキュリティコード
+      &-code {
+        margin-top: vwset(16);
+      }
+
+    }
+  }
+
+  // 登録済みカード情報
+  &__registeredcard {
+    width: fit-content;
+    padding: 2.1vw 2.6vw;
+    background: rgba($color: $color-orange-lightGray, $alpha: .8);
+    border-radius: 5px;
+
+    .c-input {
+      width: 80px;
+      height: 45px;
+      margin-inline: 5px 10px;
+    }
+
+    @include media(sm) {
+      padding: vwset(24) vwset(20);
+      min-width: 100%;
+
+      .c-input {
+        width: vwset(70);
+        height: vwset(45);
+        margin-inline: vwset(5) vwset(10);
+      }
+
+    }
+  }
+
+  // 支払い回数
+  &__paymentttime {
+
+    &-list {
+      height: 60px;
+      width: fit-content;
+      display: grid;
+      grid-auto-flow: column;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .c-select__inner {
+      width: 110px;
+    }
+
+
+    @include media(sm) {
+
+      &-list {
+        height: inherit;
+        display: block;
+        margin-top: vwset(9);
+
+        li {
+          margin-top: vwset(7);
+        }
+      }
+
+    }
+  }
+
+  // カード情報の登録
+  &__cardregister {
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    @include media(sm) {
+
+      p {
+        margin-bottom: vwset(5);
+      }
+  
+      .c-checkbox {
+        align-items: flex-start;
+      }
+
+      .c-checkbox__box {
+        padding-top: vwset(5);
+      }
+
+    }
+  }
+
+  // クーポン
+  &__coupon {
+
+    &-price {
+      width: fit-content;
+      display: grid;
+      grid-auto-flow: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &-price-amount {
+      @include font-style(18, 32, bold);
+
+      span {
+        @include font-style(14, 32, normal)
+      }
+    }
+
+    &-code {
+      width: fit-content;
+      display: grid;
+      grid-auto-flow: column;
+      gap: 15px;
+
+      p {
+        line-height: 60px;
+      }
+
+      .c-button {
+        margin-top: 13px;
+      }
+
+    }
+
+    &-selected {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    @include media(sm) {
+  
+      &-price-amount {
+        @include font-sp-style(18, 28);
+  
+        span {
+          @include font-sp-style(13, 28)
+        }
+      }
+
+      &-code {
+        display: flex;
+        flex-wrap: wrap;
+        gap: vwset(10);
+
+        p {
+          line-height: 1.4;
+        }
+
+        .c-button {
+          margin-top: vwset(4);
+        }
+      }
+
+      &-code-input {
+        width: 70%;
+
+        input {
+          width: 100%;
+        }
+      }
+
+    }
+
+  }
+
+
+  // テキスト + セレクトボックス
+  // ----------------------------------------------------------
+
+  &__text-select {
+    display: flex;
+    align-items: flex-start;
+
+    p {
+      margin-right: 20px;
+      word-break: keep-all;
+      height: 60px;
+      display: flex;
+      align-items: center;
+
+      @include media(sm) {
+        margin-right: vwset(20);
+        line-height: vwset(43);
+      }
+    }
+  }
+
+  // ペイジー
+  // ----------------------------------------------------------
+
+  &__pay-easy {
+
+    .c-text--note {
+      margin-top: 25px;
+
+      @include media(sm) {
+        margin-top: vwset(24);
+      }
+    }
+
+    .c-textlink {
+      @include font-style(12, 18);
+    }
+  }
+}
+
+

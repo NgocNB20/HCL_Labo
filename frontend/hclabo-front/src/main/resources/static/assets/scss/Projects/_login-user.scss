@@ -1,0 +1,174 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-login-user {
+
+  &__col2 {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+
+    // ログインパーツのみ表示される場合
+    .p-login-user__member:only-child {
+      width: 100%;
+    }
+  }
+
+  &__member {
+    width: 700px;
+    background: $color-orange-lightGray;
+    padding: 70px 50px;
+
+    .c-button {
+      width: 400px;
+    }
+
+    &-input {
+      margin-bottom: 70px;
+    }
+  }
+
+  &__beginner {
+    width: 450px;
+    border: solid 10px $color-orange-lightGray;
+    padding: 70px 40px;
+
+    h3 {
+      margin-bottom: 50px;
+      padding-bottom: 26px;
+      border-bottom: solid 1px $color-primary;
+      @include font-style(20,32,500);
+      color: $color-primary;
+    }
+
+    p {
+      @include font-style(16,32,500);
+    }
+
+    .c-button {
+      margin-top: 70px;
+      width: 300px;
+    }
+  }
+
+  &__list {
+
+    &:nth-of-type(n + 2) {
+      margin-top: 40px;
+    }
+
+    dt {
+      text-align: center;
+      @include font-style(16, 32, 500);
+    }
+
+    dd {
+      margin-top: 15px;
+      text-align: left;
+
+      input {
+        width: 100%;
+      }
+    }
+
+    .password-wrap {
+      position: relative;
+
+      input {
+        margin-bottom: 16px;
+      }
+
+      button {
+        position: absolute;
+        bottom: -27px;
+        right: 0;
+      }
+    }
+  }
+
+  &__check {
+    margin-bottom: 30px;
+  }
+
+  @include media(sm) {
+
+    &__col2 {
+      flex-direction: column;
+      }
+  
+    &__member {
+      width: 100%;
+      padding: vwset(50) vwset(20);
+  
+      .c-button {
+        width: vwset(300);
+      }
+
+      &-input {
+        margin-bottom: vwset(40);
+      }
+
+    }
+  
+    &__beginner {
+      width: 100%;
+      border: none;
+      padding: vwset(50) 0 0;
+  
+      h3 {
+        margin-bottom: vwset(50);
+        padding-bottom: vwset(20);
+        @include font-sp-style(18,26);
+      }
+  
+      p {
+        @include font-sp-style(16,32,500);
+      }
+  
+      .c-button {
+        margin-top: vwset(50);
+        width: vwset(300);
+      }
+    }
+  
+    &__list {
+  
+      &:nth-of-type(n + 2) {
+        margin-top: vwset(30);
+      }
+  
+      dt {
+        @include font-sp-style(16, 32, 500);
+      }
+  
+      dd {
+        margin-top: vwset(15);
+      }
+  
+      .password-wrap {
+  
+        input {
+          margin-bottom: vwset(16);
+        }
+  
+        button {
+          position: relative;
+          bottom: 0;
+        }
+      }
+  
+      .c-textlink {
+        margin-top: vwset(10);
+      }
+    }
+  
+    &__check {
+      margin-bottom: vwset(30);
+    }
+
+  }
+
+}

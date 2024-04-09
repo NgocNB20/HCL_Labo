@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml"
+      xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-order p-order-address">
+<div class="l-mainwrap">
+    <div th:replace="~{include/header-small}"></div>
+    <main class="l-page">
+        <div class="l-section">
+            <div class="l-section__inner">
+                <h2 class="c-title-page"><strong>お届け先住所の選択</strong></h2>
+                <form  name="form1" id="form1" th:action="@{/order/addressselect}" th:object="${addressSelectModel}" method="post">
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <th:block id="isAddressBookFull" th:if="*{isAddressBookFull()}">
+                        <p class="c-global-error c-global-error--margin-m">※アドレス帳が最大件数に達している為、登録できません。</p>
+                    </th:block>
+                    <div class="l-form__area c-text--m">
+                        <th:block th:if="*{isLogin()}">
+                            <dl class="l-form__list" th:each="item,stat : *{addressBookModelList}">
+                                <dt>
+                                    <div data-relation-inputs="el">
+                                        <input th:value="${item.addressId}" th:id="${'delivery-address_'+ stat.index}" name="shippingAddressId" type="radio" th:checked="${item.addressId} == *{shippingAddressId}" class="c-radio" data-relation-inputs="parent">
+                                        <label th:for="${'delivery-address_'+ stat.index}"></label>
+                                    </div>
+                                </dt>
+                                <dd>
+                                    <label th:for="${'delivery-address_'+ stat.index}">
+                                        <p th:text="${item.addressName}" th:remove="tag"></p>
+                                        <p th:text="${item.lastName} + ' ' + ${item.firstName} + ', '+ ${item.lastKana} + ' ' + ${item.firstKana}"></p>
+                                        <p th:text="'〒' + ${#strings.substring(item.zipCode,0,3)} + '-' + ${#strings.substring(item.zipCode,3,7)}"></p>
+                                        <p th:text="${item.prefecture} + ${item.address1} + ' ' + ${item.address2} + ' ' + ${item.address3}"></p>
+                                        <p th:text="'TEL: ' + ${item.tel}"></p>
+                                        <p th:utext="${item.shippingMemo} ? '配送メモ: ' + ${#pre.convert(item.shippingMemo)} : ''"></p>
+                                    </label>
+                                </dd>
+                            </dl>
+                        </th:block>
+
+                        <th:block id="isNotAddressBookFull" th:if="*{!isAddressBookFull()}">
+                            <div class="address-add">
+                                <input hidden="hidden" type="submit" id="doAdd" name="doAdd" />
+                                <a onClick="onClickAddAddress()" class="c-button c-button--primary-line">
+                                    <svg viewBox="0 0 18 18" width="14"><use xlink:href="/assets/images/icon/plus.svg#plus"></use></svg><p>新しい住所を登録する</p>
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <nav class="l-form__sender__navigation">
+                        <div class="c-button-wrap">
+                            <div>
+                                <button name="doDeliveryReceiverSelect" id="doDeliveryReceiverSelect" type="submit" class="c-button c-button--primary c-button--width-l">
+                                    選択した住所に届ける
+                                </button>
+                                <div class="c-button-wrap__memo c-margin--s">
+                                    <a th:href="@{/order/confirm}" class="c-textlink c-textlink--left c-text--size-s">
+                                        <p>ご注文内容の確認へ戻る</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </form>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{include/footer-small}"></div>
+    <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+    <script type="text/javascript">
+        <!--
+        function onClickDoAddAdressBookSubmit() {
+            document.getElementById("doAddAddressBook").click();
+        }
+        var zipsearch = new Zipsearch();
+        zipsearch.switchZipCodeButton();
+
+        function callZipSearchFunc() {
+            zipsearch.zipCodeSearchPrefectureNameReturn(true, document.getElementById('receiverPrefecture'), document.getElementById('receiverAddress1'), document.getElementById('receiverAddress2'), document.getElementById('receiverAddress3'), document.getElementById('receiverZipCode1'), document.getElementById('receiverZipCode2'));
+        }
+
+        -->
+        $('.c-input').on('keydown',function(event) {
+            if ( event.which == 13 ) {
+                return false;
+            }
+        });
+
+        function onClickAddAddress() {
+            document.getElementById("doAdd").click();
+        }
+    </script>
+</div>
+</body>
+</html>

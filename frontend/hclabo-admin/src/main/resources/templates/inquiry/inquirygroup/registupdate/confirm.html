@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>問い合わせ分類設定 登録更新確認｜店舗管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="shop">
+<div id="inquiryShop" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/inquiry/inquirygroup/registupdate/confirm}" th:object="${inquiryGroupRegistUpdateModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">問い合わせ分類設定</h1>
+						<h2 class="c-pagetitle_h2">登録更新：確認</h2>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<!-- 問い合わせ分類詳細設定 -->
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">問い合わせ分類設定</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<div class="wrap_flex_equivalent">
+										<div class="col mr20">
+											<table class="c-tbl-base th_fntnormal">
+												<tbody>
+												<tr>
+													<th class="w190px">問い合わせ分類名</th>
+													<td th:class="*{#style.diff(modifiedList, {'inquiryGroupName'})}" th:text="*{inquiryGroupName}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="col">
+											<table class="c-tbl-base th_fntnormal">
+												<tbody>
+												<tr>
+													<th class="w190px">公開状態</th>
+													<td th:class="*{#style.diff(modifiedList, {'openStatus'})}" th:text="*{#enumtype.getLabel('HTypeOpenStatus',openStatus)}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button type="submit" name="doCancel"  class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る</button>
+							</div>
+							<div class="col_left">
+								<button class="c-btn btn_regular" type="submit" name="doOnceInquiryGroupRegist">登録</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer -->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "d8058bdf-e8d5-49ba-a2ed-5c93ab6f23d6",
+		"name": "hclabo-promotion-image-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "その他画像zip一括アップロード(regist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"zipImageUrl\": \"C:\\\\Users\\\\thang.nguyencong\\\\Desktop\\\\1.zip\",\r\n    \"zipImageTarget\": \"C:\\\\Users\\\\thang.nguyencong\\\\Desktop\\\\1.zip\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8680/content-management/other-images/zip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8680",
+					"path": [
+						"content-management",
+						"other-images",
+						"zip"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

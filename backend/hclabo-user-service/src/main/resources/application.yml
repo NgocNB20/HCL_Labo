@@ -1,0 +1,26 @@
+########### Spring設定 ###########
+spring:
+  profiles:
+    active: '@active.profile@'
+  application:
+    # SleuthによるTrace-ID出力する際のアプリケーション名
+    name: user-service
+  web:
+    resources:
+      static-locations: # デフォルㇳ設定に監視用ディレクトリ/healthを追加
+        - /META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        - classpath:/health/
+########### Spring設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# Log出力対象外User-Agent
+#
+quad:
+  logging:
+    not-output:
+      user-agents:
+        - healthCheck
+########### HIT-MALL独自設定 ###########

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="https://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+     xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+     lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>メール送信確認｜受注管理</title>
+</head>
+
+<body id="order">
+<div id="searchOrder">
+<div id="page" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form id="confirmSendForm" th:action="@{/mailtemplate/send/confirm}" th:object="${mailtemplateSendModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1" th:text="*{mailSendDto.displayName}"></h1>
+                        <h1  class="c-pagetitle_h1">メール送信確認</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                           <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <table class="c-tbl-base th_fntnormal w800px">
+                                        <tbody>
+                                            <tr th:each="mailDtoList: *{mailSendDto.mailDtoList}">
+                                                <th class="w190px">送信先アドレス</th>
+                                                <td>
+                                                	<th:block th:each="item, stat: ${mailDtoList.toList}">
+                                                        <th:block th:if="${stat.index == 0}">
+                                                           <span th:text="${item}" th:remove="tag"></span>
+                                                        </th:block>
+                                                        <th:block th:if="${stat.index != 0}">
+                                                           <span th:text="',' + ${item}" th:remove="tag"></span>
+                                                        </th:block>
+                                        			</th:block>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt20">
+                                        <label class="c-form-control"><input type="checkbox" th:field="*{sendMeToo}"><i></i><span th:text="*{testAddress}" th:remove="tag"></span>にも送信する （1件目の送信先の内容のみが送信されます）</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" name="doEditPage"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <button class="c-btn btn_regular" name="doOnceSendMail">メール送信</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</div>
+</body>
+</html>

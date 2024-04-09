@@ -1,0 +1,699 @@
+{
+	"info": {
+		"_postman_id": "77b7bfab-d5f7-4fea-8830-55b0da44d88e",
+		"name": "hclabo-product-category-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "カテゴリ取得(getByCategoryId)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByCategoryId-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/categories/top",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"top"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ取得(getByCategoryId)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByCategoryId-ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/categories/car",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"car"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ一覧取得(get)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCategories-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.categoryList).to.have.lengthOf(15);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "公開カテゴリパス一覧取得 (getCategoryPaths) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-getByCategorySeqPath\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/open-passes/10000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"open-passes",
+						"10000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "公開カテゴリパス一覧取得 (getCategoryPaths) - NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-getByCategorySeqPath\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/open-passes/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"open-passes",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ内商品一覧取得(getCategoryItems)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCategoryItems-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"getCategoryItems-OK：ListItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.categoryList).to.have.lengthOf(6);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/cake/items?page=1&limit=10&orderBy=categorySeq&sort=true&categorySeq=10000002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"cake",
+						"items"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "orderBy",
+							"value": "categorySeq"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						},
+						{
+							"key": "categorySeq",
+							"value": "10000002"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ内商品一覧取得(getCategoryItems) - EMPTY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCategoryItems-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"getCategoryItems-OK：ListItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.categoryList).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/car/items?page=1&limit=10&orderBy=categorySeq&sort=true&categorySeq=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"car",
+						"items"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "orderBy",
+							"value": "categorySeq"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						},
+						{
+							"key": "categorySeq",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(getTreeNodes) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/tree-nodes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"tree-nodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(regist) - Is NOT List Screen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryRequest\": {\r\n        \"categorySeq\": 10000001,\r\n        \"categoryId\": \"testapi\",\r\n        \"categoryName\": \"testapi\",\r\n        \"rootCategorySeq\": 0\r\n    },\r\n    \"categoryDisplayRequest\":{\r\n        \"categorySeq\":  10000001\r\n    },\r\n    \"categoryId\": \"recommend\",\r\n    \"categorySeqPath\": \"10000000100000011\",\r\n    \"fileName\": \"abc.jpg\",\r\n    \"tmpImage\": \"true\",\r\n    \"categoryImage\": \"abc.jpg\",\r\n    \"listScreen\": \"false\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories"
+					],
+					"query": [
+						{
+							"key": "categorySeq",
+							"value": "10000001",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "recommend",
+							"disabled": true
+						},
+						{
+							"key": "rootCategorySeq",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "categorySeqPath",
+							"value": "1000000010000001",
+							"disabled": true
+						},
+						{
+							"key": "fileName",
+							"value": "abc",
+							"disabled": true
+						},
+						{
+							"key": "tmpImage",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "categoryImage",
+							"value": "abc",
+							"disabled": true
+						},
+						{
+							"key": "listScreen",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(regist) - Is List Screen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryRequest\": {\r\n        \"categorySeq\": 10000123,\r\n        \"categoryId\": \"testapi\",\r\n        \"categoryName\": \"testapi\",\r\n        \"rootCategorySeq\": 0,\r\n        \"categoryLevel\": 2,\r\n        \"categoryPath\": \"/015\",\r\n        \"orderDisplay\": 15\r\n    },\r\n    \"categoryDisplayRequest\":{\r\n        \"categorySeq\":  10000123,\r\n        \"categoryName\": \"testapi\"\r\n    },\r\n    \"categoryId\": \"recommend\",\r\n    \"categorySeqPath\": \"10000000100000011\",\r\n    \"fileName\": \"abc.jpg\",\r\n    \"tmpImage\": \"true\",\r\n    \"categoryImage\": \"abc.jpg\",\r\n    \"listScreen\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(regist) - Table Lock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/table-lock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"table-lock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(update) - Update By Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderDisplay\": \"1\",\r\n    \"categoryPath\": \"/002\",\r\n    \"categorySeqPath\": \"1000000010000001\",\r\n    \"categoryLevel\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/categories/recommend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"recommend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(update) - Update Category Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/{categoryId}/order?categorySeq=10000041&no=6&targetNo=6&page=1&limit=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"{categoryId}",
+						"order"
+					],
+					"query": [
+						{
+							"key": "categorySeq",
+							"value": "10000041"
+						},
+						{
+							"key": "no",
+							"value": "6"
+						},
+						{
+							"key": "targetNo",
+							"value": "6"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(update) - Update Category Paths",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderDisplay\": 1,\r\n    \"categoryPath\": \"/0144\",\r\n    \"categorySeqPath\": \"10000000100000414\",\r\n    \"categoryLevel\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/categories/TESTCATEGORY/paths",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"TESTCATEGORY",
+						"paths"
+					],
+					"query": [
+						{
+							"key": "orderDisplay",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "categoryPath",
+							"value": "100000001000000310000006",
+							"disabled": true
+						},
+						{
+							"key": "categorySeqPath",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "categoryLevel",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "カテゴリ木構造取得(delete) - Delete Category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getTreeNodes-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/categories/10000026",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"categories",
+						"10000026"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

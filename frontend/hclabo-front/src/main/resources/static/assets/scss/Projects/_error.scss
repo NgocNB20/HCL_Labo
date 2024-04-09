@@ -1,0 +1,72 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-error {
+
+  &--static {
+
+    min-width: 100%;
+
+    .l-mainwrap {
+      overflow: hidden;
+      height: 100vh;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .l-page {
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 60px);
+    }
+
+    .l-section {
+      width: 90%;
+    }
+
+    .l-header__logo a {
+      margin: 0 auto 50px;
+    }
+
+    .l-footer {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background: $color-orange;
+
+      &__copyright {
+        text-align: center;
+        color: $color-fff;
+      }
+    }
+
+    @include media(sm) {
+
+      .l-header__logo {
+
+        a {
+          width: 26.3vw;
+          min-width: 257px;
+        }
+
+        &-icon {
+          width: 3.16vw;
+          min-width: 30px;
+        }
+      
+        &-text {
+          width: 22.1vw;
+          min-width: 216px;
+        }
+      }
+    }
+  }
+
+}
+
+

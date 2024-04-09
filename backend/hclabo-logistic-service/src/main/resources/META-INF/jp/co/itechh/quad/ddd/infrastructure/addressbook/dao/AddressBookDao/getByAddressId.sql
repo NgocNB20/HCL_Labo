@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    ADDRESSBOOK
+WHERE
+        ADDRESSID = /*addressId*/'1001'

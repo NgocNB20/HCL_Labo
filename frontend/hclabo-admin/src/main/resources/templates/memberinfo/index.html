@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>会員検索｜会員管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/csvOptionDownload.js}"></script>
+    <script>
+        jQuery(function($) {
+            $("#memberInfoBirthday").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                yearRange : "-100:+0"
+            });
+
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                if (mode[1] == "date") {
+                    // 期間
+                    setTargetDate(mode[0], "startDate", "endDate");
+                }
+            });
+          CsvOptionDownload("/memberinfo/getCsvTemplateListAjax", "/memberinfo/doUpdateTemplateAjax", "/memberinfo/getDefaultOptionDownloadAjax");
+        });
+    </script>
+</head>
+
+<body id="memberinfo">
+<div id="searchMember" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form id="indexForm" th:action="@{/memberinfo/}" th:object="${memberInfoModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">会員検索</h1>
+                    </div>
+    
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    
+                    <input type="hidden" name="limit" value="100"/>
+                    
+                    <!-- 検索 -->
+                    <div class="l-section" id="allItemsSearch">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>会員ID</dt>
+                                            <dd>
+                                                <input type="text" class="c-form-control w240px" placeholder="ここに入力してください"
+                                                       th:field="*{memberInfoId}" maxlength="255" th:errorclass="error">
+                                                <div th:if="${#fields.hasErrors('memberInfoId')}" th:errors="*{memberInfoId}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>氏名</dt>
+                                            <dd>
+                                                <input type="text" class="c-form-control w240px" placeholder="ここに入力してください"
+                                                       th:field="*{memberInfoName}" maxlength="80" th:errorclass="error">
+                                                <div th:if="${#fields.hasErrors('memberInfoName')}" th:errors="*{memberInfoName}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>状態</dt>
+                                            <dd>
+                                                <select class="c-form-control" th:field="*{memberInfoStatus}" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{memberInfoStatusItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{memberInfoStatus}">
+                                                    </option>
+                                                </select>
+                                                <div th:if="${#fields.hasErrors('memberInfoStatus')}" th:errors="*{memberInfoStatus}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="c-detail-warp search_data_smp wrap mt20">
+                                        <dl class="mr40">
+                                            <dt>メールマガジンの購読</dt>
+                                            <dd>
+                                                <ul class="c-list-left list_sp20">
+                                                    <li><label class="c-form-control"><input type="checkbox" name="mailMagazine" th:field="*{mailMagazine}" value=""><i></i>希望する</label></li>
+                                                </ul>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>会員種別</dt>
+                                            <dd>
+                                                <ul class="c-list-left list_sp20">
+                                                    <li><label class="c-form-control"><input type="checkbox" name="mainMemberFlag" th:field="*{mainMemberFlag}" value=""><i></i>本会員</label></li>
+                                                </ul>
+                                            </dd>
+                                        </dl>
+                                    </div>
+
+                                    <!-- 詳細検索 -->
+                                    <div class="c-detail-warp search mt30">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <dl>
+                                                        <dt>検索期間</dt>
+                                                        <dd>
+                                                            <select class="c-form-control" th:field="*{periodType}" th:errorclass="error">
+                                                                <option value="">選択してください</option>
+                                                                <option th:each="item : *{periodTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                        th:selected="${item.key} == *{periodType}">
+                                                                </option>
+                                                            </select>
+                                                            <div th:if="${#fields.hasErrors('periodType')}" th:errors="*{periodType}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <div class="wrap_flex_wrap">
+                                                        <dl class="search_open_long">
+                                                            <dt>検索開始日</dt>
+                                                            <dd class="wrap_flex_center">
+                                                                <label class="c-datepicker">
+                                                                    <input type="text" class="c-form-control" placeholder="年/月/日"
+                                                                           th:field="*{startDate}" maxlength="10" autocomplete="off" th:errorclass="error">
+                                                                </label>
+                                                                <span class="ml10">〜</span>
+                                                                <ul class="c-list-left list_sp5 mt10 w100p">
+                                                                    <li><button class="c-btn-small" id="targetDate_today_date" value="今日" type="button">今日</button></li>
+                                                                    <li><button class="c-btn-small" id="targetDate_yesterday_date" value="昨日" type="button">昨日</button></li>
+                                                                    <li><button class="c-btn-small" id="targetDate_crrentMonth_date" value="今月" type="button">今月</button></li>
+                                                                    <li><button class="c-btn-small" id="targetDate_prevMonth_date" value="先月" type="button">先月</button></li>
+                                                                    <li><button class="c-btn-txt" id="targetDate_clear_date" value="クリア" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                                </ul>
+                                                                <ul class="c-list-left list_sp5 w100p">
+                                                                    <div th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="c-error-txt mt5"></div>
+                                                                    <div th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="c-error-txt mt5"></div>
+                                                                </ul>
+                                                            </dd>
+                                                        </dl>
+                                                        <dl class="search_close_long mglm75">
+                                                            <dt>検索終了日</dt>
+                                                            <dd class="wrap_flex_center">
+                                                                <label class="c-datepicker">
+                                                                    <input type="text" class="c-form-control" placeholder="年/月/日"
+                                                                           th:field="*{endDate}" maxlength="10" autocomplete="off" th:errorclass="error">
+                                                                </label>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                                <div class="c-detail-warp search_data_smp wrap mt20">
+                                                    <dl>
+                                                        <dt>会員SEQ</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w160px" placeholder="ここに入力してください"
+                                                                   th:field="*{searchMemberInfoSeq}" maxlength="10" th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('searchMemberInfoSeq')}" th:errors="*{searchMemberInfoSeq}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>生年月日</dt>
+                                                        <dd>
+                                                            <label class="c-datepicker">
+                                                                <input type="text" class="c-form-control w150px" placeholder="年/月/日"
+                                                                       th:field="*{memberInfoBirthday}" maxlength="10" autocomplete="off" th:errorclass="error">
+                                                            </label>
+                                                            <div th:if="${#fields.hasErrors('memberInfoBirthday')}" th:errors="*{memberInfoBirthday}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>性別</dt>
+                                                        <dd>
+                                                            <select class="c-form-control" name="memberInfoSex" th:errorclass="error">
+                                                                <option value="">選択してください</option>
+                                                                <option th:each="item : *{memberInfoSexItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                        th:selected="${item.key} == *{memberInfoSex}">選択してください
+                                                                </option>
+                                                            </select>
+                                                            <div th:if="${#fields.hasErrors('memberInfoSex')}" th:errors="*{memberInfoSex}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>電話番号</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control number w240px" placeholder="ここに入力してください"
+                                                                   th:field="*{memberInfoTel}" maxlength="11" th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('memberInfoTel')}" th:errors="*{memberInfoTel}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="c-detail-warp search_data_smp wrap mt20">
+                                                    <dl>
+                                                        <dt>郵便番号</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w120px" placeholder="ここに入力してください"
+                                                                   th:field="*{memberInfoZipCode}" maxlength="7" th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('memberInfoZipCode')}" th:errors="*{memberInfoZipCode}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>都道府県</dt>
+                                                        <dd>
+                                                            <select class="c-form-control" th:field="*{memberInfoPrefecture}" th:errorclass="error">
+                                                                <option value="">選択してください</option>
+                                                                <option th:each="item : *{memberInfoPrefectureItems}" th:value="${item.value}" th:text="${item.value}"
+                                                                        th:selected="${item.key} == *{memberInfoPrefecture}">
+                                                                </option>
+                                                            </select>
+                                                            <div th:if="${#fields.hasErrors('memberInfoPrefecture')}" th:errors="*{memberInfoPrefecture}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>市区町村郡</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control number w600px" placeholder="ここに入力してください"
+                                                                   th:field="*{memberInfoAddress}" maxlength="350" th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('memberInfoAddress')}" th:errors="*{memberInfoAddress}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top ai_flex-start" >
+                                            <button class="c-btn btn_regular" type="submit" name="doSearch">検索する</button>
+                                            <th:block sec:authorize="hasAnyAuthority('MEMBER:8')">
+                                                <div class="col_left wrap_flex_center ai_flex-start" >
+                                                    <div th:replace="~{include/downloadoption}"></div>
+                                                    <span class="pt10">全件</span>
+                                                    <div>
+                                                        <select id="downloadOptionType" class="c-form-control ml10" name="memberOutData" th:classappend="${#fields.hasErrors('memberOutData')} ? 'error'">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{memberOutDataItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                    th:selected="${item.key} == *{memberOutData}">
+                                                            </option>
+                                                        </select>
+                                                        <div th:if="${#fields.hasErrors('memberOutData')}" th:errors="*{memberOutData}" class="c-error-txt ml10 mt5"></div>
+                                                    </div>
+                                                    <div class="ml10">
+                                                        <select id="option_template_index" disabled name="optionTemplateIndex" class="c-form-control">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{csvDownloadOptionDtoList}" th:value="${item.optionId}"
+                                                                    th:text="${item.optionName}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="button" disabled title="ダウンロードオプション" class="c-btn btn_back btn_disabled_gray min_w45px ml10 h38px" id="doOptionDownload"><i class="material-icons settings"></i></button>
+                                                    <button class="c-btn btn_back icon ml10" type="submit" name="doAllDownload"><i class="material-icons save_alt"></i>ダウンロード</button>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+    
+                            <input type="hidden" id="pageNumber" name="pageNumber" />
+                            <input type="hidden" id="orderField" th:field="*{orderField}" />
+                            <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                            <input type="hidden" id="checkSeqArray" name="checkSeqArray" />
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+                            
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() == 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true)}"></div>
+                                        <th:block sec:authorize="hasAnyAuthority('MEMBER:8')">
+                                            <div class="col_left wrap_flex_center count_menu ai_flex-start">
+                                                <span class="resultcount pt10"></span>
+                                                    <div class="col_left">
+                                                        <select  id="downloadOptionTypeResult"  class="c-form-control ml10" name="checkedMemberOutData1" title="出力形式" th:classappend="${#fields.hasErrors('checkedMemberOutData1')} ? 'error'">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{checkedMemberOutData1Items}" th:value="${item.key}" th:text="${item.value}"
+                                                                    th:selected="${item.key} == *{checkedMemberOutData1}">
+                                                            </option>
+                                                        </select>
+                                                        <div th:if="${#fields.hasErrors('checkedMemberOutData1')}" th:errors="*{checkedMemberOutData1}" class="c-error-txt ml10 mt5"></div>
+                                                    </div>
+                                                    <div class="col_left">
+                                                        <select id="option_template_index_result" disabled name="optionTemplateIndexResult" class="c-form-control ml10">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{csvDownloadOptionDtoList}" th:value="${item.optionId}"
+                                                                    th:text="${item.optionName}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                <button class="c-btn btn_back icon ml10" type="submit" name="doDownload1"><i class="material-icons save_alt"></i>ダウンロード</button>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                    <table id="search_result" class="c-tbl tbl_search_member">
+                                        <thead>
+                                            <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                                <th:block sec:authorize="hasAnyAuthority('MEMBER:8')">
+                                                    <th class="check">
+                                                        <label class="c-form-control"><input id="selectAll" type="checkbox" name="" value=""><i></i></label>
+                                                    </th>
+                                                </th:block>
+                                                <th class="number">#</th>
+                                                <th class="member_seq">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');"id="headerMemberInfoSeq">
+                                                        会員SEQ<th:block th:if="*{orderField == 'memberInfoSeq'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="member_id">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoId">
+                                                        会員ID<th:block th:if="*{orderField == 'memberInfoId'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="status">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoStatus">
+                                                        状態<th:block th:if="*{orderField == 'memberInfoStatus'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="mailmaga w120px">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMailMagazine">
+                                                        メルマガ希望<th:block th:if="*{orderField == 'mailMagazine'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="name">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoName">
+                                                        氏名<th:block th:if="*{orderField == 'memberInfoName'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="tel w120px">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoTel">
+                                                        電話番号<th:block th:if="*{orderField == 'memberInfoTel'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th class="zip">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoZipCode">
+                                                        郵便番号<th:block th:if="*{orderField == 'memberInfoZipCode'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                                <th>
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMemberInfoAddress">
+                                                        住所<th:block th:if="*{orderField == 'memberInfoAddress'}"><span th:text="${sortStr}"></span></th:block>
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item, stat: *{resultItems}">
+                                                <th:block sec:authorize="hasAnyAuthority('MEMBER:8')">
+                                                    <td class="check">
+                                                        <label class="c-form-control"><input type="checkbox" th:field="*{resultItems[__${stat.index}__].resultMemberInfoCheck}"><i></i></label>
+                                                    </td>
+                                                </th:block>
+                                                <td class="number">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.resultNo}"></span>
+                                                    </a>
+                                                </td>
+                                                <td class="member_seq">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.memberInfoSeq}"></span>
+                                                    </a>
+                                                </td>
+                                                <td class="member_id">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.resultMemberInfoId}"></span>
+                                                    </a>
+                                                </td>
+                                                <td class="status">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${#enumtype.getLabel('HTypeMemberInfoStatus',item.resultMemberInfoStatus)}"></span>
+                                                    </a>
+                                                </td>
+                                                <td class="mailmaga">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <th:block th:if="${item.resultMailMagazine}">希望する</th:block>
+                                                        <th:block th:if="${!item.resultMailMagazine}">希望しない</th:block>
+                                                    </a>
+                                                </td>
+                                                <td class="name">
+                                                    <div class="ellipsis">
+                                                        <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                            <span th:text="${item.resultMemberInfoLastName}"></span>
+                                                            <span> </span>
+                                                            <span th:text="${item.resultMemberInfoFirstName}"></span>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="tel">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.resultMemberInfoTel}"></span>
+                                                    </a>
+                                                </td>
+                                                <td class="zip">
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.resultMemberInfoZipCode}"></span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a th:href="@{/memberinfo/details(memberInfoSeq=${item.memberInfoSeq},from=member)}">
+                                                        <span th:text="${item.resultMemberInfoPrefecture}"></span>
+                                                        <span th:text="${item.resultMemberInfoAddress1}"></span>
+                                                        <span th:text="${item.resultMemberInfoAddress2}"></span>
+                                                        <span th:text="${item.resultMemberInfoAddress3}" ></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

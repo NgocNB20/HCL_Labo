@@ -1,0 +1,178 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+.p-search {
+
+  // ヘッダー
+  &__header {
+    margin-bottom: 28px;
+
+    &-sort {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 25px;
+
+      @include media(sm) {
+        justify-content: space-between;
+      }
+    }
+
+    &-view {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+
+      li {
+        width: 40px;
+        height: 40px;
+
+        span,a {
+          display: grid;
+          place-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: $color-orange-lightGray;
+        }
+
+        svg {
+          width: 17px;
+          height: auto;
+        }
+
+        span svg {
+          fill: $color-ccc;
+        }
+
+        a {
+          transition: opacity $comMS $comES;
+
+          svg {
+            fill: $color-70;
+          }
+
+          &:hover {
+            @include media(lg) {
+              opacity: .5;
+            }
+          }
+        }  
+      }
+    }
+
+    &-select-wrap {
+      font-size: 0;
+    }
+
+    &-select {
+
+      &::before {
+        right: 20px;
+        width: 10px;
+        height: 6px;
+        @include icon('arrow-down', '707070');
+      }
+
+      select {
+        width: 170px;
+        height: 40px;
+      }
+
+      &--ascdesc {
+
+        margin-left: 25px;
+
+        select {
+          width: 100px;
+          height: 40px;
+        }
+      }
+
+    }
+
+    @include media(sm) {
+      margin-bottom: vwset(30);
+      margin-inline: vwset(20);
+
+      &-view {
+        gap: vwset(10);
+  
+        li {
+          width: vwset(40);
+          height: vwset(40);
+
+          span,a {
+            width: vwset(40);
+            height: vwset(40);
+          }
+        }
+      }
+
+      &-select {
+
+        &::before {
+          right: vwset(20);
+          width: vwset(10);
+          height: vwset(6);
+        }
+  
+        select {
+          width: vwset(110);
+          height: vwset(40);
+        }
+
+        &--ascdesc {
+
+          margin-left: vwset(10);
+          
+          select {
+            width: vwset(90);
+            height: vwset(40);
+          }
+        }
+
+      }
+
+      button {
+        width: 100%;
+        height: vwset(45);
+        margin-bottom: vwset(20);
+        @include font-sp-style(15, 45, 500);
+
+        svg {
+          width: vwset(20);
+          fill: $color-primary;
+          margin-right: vwset(10);
+        }
+      }
+    }
+  }
+
+  // 商品全数
+  &__count {
+    margin-top: 67px;
+    text-align: center;
+    @include font-style(18, 40);
+
+    &-sum {
+      @include font-style(24, 40, bold);
+    }
+
+    @include media(sm) {
+      margin-top: vwset(35);
+      @include font-sp-style(15, 20);
+
+      &-sum {
+        @include font-sp-style(20, 20, bold);
+      }
+    }
+  }
+
+
+}

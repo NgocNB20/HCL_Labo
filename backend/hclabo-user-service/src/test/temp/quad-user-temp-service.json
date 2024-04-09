@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "cae7b56a-1a27-47d9-8cf7-87079ad7a3bb",
+		"name": "hclabo-user-temp-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "仮会員登録(registTemps)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"registTemps OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registTemps confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.memberInfoId).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"memberInfoMail\": \"itec_tuan.truongngoc2@itec-hankyuhanshin.co.jp\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/temps",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"temps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "仮会員情報取得(getMemberTemp)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"registTemps OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/temps/981d89ae2ed7658bb1337772f34e56b3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"temps",
+						"981d89ae2ed7658bb1337772f34e56b3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "b8353309-bd6c-470d-a977-f2a978e23ed2",
+		"name": "hclabo-user-management-inquiry-service Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "問い合わせ分類取得(getByInquirySeq)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByInquirySeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups/1002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups",
+						"1002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お問い合わせ分類一覧取得(get)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ分類登録(regist)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.inquiryGroupSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryGroupSeq\": 1116,\r\n    \"inquiryGroupName\": \"支払い方法について\",\r\n    \"openStatus\": \"1\",\r\n    \"orderDisplay\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ分類登録更新チェック(check)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryGroupSeq\": 1116,\r\n    \"inquiryGroupName\": \"支払い方法についてabc\",\r\n    \"openStatus\": \"1\",\r\n    \"orderDisplay\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ分類更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.inquiryGroupSeq).eql(1002);\r",
+							"    pm.expect(jsonData.inquiryGroupName).eql(\"支払い方法について\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryGroupName\": \"支払い方法について\",\r\n    \"openStatus\": \"1\",\r\n    \"orderDisplay\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups/1002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups",
+						"1002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ分類一覧更新(updateList)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update list OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update list confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.result) = 2\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryGroupListUpdate\": [\r\n        {\r\n            \"inquiryGroupSeq\": 1002,\r\n            \"inquiryGroupName\": \"支払い方法について\",\r\n            \"openStatus\": \"1\",\r\n            \"orderDisplay\": 2\r\n        },\r\n        {\r\n            \"inquiryGroupSeq\": 1001,\r\n            \"inquiryGroupName\": \"商品について\",\r\n            \"openStatus\": \"1\",\r\n            \"orderDisplay\": 3\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/groups",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

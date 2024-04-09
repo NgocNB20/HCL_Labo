@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>店舗情報詳細｜システム管理</title>
+</head>
+
+<body id="system">
+<div id="searchShopInfo" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"/>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"/>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/shopinfo/update}" th:object="${shopInfoModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">店舗情報詳細</h1>
+                    </div>
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- 店舗設定 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">店舗設定</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>店舗名</dt>
+                                            <dd>
+                                                <span th:text="*{shopNamePC}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- メタ情報 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">メタ情報</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>メタ説明文</dt>
+                                            <dd>
+                                                <span th:utext="*{#pre.convert(metaDescription)}"
+                                                      th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>メタキーワード</dt>
+                                            <dd>
+                                                <span th:utext="*{#pre.convert(metaKeyword)}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                <div class="col_left">
+                                    <button name="doUpdatePage" class="c-btn btn_regular" type="submit">修正</button>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"/>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>検査結果登録｜受注管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+    <script>
+
+        jQuery(function($){
+            var radio_target = $('.c-form-control input[name="uploadTarget"]:checked').val();
+            if (radio_target == "0") {
+                $('#registUploadFile').prop('accept', ".csv");
+            } else if (radio_target == "1") {
+                $('#registUploadFile').prop('accept', ".pdf,.zip");
+            }
+
+            $('input[name="uploadTarget"]').on('change', function () {
+                var upload_target_radio_val = $('.c-form-control input[name="uploadTarget"]:checked').val();
+                if (upload_target_radio_val === '0') {
+                    $('#registUploadFile').prop('accept', ".csv");
+                } else if (upload_target_radio_val === '1') {
+                    $('#registUploadFile').prop('accept', ".pdf,.zip");
+                }
+            });
+
+        })
+
+    </script>
+</head>
+
+<body id="order">
+<div id="examresultsupload" class="l-mainwrap">
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form enctype="multipart/form-data" th:action="@{/order/examResultsUpload/}" th:object="${examResultsUploadModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">検査結果登録</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section" id="mainContainer">
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">アップロードする検査結果データ</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl class="mr0">
+                                            <dt>検査結果データ</dt>
+                                            <dd>
+                                                <div class="wrap_flex_center fileinputs">
+                                                    <input type="file" accept=".csv,.pdf,.zip" id="registUploadFile" name="registUploadFile" th:value="*{registUploadFile}" class="c-form-control w625px mr10 file" title="検査結果データ" onchange="uploadfileViewPath(this.id, this.value);" />
+                                                    <div class="fakefile">
+                                                        <input type="text" name="registUploadFile_path" class="c-input-file" th:classappend="${#fields.hasErrors('registUploadFile')}?'error':''"/>
+                                                        <button class="c-btn-small_over mr20" type="button">参照</button>
+                                                    </div>
+                                                    <div class="c-detail-warp wrap mt-20">
+                                                        <dl>
+                                                            <dt>アップロード対象</dt>
+                                                            <dd>
+                                                                <ul class="c-list-left list_sp20 mr40">
+                                                                    <li>
+                                                                        <label class="c-form-control"><input type="radio" th:field="*{uploadTarget}" value="0"><i th:classappend="${#fields.hasErrors('uploadTarget')} ? 'error'"></i>検査結果 CSV</label>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label class="c-form-control mr10"><input type="radio" th:field="*{uploadTarget}" value="1"><i th:classappend="${#fields.hasErrors('uploadTarget')} ? 'error'"></i>検査結果 PDF</label>
+                                                                    </li>
+                                                                </ul>
+                                                                <div th:if="${#fields.hasErrors('uploadTarget')}" th:errors="*{uploadTarget}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                                <div id="registUploadFileError" th:if="${#fields.hasErrors('registUploadFile')}" th:errors="*{registUploadFile}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <input type="hidden" id="isOnceUploadBtnClicked" value="false"/>
+                                    <button class="c-btn btn_back icon mt30" type="submit" id="doOnceFileUpload" name="doOnceFileUpload"><i class="c-btn-icon upload"></i>アップロード</button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" class="c-btn btn_back icon_left" name="doReturn" ><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

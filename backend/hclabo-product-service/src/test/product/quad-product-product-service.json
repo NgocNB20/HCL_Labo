@@ -1,0 +1,1263 @@
+{
+	"info": {
+		"_postman_id": "27fab204-03eb-44ea-b8f0-05cdba78f77a",
+		"name": "hclabo-product-product-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "商品グループ更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": 10000146,\r\n        \"goodsGroupCode\": \"100000\",\r\n        \"goodsGroupName\": \"Tuan test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsOpenStatus\": \"9\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 11,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"goodsGroupSeq\": 10000146,\r\n                    \"goodsCode\": \"tv1000\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 2,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationRequestList\": [],\r\n    \"typeScreen\": 0,\r\n    \"goodsGroupImageUpdateRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(update)- REQUEST NULL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(update)- CORRELATION CHECK FAIL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": 10000146,\r\n        \"goodsGroupCode\": \"100000\",\r\n        \"goodsGroupName\": null,\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 50,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"goodsGroupSeq\": 10000146,\r\n                    \"goodsCode\": \"tv1000\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationRequestList\": [],\r\n    \"typeScreen\": 0,\r\n    \"goodsGroupImageUpdateRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(update)- REGISTRATION UPDATE FAIL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": 10000146,\r\n        \"goodsGroupCode\": \"100000\",\r\n        \"goodsGroupName\": \"Tuan test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsOpenStatus\": \"9\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 13,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"goodsGroupSeq\": 10000146,\r\n                    \"goodsCode\": \"tv1000\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationRequestList\": [],\r\n    \"typeScreen\": 0,\r\n    \"goodsGroupImageUpdateRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(correlation-check)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"correlation OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": 10000146,\r\n        \"goodsGroupCode\": \"100000\",\r\n        \"goodsGroupName\": \"TIVI test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsOpenStatus\": \"9\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 51,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"goodsGroupSeq\": 10000146,\r\n                    \"goodsCode\": \"tv1000\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 10000233,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/correlation-check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"correlation-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(regist)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": null,\r\n        \"goodsGroupCode\": \"furniture-00802\",\r\n        \"goodsGroupName\": \"test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsOpenStatus\": \"9\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 48,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": null,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"check\",\r\n            \"goodsNote1\": \"goodsNote1\",\r\n            \"goodsNote2\": \"goodsNote2\",\r\n            \"goodsNote3\": \"goodsNote3\",\r\n            \"goodsNote4\": \"goodsNote4\",\r\n            \"goodsNote5\": \"goodsNote5\",\r\n            \"goodsNote6\": \"goodsNote6\",\r\n            \"goodsNote7\": \"goodsNote7\",\r\n            \"goodsNote8\": \"goodsNote8\",\r\n            \"goodsNote9\": \"goodsNote9\",\r\n            \"goodsNote10\": \"goodsNote10\",\r\n            \"orderSetting1\": \"aab\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"car1/car_06.jpg\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": null,\r\n                    \"goodsGroupSeq\": 10000141,\r\n                    \"goodsCode\": \"tv1000114\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": null,\r\n                    \"salesPossibleStock\": 1000,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": [],\r\n    \"goodsGroupImageRegistRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"car1/car_06.jpg\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(regist)- Error GoodGroup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"GoodGroup Error\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": null,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"check\",\r\n            \"goodsNote1\": \"goodsNote1\",\r\n            \"goodsNote2\": \"goodsNote2\",\r\n            \"goodsNote3\": \"goodsNote3\",\r\n            \"goodsNote4\": \"goodsNote4\",\r\n            \"goodsNote5\": \"goodsNote5\",\r\n            \"goodsNote6\": \"goodsNote6\",\r\n            \"goodsNote7\": \"goodsNote7\",\r\n            \"goodsNote8\": \"goodsNote8\",\r\n            \"goodsNote9\": \"goodsNote9\",\r\n            \"goodsNote10\": \"goodsNote10\",\r\n            \"orderSetting1\": \"aab\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": null,\r\n                    \"goodsGroupSeq\": 10000141,\r\n                    \"goodsCode\": \"tv1000114\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": null,\r\n                    \"salesPossibleStock\": 1000,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": [],\r\n    \"goodsGroupImageRegistRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"car1/car_010.jpg\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(regist)- Error GoodRelation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Error GoodRelation\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": null,\r\n        \"goodsGroupCode\": \"100002993\",\r\n        \"goodsGroupName\": \"TIVI test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 48,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 1009990,\r\n                    \"goodsGroupSeq\": 10000141,\r\n                    \"goodsCode\": \"tv1000115\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 19999992,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": [],\r\n    \"goodsGroupImageRegistRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(regist)- Error Image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Error Image\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": null,\r\n        \"goodsGroupCode\": \"furniture-00802\",\r\n        \"goodsGroupName\": \"test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsOpenStatus\": \"9\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 48,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": null,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"check\",\r\n            \"goodsNote1\": \"goodsNote1\",\r\n            \"goodsNote2\": \"goodsNote2\",\r\n            \"goodsNote3\": \"goodsNote3\",\r\n            \"goodsNote4\": \"goodsNote4\",\r\n            \"goodsNote5\": \"goodsNote5\",\r\n            \"goodsNote6\": \"goodsNote6\",\r\n            \"goodsNote7\": \"goodsNote7\",\r\n            \"goodsNote8\": \"goodsNote8\",\r\n            \"goodsNote9\": \"goodsNote9\",\r\n            \"goodsNote10\": \"goodsNote10\",\r\n            \"orderSetting1\": \"aab\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"car1/car_06.jpg\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": null,\r\n                    \"goodsGroupSeq\": 10000141,\r\n                    \"goodsCode\": \"tv1000114\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": null,\r\n                    \"salesPossibleStock\": 1000,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": [\r\n        {\r\n            \"goodsGroupSeq\": null,\r\n            \"goodsRelationGroupSeq\": 10000069,\r\n            \"orderDisplay\": 1,\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n            \"goodsGroupCode\": \"furniture-00802\",\r\n            \"goodsGroupName\": \"test\",\r\n            \"goodsOpenStatusPC\": \"9\"\r\n        }\r\n    ],\r\n    \"goodsGroupImageRegistRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": null,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"car1/car_06.jpg\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ更新(regist)- check fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"goodsGroup\": {\r\n        \"goodsGroupSeq\": null,\r\n        \"goodsGroupCode\": \"100002993\",\r\n        \"goodsGroupName\": \"TIVI test\",\r\n        \"goodsPrice\": 1000,\r\n        \"whatsnewDate\": \"2022-02-18T14:22:00.000\",\r\n        \"openStartTime\": \"2022-02-18T14:22:00.000\",\r\n        \"openEndTime\": \"2022-02-18T14:22:00.000\",\r\n        \"goodsTaxType\": \"1\",\r\n        \"alcoholFlag\": \"0\",\r\n        \"snsLinkFlag\": \"0\",\r\n        \"versionNo\": 48,\r\n        \"registTime\": \"2022-02-18T14:22:00.000\",\r\n        \"updateTime\": \"2022-02-18T14:22:00.000\",\r\n        \"batchUpdateStockStatus\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"realTimeStockStatus\": {\r\n            \"goodsGroupSeq\": 0,\r\n            \"stockStatus\": \"0\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupDisplay\": {\r\n            \"goodsGroupSeq\": 10000146,\r\n            \"informationIcon\": \"\",\r\n            \"searchKeyword\": \"ＴＩＶＩ　ＴＥＳＴ　ＴＩＶＩ　ＴＥＳＴ　１０００００\",\r\n            \"searchKeywordEm\": \"\",\r\n            \"unitManagementFlag\": \"0\",\r\n            \"unitTitle1\": null,\r\n            \"unitTitle2\": null,\r\n            \"metaDescription\": \"\",\r\n            \"metaKeyword\": \"\",\r\n            \"deliveryType\": \"\",\r\n            \"goodsNote1\": \"\",\r\n            \"goodsNote2\": \"\",\r\n            \"goodsNote3\": \"\",\r\n            \"goodsNote4\": \"\",\r\n            \"goodsNote5\": \"\",\r\n            \"goodsNote6\": \"\",\r\n            \"goodsNote7\": \"\",\r\n            \"goodsNote8\": \"\",\r\n            \"goodsNote9\": \"\",\r\n            \"goodsNote10\": \"\",\r\n            \"orderSetting1\": \"aa\",\r\n            \"orderSetting2\": \"\",\r\n            \"orderSetting3\": \"\",\r\n            \"orderSetting4\": \"\",\r\n            \"orderSetting5\": \"\",\r\n            \"orderSetting6\": \"\",\r\n            \"orderSetting7\": \"\",\r\n            \"orderSetting8\": \"\",\r\n            \"orderSetting9\": \"\",\r\n            \"orderSetting10\": \"\",\r\n            \"registTime\": \"2022-02-18T14:22:00.000\",\r\n            \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n        },\r\n        \"goodsGroupImageRequestList\": [\r\n            {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 1,\r\n                \"imageFileName\": \"100000/100000_01.jfif\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            }\r\n        ],\r\n        \"goodsRequestList\": [\r\n            {\r\n                \"goodsSub\": {\r\n                    \"goodsSeq\": 1009990,\r\n                    \"goodsGroupSeq\": 10000141,\r\n                    \"goodsCode\": \"tv1000115\",\r\n                    \"janCode\": null,\r\n                    \"saleStatus\": \"0\",\r\n                    \"saleStartTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"saleEndTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"individualDeliveryType\": \"0\",\r\n                    \"freeDeliveryFlag\": \"0\",\r\n                    \"unitManagementFlag\": \"0\",\r\n                    \"unitValue1\": null,\r\n                    \"unitValue2\": null,\r\n                    \"stockManagementFlag\": \"1\",\r\n                    \"purchasedMax\": 999,\r\n                    \"orderDisplay\": 1,\r\n                    \"versionNo\": 4,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"stock\": {\r\n                    \"goodsSeq\": 19999992,\r\n                    \"salesPossibleStock\": 0,\r\n                    \"realStock\": 0,\r\n                    \"orderReserveStock\": 0,\r\n                    \"remainderFewStock\": 0,\r\n                    \"supplementCount\": 0,\r\n                    \"orderPointStock\": 0,\r\n                    \"safetyStock\": 0,\r\n                    \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                    \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n                },\r\n                \"deleteFlg\": \"\",\r\n                \"stockStatus\": \"0\"\r\n            }\r\n        ],\r\n        \"categoryGoodsRequestList\": [],\r\n        \"goodsInformationIconDetailsRequestList\": [],\r\n        \"taxRate\": 10\r\n    },\r\n    \"goodsRelationList\": [],\r\n    \"goodsGroupImageRegistRequest\": [\r\n        {\r\n            \"goodsGroupImageEntity\": {\r\n                \"goodsGroupSeq\": 10000146,\r\n                \"imageTypeVersionNo\": 0,\r\n                \"imageFileName\": \"\",\r\n                \"registTime\": \"2022-02-18T14:22:00.000\",\r\n                \"updateTime\": \"2022-02-18T14:22:00.000\"\r\n            },\r\n            \"imageFileName\": \"\",\r\n            \"tmpImageFileName\": \"\",\r\n            \"tmpImageFilePath\": \"\",\r\n            \"deleteFlg\": false\r\n        }\r\n    ],\r\n    \"masterGoodsGroupImageRequestMap\": {},\r\n    \"goodsImageItems\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "画像zip一括アップロード(regist)-Upload Image Zip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"zipImageUrl\":\"D:/Japanese.zip\",\r\n    \"zipImageTarget\":\"cde\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/images/zip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"images",
+						"zip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ削除(delete)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/toner-004?processType=0",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"toner-004"
+					],
+					"query": [
+						{
+							"key": "processType",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ削除(delete)- REQUEST ERROR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/toner-004?processType=0",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"toner-004"
+					],
+					"query": [
+						{
+							"key": "processType",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ削除(delete)-ERROR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete error\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8280/products/ornament-005?processType=0",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"ornament-005"
+					],
+					"query": [
+						{
+							"key": "processType",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品詳細一覧取得(getDetail)-NOK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getDetail-NOK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/details?goodsSeqList=10,11&page=1&limit=1&orderBy=id&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"details"
+					],
+					"query": [
+						{
+							"key": "goodsSeqList",
+							"value": "10,11"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "orderBy",
+							"value": "id"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ一覧取得(getList)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getList-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products?categoryId=tops&page=1&limit=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "stcockExistStatus",
+							"value": "1,2",
+							"disabled": true
+						},
+						{
+							"key": "goodsGroupSeqList",
+							"value": "1001, 1002",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "tops"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "orderBy",
+							"value": "id",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ一覧取得(getList)-NOK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getList-NOK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products?categoryId=RuyTest&page=1&limit=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "stcockExistStatus",
+							"value": "string",
+							"disabled": true
+						},
+						{
+							"key": "goodsGroupSeqList",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "RuyTest"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "orderBy",
+							"value": "id",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品詳細一覧取得(getDetail)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getDetail-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/details?goodsSeqList=10000028,10000029&page=1&limit=1&orderBy=id&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"details"
+					],
+					"query": [
+						{
+							"key": "goodsSeqList",
+							"value": "10000028,10000029"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "orderBy",
+							"value": "id"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "規格２一覧取得(getItemsStandards2)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getItemsStandards2-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-003/items/furniture-00301/standards2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-003",
+						"items",
+						"furniture-00301",
+						"standards2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "管理検索用商品一覧取得(getItems)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getItems-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/items?page=1&limit=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"items"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "受注修正用商品一覧取得(get)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getOrder-items-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/order-items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"order-items"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品CSVDL(get)- OK",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "goodsSeqList",
+							"value": "10000146",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8280/products/csv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ取得(goodsGroupCode)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"goodGroupCode-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/furniture-001?openStatus=1&goodCode=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"furniture-001"
+					],
+					"query": [
+						{
+							"key": "openStatus",
+							"value": "1"
+						},
+						{
+							"key": "goodCode",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商品グループ一覧取得(getListRequest) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getListRequest-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "site",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition1",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition2",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition3",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition4",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition5",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition6",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition7",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition8",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition9",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "keywordLikeCondition10",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "categoryId",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "goodsGroupCode",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "minPrice",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "maxPrice",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "siteType",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "openStatus",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "outOpenStatus",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "categoryPath",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "stcockExistStatus",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "goodsGroupSeqList",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "limit",
+							"value": "4",
+							"type": "default"
+						},
+						{
+							"key": "orderBy",
+							"value": "orderDisplay",
+							"type": "default"
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8280/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "受注修正用商品一覧取得(get)- OK Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getOrder-items-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/products/order-items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"products",
+						"order-items"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,51 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-baloon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-secondary;
+  border-radius: 50%;
+  text-align: center;
+  font-style: normal;
+  color: $color-fff;
+  position: absolute;
+
+  &--number {
+    min-width: 23px;
+    min-height: 23px;
+    border: solid 3px $color-fff;
+    @include font-style(11, 11, 500);
+  }
+
+  &--hot {
+    width: 16px;
+    height: 16px;
+    @include font-style(12, 14, bold);
+  }
+
+  @include media(sm) {
+
+    &--number {
+      border-width: 2px;
+      min-width: vwset(17);
+      min-height: vwset(17);
+      padding-bottom: 1px;
+      @include font-sp-style(10, 10 , 500);
+    }
+
+    &--hot {
+      width: vwset(15);
+      height: vwset(15);
+      @include font-sp-style(10, 10 , 500);
+    }
+
+  }
+
+}
+
+

@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "cb6b94b9-01a8-475d-be25-f93843f11a98",
+		"name": "hclabo-shop-management-news-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ニュース取得(getByNewsSeq)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByNewsSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/10000005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						"10000005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース一覧取得(get)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsList).to.have.lengthOf(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/?page=1&limit=3&orderBy=newsSeq&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "orderBy",
+							"value": "newsSeq"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース一覧取得(get)- OK-Have Condition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：Conditions\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsList).to.have.lengthOf(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/?title=テスト",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						""
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "テスト",
+							"description": "タイトル"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース登録(regist)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"test\",\r\n    \"newsBody\": \"Body\",\r\n    \"newsOpenStatus\": \"1\",\r\n    \"newsTime\": \"2021-08-31T15:00:00.000+00:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/content-management/news",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.title).eql(\"title\");\r",
+							"    pm.expect(jsonData.newsBody).eql(\"Body\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"test1\",\r\n    \"newsBody\": \"newsBody\",\r\n    \"newsUrl\": null,\r\n    \"newsOpenStatus\": \"1\",\r\n    \"newsOpenStartTime\": \"2021-10-31T15:00:00.000+00:00\",\r\n    \"newsOpenEndTime\": \"2021-11-30T14:59:59.000+00:00\",\r\n    \"newsTime\": \"2021-10-31T15:00:00.000+00:00\",\r\n    \"newsNote\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/10000007",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						"10000007"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース更新(update)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"test\",\r\n    \"newsBody\": \"Body\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/10000099",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						"10000099"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース削除(delete)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/10000007",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						"10000007"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュース削除(delete)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/content-management/news/10000099",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"content-management",
+						"news",
+						"10000099"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

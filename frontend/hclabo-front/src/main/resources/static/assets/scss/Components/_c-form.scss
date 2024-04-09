@@ -1,0 +1,360 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  c-form
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+// input
+// -----------------------------------------------------------------
+.c-input {
+  border-radius: 4px;
+  background: $color-fff;
+  border: solid 1px $color-ccc;
+  height: 60px;
+  padding: 0 20px;
+  @include font-style(16);
+  transition: border-color $comMS $comES;
+
+  @include media(sm) {
+    height: 50px;
+    padding: 0 12px;
+    @include font-sp-style(15);
+  }
+
+  // 幅 / 大
+  &--width-l {
+    max-width: 700px;
+    width: 100%;
+    
+    @include media(sm) {
+      width: 100%;
+    }
+  }
+
+  // 幅 / SPのみ大
+  &--width-l-sp {
+    @include media(sm) {
+      width: 100%;
+    }
+  }
+
+
+  // 幅 / 小
+  &--width-s {
+    max-width: 200px;
+    width: 32vw;
+
+    @include media(sm) {
+      width: vwset(105);
+    }
+  }
+
+  // 高さ / 小
+  &--height-s {
+    height: 50px;
+
+    @include media(sm) {
+      height: vwset(40);
+    }
+  }
+
+  // エラー
+  &--error {
+    background: #fff2f2;
+  }
+
+}
+
+
+// textarea
+// -----------------------------------------------------------------
+.c-text-area {
+  border-radius: 4px;
+  background: $color-fff;
+  border: solid 1px $color-ccc;
+  @include font-style(16,28.8);
+  padding: 10px 20px;
+
+  @include media(sm) {
+    padding: vwset(10) vwset(12);
+    @include font-sp-style(15);
+  }
+
+  // 幅 / 大
+  &--width-l {
+    // max-width: 700px;
+    width: 100%;
+    
+    @include media(sm) {
+      width: 100%;
+    }
+  }
+
+  // エラー
+  &--error {
+    background: #fff2f2;
+  }
+
+}
+
+// カウンター付き
+.c-text-area__count {
+  position: relative;
+  max-width: 700px;
+  width: 100%;
+
+  textarea {
+    width: 100%;
+    height: 150px;
+  }
+
+  &-number {
+    margin-top: 10px;
+    text-align: right;
+  }
+
+  .c-field-error {
+    margin-top: -20px;
+
+    @include media(sm) {
+      margin-top: vwset(-23);
+    }
+  }
+
+}
+
+
+// radio
+// -----------------------------------------------------------------
+.c-radio {
+  display: none;
+}
+
+.c-radio + label {
+  height: 20px;
+  padding: 0 20px 2px 30px;
+  position: relative;
+  @include font-style(16,20);
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    display: block;
+    border: 1px solid $color-ccc;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    transition: all .3s;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    background: $color-ccc;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    top: 0;
+    transition: all .3s;
+  }
+
+
+  @include media(sm) {
+    @include font-sp-style(15, 30);
+  }
+}
+
+.c-radio:disabled + label {
+  &::before {
+    border: 1px solid rgba($color: $color-e6, $alpha: 1);
+    background: rgba($color: $color-e6, $alpha: .4);
+  }
+
+  &::after {
+    background: rgba($color: $color-e6, $alpha: .6);
+    display: none;
+  }
+}
+
+.c-radio:checked + label {
+
+  &::before {
+    border: 1px solid $color-primary;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    background: $color-primary;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    top: 0;
+  }
+}
+
+.c-radio:checked:disabled + label {
+    &::before,
+    &::after {
+    opacity: .4;
+  }
+}
+
+.c-radio-group {
+  &--error {
+    background: #fff2f2;
+  }
+}
+
+// ラジオごとに一行に並ぶ時
+.c-radio-wrap {
+
+  &:not(:first-child) {
+    margin-top: 15px;
+
+    @include media(sm) {
+      margin-top: vwset(5);
+    }
+  }
+}
+
+
+// checkbox
+// -----------------------------------------------------------------
+.c-checkbox {
+  display: inline-flex;
+  align-items: center;
+  @include font-style(16, 20);
+  cursor: pointer;
+
+  @include media(sm) {
+    align-items: center;
+    @include font-sp-style(15, 30);
+  }
+
+  &__box {
+    input[type = "checkbox"] {
+      display: none;
+    }
+
+    span {
+      display: block;
+      width: 20px;
+      height: 20px;
+      transition: border-color $comMS $comES, background-color $comMS $comES;
+      background-image: url(/assets/images/icon/check.svg);
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    input[type = "checkbox"]:disabled + span {
+      opacity: .5;
+    }
+
+    input[type = "checkbox"]:checked + span {
+      background-image: url(/assets/images/icon/check-checked.svg);
+    }
+
+    input[type = "checkbox"]:checked:disabled + span {
+      background-image: url(/assets/images/icon/check-checked.svg);
+      opacity: .5;
+    }
+  }
+
+  p {
+    margin: 0 10px 2px;
+    @include font-style(16, 20);
+
+    @include media(sm) {
+      @include font-sp-style(16, 30);
+    }
+  }
+}
+
+
+// select
+// -----------------------------------------------------------------
+.c-select {
+  $this: &;
+  display: inline-block;
+  position: relative;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    @include icon('arrow-down', '333333');
+    width: 14px;
+    height: 8px;
+
+    @include media(sm){
+      right: 20px;
+      width: vwset(10.5);
+      height: vwset(6);
+    }
+  }
+
+  &__inner {
+    border-radius: 4px;
+    background: $color-fff;
+    border: solid 1px $color-ccc;
+    height: 60px;
+    padding: 0 40px 0 18px;
+    text-indent: .01px; // 【メモ】矢印非表示対策
+    overflow: hidden;   // 【メモ】矢印非表示対策
+    cursor: pointer;
+    position: relative;
+    @include font-style(16,32,normal);
+  
+    @include media(sm) {
+      display: block;
+      padding: 0 vwset(25) 0 vwset(18);
+      @include font-sp-style(15);
+    }
+  }
+
+  // エラー
+  &--error {
+    background: #fff2f2;
+  }
+
+}
+
+
+
+// 必須タグ
+// -----------------------------------------------------------------
+
+.c-require {
+  display: inline-block;
+  padding: 0 3px 1px;
+  background-color: $color-orange;
+  color: $color-fff;
+  @include font-style(12, 18, bold);
+  white-space: nowrap;
+}
+

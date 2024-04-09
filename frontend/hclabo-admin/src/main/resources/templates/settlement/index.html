@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>決済方法設定｜システム設定</title>
+</head>
+
+<body id="system">
+<div id="searchSettlementMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"/>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"/>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/settlement/}" th:object="${settlementModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">決済方法設定</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                            <ul>
+                                <li><button class="c-btn btn_move" name="doRegist" type="submit">決済方法登録</button></li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <div th:if="${#fields.hasErrors('orderDisplay')}" class="global-error-message">
+                        <ul>
+                            <li th:errors="*{orderDisplay}"></li>
+                        </ul>
+                    </div>
+                    <!-- 決済方法一覧 -->
+                    <div class="l-section">
+                        <article class="l-article">
+
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() == 0}">
+                                    <span class="as_end">現在、登録されている決済方法はありません。</span>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+                                    <th:block th:if="*{isResult}">
+                                        <table class="c-tbl tbl_settlement_list large60">
+                                            <thead>
+                                            <tr>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <th class="check"></th>
+                                                </th:block>
+                                                <th class="number">#</th>
+                                                <th class="settlement_id">決済ID</th>
+                                                <th>決済名称</th>
+                                                <th class="status">公開状態</th>
+                                                <th class="settlement_kinds">決済種別</th>
+                                                <th class="request_kinds">請求種別</th>
+                                                <th class="commission">手数料種別</th>
+                                                <th>対象配送方法</th>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <th class="btn_set">詳細設定</th>
+                                                </th:block>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="item, stat: *{resultItems}">
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <td class="check">
+                                                        <label class="c-form-control">
+                                                            <input type="radio" th:id="'orderDisplay' + '-' + ${stat.index}" name="orderDisplay"
+                                                                   th:value="${item.orderDisplayRadioValue}"
+                                                                   th:checked="${item.orderDisplayRadioValue} == *{orderDisplay}">
+                                                            <i></i>
+                                                        </label>
+                                                    </td>
+                                                </th:block>
+                                                <td class="number">
+                                                    <span th:text="${item.orderDisplayValue}" th:remove="tag"></span>
+                                                </td>
+                                                <td class="settlement_id">
+                                                    <span th:text="${item.settlementMethodSeq}" th:remove="tag"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${item.settlementMethodName}" th:remove="tag"></span>
+                                                </td>
+                                                <td class="status">
+                                                    <span th:text="${item.openStatusPc.label}" th:remove="tag"></span>
+                                                </td>
+                                                <td class="settlement_kinds">
+                                                    <span th:text="${item.settlementMethodType.label}" th:remove="tag"></span>
+                                                </td>
+                                                <td class="request_kinds">
+                                                    <span th:text="${item.billType.label}" th:remove="tag"></span>
+                                                </td>
+                                                <td class="commission">
+                                                    <span th:text="${item.settlementMethodCommissionType.label}" th:remove="tag"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${item.deliveryMethodName}"></span>
+                                                </td>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <td class="btn_set">
+                                                        <th:block th:if="${!item.isDiscountSettlement()}">
+                                                            <div class="wrap_flex_center jc_center">
+                                                                <button class="c-btn-icon" type="button"><a th:href="@{/settlement/registupdate(seq=${item.settlementMethodSeq})}">
+                                                                    <i class="edit"></i> </a></button>
+                                                            </div>
+                                                        </th:block>
+                                                    </td>
+                                                </th:block>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                            <div class="mt20 wrap_flex ai_start">
+                                                <ul class="c-list-left list_sp5 mb10">
+                                                    <li>
+                                                        <button class="c-btn-small c-btn_sort" type="submit"  name="doOrderDisplayUp" value="UP">
+                                                            <i class="material-icons navigate_before"></i>UP
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayDown" value="DOWN">
+                                                            <i class="material-icons navigate_next"></i>DOWN
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button  class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayTop" value="TOP">
+                                                            <i class="material-icons first_page"></i>TOP
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayBottom" value="BOTTOM">
+                                                            <i class="material-icons last_page"></i>BOTTOM
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                                <button name="doOnceOrderDisplayUpdate" class="c-btn btn_regular col_left" type="submit">表示順を登録</button>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"/>
+    </main>
+</div>
+</body>
+</html>

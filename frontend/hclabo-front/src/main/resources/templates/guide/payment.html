@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-guide">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+
+	<main class="l-page">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('payment')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>お支払い・配送について</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="#anchor-guide-payment01" class="js-anchor" data-scroll="">お支払い金額について</a>
+          <a href="#anchor-guide-payment02" class="js-anchor" data-scroll="">お支払い方法について</a>
+          <a href="#anchor-guide-payment03" class="js-anchor" data-scroll="">配送について</a>
+          <a href="#anchor-guide-payment04" class="js-anchor" data-scroll="">送料について</a>
+          <a href="#anchor-guide-payment05" class="js-anchor" data-scroll="">商品の外装について</a>
+          <a href="#anchor-guide-payment06" class="js-anchor" data-scroll="">商品のキャンセル・返品について</a>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">お支払い金額について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text p-guide__text--large"><strong>表示金額（税込）がお支払い金額となります。</strong>　<br class="l-sm">※送料含む</p>
+              <div class="p-guide__title-inner c-margin--xs">【消費税について】</div>
+              <p class="p-guide__text">当店の記載価格は、すべて消費税（10％）込みの価格です。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment02">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">お支払い方法について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">みんなの郵送検査室は、お支払い方法として「クレジットカード決済」「PayPay決済」「コンビニ決済」がご利用いただけます。<br>
+                ※ご注文完了後にお支払い方法を変更することはできません。</p>
+            </div>
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">クレジットカードでのお支払いについて</h4>
+              <div class="p-guide__unit-nest">
+                <div class="p-guide__title-inner">【ご利用可能なクレジットカード】</div>
+                <p class="p-guide__text">VISA／MASTER／JCB／AMEX／DINERS</p>
+                <div class="p-guide__figure">
+                  <div class="p-guide__figure-img"><img src="/assets/images/guide/payment/credit.png" alt="" width="440"></div>
+                </div>
+
+                <div class="p-guide__title-inner c-margin--xs">【お支払い回数について】</div>
+                <p class="p-guide__text">お支払い回数は「一括払い」のみとなっておりますので選択後、お支払いお願いします。</p>
+
+                <div class="p-guide__title-inner c-margin--xs">【クレジットカードご利用に関する注意事項】</div>
+                <ul class="p-guide__bullet-point">
+                  <li>ご依頼主様とクレジットカードのご名義人様が異なる場合は、クレジットカード発行会社の承認をとらせていただく場合がございます。</li>
+                  <li>ご予約商品や、お届け日のご指定がある場合など、お届け前にカード会社よりご請求となる場合がございます。</li>
+                </ul>
+
+                <div class="p-guide__title-inner c-margin--xs">【セキュリティコードについて】</div>
+                <p class="p-guide__text">お支払い方法にクレジットカードをお選びの際、クレジットカード番号と有効期限に加え、カードにセキュリティコードの記載がある場合は、セキュリティコードの入力が必要です。<br>
+                （記載がないカードは、セキュリティコード欄は入力せずに注文を進めてください。）</p>
+                <div class="p-guide__article c-margin--xs">
+                  <div class="p-guide__article-title">セキュリティコードとは？</div>
+                  <div class="p-guide__article-contents">
+                    <p class="p-guide__text">クレジットカード番号とは別にカードに印字されている3桁の数字です。<br>クレジットカードをお持ちの方のみが分かるセキュリティコードをご入力いただくことにより、クレジットカードをご利用いただく際のセキュリティが向上します。</p>
+                    <div class="p-guide__article-fit c-margin--xs">
+                      <img src="/assets/images/guide/payment/secure-code.png" alt="">
+                    </div>
+                    <p class="p-guide__text p-guide__text--small c-margin--xxs">※カード裏面のご署名欄に表示された数字の末尾3桁がセキュリティコードです。<br>※カードによっては、表面のカード番号右上または左上に4桁で表示されていることもあります。</p>
+                  </div>
+                </div>
+
+                <div class="p-guide__title-inner c-margin--s">【本人認証サービス3Dセキュア2.0（EMV3Dセキュア）について】</div>
+                <p class="p-guide__text">クレジットカードの第三者による不正利用防止を目的とした本人認証サービスで、クレジットカード発行会社へ事前に登録することでご利用いただけます。</p>
+                <div class="p-guide__article c-margin--xs">
+                  <div class="p-guide__article-title">3Dセキュアを利用するには？</div>
+                  <div class="p-guide__article-contents">
+                    <p class="p-guide__text">ご利用のクレジットカード発行会社のホームページから事前にご登録することでご利用いただけます。<br>
+                      ご利用いただくクレジットカードが3Dセキュアに対応しているかどうかや、設定方法につきましては、カード裏面に表示されている各カード発行会社にお問合せください。<br>※カード発行会社によっては、3Dセキュアが適用されない場合があります。</p>
+                  </div>
+                </div>
+                <div class="p-guide__article c-margin--xs">
+                  <div class="p-guide__article-title">3Dセキュアを利用した場合のご購入方法について</div>
+                  <div class="p-guide__article-contents">
+                    <div class="p-guide__article-fit c-margin--xs">
+                      <img src="/assets/images/guide/payment/secure-3d.jpg" alt="" class="l-lg"><img src="/assets/images/guide/payment/secure-3d_sp.jpg" alt="" class="l-sm">
+                    </div>
+                    <p class="p-guide__text p-guide__text--small c-margin--xs">※カード発行会社にて認証が不要と判断された場合は、本人認証画面が表示されない場合がございます。<br>
+                    ※3Dセキュアの本人認証画面や入力項目は、ご契約されているクレジットカード発行会社により異なります。<br>
+                    ※クセスが集中した際には、システム処理の都合上、適用されない場合がございます。</p>
+                    <div class="p-guide__title-inner c-margin--xs">【次のような場合、3Dセキュア本人認証画面が正常に表示されない場合がございます。】</div>
+                    <ul class="p-guide__bullet-point">
+                      <li>セキュリティソフトを導入している、またはセキュリティレベルを“高”に設定している場合。</li>
+                      <li>日本語フォントに対応していないパソコンをご利用の場合。（文字化けすることがあります）</li>
+                      <li>Cookieの設定が“有効”の状態にない場合。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <!-- guide/payment.html ＆ pop_linkpay.html 共通エリア -->
+              <hm:freearea key="linkpay"/>
+              <!-- //  guide/payment.html ＆ pop_linkpay.html 共通エリア -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment03">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">配送について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">商品の配送は日本郵便株式会社からとなります。<br>※宅配業者を選択することは出来ません。</p>
+              <p class="p-guide__text c-margin--xs">配送は基本ゆうパケットでのポスト投函となります。（発送後1日～3日前後）<br>※お届け日・時間帯の指定はできません</p>
+              <p class="p-guide__text c-margin--xs">発送は弊社営業日15時までのお申込み入金確認分は当日発送致します。<br>
+              左記以外につきましては、翌営業日確認での発送となります。通常1～3日着となりますが、地域によって異なります。<br>
+              また営業日外（日・祝）等、大型連休中でのご注文は、通常よりお届けが遅れますことご了承ください。<br>
+              北海道・沖縄、および離島地域の郵便局ご指定の場合は、3日～10日前後かかる場合もございます。<br>
+              大きな郵便局をご指定いただくと、平日の遅い時間や、土・日・祝日の受け取りもできるので便利です。<br>
+              （簡易郵便局や、ATMのみしかない出張所などは、お受け取り指定ができません）</p>
+              <p class="p-guide__text c-margin--xs">※災害時には、通常のお届けができない場合がございます。ご了承ください。<br>
+                ※複数の商品をご注文の場合は、規定外サイズとなるため、郵便局のゆうパックへ変更させていただく場合がございますので予めご了承ください。<br>（その場合の送料は無料です）</p>
+            </div>
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">郵便局留め配送について</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">利用可能です。<br>
+                  自宅で受け取りにくい方につきましてはお近くの郵便局でお受け取りいただくこともできおすすめです。<br>お受け取りにご都合の良い郵便局をご指定ください。<br>
+                  【郵便局を探す】<br><a href="https://map.japanpost.jp/p/search/" target="_blank" class="c-textlink c-inlinelink">https://map.japanpost.jp/p/search/</a></p>
+                <p class="p-guide__text c-margin--xs">※郵便局留めの送り主はHCLでの発送となります。<br>
+                  ※郵便局窓口でお受け取りの際は、ご本人確認のために身分証明書（運転免許証など）の提示が必要となります。<br>
+                  ※郵便物が郵便局に届いているという通知はきません。</p>
+                <p class="p-guide__text c-margin--xs">商品出荷完了メールもしくはマイページの注文履歴から伝票番号をご確認のうえ、ご利用ください。<br>
+                  【日本郵便の郵便追跡サービス】<br>
+                  <a href="https://trackings.post.japanpost.jp/services/srv/search/" target="_blank" class="c-textlink c-inlinelink">https://trackings.post.japanpost.jp/services/srv/search/</a><br>
+                  ※郵便局における商品保管期限は到着後7日ですので、お早めにお受け取りください。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment04">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">送料について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text p-guide__text--large"><strong>送料：無料</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment05">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">商品の外装について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <div class="p-guide__title-inner">お届けは検査キットだとはわからない梱包です。</div>
+              <ul class="p-guide__bullet-point">
+                <li>外装からは中身が特定できないようにしてお送りいたします。商品や検査項目に関する表記は入りません。</li>
+                <li>送り状ラベルの品名記入欄には「雑貨」と表記し、発送元はHCLとなります。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-payment06">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">商品のキャンセル・返品について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <h4 class="p-guide__title-unit">変更・キャンセル</h4>
+              <div class="p-guide__unit-nest">
+                <ul class="p-guide__bullet-point">
+                  <li>商品発送後のお届け先・ご注文のキャンセルはお受けできかねます。あらかじめご了承ください。</li>
+                  <li>ご注文完了後、金額変更を伴う内容変更については承ることができかねます。<br>内容変更をご希望の場合はご注文履歴の「お問合せはこちら」または「お電話」にて至急ご連絡ください。<br>
+                    弊社担当者が確認しだいご対応いたしますので、その後再度ご注文ください。</li>
+                </ul>
+              </div>
+            </div>
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">返品</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">お届けした商品がご注文内容と異なっている場合や、不良品の場合についてのみ検査キットの交換・返品を承ります。<br>
+                  検査キット交換・返品をご希望の場合は、必ず商品到着後7日以内に、みんなの郵送検査室まで、お電話にてご連絡ください。<br>
+                  事前のご連絡がない返送商品のご対応はお受けできませんのでご注意ください。<br>
+                  当社責任による検査キットの交換・ご返品の際の配送料金は当社負担とさせていただきます。</p>
+                <div class="p-guide__title-inner c-margin--xs">【次の場合、返品はお受けできませんので、ご注意ください。】</div>
+                <ol class="p-guide__ordered-list01">
+                  <li>返品受付期間（商品到着後7日以内のご連絡）が経過した商品</li>
+                  <li>お客様都合による返品（イメージと異なる、注文違い等）</li>
+                  <li>一度ご使用になった商品</li>
+                  <li>お客様のもとで、検査キットの付属品を紛失・破損してしまった商品</li>
+                  <li>事前のご連絡がなく返送されてきた商品</li>
+                  <li>返品受付後、10日以上経過して返品先住所に届いた商品</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+	</main>
+	<div th:replace="~{include/footer}"></div>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body>
+</html>

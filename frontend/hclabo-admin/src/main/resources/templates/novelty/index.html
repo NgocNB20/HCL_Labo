@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>ノベルティプレゼント条件検索｜店舗管理</title>
+    <script>
+
+        jQuery(function($){
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+    </script>
+</head>
+
+<body id="shop">
+<div id="noveltySearchShop" class="l-mainwrap">
+    <!--/* side */-->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!--/* header */-->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!--/* contents */-->
+            <div class="l-main">
+                <form th:action="@{/novelty/}" th:object="${noveltyModel}" method="post">
+                    <input type="hidden" name="limit" value="100"/>
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">ノベルティプレゼント条件検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                            <ul>
+                                <li>
+                                    <input class="c-btn btn_move w200px" type="submit" value = "ノベルティプレゼント条件登録" id="doRegist" name="doRegist"/>
+                                </li>
+                            </ul>
+                        </th:block>
+                        <th:block sec:authorize="!hasAnyAuthority('SHOP:8')">&nbsp;</th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!--/* 検索 */-->
+                    <div class="l-section" id="allItemsSearch">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>条件名</dt>
+                                            <dd>
+                                                <input th:field="*{searchNoveltyPresentName}" maxlength="120" th:errorclass="error" type="text" class="c-form-control w600px" placeholder="入力してください">
+                                                <div th:if="${#fields.hasErrors('searchNoveltyPresentName')}" th:errors="*{searchNoveltyPresentName}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <div>
+                                            <dl>
+                                                <dt>条件開始日</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <div class="wrap_flex_center">
+                                                        <label class="c-datepicker w150px">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{searchNoveltyPresentStartTimeFrom}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                        <span class="ml10">〜</span>
+                                                        <label class="ml10 c-datepicker w150px">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{searchNoveltyPresentStartTimeTo}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <ul class="c-list-left list_sp5 mt10 w100p">
+                                                <li><button id="targetDate_today_searchNoveltyPresentStartTime" class="c-btn-small" type="button">今日</button></li>
+                                                <li><button id="targetDate_yesterday_searchNoveltyPresentStartTime" class="c-btn-small" type="button">昨日</button></li>
+                                                <li><button id="targetDate_crrentMonth_searchNoveltyPresentStartTime" class="c-btn-small" type="button">今月</button></li>
+                                                <li><button id="targetDate_prevMonth_searchNoveltyPresentStartTime" class="c-btn-small" type="button">先月</button></li>
+                                                <li><button id="targetDate_clear_searchNoveltyPresentStartTime" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                            </ul>
+                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentStartTimeFrom')}" th:errors="*{searchNoveltyPresentStartTimeFrom}" class="c-error-txt mt5"></div>
+                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentStartTimeTo')}" th:errors="*{searchNoveltyPresentStartTimeTo}" class="c-error-txt mt5"></div>
+                                        </div>
+                                        <div class="flex_grow">
+                                            <dl>
+                                                <dt>条件終了日</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <div class="wrap_flex_center">
+                                                        <label class="c-datepicker w150px">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{searchNoveltyPresentEndTimeFrom}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                        <span class="ml10">〜</span>
+                                                        <label class="ml10 c-datepicker w150px">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{searchNoveltyPresentEndTimeTo}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <ul class="c-list-left list_sp5 mt10 w100p">
+                                                <li><button id="targetDate_today_searchNoveltyPresentEndTime" class="c-btn-small" type="button">今日</button></li>
+                                                <li><button id="targetDate_yesterday_searchNoveltyPresentEndTime" class="c-btn-small" type="button">昨日</button></li>
+                                                <li><button id="targetDate_crrentMonth_searchNoveltyPresentEndTime" class="c-btn-small" type="button">今月</button></li>
+                                                <li><button id="targetDate_prevMonth_searchNoveltyPresentEndTime" class="c-btn-small" type="button">先月</button></li>
+                                                <li><button id="targetDate_clear_searchNoveltyPresentEndTime" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                            </ul>
+                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentEndTimeFrom')}" th:errors="*{searchNoveltyPresentEndTimeFrom}" class="c-error-txt mt5"></div>
+                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentEndTimeTo')}" th:errors="*{searchNoveltyPresentEndTimeTo}" class="c-error-txt mt5"></div>
+                                        </div>
+                                    </div>
+
+                                    <!--/* 詳細検索 */-->
+                                    <div class="c-detail-warp search mt10">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <dl>
+                                                        <dt>商品番号</dt>
+                                                        <dd>
+                                                            <input th:field="*{searchNoveltyPresentGoodsCode}" maxlength="20" th:errorclass="error" type="text" class="c-form-control w350px" placeholder="入力してください">
+                                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentGoodsCode')}" th:errors="*{searchNoveltyPresentGoodsCode}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>販売可能在庫数</dt>
+                                                        <dd class="wrap_flex_center">
+                                                            <input type="text" class="c-form-control count w80px" placeholder=""
+                                                                   th:field="*{searchNoveltyPresentGoodsCountFrom}" maxlength="6" th:errorclass="error">
+                                                            <label class="sp_label">～</label>
+                                                            <input type="text" class="c-form-control count w80px" placeholder=""
+                                                                   th:field="*{searchNoveltyPresentGoodsCountTo}" maxlength="6" th:errorclass="error">
+                                                        </dd>
+                                                        <dd>
+                                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentGoodsCountFrom')}" th:errors="*{searchNoveltyPresentGoodsCountFrom}" class="c-error-txt mt5"></div>
+                                                            <div th:if="${#fields.hasErrors('searchNoveltyPresentGoodsCountTo')}" th:errors="*{searchNoveltyPresentGoodsCountTo}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <div class="wrap_flex_wrap">
+                                                        <dl class="search-date">
+                                                            <dt>条件状態</dt>
+                                                            <dd class="pt10">
+                                                                <ul class="c-list-left list_sp20">
+                                                                    <li th:each="item : *{noveltyPresentStateItems}">
+                                                                        <label class="c-form-control">
+                                                                            <input type="checkbox" th:field="*{noveltyPresentState}" th:value="${item.key}" th:checked="${item.key} == *{noveltyPresentState}">
+                                                                            <i th:classappend="${#fields.hasErrors('noveltyPresentState')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </dd>
+                                                            <dd>
+                                                                <div th:if="${#fields.hasErrors('noveltyPresentState')}" th:errors="*{noveltyPresentState}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top">
+                                            <button name="doNoveltySearch" class="c-btn btn_regular" type="submit">検索する</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--/* 検索結果 */-->
+                        <article th:if="*{isResult}" class="l-article">
+                            <input type="hidden" id="pageNumber" name="pageNumber" />
+                            <input type="hidden" id="orderField" th:field="*{orderField}" />
+                            <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                            <input type="hidden" id="resultNoveltyPresentStartTime" name="resultNoveltyPresentStartTime"/>
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() == 0}" >
+                                    <div class="col wrap_flex">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true)}"></div>
+                                    </div>
+                                    <table id="search_result" class="c-tbl tbl_search_news">
+                                        <thead>
+                                        <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                            <th class="number">#</th>
+                                            <th class="times">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerNoveltyPresentStartTime">条件開始日
+                                                    <th:block th:if="*{orderField} == 'noveltyPresentStartTime'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a></th>
+                                            <th class="times">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerNoveltyPresentEndTime">条件終了日
+                                                    <th:block th:if="*{orderField} == 'noveltyPresentEndTime'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerNoveltyPresentName">条件名
+                                                    <th:block th:if="*{orderField} == 'noveltyPresentName'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a>
+                                            </th>
+                                            <th class="status">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerNoveltyPresentState">条件状態
+                                                    <th:block th:if="*{orderField} == 'noveltyPresentState'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <p>ノベルティ商品＜規格1／規格2＞（販売可能在庫数）</p>
+                                            </th>
+                                            <th class="btn_set"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="item: *{resultItems}">
+                                            <td class="number">
+                                                <span th:text="${item.resultNo}" />
+                                            </td>
+                                            <td class="times">
+                                                <span th:text="${#date.convert(item.resultNoveltyPresentStartTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                            </td>
+                                            <td class="times">
+                                                <span th:text="${#date.convert(item.resultNoveltyPresentEndTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                            </td>
+                                            <td>
+                                                <span th:text="${item.resultNoveltyPresentName}" />
+                                            </td>
+                                            <td class="status">
+                                                <span th:if="${item.isNoveltyPresentStateValid}" th:text="${#enumtype.getLabel('HTypeNoveltyPresentState',item.resultNoveltyPresentState)}"/>
+                                                <span th:if="${item.isNoveltyPresentStateInvalid}" th:text="${#enumtype.getLabel('HTypeNoveltyPresentState',item.resultNoveltyPresentState)}" style="color: #D13328"/>
+                                            </td>
+                                            <td>
+                                                <span th:utext="${item.resultNoveltyPresentGoods}" />
+                                            </td>
+                                            <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                <td class="btn_set">
+                                                    <div class="wrap_flex_center jc_center">
+                                                        <button class="c-btn-icon" type="button"><a th:href="@{/novelty/registupdate/(noveltyPresentConditionSeq=${item.noveltyPresentConditionSeq})}">
+                                                            <i class="edit"></i> </a></button>
+                                                    </div>
+                                                </td>
+                                            </th:block>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--ページネーション-->
+                                    <div th:replace="~{include/pager}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

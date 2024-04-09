@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "8f2892a5-3fd3-424f-85f4-528aac97a1b0",
+		"name": "Infratracture-Logistic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12332888"
+	},
+	"item": [
+		{
+			"name": "get-address",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8580/shippings/addressbooks",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "regist-address",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"addressName\": \"Ｈａｉ　Ｐｈｏｎｇ\",\r\n    \"lastName\": \"Ｔｒｕｏｎｇ\",\r\n    \"firstName\": \"Ｔｕａｎ\",\r\n    \"lastKana\": \"セイ\",\r\n    \"firstKana\": \"イ\",\r\n    \"tel\": \"11111222388\",\r\n    \"zipCode\": \"0600034\",\r\n    \"prefecture\": \"北海道\",\r\n    \"address1\": \"Ｈａｉ　Ｐｈｏｎｇ\",\r\n    \"address2\": \"Ｈａｉ　Ｐｈｏｎｇ\",\r\n    \"address3\": \"Ｈａｉ　Ｐｈｏｎｇ\",\r\n    \"shippingMemo\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/addressbooks",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAddressById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8580/shippings/addressbooks/16b1603c-9f6e-4be7-a5bd-6d4aedfae3cf",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"16b1603c-9f6e-4be7-a5bd-6d4aedfae3cf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "regist shipping",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "shipping check",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/check",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure Inventory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/inventories/secure",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"inventories",
+						"secure"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "open shipping",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/open",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"open"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get shipping",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips?transactionId=698176dc-4028-4638-a452-f00bf62a7781",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips"
+					],
+					"query": [
+						{
+							"key": "transactionId",
+							"value": "698176dc-4028-4638-a452-f00bf62a7781"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update ship address",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\",\r\n    \"shippingAddressId\": \"275eb4ba-41e1-44ae-8cfa-dda1adac5b6a\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/address",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update ship method",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\",\r\n    \"shippingMethodId\": \"1004\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/methods",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "revert shipping",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000084",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7781\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/shipping-slips/draft/revert",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"shipping-slips",
+						"draft",
+						"revert"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>受注詳細 送信メール編集｜受注管理</title>
+	<meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=yes">
+</head>
+
+<body id="order">
+	<div id="searchOrder">
+		<div id="page" class="l-mainwrap">
+			<!-- side -->
+			<div th:replace="~{include/sidemenu}"></div>
+			<main class="l-page">
+				<!-- header -->
+				<div th:replace="~{include/header}"></div>
+				<div class="l-container">
+					<!-- contents -->
+					<div class="l-main">
+						<form id="selectForm" th:action="@{/mailtemplate/send/edit}" th:object="${mailtemplateSendModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+							<input type="hidden" id="toAddressValue"  name="toAddressValue"  value="" />
+							<div class="l-pagetitle_wrap">
+								<h1 class="c-pagetitle_h1">受注詳細</h1>
+								<h1 class="c-pagetitle_h1">送信メール編集</h1>
+							</div>
+							<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+								<ul th:each="message : ${allMessages}">
+									<li th:utext="${message}"></li>
+								</ul>
+							</div>
+							<th:block th:if="*{mailSent}">
+								<span id="isMailSent">
+									<p class="notice"><span id="testAddress" th:text="*{testAddress}"></span>に編集中のメールを送信しました。</p>
+								</span>
+							</th:block>
+							<th:block th:if="*{mailSendFailure}">
+								<span id="isMailSendFailure">
+									<p class="notice">メール送信できませんでした。</p>
+								</span>
+							</th:block>
+							<div class="l-section" id="mainContainer">
+								<article class="l-article">
+									<div class="l-article_inner">
+										<div class="l-inner_wrap">
+											<div class="wrap_flex_equivalent">
+												<div class="col mr20">
+													<table class="c-tbl-base th_fntnormal">
+														<tbody>
+															<tr>
+																<th class="w190px">テンプレートタイプ</th>
+																<td id="mailTemplateTypeName" th:text="*{mailTemplateTypeName}"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="col">
+													<table class="c-tbl-base th_fntnormal">
+														<tbody>
+															<tr>
+																<th class="w190px">テンプレート名</th>
+																<td id="mailTemplateName" th:text="*{mailTemplateName}"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<dl class="c-dl-base dt_fn13 dt_w160px mt40">
+												<div class="edit">
+													<dt>From<span class="ico_required">必須</span></dt>
+													<dd>
+														<input type="text" class="c-form-control w560px" th:classappend="${#fields.hasErrors('fromAddress')}?'error':''"  placeholder="" id="fromAddress" name="fromAddress" th:field="*{fromAddress}" title="From">
+														<div th:if="${#fields.hasErrors('fromAddress')}" th:errors="*{fromAddress}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>Bcc</dt>
+													<dd>
+														<input type="text" class="c-form-control w560px" th:classappend="${#fields.hasErrors('bccAddress')}?'error':''" placeholder="" id="bccAddress" name="bccAddress" th:field="*{bccAddress}" title="BCC" >
+														<div th:if="${#fields.hasErrors('bccAddress')}" th:errors="*{bccAddress}" class="c-error-txt mt5"></div>
+														<div class="c-annotation mt5">
+															※送信対象の数だけ送信されます<br>
+															※テスト送信には使用されません
+														</div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>メール件名<span class="ico_required">必須</span></dt>
+													<dd>
+														<input type="text" class="c-form-control w100p" th:classappend="${#fields.hasErrors('mailTitle')}?'error':''" placeholder="" id="mailTitle" name="mailTitle" th:field="*{mailTitle}" title="メール件名">
+														<div th:if="${#fields.hasErrors('mailTitle')}" th:errors="*{mailTitle}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>テスト送信先</dt>
+													<dd>
+														<input type="text" class="c-form-control w560px" th:classappend="${#fields.hasErrors('testAddress')}?'error':''" placeholder="" id="testAddress" name="testAddress" th:field="*{testAddress}" title="テスト送信先">
+														<input type="hidden" id="isSendTestMail" value="false"/>
+														<input type="hidden" id="isConfirmSendPageBtnClicked" value="false"/>
+														<button class="c-btn-small_over ml10" id="doSendTestMail" name="doSendTestMail">テスト送信</button><br>
+														<div th:if="${#fields.hasErrors('testAddress')}" th:errors="*{testAddress}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</article>
+							</div>
+							<!-- 追尾ボタン -->
+							<div class="l-pagebtn-nav">
+								<div class="l-pagebtn-nav_inner">
+									<div class="c-back">
+										<span id="isNotSkippedSelectPage" th:if="*{!skippedSelectPage}">
+											<button class="c-btn btn_back icon_left" id="jumpSelect" name="doSelectPage"><i class="material-icons navigate_before"></i>戻る</button>
+										</span>
+										<span id="isSkippedSelectPage" th:if="*{skippedSelectPage}">
+											<button class="c-btn btn_back icon_left" id="doGoBackPreviousSubapplication" name="doGoBackPreviousSubapplication"><i class="material-icons navigate_before"></i>キャンセル</button>
+										</span>
+									</div>
+									<div class="col_left">
+										<button class="c-btn btn_regular" id="doConfirmSendPage" name="doConfirmSendPage">確認</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- footer -->
+				<div th:replace="~{include/footer}"></div>
+			</main>
+		</div>
+	</div>
+</body>
+</html>

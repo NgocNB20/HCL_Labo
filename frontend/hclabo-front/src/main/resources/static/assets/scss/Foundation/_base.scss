@@ -1,0 +1,177 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  base
+// ==========================================================================
+
+@use "sass:math";
+@use "./variables" as *;
+@use "./mixin" as *;
+@use "./functions" as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+// Document
+// -----------------------------------------------------------------
+html {
+  overflow-y: scroll;
+  height: 100%;
+  font-size: 10px;
+  -webkit-font-smoothing: antialiased;
+  color: $color-333; // site thema
+
+  @include media(sm) {
+    padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+}
+
+// Sections
+// -----------------------------------------------------------------
+body {
+  font-size: 1.6rem;
+  font-family: $fontFamily;
+  font-feature-settings: 'palt';
+  margin: 0 auto;
+  min-height: 100%;
+  min-width: 1024px;  // site thema
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: none;
+  width: 100%;
+  word-wrap: break-word;
+
+  // アンチエイリアス
+  @include media(retina) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  // メニュー展開時（スマホ）
+  @include media(sm) {
+    min-width: initial;
+
+    .is-nav-active & {
+      overflow: hidden;
+    }
+
+    .is-search-active & {
+      overflow: hidden;
+    }
+  }
+}
+
+
+// Text-level semantics
+// -----------------------------------------------------------------
+a {
+  &[href ^= "tel:"] {
+    @include media(lg) {
+      pointer-events: none;
+    }
+  }
+}
+
+sup {
+  line-height: inherit;
+  vertical-align: unset;
+}
+
+
+// Replaced content
+// -----------------------------------------------------------------
+
+img,
+svg,
+video {
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+picture {
+
+  img {
+    height: auto;
+    width: 100%;
+  }
+}
+
+// Case link img / hover
+a img {
+  transition: opacity $comMS $comES;
+}
+a:hover img {
+  @include media(lg) {
+    opacity: .5;
+  }
+}
+
+
+// Forms
+// -----------------------------------------------------------------
+input,
+textarea {
+  &::placeholder {
+    color: $color-bbb;
+  }
+}
+
+input,
+textarea,
+select {
+  outline: none; 
+
+  &:focus {
+    outline: none; // 【メモ】アクセシビリティ上よくないので再考
+    border-color: $color-ccc;
+    box-shadow: 0 0 7px rgba($color: $color-000, $alpha: .2);
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled {
+  background: rgba($color: $color-e6, $alpha: .5);
+}
+
+select:disabled {
+  background: rgba($color: $color-e6, $alpha: .5);
+  color: $color-bbb;
+}
+
+
+// Tables
+// -----------------------------------------------------------------
+
+table {
+  max-width: 100%;
+  width: 100%;
+
+  th,
+  td {
+    word-break: break-all;
+  }
+}
+
+
+// aria
+// -----------------------------------------------------------------
+
+[aria-hidden = "false"] {
+  visibility: visible;
+}
+
+[aria-hidden = "true"] {
+  display: none;
+  visibility: hidden;
+}
+
+
+
+
+
+

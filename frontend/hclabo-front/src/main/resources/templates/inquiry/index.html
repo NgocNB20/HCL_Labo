@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+  <th:block th:with="canonical='true'" >
+    <meta th:replace="~{include/head}" />
+  </th:block>
+  <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+  <script>
+    $( document ).ready(function(){
+      var ggcd= $("#ggcd").text();
+      var gcd = $("#gcd").text();
+      var goodsGroupName = $("#goodsGroupName").text();
+      var unitTitle1 = $("#unitTitle1").text();
+      var unitValue1 = $("#redirectU1Lbl").text();
+      var unitTitle2 = $("#unitTitle2").text();
+      var unitValue2 = $("#unitSelect2Label").text();
+
+      if(ggcd !="" && $("#inquiryBody").val() == "") {
+        var inquiryBodyContents = "商品管理番号："+ggcd+"\n";
+        (gcd != "")? inquiryBodyContents +=  "商品番号："+gcd+"\n" : 1 ;
+        (goodsGroupName != "")? inquiryBodyContents +=  "商品名："+goodsGroupName+"\n" : 1 ;
+        (unitValue1 != "")? inquiryBodyContents += unitTitle1+"："+unitValue1+"\n" : 1 ;
+        (unitValue2 != "")? inquiryBodyContents += unitTitle2+"："+unitValue2+"\n" : 1 ;
+        $("#inquiryBody").val(inquiryBodyContents);
+      }
+    });
+  </script>
+  <script language="JavaScript">
+    $(function () {
+      new CharCount(document.getElementById('inputInquiryBody'), 'limit');
+    })
+  </script>
+  <style>
+  .l-form__list dd .last-name-wrap, .l-form__list dd .first-name-wrap {
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+  </style>
+
+</head>
+
+<body id="gotop" class="p-inquiry">
+  <div class="l-mainwrap">
+    <span id="ggcd" th:text="${inquiryModel.ggcd}" style="display:none;"></span>
+    <span id="gcd" th:text="${inquiryModel.gcd}" style="display:none;"></span>
+    <span id="goodsGroupName" th:text="${inquiryModel.goodsGroupName}" style="display:none;"></span>
+    <span id="unitTitle1"  th:text="${inquiryModel.unitTitle1}" style="display:none;"></span>
+    <span id="redirectU1Lbl" th:text="${inquiryModel.redirectU1Lbl}" style="display:none;"></span>
+    <span id="unitTitle2" th:text="${inquiryModel.unitTitle2}" style="display:none;"></span>
+    <span id="unitSelect2Label" th:text="${inquiryModel.unitSelect2Label}" style="display:none;"></span>
+
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page l-form">
+        <div th:replace="~{include/headerinquiry :: headerinquiry('inquiry')}"></div>
+
+      <div class="l-section">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>お問い合わせ</strong></h2>
+
+          <form th:action="@{/inquiry/}" th:object="${inquiryModel}" method="post" novalidate>
+
+            <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+              <ul th:each="message : ${allMessages}">
+                <li th:utext="${message}"></li>
+              </ul>
+            </div>
+            <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+              入力内容をご確認ください。
+            </div>
+
+            <div class="l-form">
+              <div class="l-form__area">
+                  <p class="c-text--m">みんなの郵送検査室をご利用にあたり、ご不明な点などがありましたら、下記フォームにてお問い合わせください。<br>お問い合わせになる前に、お買い物方法やご利用方法を「ご利用ガイド」でよくご覧の上お問い合わせください。<br>下記フォームに必要事項とお問い合わせ内容をご入力の上、「確認する」ボタンを押してください。</p>
+                  <h3 class="c-title-line">お問い合わせ内容の入力</h3>
+                  <dl class="l-form__list">
+                    <dt>お問い合わせ分類<span class="c-require">必須</span></dt>
+                    <dd>
+                        <div class="c-radio-group" th:classappend="${#fields.hasErrors('inquiryGroup')} ? 'c-radio-group--error'">
+                          <th:block th:each="item, stat : *{inquiryGroupItems}">
+                            <div class="c-radio-wrap">
+                              <input th:id="'category_1-' + ${stat.index}" name="inquiryGroup" type="radio" class="c-radio" th:value="${item.key}" th:checked="${item.key} == *{inquiryGroup}">
+                              <label th:for="'category_1-' + ${stat.index}" th:text="${item.value}"></label>
+                            </div>
+                          </th:block>
+                        </div>
+                      <div th:if="${#fields.hasErrors('inquiryGroup')}" th:errors="*{inquiryGroup}"　class="c-field-error"></div>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>氏名 <span class="l-form__list-memo">（全角）</span><span class="c-require">必須</span></dt>
+                    <dd class="name-wrap">
+                        <div class="last-name-wrap">
+                            <span class="l-form__list-settext l-form__list-settext--margin-right">姓</span>
+                              <div class="name-input">
+                                  <input type="text" th:field="*{inquiryLastName}" name="name01" autocomplete="name" value="" placeholder="山田" maxlength="16" class="c-input" th:errorclass="field-error">
+                                  <div th:if="${#fields.hasErrors('inquiryLastName')}" th:errors="*{inquiryLastName}" class="c-field-error"></div>
+                              </div>
+                        </div>
+                        <div class="first-name-wrap">
+                            <span class="l-form__list-settext l-form__list-settext--margin-right">名</span>
+                            <div class="name-input">
+                              <input type="text" th:field="*{inquiryFirstName}" name="name02" autocomplete="name" value="" placeholder="太郎" maxlength="16" class="c-input" th:errorclass="field-error">
+                              <div th:if="${#fields.hasErrors('inquiryFirstName')}" th:errors="*{inquiryFirstName}" class="c-field-error"></div>
+                            </div>
+                        </div>
+                    </dd>
+                  </dl>
+
+                  <dl class="l-form__list">
+                    <dt>フリガナ <span class="l-form__list-memo">（全角カナ）</span><span class="c-require">必須</span></dt>
+                    <dd class="name-wrap">
+                        <div class="last-name-wrap">
+                          <span class="l-form__list-settext l-form__list-settext--margin-right">セイ</span>
+                          <div class="name-input">
+                              <input type="text" th:field="*{inquiryLastKana}" name="kana01" autocomplete="name" value="" placeholder="ヤマダ" maxlength="40" class="c-input" th:errorclass="field-error">
+                              <div th:if="${#fields.hasErrors('inquiryLastKana')}" th:errors="*{inquiryLastKana}" class="c-field-error"></div>
+                          </div>
+                        </div>
+                        <div class="first-name-wrap">
+                          <span class="l-form__list-settext l-form__list-settext--margin-right">メイ</span>
+                          <div class="name-input">
+                            <input type="text" th:field="*{inquiryFirstKana}"  name="kana02" autocomplete="name" value="" placeholder="タロウ" maxlength="40" class="c-input" th:errorclass="field-error">
+                            <div th:if="${#fields.hasErrors('inquiryFirstKana')}" th:errors="*{inquiryFirstKana}" class="c-field-error"></div>
+                          </div>
+                        </div>
+                    </dd>
+                  </dl>
+
+                  <dl class="l-form__list">
+                    <dt>メールアドレス <span class="l-form__list-memo">（半角英数字）</span><span class="c-require">必須</span></dt>
+                    <dd>
+                        <input type="email" th:field="*{inquiryMail}" maxLength="160" name="email" autocomplete="email" value="" placeholder="ここに入力してください" class="c-input c-input--width-l" th:errorclass="field-error">
+                        <div th:if="${#fields.hasErrors('inquiryMail')}" th:errors="*{inquiryMail}" class="c-field-error"></div>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>電話番号 <span class="l-form__list-memo">（半角数字）</span><span class="c-require">必須</span></dt>
+                    <dd>
+                        <input type="tel" th:field="*{inquiryTel}" name="tel01" autocomplete="tel" value="" placeholder="0792671251" maxlength="11" class="c-input c-input--width-l-sp" th:errorclass="field-error">
+                        <div class="l-form__list-note">※ハイフンなし</div>
+                        <div th:if="${#fields.hasErrors('inquiryTel')}" th:errors="*{inquiryTel}" class="c-field-error"></div>
+                    </dd>
+                  </dl>
+                  <dl id="inputInquiryBody" class="l-form__list">
+                    <dt>お問い合わせ内容<span class="c-require">必須</span></dt>
+                    <dd>
+                      <div class="c-text-area__count">
+                        <textarea limit="4000" th:field="*{inquiryBody}" name="" class="c-text-area" placeholder="ここに入力してください。" th:errorclass="field-error"></textarea>
+                        <div th:if="${#fields.hasErrors('inquiryBody')}" th:errors="*{inquiryBody}" class="c-field-error"></div>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+            </div>
+            <div class="c-button-wrap">
+                <button name="doConfirm" type="submit" class="c-button c-button--primary c-button--width-l">確認する</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

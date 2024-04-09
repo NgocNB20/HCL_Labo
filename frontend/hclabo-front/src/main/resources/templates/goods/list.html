@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+  <th:block th:with="canonical='true', query='cid=' + ${goodsListModel.cid}, addTitle=${goodsListModel.getCategoryDisplayName()}, addDescription=${goodsListModel.metaDescription}" >
+    <meta th:replace="~{include/head}" >
+  </th:block>
+  <!--/* プレビュー画面 */-->
+  <th:block th:if="${!#strings.isEmpty(goodsListModel.preKey)}">
+    <link rel="stylesheet" th:href="@{/assets/css/set.css}">
+    <script th:src="@{/assets/js/jquery-ui.js}"></script>
+    <script th:src="@{/assets/js/hm4-datepicker.js}"></script>
+  </th:block>
+  <script type="text/javascript" th:src="@{/assets/js/goodsIcon.js}"></script>
+</head>
+
+<body id="gotop" class="p-product-list p-search" th:object="${goodsListModel}">
+<div class="l-mainwrap">
+  <div th:replace="~{include/header}"></div>
+  <main class="l-page">
+    <!--/* プレビュー画面 */-->
+    <th:block th:if="*{!#strings.isEmpty(preKey)}">
+        <div id="preview" class="preview_header">
+          <div class="l-form__area">
+            <dl class="l-form__list">
+              <dt class="c-title--table c-font-bold preview_title">プレビュー</dt>
+              <dd class="post-txt">
+                <div class="preview-btn-wrap">
+                  <label class="c-datepicker">
+                    <input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-input c-input-date" placeholder="年/月/日" th:errorclass="error">
+                  </label>
+                  <input type="text" th:field="*{previewTime}" maxlength="8" class="c-input c-input-time" placeholder="00:00:00" th:errorclass="error">
+                  <button type="button" id="doPreview" onclick="doPreviewGoodsList();" class="c-btn--address c-preview">
+                    <svg viewBox="0 0 20 20">
+                      <use th:attr="'xlink:href'=@{/assets/images/icon/search.svg#search}"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div id="previewDateErr" style="display: none;" class="field-error-message"></div>
+                <div id="previewTimeErr" style="display: none;" class="field-error-message"></div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <!--/* プレビューのscript用項目 */-->
+        <input type="hidden" id="cid" th:value="*{cid}" />
+        <input type="hidden" id="preKey" th:value="*{preKey}" />
+        <input type="hidden" id="preTime" th:value="*{preTime}" />
+    </th:block>
+
+    <div class="l-breadcrumbs">
+      <div class="l-breadcrumbs__inner">
+        <div class="l-breadcrumbs__list">
+          <div class="l-breadcrumbs__item">
+            <span class="l-breadcrumbs__link" property="itemListElement" typeof="ListItem">
+              <a property="item" typeof="WebPage" title="TOP" th:href="@{/}" class="c-textlink c-textlink--hover">TOP</a>
+              <meta property="position" content="1">
+            </span>
+          </div>
+          <th:block th:each="categoryItem, stat : *{categoryPassItems}">
+            <div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem">
+              <th:block th:if="${!stat.last}">
+                <span class="l-breadcrumbs__link">
+                  <th:block th:if="*{#strings.isEmpty(preKey)}">
+                    <a property="item" typeof="WebPage" th:title="${categoryItem.categoryName}" th:href="@{/goods/list(cid=${categoryItem.cid},hsn=${categoryItem.hierarchicalSerialNumber},isSide=true)}" class="c-textlink c-textlink--hover">
+                      <span th:text="${categoryItem.categoryName}" th:remove="tag"></span>
+                    </a>
+                  </th:block>
+                  <th:block th:if="*{!#strings.isEmpty(preKey)}">
+                    <a th:id="'breadcrumbs_item-'+${stat.index}" property="item" typeof="WebPage" th:title="${categoryItem.categoryName}" th:href="@{/goods/list(cid=${categoryItem.cid},prekey=*{preKey},pretime=*{preTime})}" class="c-textlink c-textlink--hover">
+                      <span th:text="${categoryItem.categoryName}" th:remove="tag"></span>
+                    </a>
+                  </th:block>
+                <meta property="position" content="2">
+                </span>
+              </th:block>
+              <th:block th:if="${stat.last}">
+                <span property="name" th:text="${categoryItem.categoryName}" class="l-breadcrumbs__current"></span>
+              </th:block>
+            </div>
+          </th:block>
+        </div>
+      </div>
+    </div>
+    <div class="l-container">
+      <div class="l-container__inner">
+        <div th:replace="~{include/sidemenu::category('3')}"></div>
+        <div class="l-main">
+          <h2 class="c-title-page"><strong th:text="*{getCategoryDisplayName()}"></strong></h2>
+          <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+            <ul th:each="message : ${allMessages}">
+              <li th:utext="${message}"></li>
+            </ul>
+          </div>
+          <th:block th:if="*{!#strings.isEmpty(preKey)}">
+            <div th:if="*{!#strings.isEmpty(warningMessage)}" class="c-global-error c-global-error--margin-m">
+              <span th:text="*{warningMessage}"></span>
+            </div>
+          </th:block>
+          <!--/* プレビューキーがない場合は通常表示のチェックを行う プレビューキーがあり、ワーニングメッセージが設定されている場合は未表示 */-->
+          <th:block th:if="*{#strings.isEmpty(preKey) || (!#strings.isEmpty(preKey) && #strings.isEmpty(warningMessage))}">
+            <div>
+              <th:block th:if="*{isViewCategoryImagePC()}">
+                <div class="category-setting">
+                  <div class="category-setting__image" style="background: #eee;"><img th:src="*{categoryImagePC}" th:alt="*{getCategoryDisplayName()}" /></div>
+                </div>
+              </th:block>
+              <th:block th:if="*{freeTextPC != null}">
+                <div class="category-setting__free"><span th:remove="tag" th:utext="*{#pre.convert(freeTextPC, false)}"></span></div>
+              </th:block>
+            </div>
+            <th:block th:if="*{isNoGoods()}">
+              <div class="c-nodata">
+                <h2>該当する商品がありません。</h2>
+              </div>
+            </th:block>
+            <th:block th:if="*{!isNoGoods()}" th:with="manualDisplayFlag=*{isManualDisplay()},additionalParam='hsn='+*{hsn}+',cid='+*{cid}">
+              <div class="p-search__header">
+                <div th:replace="~{include/pager::pager2(url='/goods/list',viewTypeDisplayFlag=true,displayCount='件')}"></div>
+              </div>
+              <div id="goods_list" class="search__list">
+                <th:block th:if="${pageInfo.isViewTypeList()}">
+                  <div class="c-product c-product--list">
+                    <th:block th:each="itemsItems : *{goodsGroupThumbnailItemsItems}">
+                      <th:block th:each="item : ${itemsItems}">
+                        <div class="c-product__item">
+                          <a th:href="@{/goods/detail(ggcd=${item.ggcd},cid=${item.cid},hsn=${item.hsn})}">
+                            <div class="c-product__item-image">
+                              <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="210" width="210" decoding="async" loading="lazy">
+                            </div>
+                            <div class="c-product__item-overview">
+                              <div class="c-product__item-icon">
+                                <th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+                                  <span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+                                </th:block>
+                              </div>
+                                <div class="c-product__item-group">
+                                  <div class="c-product__item-description">
+                                    <div class="c-product__item-title">
+                                      <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                                    </div>
+                                    <div class="c-product__item-text">
+                                      <span th:utext="${#pre.convert(item.goodsNote1, false)}" th:remove="tag"></span>
+                                    </div>
+                                  </div>
+                                  <div class="c-product__item-state">
+                                    <div class="c-product__item-price">
+                                      <div class="c-product__item-price-unit">
+                                        <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                        <span>円 (税込)</span>
+                                      </div>
+                                    </div>
+                                    <!--/* プレビュー画面では販売ステータスを非表示 */-->
+                                    <th:block th:if="*{#strings.isEmpty(preKey)}">
+                                      <th:block th:if="${item.isStockStatusDisplay()}">
+                                        <!--/* 非販売 */-->
+                                        <th:block th:if="${item.isStockNoSaleIconDisp()}">
+                                          <div class="c-product__item-stock">
+                                            <span th:remove="tag">販売しておりません</span>
+                                          </div>
+                                        </th:block>
+                                        <!--/* 販売期間終了 */-->
+                                        <th:block th:if="${item.isStockSoldOutIconDisp()}">
+                                          <div class="c-product__item-stock">
+                                            <span th:remove="tag">販売終了しました</span>
+                                          </div>
+                                        </th:block>
+                                        <!--/* 販売前 */-->
+                                        <th:block th:if="${item.isStockBeforeSaleIconDisp()}">
+                                          <div class="c-product__item-stock">
+                                            <span th:remove="tag">販売開始前</span>
+                                          </div>
+                                        </th:block>
+                                        <!--/* 在庫切れ */-->
+                                        <th:block th:if="${item.isStockNoStockIconDisp()}">
+                                          <div class="c-product__item-stock">
+                                            <span th:remove="tag">完売しました</span>
+                                          </div>
+                                        </th:block>
+                                        <!--/* 残りわずか */-->
+                                        <th:block th:if="${item.isStockFewIconDisp()}">
+                                          <div class="c-product__item-stock">
+                                            <span th:remove="tag">残りわずか</span>
+                                          </div>
+                                        </th:block>
+                                      </th:block>
+                                    </th:block>
+                                  </div>
+                                </div>
+                                <th:block th:if="${!(!item.isGoodsNote2() and !item.isGoodsNote3())}">
+                                    <div class="p-product-list-exam c-exam">
+                                        <dl class="c-exam--type01">
+                                            <th:block th:if="${item.isGoodsNote2()}">
+                                                <dt class="c-exam__sum" th:utext="${#pre.convert(item.goodsNote2, false)}"></dt>
+                                            </th:block>
+                                            <th:block th:if="${item.isGoodsNote3()}">
+                                                <dd th:utext="${#pre.convert(item.goodsNote3, false)}"></dd>
+                                            </th:block>
+                                        </dl>
+                                    </div>
+                                </th:block>
+                            </div>
+                          </a>
+                        </div>
+                      </th:block>
+                    </th:block>
+                  </div>
+                </th:block>
+                <th:block th:if="${pageInfo.isViewTypeThumbnail()}">
+                  <div class="c-product c-product--thumb">
+                    <th:block th:each="item : *{goodsGroupListItems}">
+                      <div class="c-product__item">
+                        <a th:href="@{/goods/detail(ggcd=${item.ggcd},cid=${item.cid},hsn=${item.hsn})}">
+                          <div class="c-product__item-image">
+                            <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="210" width="210" decoding="async" loading="lazy">
+                          </div>
+                          <div class="c-product__item-icon">
+                            <th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+                              <span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+                            </th:block>
+                          </div>
+                          <div class="c-product__item-title">
+                            <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                          </div>
+                          <div class="c-product__item-price">
+                            <div class="c-product__item-price-unit">
+                              <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                              <span>円 (税込)</span>
+                            </div>
+                          </div>
+                          <!--/* プレビュー画面では販売ステータスを非表示 */-->
+                          <th:block th:if="*{#strings.isEmpty(preKey)}">
+                            <th:block th:if="${item.isStockStatusDisplay()}">
+                              <!--/* 非販売 */-->
+                              <th:block th:if="${item.isStockNoSaleIconDisp()}">
+                                <div class="c-product__item-stock">
+                                  <span th:remove="tag">販売しておりません</span>
+                                </div>
+                              </th:block>
+                              <!--/* 販売期間終了 */-->
+                              <th:block th:if="${item.isStockSoldOutIconDisp()}">
+                                <div class="c-product__item-stock">
+                                  <span th:remove="tag">販売終了しました</span>
+                                </div>
+                              </th:block>
+                              <!--/* 販売前 */-->
+                              <th:block th:if="${item.isStockBeforeSaleIconDisp()}">
+                                <div class="c-product__item-stock">
+                                  <span th:remove="tag">販売開始前</span>
+                                </div>
+                              </th:block>
+                              <!--/* 在庫切れ */-->
+                              <th:block th:if="${item.isStockNoStockIconDisp()}">
+                                <div class="c-product__item-stock">
+                                  <span th:remove="tag">完売しました</span>
+                                </div>
+                              </th:block>
+                              <!--/* 残りわずか */-->
+                              <th:block th:if="${item.isStockFewIconDisp()}">
+                                <div class="c-product__item-stock">
+                                  <span th:remove="tag">残りわずか</span>
+                                </div>
+                              </th:block>
+                            </th:block>
+                          </th:block>
+                        </a>
+                      </div>
+                    </th:block>
+                  </div>
+                </th:block>
+              </div>
+              <div class="p-search__count">
+                全 <span class="p-search__count-sum"><th:block th:text="*{pageInfo.total}"></th:block></span> 件
+              </div>
+              <div th:replace="~{include/pager::pager1(url='/goods/list')}"></div>
+            </th:block>
+          </th:block>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{include/footer}" ></div>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+<th:block th:if="${!#strings.isEmpty(goodsListModel.preKey)}">
+  <!--/* プレビュー画面フォーム用script */-->
+  <script type="text/javascript" th:src="@{/assets/js/preview.js}"></script>
+  <!--/* プレビュー画面表示状態で画面遷移を不可にするスタイルを追加 ※画面描画完了後に処理させること */-->
+  <script type="text/javascript" th:src="@{/assets/js/previewAccessControl.js}"></script>
+
+  <!--/* プレビュー画面表示状態で画面遷移を可能にするスタイルを追加 ※画面描画完了後に処理させること */-->
+  <script type="text/javascript" defer="defer">
+		$(document).ready( function() {
+
+			// サイドメニューのボタン有効化はサイドメニュー用のJavaScriptで対応するため、ここでは考慮しない
+			// 【理由】サイドメニュー用インクルードファイルの中のScriptでタグ構築を行っており、タイミング上上書き不可のため
+
+            var preKey = document.getElementById("preKey").value
+			var preTime = document.getElementById("preTime").value
+
+			// パンくずリストのボタンを有効化
+			$("[id^='breadcrumbs_item']").css({
+				pointerEvents: "auto",
+			}).unwrap("span");
+
+			// 商品のボタンを有効化 + リクエストパラメータを付与
+			$('#goods_list a').each(function() {
+				$(this).parent().css({
+					cursor: "auto",
+				});
+				$(this).css({
+					pointerEvents: "auto",
+				});
+				this.href += "&prekey=" + preKey + "&pretime=" + preTime;
+			});
+
+			// プレビューのボタンを有効化
+			$('#preview input, #preview a, #preview button').each(function() {
+				$(this).css({
+					pointerEvents: "auto",
+				});
+				$(this).unwrap("span");
+			});
+
+			// ページングのボタンを有効化 + リクエストパラメータを付与
+			$('#pagination a').each(function() {
+				$(this).css({
+					pointerEvents: "auto",
+				});
+				$(this).unwrap("span");
+				this.href += "&prekey=" + preKey + "&pretime=" + preTime;
+			});
+
+			// ソートのボタンを有効化 + リクエストパラメータを付与
+			$('#pagination_sort option').each(function() {
+				this.value += "&prekey=" + preKey + "&pretime=" + preTime;
+			});
+
+			// サイドメニュー表示ボタン
+			$('#sidemenu-display').css('pointer-events', 'auto');
+		})
+	</script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-regist {
+
+  // 利用規約
+  &__rule {
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    padding: 40px;
+
+    &-scroll {
+      height: 500px;
+      padding-right: 40px;
+      @include font-style(16,32,normal);
+    }
+
+    time {
+      display: block;
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    &-item {
+      margin-top: 20px;
+
+      ol {
+        list-style-type: decimal;
+        list-style-position: outside;
+        margin-left: 1.5em;
+
+        ol {
+          list-style-type: lower-roman;
+          margin-left: 1.5em;
+        }
+      }
+    }
+
+    aside {
+      text-align: right;
+      margin-top: 30px;
+    }
+
+    @include media(sm) {
+      border-radius: vwset(5);
+      padding: vwset(20) vwset(10);
+      margin-top: vwset(20);
+
+      &--scroll {
+        height: vwset(360);
+        padding: 0 vwset(10);
+      }
+
+      &--text {
+        margin-top: vwset(30);
+      }
+
+      &--item {
+        margin-top: vwset(20);
+      }
+
+      aside {
+        margin-top: vwset(20);
+      }
+    }
+  }
+
+  @include media(sm) {
+
+    &__area {
+      margin-inline: vwset(20);
+    }
+
+    // 利用規約
+    &__rule {
+        padding: vwset(30) vwset(15);
+
+        &-scroll {
+          height: vwset(400);
+          padding-right: vwset(20);
+          @include font-style(14,28);
+        }
+
+        &-item {
+          margin-bottom: vwset(20);
+        }
+
+        aside {
+          margin-top: vwset(20);
+        }
+      }
+  }
+
+}

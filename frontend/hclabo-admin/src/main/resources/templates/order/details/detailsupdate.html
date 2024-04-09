@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ja">
+
+<head>
+	<meta th:replace="~{include/head}"/>
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+	var token = $('#_csrf').attr('content');
+	var header = $('#_csrf_header').attr('content');
+
+
+	</script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/admin.orderupdate.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+	<script type="text/javascript" th:src="@{/assets/js/additionCharge.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/detailsUpdateGoodsSearch.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+	<script language="JavaScript">
+		$(function () {
+			new CharCount(document.getElementById('memo'), 'limit');
+			new CharCount(document.getElementById('deliveryNote'), 'limit');
+		})
+
+	</script>
+	<title>受注詳細修正｜受注管理</title>
+</head>
+
+<body id="order" onload="setSettlementMethodChangeEvent();">
+<div id="searchOrder" class="l-mainwrap">
+	<div th:replace="~{include/sidemenu}"></div>
+
+	<main class="l-page">
+		<div th:replace="~{include/header}"></div>
+
+		<input id="appComplementUrl" type="hidden" th:value="${@environment.getProperty('app.complement.url')}"/>
+		<input id="staticComplementUrl" type="hidden" th:value="${@environment.getProperty('static.complement.url')}"/>
+		<input id="goodsImagePath" type="hidden" th:value="${@environment.getProperty('images.path.goods')}"/>
+
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form id="detailsupdateForm" th:action="@{/order/detailsupdate/}" th:object="${detailsUpdateModel}"
+							method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<input type="hidden" id="orderCode"/>
+					<!-- 手数料ポップアップ -->
+					<input type="hidden" id="commissionCalcFlag" name="commissionCalcFlag" th:value="*{commissionCalcFlag}"/>
+					<input type="hidden" id="commissionDialogDisplay" name="commissionDialogDisplay"
+								 th:value="*{commissionDialogDisplay}"/>
+					<input type="hidden" id="orgCommissionDisp" name="orgCommissionDisp" th:value="*{orgCommissionDisp}"/>
+					<input type="hidden" id="commissionSelected" name="commissionSelected" th:value="*{commissionSelected}"/>
+					<!-- 送料ポップアップ -->
+					<input type="hidden" id="carriageCalcFlag" name="carriageCalcFlag" th:value="*{carriageCalcFlag}"/>
+					<input type="hidden" id="carriageDialogDisplay" name="carriageDialogDisplay"
+								 th:value="*{carriageDialogDisplay}"/>
+					<input type="hidden" id="orgCarriageDisp" name="orgCarriageDisp" th:value="*{orgCarriageDisp}"/>
+					<input type="hidden" id="carriageSelected" name="carriageSelected" th:value="*{carriageSelected}"/>
+					<!-- クーポンポップアップ -->
+					<input type="hidden" id="couponCancelDialogDisplay" name="couponCancelDialogDisplay"
+								 th:value="*{couponCancelDialogDisplay}"/>
+					<input type="hidden" id="couponTargetGoodsCancelMessgeFlg" name="couponTargetGoodsCancelMessgeFlg"
+								 th:value="*{couponTargetGoodsCancelMessgeFlg}"/>
+					<input type="hidden" id="couponTargetGoodsCode" name="couponTargetGoodsCode"
+								 th:value="*{couponTargetGoodsCode}"/>
+					<input type="hidden" id="couponTargetGoodsName" name="couponTargetGoodsName"
+								 th:value="*{couponTargetGoodsName}"/>
+					<input type="hidden" id="couponTargetType" name="couponTargetType"
+								 th:value="*{couponTargetType}"/>
+					<input type="hidden" id="couponDiscountLowerOrderPriceMessgeFlg" name="couponDiscountLowerOrderPriceMessgeFlg"
+								 th:value="*{couponDiscountLowerOrderPriceMessgeFlg}"/>
+					<input type="hidden" id="couponTargetGoodsIsAllFlg" name="couponTargetGoodsIsAllFlg"
+								 th:value="*{couponTargetGoodsIsAllFlg}"/>
+					<input type="hidden" id="goodsPriceTotalDisp" name="goodsPriceTotalDisp" th:value="*{goodsPriceTotalDisp}"/>
+					<input type="hidden" id="couponDiscountPriceDisp" name="couponDiscountPriceDisp"
+								 th:value="*{couponDiscountPriceDisp}"/>
+					<input type="hidden" id="couponDiscountLowerOrderPriceDisp" name="couponDiscountLowerOrderPriceDisp"
+								 th:value="*{couponDiscountLowerOrderPriceDisp}"/>
+					<input type="hidden" id="useCouponFlg" name="useCouponFlg" th:value="*{useCouponFlg}"/>
+
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">受注詳細修正</h1>
+						<ul>
+							<li>
+								<button type="submit" th:if="*{isOrderCancelModifyPossible}" name="doOnceOrderCancel"
+												class="c-btn btn_del" onclick="return orderCancelConfirm(this);">
+									受注キャンセル
+								</button>
+								<button type="submit" th:if="*{!isOrderCancelModifyPossible}" name="doOnceOrderCancel"
+												class="c-btn btn_del" disabled="disabled" style="pointer-events: none;opacity: 0.4;">
+									受注キャンセル
+								</button>
+								<input type="button" id="couponCancel" name="couponCancel" style="display:none"/>
+								<input type="submit" id="doOnceOrderCancel-1" name="doOnceOrderCancel" style="display:none"/>
+							</li>
+						</ul>
+					</div>
+
+					<div id="global-mesage" class="global-error-message" hidden="hidden"></div>
+
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<div class="l-section">
+						<div class="l-article-un wrap_flex_center">
+							<div class="c-number mr50" th:text="${detailsUpdateCommonModel.orderCode}"></div>
+							<dl class="c-times mr45">
+								<dt>受注日時</dt>
+								<dd th:text="*{#date.convert(orderTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+							</dl>
+							<div class="c-status">
+								<!--/* 受注状態 */-->
+								<span th:if="*{!isCancel()} AND *{!isEmergency()} AND orderStatus != null AND *{orderStatus.value} == '0'"
+											th:text="*{orderStatus.label}" class="c-status02 ico_orange"></span>
+								<span th:if="*{!isCancel()} AND *{!isEmergency()} AND orderStatus != null AND *{orderStatus.value} == '1'"
+											th:text="*{orderStatus.label}" class="c-status02 ico_blue"></span>
+								<span th:if="*{!isCancel()} AND *{!isEmergency()} AND orderStatus != null AND *{orderStatus.value} == '3'"
+											th:text="*{orderStatus.label}" class="c-status02 ico_green"></span>
+								<span th:if="*{isCancel()}" th:text="*{cancelFlag.label}" class="c-status02 ico_gray"></span>
+								<span th:if="*{isEmergency()}" class="c-status02 ico_red">請求決済エラー</span>
+								<!--/* 入金状態 */-->
+								<span th:if="*{paymentStatus} == '1' OR *{paymentStatus} == '3' OR *{paymentStatus} == '4'"
+											th:text="*{#enumtype.getLabel('HTypePaymentStatus',paymentStatus)}"
+											class="c-status02 ico_orange"></span>
+								<span th:if="*{paymentStatus} == '2'"
+											th:text="*{#enumtype.getLabel('HTypePaymentStatus',paymentStatus)}"
+											class="c-status02 ico_green"></span>
+								<!--/* 出荷状態 */-->
+								<span th:if="*{orderReceiverItem.shipmentStatus.value} == '0'"
+											th:text="*{orderReceiverItem.shipmentStatus.label}" class="c-status02 ico_orange"></span>
+								<span th:if="*{orderReceiverItem.shipmentStatus.value} == '1'"
+											th:text="*{orderReceiverItem.shipmentStatus.label}" class="c-status02 ico_green"></span>
+								<!--/* GMO連携解除 */-->
+								<span th:if="*{isRelease}" class="c-status02 ico_red">GMO連携解除</span>
+							</div>
+							<dl th:if="*{isCancel()}" class="c-times col_left">
+								<dt class="mr25">キャンセル日時</dt>
+								<dd th:text="*{#date.convert(cancelTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="l-section_column" id="mainContainer">
+						<div class="l-section_inner">
+
+							<!-- 受注商品編集可能 -->
+							<article th:if="*{isOrderUpdatable}" class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">受注商品</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<ul class="c-list-righ mb30">
+											<li>
+												<button class="c-btn btn_back icon" type="submit" name="doReCalculate">
+													<i class="material-icons sync"></i>再計算
+												</button>
+											</li>
+											<li>
+												<button class="c-btn btn_del" type="submit" name="doOrderGoodsDelete">選択した商品を削除</button>
+											</li>
+										</ul>
+
+										<div class="order_product" th:each="item,stat : *{orderReceiverItem.orderGoodsUpdateItems}">
+											<div class="check">
+												<label class="c-form-control"><input type="checkbox"
+																														 th:field="*{orderReceiverItem.orderGoodsUpdateItems[__${stat.index}__].goodsCheck}"><i></i></label>
+											</div>
+											<div class="item">
+												<div class="product_name" th:text="${item.goodsGroupName}"></div>
+												<dl class="c-dl-base">
+													<div class="sml_sty" th:if="${!#strings.isEmpty(item.unitValue1)}">
+														<dt>規格1</dt>
+														<dd th:text="${item.unitValue1}"></dd>
+													</div>
+													<div class="sml_sty" th:if="${!#strings.isEmpty(item.unitValue2)}">
+														<dt>規格2</dt>
+														<dd th:text="${item.unitValue2}"></dd>
+													</div>
+												</dl>
+											</div>
+											<div class="management_number">
+												<dl class="c-dl-base">
+													<div class="mb15">
+														<dt>商品管理番号</dt>
+														<dd th:text="${item.goodsGroupCode}"></dd>
+													</div>
+													<div class="sml_sty">
+														<dt>商品番号</dt>
+														<dd th:text="${item.goodsCode}"></dd>
+													</div>
+													<div class="sml_sty">
+														<dt th:if="${!#strings.isEmpty(item.janCode)}">JANコード</dt>
+														<dd th:text="${item.janCode}"></dd>
+													</div>
+												</dl>
+											</div>
+											<div class="fee">
+												<div class="charge_detail">
+													<div class="item_price">
+														<span th:text="${item.goodsPrice == null ? '―' : #number.convert(item.goodsPrice)} + 円"></span>
+														<span class="c-annotation">税抜</span>
+													</div>
+													<div class="times">
+														<input type="text"
+																	 th:field="*{orderReceiverItem.orderGoodsUpdateItems[__${stat.index}__].updateGoodsCount}"
+																	 maxlength="4" class="c-form-control w56px price" th:errorclass="error"
+																	 placeholder="10">
+													</div>
+													<div class="total">
+														<span th:text="${item.postTaxOrderGoodsPrice == null ? '―' : #number.convert(item.postTaxOrderGoodsPrice)} + 円"></span>
+														<span class="c-annotation">税抜</span>
+													</div>
+												</div>
+
+												<div class="c-status">
+													<span th:text="税 + ${item.taxRate == null ? '―' : #number.convert(item.taxRate)} + '%'"
+																class="c-status03 ico_blue"></span>
+													<span th:if="${item.isIndividualDelivery()}" class="c-status03 ico_green">個別配送</span>
+													<span th:if="${item.couponTargetGoodsFlg}" class="c-status03 ico_green">クーポン対象</span>
+												</div>
+												<div class="c-status"
+														 th:if="${#fields.hasErrors('orderReceiverItem.orderGoodsUpdateItems[' + stat.index + '].updateGoodsCount')}">
+													<div th:id="${'orderReceiverItem.orderGoodsUpdateItems' + stat.index +'.updateGoodsCountError'}"
+															 th:errors="*{orderReceiverItem.orderGoodsUpdateItems[__${stat.index}__].updateGoodsCount}"
+															 class="c-error-txt mt5"></div>
+												</div>
+												<th:block th:if="${!#strings.isEmpty(item.errContent)}">
+													<div th:utext="${item.errContent}" class="fnt11 mt5 c-error-txt"></div>
+												</th:block>
+											</div>
+                                            <div class="examkit">
+                                                <dl class="c-dl-base wrap-flex-center-column">
+                                                    <div class="text-center">
+                                                        <dt>検査キット番号</dt>
+                                                    </div>
+                                                    <div class="display_inblock text-center">
+                                                        <dt th:utext="${item.examKitCode}"></dt>
+                                                    </div>
+                                                </dl>
+                                            </div>
+										</div>
+										<div class="mt20 txt_right">
+											<button id="goodssearch_dialog_btn" class="c-btn_add" type="button"><i></i><span>商品の追加</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<div id="goodssearch_dialog" style="display:none;">
+								<div id="globalMesDiv" style="display: none;" class="global-error-message"></div>
+								<div class="c-detail-warp relation_item_search wrap">
+									<dl>
+										<dt>商品管理番号</dt>
+										<dd>
+											<input id="searchGoodsGroupCode" maxlength="20" type="text" class="c-form-control w160px"
+														 placeholder="000000000000">
+										</dd>
+										<div id="searchGoodsGroupCodeErr" style="display: none;" class="c-error-txt mt5"></div>
+									</dl>
+									<dl>
+										<dt>商品番号</dt>
+										<dd>
+											<input id="searchGoodsCode" type="text" maxlength="20" class="c-form-control w160px"
+														 placeholder="000000000000">
+										</dd>
+										<div id="searchGoodsCodeErr" style="display: none;" class="c-error-txt mt5"></div>
+									</dl>
+									<dl>
+										<dt>JANコード</dt>
+										<dd>
+											<input id="searchJanCode" type="text" maxlength="16" class="c-form-control w160px"
+														 placeholder="000000000000">
+										</dd>
+										<div id="searchJanCodeErr" style="display: none;" class="c-error-txt mt5"></div>
+									</dl>
+									<dl>
+										<dt>商品名</dt>
+										<dd>
+											<input id="searchGoodsGroupName" maxlength="120" type="text" class="c-form-control w420px"
+														 placeholder="商品名を入力してください">
+										</dd>
+										<div id="searchGoodsGroupNameErr" style="display: none;" class="c-error-txt mt5"></div>
+									</dl>
+									<dl>
+										<dt>&nbsp;</dt>
+										<button id="doGoodsSearchPopup" class="c-btn btn_back" type="button">検索する</button>
+									</dl>
+								</div>
+								<div id="goods_search_result" class="c-sticky-tbl-wrap"></div>
+							</div>
+
+							<!-- 受注商品編集不可 -->
+							<article th:if="*{!isOrderUpdatable}" class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">受注商品</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<div class="order_product" th:each="item,stat : *{orderReceiverItem.orderGoodsUpdateItems}">
+											<div class="item">
+												<div class="product_name" th:text="${item.goodsGroupName}"></div>
+												<dl class="c-dl-base">
+													<div class="sml_sty" th:if="${!#strings.isEmpty(item.unitValue1)}">
+														<dt>規格1</dt>
+														<dd th:text="${item.unitValue1}"></dd>
+													</div>
+													<div class="sml_sty" th:if="${!#strings.isEmpty(item.unitValue2)}">
+														<dt>規格2</dt>
+														<dd th:text="${item.unitValue2}"></dd>
+													</div>
+												</dl>
+											</div>
+											<div class="management_number">
+												<dl class="c-dl-base">
+													<div class="mb15">
+														<dt>商品管理番号</dt>
+														<dd th:text="${item.goodsGroupCode}"></dd>
+													</div>
+													<div class="sml_sty">
+														<dt>商品番号</dt>
+														<dd th:text="${item.goodsCode}"></dd>
+													</div>
+													<div class="sml_sty">
+														<dt th:if="${!#strings.isEmpty(item.janCode)}">JANコード</dt>
+														<dd th:text="${item.janCode}"></dd>
+													</div>
+												</dl>
+											</div>
+											<div class="fee">
+												<div class="charge_detail">
+													<div class="item_price"
+															 th:text="${item.goodsPrice == null ? '―' : #number.convert(item.goodsPrice)} + 円"></div>
+													<div class="times" th:text="${#number.convert(item.goodsCount)}"></div>
+													<div class="total"
+															 th:text="${item.postTaxOrderGoodsPrice == null ? '―' : #number.convert(item.postTaxOrderGoodsPrice)}  + 円"></div>
+												</div>
+												<div class="c-status">
+													<span th:text="税 + ${item.taxRate == null ? '―' : #number.convert(item.taxRate)} + '%'"
+																class="c-status03 ico_blue"></span>
+													<span th:if="${item.isIndividualDelivery()}" class="c-status03 ico_green">個別配送</span>
+													<span th:if="${item.couponTargetGoodsFlg}" class="c-status03 ico_green">クーポン対象</span>
+												</div>
+												<th:block th:if="${!#strings.isEmpty(item.errContent)}">
+													<span th:utext="${item.errContent}" class="fnt11 c-error-txt mt5"></span>
+												</th:block>
+											</div>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<a name="anchorCommissionDialog"></a> <a name="anchorCarriageDialog"></a>
+
+							<!-- お届け先編集可 -->
+							<article class="l-article" th:if="*{isOrderUpdatable}">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">お届け先</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap delivery_target c-edit">
+										<!-- お届け先情報 -->
+										<div class="delivery_target_info">
+											<div class="c-pagetitle_h4 mb15">お届け先情報</div>
+											<dl class="c-dl-base dt_w120px">
+												<div class="edit">
+													<dt>氏名<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="name">
+															<div class="ai_start">
+																<dt>姓</dt>
+																<dd>
+																	<input type="text" th:field="*{orderReceiverItem.receiverLastName}" maxlength="16"
+																				 class="c-form-control w120px" th:errorclass="error">
+																	<div th:if="${#fields.hasErrors('orderReceiverItem.receiverLastName')}"
+																			 th:errors="*{orderReceiverItem.receiverLastName}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div class="ai_start">
+																<dt>名</dt>
+																<dd>
+																	<input type="text" th:field="*{orderReceiverItem.receiverFirstName}" maxlength="16"
+																				 class="c-form-control w120px" th:errorclass="error">
+																	<div th:if="${#fields.hasErrors('orderReceiverItem.receiverFirstName')}"
+																			 th:errors="*{orderReceiverItem.receiverFirstName}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>フリガナ<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="name">
+															<div class="ai_start">
+																<dt>セイ</dt>
+																<dd>
+																	<input type="text" th:field="*{orderReceiverItem.receiverLastKana}"
+																				 class="c-form-control w120px" maxlength="40" th:errorclass="error">
+																	<div th:if="${#fields.hasErrors('orderReceiverItem.receiverLastKana')}"
+																			 th:errors="*{orderReceiverItem.receiverLastKana}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div class="ai_start">
+																<dt>メイ</dt>
+																<dd>
+																	<input type="text" th:field="*{orderReceiverItem.receiverFirstKana}"
+																				 class="c-form-control w120px" maxlength="40" th:errorclass="error">
+																	<div th:if="${#fields.hasErrors('orderReceiverItem.receiverFirstKana')}"
+																			 th:errors="*{orderReceiverItem.receiverFirstKana}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>電話番号<span class="ico_required">必須</span></dt>
+													<dd>
+														<input type="text" class="c-form-control w240px" th:field="*{orderReceiverItem.receiverTel}"
+																	 maxlength="11" th:errorclass="error">
+														<div th:if="${#fields.hasErrors('orderReceiverItem.receiverTel')}"
+																 th:errors="*{orderReceiverItem.receiverTel}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>郵便番号<span class="ico_required">必須</span></dt>
+													<dd class="wrap_flex_center">
+														<input type="text" id="receiverZipCode" class="zip c-form-control w120px mr10"
+																	 th:field="*{orderReceiverItem.receiverZipCode}" maxlength="7" th:errorclass="error">
+														<button type="button" class="c-btn btn_back"
+																		onClick="H.Event.actionCancel(event);callZipSearchFunc('receiverZip', this);">
+															住所検索
+														</button>
+													</dd>
+												</div>
+												<div class="mt-25">
+													<dt></dt>
+													<dd>
+														<div id="receiverZipCodeError"
+																 th:if="${#fields.hasErrors('orderReceiverItem.receiverZipCode')}"
+																 th:errors="*{orderReceiverItem.receiverZipCode}" class="c-error-txt mt5"></div>
+														<div id="receiverZipErrorMsg" th:text="*{orderReceiverItem.receiverZipErrorMsg}"></div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>住所<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="address">
+															<div>
+																<dt>都道府県</dt>
+																<dd>
+																	<select id="receiverPrefecture" th:field="*{orderReceiverItem.receiverPrefecture}"
+																					class="pref c-form-control" th:errorclass="error">
+																		<option value="">選択してください</option>
+																		<option th:each="item : *{receiverPrefectureItems}" th:value="${item.value}"
+																						th:text="${item.value}"></option>
+																	</select>
+																	<div id="receiverPrefectureError"
+																			 th:if="${#fields.hasErrors('orderReceiverItem.receiverPrefecture')}"
+																			 th:errors="*{orderReceiverItem.receiverPrefecture}"
+																			 class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>市区郡</dt>
+																<dd>
+																	<input type="text" id="receiverAddress1"
+																				 th:field="*{orderReceiverItem.receiverAddress1}"
+																				 class="addr1 c-form-control w240px" th:errorclass="error">
+																	<div id="receiverAddress1Error"
+																			 th:if="${#fields.hasErrors('orderReceiverItem.receiverAddress1')}"
+																			 th:errors="*{orderReceiverItem.receiverAddress1}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>町村・番地</dt>
+																<dd>
+																	<input type="text" id="receiverAddress2"
+																				 th:field="*{orderReceiverItem.receiverAddress2}"
+																				 class="addr2 c-form-control w240px" th:errorclass="error">
+																	<div id="receiverAddress2Error"
+																			 th:if="${#fields.hasErrors('orderReceiverItem.receiverAddress2')}"
+																			 th:errors="*{orderReceiverItem.receiverAddress2}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>建物名</dt>
+																<dd>
+																	<input type="text" id="receiverAddress3"
+																				 th:field="*{orderReceiverItem.receiverAddress3}"
+																				 class="addr3 c-form-control w240px" th:errorclass="error">
+																	<div id="receiverAddress3Error"
+																			 th:if="${#fields.hasErrors('orderReceiverItem.receiverAddress3')}"
+																			 th:errors="*{orderReceiverItem.receiverAddress3}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+											</dl>
+										</div>
+										<!-- 配送情報 -->
+										<div class="delivery_info">
+											<div class="c-pagetitle_h4 mb15">配送情報</div>
+											<dl class="c-dl-base dt_w120px">
+												<div class="edit">
+													<dt>配送方法<span class="ico_required">必須</span></dt>
+													<dd>
+														<select th:id="updateDeliveryMethodSeq"
+																		th:field="*{orderReceiverItem.updateDeliveryMethodSeq}"
+																		th:onChange="changeTimeZone()" th:errorclass="error" class="c-form-control w160px">
+															<option value="">選択してください</option>
+															<option th:each="item : *{orderReceiverItem.updateDeliveryMethodSeqItems}"
+																			th:value="${item.key}" th:text="${item.value}"></option>
+														</select>
+														<div id="updateDeliveryMethodSeqError"
+																 th:if="${#fields.hasErrors('orderReceiverItem.updateDeliveryMethodSeq')}"
+																 th:errors="*{orderReceiverItem.updateDeliveryMethodSeq}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div class="edit">
+													<dt>お届け希望日</dt>
+													<dd>
+														<input type="text" class="c-form-control w130px"
+																	 th:field="*{orderReceiverItem.updateReceiverDate}" maxlength="10"
+																	 th:errorclass="error">
+														<div id="updateReceiverDateError"
+																 th:if="${#fields.hasErrors('orderReceiverItem.updateReceiverDate')}"
+																 th:errors="*{orderReceiverItem.updateReceiverDate}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div id="deliveryTime" class="edit">
+													<dt>お届け時間帯</dt>
+													<dd>
+														<div id="deliverySelect">
+															<select th:id="receiverTimeZone" th:field="*{orderReceiverItem.receiverTimeZone}"
+																			class="c-form-control w160px" th:errorclass="error">
+																<option value="">選択してください</option>
+																<option th:each="item : *{orderReceiverItem.receiverTimeZoneItems}"
+																				th:value="${item.key}" th:text="${item.value}"></option>
+															</select>
+														</div>
+														<div id="receiverTimeZoneError"
+																 th:if="${#fields.hasErrors('orderReceiverItem.receiverTimeZone')}"
+																 th:errors="*{orderReceiverItem.receiverTimeZone}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div>
+													<dt>出荷日</dt>
+													<dd th:text="*{ orderReceiverItem.shipmentDate == null ? 'ー' : #date.convert(orderReceiverItem.shipmentDate)}"></dd>
+												</div>
+												<div class="edit">
+													<dt>配送伝票番号</dt>
+													<dd>
+														<input type="text" class="c-form-control w160px"
+																	 th:field="*{orderReceiverItem.deliveryCode}" maxlength="40" th:errorclass="error">
+														<div id="deliveryCodeError" th:if="${#fields.hasErrors('orderReceiverItem.deliveryCode')}"
+																 th:errors="*{orderReceiverItem.deliveryCode}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+												<div>
+													<dt>納品書</dt>
+													<dd>
+														<ul class="c-list-10"
+																th:classappend="${#fields.hasErrors('updateInvoiceAttachmentFlag')} ? 'error'">
+															<li th:each="item : *{updateInvoiceAttachmentFlagItems}">
+																<label class="c-form-control"><input type="radio"
+																																		 th:field="*{updateInvoiceAttachmentFlag}"
+																																		 th:value="${item.key}"><i></i>[[${item.value}]]</label>
+															</li>
+														</ul>
+														<div id="updateInvoiceAttachmentFlagError"
+																 th:if="${#fields.hasErrors('updateInvoiceAttachmentFlag')}"
+																 th:errors="*{updateInvoiceAttachmentFlag}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<!-- お届け先編集不可 -->
+							<article class="l-article" th:if="*{!isOrderUpdatable}">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">お届け先</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap delivery_target c-edit">
+										<!-- お届け先情報 -->
+										<div class="delivery_target_info">
+											<div class="c-pagetitle_h4 mb15">お届け先情報</div>
+											<dl class="c-dl-base dt_w120px">
+												<div>
+													<dt>氏名</dt>
+													<dd th:text="*{orderReceiverItem.receiverLastName} + ' ' + *{orderReceiverItem.receiverFirstName}"></dd>
+												</div>
+												<div>
+													<dt>フリガナ</dt>
+													<dd th:text="*{orderReceiverItem.receiverLastKana} + ' ' + *{orderReceiverItem.receiverFirstKana}"></dd>
+												</div>
+												<div>
+													<dt>電話番号</dt>
+													<dd th:text="*{orderReceiverItem.receiverTel}"></dd>
+												</div>
+												<div>
+													<dt>郵便番号</dt>
+													<dd th:text="*{orderReceiverItem.receiverZipCode}"></dd>
+												</div>
+												<div>
+													<dt>住所</dt>
+													<dd>[[*{orderReceiverItem.receiverPrefecture} + *{orderReceiverItem.receiverAddress1}]]<br>
+														[[*{orderReceiverItem.receiverAddress2}]]
+														<th:block th:if="*{!#strings.isEmpty(orderReceiverItem.receiverAddress3)}">
+															[[*{orderReceiverItem.receiverAddress3}]]
+														</th:block>
+													</dd>
+												</div>
+											</dl>
+										</div>
+										<!-- 配送情報 -->
+										<div class="delivery_info">
+											<div class="c-pagetitle_h4 mb15">配送情報</div>
+											<dl class="c-dl-base dt_w120px">
+												<div>
+													<dt>配送方法</dt>
+													<dd th:text="*{orderReceiverItem.deliveryMethodName}"></dd>
+												</div>
+												<div>
+													<dt>お届け希望日</dt>
+													<dd th:text="*{ orderReceiverItem.isReceiverDateNoSelected() ? '指定なし' : #date.convert(orderReceiverItem.receiverDate)}"></dd>
+												</div>
+												<div>
+													<dt>お届け時間帯</dt>
+													<dd th:text="*{ #strings.isEmpty(orderReceiverItem.receiverTimeZone) ? '指定なし' : orderReceiverItem.receiverTimeZone }"></dd>
+												</div>
+												<div>
+													<dt>出荷日</dt>
+													<dd th:text="*{ orderReceiverItem.shipmentDate == null ? 'ー' : #date.convert(orderReceiverItem.shipmentDate)}"></dd>
+												</div>
+												<div>
+													<dt>配送伝票番号</dt>
+													<dd th:text="*{ #strings.isEmpty(orderReceiverItem.deliveryCode) ? 'ー' : orderReceiverItem.deliveryCode}"></dd>
+												</div>
+												<div>
+													<dt>納品書</dt>
+													<dd th:text="*{invoiceAttachmentFlag.label}"></dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<!-- お支払い情報 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">お支払い情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<th:block th:if="*{isDisplayCouponDiscount()}">
+											<ul th:if="*{isOrderUpdatable}" class="c-list-righ mb30">
+												<input type="hidden" id="couponLimitTargetTypeValue" name="couponLimitTargetTypeValue"
+															 th:value="*{couponLimitTargetTypeValue}"/>
+												<input type="submit" id="doCouponLimitTarget" name="doCouponLimitTarget" style="display:none"/>
+												<li>
+													<th:block th:if="*{isDispCouponInvalid()}">
+														<button class="c-btn btn_back" type="button"
+																		onClick="document.getElementById('couponLimitTargetTypeValue').value='2';document.getElementById('doCouponLimitTarget').click();">
+															クーポンを有効化
+														</button>
+													</th:block>
+													<th:block th:if="*{!isDispCouponInvalid()}">
+														<button class="c-btn btn_back" type="button"
+																		onClick="document.getElementById('couponLimitTargetTypeValue').value='0';document.getElementById('doCouponLimitTarget').click();">
+															クーポンを無効化
+														</button>
+													</th:block>
+												</li>
+											</ul>
+										</th:block>
+
+										<table class="c-tbl-base td_txt_right tbl_pay_info">
+											<tbody>
+											<tr>
+												<th>商品数量合計</th>
+												<td>
+													<strong th:text="*{#number.convert(orderGoodsCountTotal)}"></strong>
+												</td>
+											</tr>
+											<tr>
+												<th>商品合計金額（税抜）</th>
+												<td>
+													<strong th:text="*{#number.convert(goodsPriceTotal)}"></strong><span
+																class="currency">円</span>
+												</td>
+											</tr>
+											<tr>
+												<th>送料合計金額（税抜）</th>
+												<td>
+													<strong th:text="*{#number.convert(carriage)}"></strong><span class="currency">円</span>
+												</td>
+											</tr>
+											<tr>
+												<th>手数料（税抜）</th>
+												<td>
+													<strong th:text="*{#number.convert(settlementCommission)}"></strong><span
+																class="currency">円</span>
+												</td>
+											</tr>
+											<tr th:each="item : *{orderAdditionalChargeItems}">
+												<th th:text="${item.additionalDetailsName}"></th>
+												<td>
+													<strong th:text="${#number.convert(item.additionalDetailsPrice)}"></strong><span
+																class="currency">円</span>
+												</td>
+											</tr>
+											<tr>
+												<th>消費税（消費税内訳）</th>
+												<td>
+													<strong th:text="*{#number.convert(taxPrice)}"></strong><span>円</span>
+													<div class="tax_detail">
+														<dl>
+															<dt>10%対象金額</dt>
+															<dd th:text="*{#number.convert(standardTaxTargetPrice)} + 円"></dd>
+															<dd>（消費税<span th:text="*{#number.convert(standardTaxPrice)}"></span>円）</dd>
+														</dl>
+														<dl>
+															<dt>8%対象金額</dt>
+															<dd th:text="*{#number.convert(reducedTaxTargetPrice)} + 円"></dd>
+															<dd>（消費税<span th:text="*{#number.convert(reducedTaxPrice)}"></span>円）</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr th:if="*{isDisplayCouponDiscount()}">
+												<th th:text="*{couponName}"></th>
+												<td>
+													<div class="tax_detail">
+														<dl>
+															<dt th:if="*{!#strings.isEmpty(applyCouponId)}">クーポンID：[[*{applyCouponId}]]</dt>
+															<dd></dd>
+															<strong th:text="*{#number.convert(couponDiscountPrice)}"></strong><span class="currency">円</span>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr class="total">
+												<th>お支払い合計（税込）</th>
+												<td>
+													<strong th:text="*{#number.convert(orderPrice)}"></strong><span class="currency">円</span>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+										<div th:if="*{isOrderUpdatable}" class="mt20 txt_right">
+											<button id="additionalcharge_dialog_btn" type="button" class="c-btn_add">
+												<i></i><span>その他の料金を追加</span></button>
+										</div>
+									</div>
+								</div>
+							</article>
+							<div id="additionalcharge_dialog" style="display:none;">
+								<div class="mb20">
+									※税抜金額を登録してください。
+								</div>
+								<div id="globalMessage" style="display: none;" class="global-error-message"></div>
+								<div class="c-sticky-tbl-wrap">
+									<table class="c-tbl tbl_relation_item only">
+										<thead>
+										<tr>
+											<th>追加項目</th>
+											<th class="w205px">追加金額</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>
+												<input id="inputAdditionalDetailsNameInput" type="text" class="c-form-control w100p"
+															 placeholder="入力してください" value="">
+											</td>
+											<td>
+												<div class="c-input-label">
+													<input id="inputAdditionalDetailsPriceInput" type="text" class="c-form-control w160px price"
+																 placeholder="100">
+													<label>円</label>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td class="pt0 pb10 va_baseline">
+												<div id="inputAdditionalDetailsName" style="display: none;" class="c-error-txt"></div>
+											</td>
+											<td class="pt0 pb10">
+												<div id="inputAdditionalDetailsPrice" style="display: none;" class="c-error-txt"></div>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 管理メモ -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">管理メモ</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div id="memo" class="l-inner_wrap">
+										<textarea limit="2000" class="c-form-control w100p" rows="6" th:field="*{memo}"
+															th:errorclass="error"></textarea>
+										<div th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}" class="c-error-txt mt5"></div>
+									</div>
+								</div>
+							</article>
+						</div>
+
+						<div class="l-section_side">
+							<!-- 配送メモ編集可 -->
+							<article th:if="*{isOrderUpdatable}" class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">配送情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<dl>
+											<dt>ノベルティ判定状態</dt>
+											<dd>
+												<select th:field="*{updateNoveltyPresentJudgmentStatus}" th:errorclass="error"
+																class="c-form-control w160px">
+													<option value="">選択してください</option>
+													<option th:each="item : *{noveltyPresentJudgmentStatusItems}" th:value="${item.key}"
+																	th:text="${item.value}"></option>
+												</select>
+											</dd>
+										</dl>
+									</div>
+									<div id="deliveryNote" class="l-inner_wrap">
+										<textarea limit="400" class="c-form-control w100p" rows="4"
+															th:field="*{orderReceiverItem.deliveryNote}" th:errorclass="error"
+															placeholder="お客様からのメモはありません"></textarea>
+										<div id="deliveryNoteError" th:if="${#fields.hasErrors('orderReceiverItem.deliveryNote')}"
+												 th:errors="*{orderReceiverItem.deliveryNote}" class="c-error-txt mt5"></div>
+									</div>
+								</div>
+							</article>
+							<!-- 配送メモ編集不可 -->
+							<article th:if="*{!isOrderUpdatable}" class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">配送情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap" th:utext="*{updateNoveltyPresentJudgmentStatus}"></div>
+									<div class="l-inner_wrap"
+											 th:utext="*{ #strings.isEmpty(orderReceiverItem.deliveryNote) ? 'お客様からのメモはありません' : #pre.convert(orderReceiverItem.deliveryNote) }"></div>
+								</div>
+							</article>
+
+							<!-- 決済情報 -->
+							<article class="l-article">
+								<input type="hidden" id="originalSettlementMethodSeq" th:value="*{originalSettlementMethodSeq}"/>
+								<input type="hidden" id="creditSettlementMethodSeqList" th:value="*{creditSettlementMethodSeqList}"/>
+								<input type="hidden" id="mailRequiredSettlementMethodSeqList"
+											 th:value="*{mailRequiredSettlementMethodSeqList}"/>
+
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">決済情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap settlement_info c-edit">
+										<dl class="c-dl-base dt_w150px">
+											<!--/* 決済方法の選択 */-->
+											<div>
+												<dt>決済方法<span th:if="*{isSettlementUpdatable}" class="ico_required">必須</span></dt>
+												<dd th:if="*{!isSettlementUpdatable}" th:text="*{settlementMethodName}"></dd>
+												<dd th:if="*{isSettlementUpdatable}">
+													<select th:field="*{updateSettlementMethodSeq}"
+																	onchange="changeDisplayCreditConveni();changeMailRequired();disableReceiverData();"
+																	class="c-form-control w100p" th:errorclass="error">
+														<option value="">選択してください</option>
+														<option th:each="item : *{updateSettlementMethodSeqItems}" th:value="${item.key}"
+																		th:text="${item.value}"></option>
+													</select>
+													<div id="updateSettlementMethodSeqError"
+															 th:if="${#fields.hasErrors('updateSettlementMethodSeq')}"
+															 th:errors="*{updateSettlementMethodSeq}" class="c-error-txt mt5"></div>
+												</dd>
+											</div>
+											<!--/* クレジットの場合 */-->
+											<th:block th:if="*{isCredit()}">
+												<div>
+													<dt>請求状態</dt>
+													<dd>
+														[[*{billStatus.label}]]
+														<th:block th:if="*{isEmergency()}"><br/>[[*{errInfo}]]
+														</th:block>
+														<th:block th:if="*{isEmergency()} AND *{isMulPayErr()}"><br/>[[*{mulPayErrMsg}]]
+														</th:block>
+													</dd>
+												</div>
+												<div>
+													<dt>入金日</dt>
+													<dd th:text="*{ receiptTime == null ? 'ー' : #date.convert(receiptTime)}"></dd>
+												</div>
+											</th:block>
+											<!--/* リンク決済の場合 */-->
+											<th:block th:if="*{isLinkPay()}">
+												<div>
+													<dt>決済手段</dt>
+													<dd th:text="*{payTypeName}"></dd>
+												</div>
+												<div>
+													<dt>決済タイプ</dt>
+													<dd th:text="*{billTypeLink.label}"></dd>
+												</div>
+												<div>
+													<dt>請求状態</dt>
+													<dd>
+														[[*{billStatus.label}]]
+														<th:block th:if="*{isEmergency()}"><br/>[[*{errInfo}]]
+														</th:block>
+														<th:block th:if="*{isEmergency()} AND *{isMulPayErr()}"><br/>[[*{mulPayErrMsg}]]
+														</th:block>
+													</dd>
+												</div>
+												<div>
+													<dt>入金日</dt>
+													<dd th:text="*{ receiptTime == null ? 'ー' : #date.convert(receiptTime)}"></dd>
+												</div>
+												<div th:if="*{billTypeLink.value == '0'}">
+													<dt>GMOキャンセル期限</dt>
+													<dd th:text="*{cancelLimit}"></dd>
+												</div>
+											</th:block>
+
+											<!--/* 決済詳細情報 */-->
+											<div th:if="*{isCredit() || billTypeLink.value == '1'}"
+													 class="all settlement_conveni settlement_credit settlement_payeasy">
+												<dt>決済詳細</dt>
+												<dd>
+													<dl class="c-dl-base sml_sty dt_w150px">
+
+														<!--/* コンビニ決済の場合 */-->
+														<th:block th:if="*{isConveni()}">
+															<div>
+																<dt>コンビニ</dt>
+																<dd th:text="*{conveniName}"></dd>
+															</div>
+															<div th:if="*{isPaymentTimeLimitDateFlag()}">
+																<dt>払込期限</dt>
+																<dd th:text="*{#date.convert(paymentTimeLimitDate)}"></dd>
+															</div>
+															<!--/* コンビニ決済受付番号情報 */-->
+															<th:block th:if="*{isConveni1()}">
+																<div>
+																	<dt>お客様番号</dt>
+																	<dd th:text="*{receiptNo}"></dd>
+																</div>
+																<div>
+																	<dt>確認番号</dt>
+																	<dd th:text="*{confNo}"></dd>
+																</div>
+															</th:block>
+															<th:block th:if="*{isConveni2()}">
+																<div>
+																	<dt>オンライン決済番号</dt>
+																	<dd th:text="*{receiptNoWithHyphen}"></dd>
+																</div>
+															</th:block>
+															<th:block th:if="*{isConveni3()}">
+																<div>
+																	<dt>払込票番号</dt>
+																	<dd th:text="*{receiptNo}"></dd>
+																</div>
+															</th:block>
+															<th:block th:if="*{isConveni4()}">
+																<div>
+																	<dt>第１番号（５桁）</dt>
+																	<dd th:text="*{confNo}"></dd>
+																</div>
+																<div>
+																	<dt>第２番号（１２桁）</dt>
+																	<dd th:text="*{receiptNo}"></dd>
+																</div>
+															</th:block>
+															<th:block id="isConveni5" th:if="*{isConveni5()}">
+																<div>
+																	<dt>受付番号</dt>
+																	<dd th:text="*{receiptNo}"></dd>
+																</div>
+																<div>
+																	<dt>確認番号</dt>
+																	<dd th:text="*{confNo}"></dd>
+																</div>
+															</th:block>
+														</th:block>
+
+														<!--/* クレジット決済の場合 */-->
+														<th:block th:if="*{isCredit()}">
+															<div th:if="*{!isNullOrderId()}">
+																<dt>オーダーID</dt>
+																<dd th:text="*{orderId}"></dd>
+															</div>
+															<div th:if="*{!isNullTranId()}">
+																<dt>トランザクションID</dt>
+																<dd th:text="*{tranId}"></dd>
+															</div>
+															<div>
+																<dt>処理区分</dt>
+																<dd th:text="*{jobCd}"></dd>
+															</div>
+															<div>
+																<dt>お支払い種別</dt>
+																<dd>
+																	[[*{getMethodDsp()}]]
+																	<th:block th:if="*{isPayTimesSetting()}">（支払回数：[[*{payTimes}]]回）</th:block>
+																</dd>
+															</div>
+															<div th:if="*{isPaymentTimeLimitDateFlag()}">
+																<dt>払込期限</dt>
+																<dd th:text="*{#date.convert(paymentTimeLimitDate)}"></dd>
+															</div>
+														</th:block>
+
+														<!--/* ペイジー決済の場合 */-->
+														<th:block th:if="*{isPayEasy()}">
+															<div>
+																<dt>収納機関番号</dt>
+																<dd th:text="*{bkCode}"></dd>
+															</div>
+															<div>
+																<dt>お客様番号</dt>
+																<dd th:text="*{custId}"></dd>
+															</div>
+															<div>
+																<dt>確認番号</dt>
+																<dd th:text="*{confNo}"></dd>
+															</div>
+															<div th:if="*{isPaymentTimeLimitDateFlag()}">
+																<dt>払込期限</dt>
+																<dd th:text="*{#date.convert(paymentTimeLimitDate)}"></dd>
+															</div>
+														</th:block>
+
+														<!--/* 銀行振込（バーチャル口座 あおぞら）決済の場合 */-->
+														<th:block th:if="*{isBankTransferAozora()}">
+															<div>
+																<dt>振込先銀行名</dt>
+																<dd th:text="*{bankName}"></dd>
+															</div>
+															<div>
+																<dt>振込先支店名</dt>
+																<dd th:text="*{branchName}"></dd>
+															</div>
+															<div>
+																<dt>振込先口座種別</dt>
+																<dd th:text="*{accountType}"></dd>
+															</div>
+															<div>
+																<dt>振込先口座番号</dt>
+																<dd th:text="*{accountNumber}"></dd>
+															</div>
+															<div>
+																<dt>振込期限</dt>
+																<dd th:text="*{exprireDate}"></dd>
+															</div>
+														</th:block>
+													</dl>
+												</dd>
+											</div>
+
+											<!--/* メール送信 */-->
+											<div class="all" th:if="*{isPaymentTimeLimitDateFlag()}">
+												<dt>メール通知</dt>
+												<dd>
+													<dl class="c-dl-base sml_sty dt_w150px">
+														<div>
+															<dt>督促/期限切れメール</dt>
+															<dd>
+																<label class="c-form-control"><input type="checkbox" id="updateMailRequired"
+																																		 th:field="*{updateMailRequired}"
+																																		 value="true"><i></i>送信する</label>
+															</dd>
+														</div>
+														<div th:if="*{isMailRequiredOn()}">
+															<dt>督促メール送信状態</dt>
+															<dd th:text="*{reminderSentFlag.label}"></dd>
+														</div>
+														<div>
+															<dt>期限切れメール送信予定</dt>
+															<dd th:text="*{#date.convert(cancelableDate)}"></dd>
+														</div>
+														<div th:if="*{isMailRequiredOn()}">
+															<dt>期限切れメール送信状態</dt>
+															<dd th:text="*{expiredSentFlag.label}"></dd>
+														</div>
+													</dl>
+												</dd>
+											</div>
+
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<th:block id="isDisplayMemberInfo" th:if="*{isDisplayMemberInfo}">
+
+								<article class="l-article">
+									<div class="l-article_title no_slide">
+										<h2 class="c-pagetitle_h3">お客様情報</h2>
+										<div class="c-open-btn"><i></i></div>
+									</div>
+									<div class="l-article_inner">
+										<div class="l-inner_wrap customer_info c-edit">
+											<dl class="c-dl-nobase">
+												<div>
+													<dt>会員ID</dt>
+													<dd th:text="*{orderMail}"></dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</article>
+
+								<!-- 請求先情報編集可 -->
+								<article th:if="*{isOrderUpdatable}" class="l-article">
+									<div class="l-article_title">
+										<h2 class="c-pagetitle_h3">請求先情報</h2>
+										<div class="c-open-btn"><i></i></div>
+									</div>
+									<div class="l-article_inner">
+										<div class="l-inner_wrap customer_info c-edit">
+											<dl class="c-dl-nobase">
+												<div>
+													<dt>氏名<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="name">
+															<div>
+																<dt>姓</dt>
+																<dd>
+																	<input type="text" th:field="*{orderBillingLastName}" class="c-form-control w120px"
+																				 maxlength="16" th:errorclass="error">
+																	<div id="orderBillingLastNameError"
+																			 th:if="${#fields.hasErrors('orderBillingLastName')}"
+																			 th:errors="*{orderBillingLastName}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>名</dt>
+																<dd>
+																	<input type="text" th:field="*{orderBillingFirstName}" maxlength="16"
+																				 class="c-form-control w120px" th:errorclass="error">
+																	<div id="orderBillingFirstNameError"
+																			 th:if="${#fields.hasErrors('orderBillingFirstName')}"
+																			 th:errors="*{orderBillingFirstName}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+												<div>
+													<dt>フリガナ<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="name">
+															<div>
+																<dt>セイ</dt>
+																<dd>
+																	<input type="text" th:field="*{orderBillingLastKana}" maxlength="40"
+																				 class="c-form-control w120px" th:errorclass="error">
+																	<div id="orderBillingLastKanaError"
+																			 th:if="${#fields.hasErrors('orderBillingLastKana')}"
+																			 th:errors="*{orderBillingLastKana}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>メイ</dt>
+																<dd>
+																	<input type="text" th:field="*{orderBillingFirstKana}" maxlength="40"
+																				 class="c-form-control w120px" th:errorclass="error">
+																	<div id="orderBillingFirstKanaError"
+																			 th:if="${#fields.hasErrors('orderBillingFirstKana')}"
+																			 th:errors="*{orderBillingFirstKana}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+												<div>
+													<dt>郵便番号<span class="ico_required">必須</span></dt>
+													<dd class="wrap_flex_center">
+														<input type="text" id="orderBillingZipCode" th:field="*{orderBillingZipCode}" maxlength="7"
+																	 class="zip_02 c-form-control w120px mr10" th:errorclass="error">
+														<button type="button" onClick="callZipSearchFunc('orderZip');" class="c-btn btn_back">住所検索
+														</button>
+													</dd>
+													<div id="orderBillingZipCodeError" th:if="${#fields.hasErrors('orderBillingZipCode')}"
+															 th:errors="*{orderBillingZipCode}" class="c-error-txt mt5"></div>
+													<div id="orderZipErrorMsg"></div>
+												</div>
+												<div>
+													<dt>住所<span class="ico_required">必須</span></dt>
+													<dd>
+														<dl class="address">
+															<div>
+																<dt>都道府県</dt>
+																<dd>
+																	<select id="orderBillingPrefecture" th:field="*{orderBillingPrefecture}"
+																					class="pref_02 c-form-control w160px" th:errorclass="error">
+																		<option value="">選択してください</option>
+																		<option th:each="item : *{orderBillingPrefectureItems}" th:value="${item.value}"
+																						th:text="${item.value}"></option>
+																	</select>
+																	<div id="orderBillingPrefectureError"
+																			 th:if="${#fields.hasErrors('orderBillingPrefecture')}"
+																			 th:errors="*{orderBillingPrefecture}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>市区郡</dt>
+																<dd>
+																	<input type="text" id="orderBillingAddress1" th:field="*{orderBillingAddress1}"
+																				 class="addr1_02 c-form-control w100p" th:errorclass="error">
+																	<div id="orderBillingAddress1Error"
+																			 th:if="${#fields.hasErrors('orderBillingAddress1')}"
+																			 th:errors="*{orderBillingAddress1}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>町村・番地</dt>
+																<dd>
+																	<input type="text" id="orderBillingAddress2" th:field="*{orderBillingAddress2}"
+																				 class="addr2_02 c-form-control w100p" th:errorclass="error">
+																	<div id="orderBillingAddress2Error"
+																			 th:if="${#fields.hasErrors('orderBillingAddress2')}"
+																			 th:errors="*{orderBillingAddress2}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+															<div>
+																<dt>建物名</dt>
+																<dd>
+																	<input type="text" id="orderBillingAddress3" class="addr3_02 c-form-control w100p"
+																				 th:field="*{orderBillingAddress3}" th:errorclass="error">
+																	<div id="orderBillingAddress3Error"
+																			 th:if="${#fields.hasErrors('orderBillingAddress3')}"
+																			 th:errors="*{orderBillingAddress3}" class="c-error-txt mt5"></div>
+																</dd>
+															</div>
+														</dl>
+													</dd>
+												</div>
+												<div class="edit wrap_flex ai_baseline">
+													<dt>電話番号<span class="ico_required">必須</span></dt>
+													<dd>
+														<input type="text" th:field="*{orderBillingTel}" maxlength="11"
+																	 class="c-form-control w160px" th:errorclass="error">
+														<div id="orderBillingTelError" th:if="${#fields.hasErrors('orderBillingTel')}"
+																 th:errors="*{orderBillingTel}" class="c-error-txt mt5"></div>
+													</dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</article>
+
+								<!-- 請求先情報編集不可 -->
+								<article th:if="*{!isOrderUpdatable}" class="l-article">
+									<div class="l-article_title">
+										<h2 class="c-pagetitle_h3">請求先情報</h2>
+										<div class="c-open-btn"><i></i></div>
+									</div>
+									<div class="l-article_inner">
+										<div class="l-inner_wrap customer_info">
+											<dl class="c-dl-nobase">
+												<div>
+													<dd th:text="*{orderBillingLastName + ' ' + orderBillingFirstName}"></dd>
+													<dd th:text="*{orderBillingLastKana + ' ' + orderBillingFirstKana}"></dd>
+												</div>
+												<div>
+													<dd th:text="*{orderBillingZipCode}"></dd>
+													<dd th:text="*{orderBillingPrefecture + orderBillingAddress1 + orderBillingAddress2 + (#strings.isEmpty(orderBillingAddress3) ? '' : orderBillingAddress3) }"></dd>
+												</div>
+												<div>
+													<dt>電話番号</dt>
+													<dd th:text="*{orderBillingTel}"></dd>
+												</div>
+											</dl>
+										</div>
+									</div>
+								</article>
+							</th:block>
+						</div>
+					</div>
+
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left"
+									 th:href="@{/order/details/(orderCode=${detailsUpdateCommonModel.orderCode})}"><i
+												class="material-icons navigate_before"></i>戻る</a>
+							</div>
+							<div class="col_left">
+								<div class="c-label-white" th:if="*{isEmergency} AND *{isCancelOfCooperationView}">
+									<label class="c-form-control"><input type="checkbox" th:field="*{cancelOfCooperation}"><i></i>GMO連携解除</label>
+								</div>
+								<input type="hidden" id="isConfirmBtnClicked" value="false"/>
+								<button type="submit" th:if="*{isOrderCancelModifyPossible}" id="doConfirm" name="doConfirm"
+												class="c-btn btn_regular">
+									確認
+								</button>
+								<button type="submit" th:if="*{!isOrderCancelModifyPossible}" id="doConfirm" name="doConfirm"
+												class="c-btn btn_regular" disabled="true" style="pointer-events: none;opacity: 0.4;">
+									確認
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- 手数料ダイアログ -->
+					<input type="submit" id="doConfirmCommissionDialog" name="doConfirmCommissionDialog" style="display:none;"/>
+					<!-- 送料ダイアログ -->
+					<input type="submit" id="doConfirmCarriageDialog" name="doConfirmCarriageDialog" style="display:none;"/>
+					<!-- クーポンダイアログ -->
+					<input type="submit" id="doConfirmCouponDialog" name="doConfirmCouponDialog" style="display:none;"/>
+				</form>
+			</div>
+		</div>
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+
+<script type="text/javascript">
+	var zipsearch = new Zipsearch();
+	function callZipSearchFunc(name, self) {
+		if (name == 'orderZip') {
+			zipsearch.zipCodeSearchPrefectureNameReturn(false,$id('orderBillingPrefecture'),$id('orderBillingAddress1'),$id('orderBillingAddress2'),$id('orderBillingAddress3'),$id('orderBillingZipCode'),$id('orderZipErrorMsg'));
+		} else {
+			zipsearch.zipCodeSearchPrefectureNameReturn(false,$id('receiverPrefecture'),$id('receiverAddress1'),$id('receiverAddress2'),$id('receiverAddress3'),$id('receiverZipCode'),$id('receiverZipErrorMsg'));
+		}
+	}
+
+
+
+</script>
+
+<script type="text/javascript">
+	// ---------------------------------------------------------------------------
+	// 手数料確認のダイアログ
+	// ---------------------------------------------------------------------------
+	CALC_TITLE = "手数料確認";
+	CALC_MESSAGE1 = "手数料が変更されています。<br />変更前の手数料を適用しますか？<br />(変更前手数料：&nbsp;";
+	CALC_MESSAGE2 = "&nbsp;円)";
+	OK_BUTTON = "はい";
+	CANCEL_BUTTON = "いいえ";
+
+	jQuery(function($){
+		if ($("#commissionDialogDisplay").val() == "true" && $("#commissionSelected").val() != "true") {
+			location.hash = "anchorCommissionDialog";
+			// エラー時自画面遷移した場合に表示しないようにする為
+			$("#commissionDialogDisplay").val(false);
+			var orgCommition = $("#orgCommissionDisp").val();
+			var msgContent = CALC_MESSAGE1 + orgCommition + CALC_MESSAGE2;
+			// -------------------------------------------------------------------
+			// 手数料確認のダイアログ表示
+			// -------------------------------------------------------------------
+			$.confirm({
+				title: CALC_TITLE,
+				content: msgContent,
+				boxWidth: '400px',
+				useBootstrap: false,
+				draggable: false,
+				buttons: {
+					confirm: {
+						text: OK_BUTTON,
+						btnClass: 'ui-button ui-corner-all ui-widget',
+						keys: ['enter'],
+						action: function(){
+							$("#commissionCalcFlag").val(true);
+							$("#doConfirmCommissionDialog").click();
+						}
+					},
+					cancel: {
+						text: CANCEL_BUTTON,
+						keys: ['esc'],
+						action: function(){
+							$("#commissionCalcFlag").val(false);
+							$("#doConfirmCommissionDialog").click();
+						}
+					}
+				}
+			});
+		}
+	});
+
+
+
+
+</script>
+
+<script th:if="${detailsUpdateModel.isDispCarriageDialog()}">
+	// ---------------------------------------------------------------------------
+	// 送料確認のダイアログ
+	// ---------------------------------------------------------------------------
+	CALC_CARRIAGE_TITLE = "送料確認";
+	CALC_CARRIAGE_MESSAGE1 = "送料が変更されています。<br />変更前の送料を適用しますか？<br />(変更前送料：&nbsp;";
+	CALC_CARRIAGE_MESSAGE2 = "&nbsp;円)";
+	OK_CARRIAGE_BUTTON = "はい";
+	CANCEL_CARRIAGE_BUTTON = "いいえ";
+
+	jQuery(function($){
+		location.hash = "anchorCarriageDialog";
+		// エラー時自画面遷移した場合に表示しないようにする為
+		$("#carriageDialogDisplay").val(false);
+		var orgCarriage = $("#orgCarriageDisp").val();
+		var msgContent = CALC_CARRIAGE_MESSAGE1 + orgCarriage + CALC_CARRIAGE_MESSAGE2;
+		// -------------------------------------------------------------------
+		// 送料確認のダイアログ表示
+		// -------------------------------------------------------------------
+		$.confirm({
+			title: CALC_CARRIAGE_TITLE,
+			content: msgContent,
+			boxWidth: '400px',
+			useBootstrap: false,
+			draggable: false,
+			buttons: {
+				confirm: {
+					text: OK_CARRIAGE_BUTTON,
+					btnClass: 'ui-button ui-corner-all ui-widget',
+					keys: ['enter'],
+					action: function(){
+						$("#carriageCalcFlag").val(true);
+						$("#doConfirmCarriageDialog").click();
+					}
+				},
+				cancel: {
+					text: CANCEL_CARRIAGE_BUTTON,
+					keys: ['esc'],
+					action: function(){
+						$("#carriageCalcFlag").val(false);
+						$("#doConfirmCarriageDialog").click();
+					}
+				}
+			}
+		});
+	});
+
+
+
+
+
+
+</script>
+
+<script th:if="${detailsUpdateModel.isDispCouponCancelDialog()}">
+	// ---------------------------------------------------------------------------
+	// クーポン確認のダイアログ
+	// ---------------------------------------------------------------------------
+	$(function() {
+		if ( $("#commissionDialogDisplay").val() != "true" && $("#carriageDialogDisplay").val() != "true" ) {
+
+			location.hash = "anchorCouponDialog";
+			$("#couponCancelDialogDisplay").val(false);
+
+			var buttonId = $("#doConfirmCouponDialog").attr("id");
+			$(couponCancel(buttonId));
+			$("#couponCancel").click(buttonId);
+		}
+	});
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

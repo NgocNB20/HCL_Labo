@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+       xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+       lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>バッチ管理｜システム管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript">
+        var token = $('#_csrf').attr('content');
+        var header = $('#_csrf_header').attr('content');
+        jQuery(function($){
+
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+        function doReportTaskId(reportTaskId){
+            let form = new FormData();
+            form.append("reportTaskId",reportTaskId);
+            $.ajax({
+                type: "POST",
+                url: pkg_common.getAppComplementUrl() + "/batchmanagement/doReportAjax",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                data: form,
+                timeout: 30000
+
+            })
+                .done(function (data) {
+                    setbatchManagementReportItem(data);
+                })
+                .fail(function (data) {
+                    if (data && data.status && data.status === 403) {
+                            location.href = pkg_common.getAppComplementUrl() + '/login/'
+                    }
+                })
+            $("#report_dialog").dialog({
+                modal:true,
+                width: 820,
+                title:"処理状況レポート",
+                close: function () {
+                    clearForm()
+                }
+            });
+        }
+
+        function conVertTaskStatus(status){
+            let statusConverted='';
+            if (status == 'COMPLETED') {
+                statusConverted = '正常終了';
+            }else if (status == 'FAILED') {
+                statusConverted = '異常終了';
+            }
+            return statusConverted;
+        }
+
+        function convertBatchderive(status) {
+            let statusConverted = '';
+            if (status == 'ONLINE') {
+                statusConverted = 'オンライン'
+            } else if (status == 'OFFLINE') {
+                statusConverted = 'オフライン'
+            }
+            return statusConverted;
+        }
+        function clearForm(){
+            $("#taskStatusAjax").text('');
+            $("#batchNameAjax").text('');
+            $("#acceptTimeAjax").text('');
+            $("#terminateTimeAjax").text('');
+            $("#processedRecordAjax").text('');
+            $("#batchDeriveAjax").text('');
+            $("#reportStringAjax").text('');
+        }
+
+        function setbatchManagementReportItem(data){
+            clearForm();
+            $("#taskStatusAjax").text(data.taskstatus ? conVertTaskStatus(data.taskstatus) : '');
+            $("#batchNameAjax").text(data.batchname ? data.batchname : '');
+            $("#acceptTimeAjax").text(data.accepttimeStr ? data.accepttimeStr : '');
+            $("#terminateTimeAjax").text(data.terminatetimeStr ? data.terminatetimeStr : '');
+            if (data.processedrecord !== null) {
+                $("#processedRecord").show();
+                $("#processedRecordAjax").text(data.processedrecord + " 件終了しました");
+            } else {
+                $("#processedRecord").hide();
+            }
+            $("#batchDeriveAjax").text(data.batchderive ? convertBatchderive(data.batchderive) : '');
+            $("#reportStringAjax").html(data.reportstring ? data.reportstring.replace(/\n/g, "<br/>") : '');
+        }
+        $(function() {
+            $("#doExcute").click(function() {
+                return (window.confirm("手動起動しますが、よろしいですか？"));
+            });
+        });
+    </script>
+</head>
+
+<body id="system">
+<div id="batchManagement" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"/>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"/>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/batchmanagement/}" th:object="${batchManagementModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">バッチ管理</h1>
+                    </div>
+                    <!--エラーメッセージ-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <!-- 検索 -->
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <th:block sec:authorize="hasAnyAuthority('BATCH:8')">
+                                        <div class="c-detail-warp search_data_smp wrap c-btm_line">
+                                            <dl class="w100p">
+                                                <dt>バッチ名</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <select class="c-form-control wauto mr10"  name="manualBatch" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="item : *{manualBatchItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{manualBatch}">選択してください
+                                                        </option>
+                                                    </select>
+                                                    <button class="c-btn-small_over w95px" id="doExcute" name="doExecute" type="submit">手動起動</button>
+                                                </dd>
+                                                <div th:if="${#fields.hasErrors('manualBatch')}" th:errors="*{manualBatch}" class="c-error-txt mt5"></div>
+                                            </dl>
+                                        </div>
+                                    </th:block>
+
+                                    <h2 class="c-pagetitle_h4 mb15 w100p">履歴検索</h2>
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>バッチ名</dt>
+                                            <dd>
+                                                <select class="c-form-control" name="batchtypes" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{batchtypesItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{batchtypes}">選択してください
+                                                    </option>
+                                                </select>
+                                                <div th:if="${#fields.hasErrors('batchtypes')}" th:errors="*{batchtypes}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <div>
+                                            <dl>
+                                                <dt>期間</dt>
+                                                <dd class="wrap_flex_center w325px">
+                                                    <div class="search_open_long wrap_flex_center w325px">
+                                                        <label class="c-datepicker">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{accepttimeFrom}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                        <span class="ml10">〜</span>
+                                                        <label class="ml10 c-datepicker">
+                                                            <input maxlength="10" th:errorclass="error" autocomplete="off" th:field="*{accepttimeTo}" type="text" class="c-form-control" placeholder="年/月/日">
+                                                        </label>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <ul class="c-list-left list_sp5 mt10 w100p">
+                                                <li><button id="targetDate_today_accepttime" value="今日" class="c-btn-small" type="button">今日</button></li>
+                                                <li><button id="targetDate_yesterday_accepttime" value="昨日" class="c-btn-small" type="button">昨日</button></li>
+                                                <li><button id="targetDate_crrentMonth_accepttime" value="今月" class="c-btn-small" type="button">今月</button></li>
+                                                <li><button id="targetDate_prevMonth_accepttime"value="先月" class="c-btn-small" type="button">先月</button></li>
+                                                <li><button id="targetDate_clear_accepttime" value="クリア" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                            </ul>
+                                            <div th:if="${#fields.hasErrors('accepttimeFrom')}" th:errors="*{accepttimeFrom}" class="c-error-txt mt5"></div>
+                                            <div th:if="${#fields.hasErrors('accepttimeTo')}" th:errors="*{accepttimeTo}" class="c-error-txt mt5"></div>
+                                    </div>
+                                        <dl>
+                                            <dt>処理状況</dt>
+                                            <dd>
+                                                <select class="c-form-control" name="taskstatuses" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{taskstatusesItems}" th:value="${item.key}" th:text="${item.value}"
+                                                              th:selected="${item.key} == *{taskstatuses}">選択してください
+                                                    </option>
+                                                </select>
+                                                <div th:if="${#fields.hasErrors('taskstatuses')}" th:errors="*{taskstatuses}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <!-- 詳細検索 -->
+                                    <div class="c-contbtn_wrap_top mt10">
+                                        <button class="c-btn btn_regular" name="doSearch" type="submit">検索する</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+
+                            <input type="hidden" id="pageNumber" name="pageNumber" />
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" />
+
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() == 0}" >
+                                    <div class="col wrap_flex">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true)}"></div>
+                                    </div>
+                                    <table class="c-tbl large60 tbl_search_batchmanagement">
+                                        <thead>
+                                        <tr>
+                                            <th>バッチ名</th>
+                                            <th class="w200px">処理受付日時</th>
+                                            <th class="w200px">処理終了日時</th>
+                                            <th class="w200px">処理状況</th>
+                                            <th class="w200px">同時処理識別</th>
+                                            <th class="w115px"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item: *{resultItems}">
+                                                <td th:text="${item.batchname}"></td>
+                                                <td class="times" th:text="${#date.convert(item.accepttime, 'yyyy/MM/dd HH:mm:ss')}"></td>
+                                                <td class="times" th:text="${#date.convert(item.terminatetime, 'yyyy/MM/dd HH:mm:ss')}"></td>
+                                                <td class="status" th:switch="${item.taskstatus.value}">
+                                                    <span th:case="'COMPLETED'" th:text="${item.taskstatus.label}" class="c-status01 ico_blue"></span>
+                                                    <span th:case="'FAILED'" th:text="${item.taskstatus.label}" class="c-status01 ico_red" ></span>
+                                                    <span th:case="*" th:text="${item.taskstatus.label}" class="c-status01 ico_gray"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:if="${item.batchderive.value} == 1" th:text="${item.batchderive.label}"
+                                                          class="c-status01 ico_green" ></span>
+                                                    <span th:if="${item.batchderive.value} == 0" th:text="${item.batchderive.label}"
+                                                          class="c-status01 ico_gray" ></span>
+                                                </td>
+                                                <td>
+                                                    <button th:onClick="|doReportTaskId('${item.taskid}');|" class="c-btn-small_over w95px" type="button">結果表示</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--ページネーション-->
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </article>
+                        <div id="report_dialog" style="display:none;">
+                            <table class="c-tbl-base mb20">
+                                <tbody>
+                                <tr>
+                                    <th class="w190px">処理状況</th>
+                                    <td id="taskStatusAjax"></td>
+                                </tr>
+                                <tr>
+                                    <th class="w190px">バッチ名</th>
+                                    <td id="batchNameAjax"></td>
+                                </tr>
+                                <tr>
+                                    <th class="w190px">処理受付日時</th>
+                                    <td id="acceptTimeAjax"></td>
+                                </tr>
+                                <tr id="processedRecord">
+                                    <th class="w190px">処理件数</th>
+                                    <td id="processedRecordAjax"></td>
+                                </tr>
+                                <tr>
+                                    <th class="w190px">処理終了日時</th>
+                                    <td id="terminateTimeAjax"></td>
+                                </tr>
+                                <tr>
+                                    <th class="w190px">同時処理識別</th>
+                                    <td id="batchDeriveAjax"></td>
+                                </tr>
+                                <tr>
+                                    <th class="w190px">レポート内容</th>
+                                    <td id="reportStringAjax"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"/>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-scroll {
+  overflow: scroll;
+  -ms-overflow-style: none;
+  /* IE, Edge 対応 */
+  scrollbar-width: none;
+  /* Firefox 対応 */
+
+  &::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
+  }
+
+  .simplebar-track {
+    background: $color-e6;
+  }
+
+  .simplebar-track.simplebar-vertical,
+  .simplebar-track.simplebar-vertical .simplebar-scrollbar::before {
+    width: 6px;
+  }
+
+  .simplebar-track.simplebar-horizontal,
+  .simplebar-track.simplebar-horizontal .simplebar-scrollbar::before {
+    height: 6px;
+  }
+  
+  .simplebar-track .simplebar-scrollbar.simplebar-visible::before {
+    opacity: 1;
+  }
+  
+  .simplebar-track .simplebar-scrollbar::before {
+    background: $color-primary;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+  }
+
+  @include media(sm) {
+
+
+
+  }
+
+}
+
+
+.c-scroll2 {
+  overflow: scroll;
+  -ms-overflow-style: none;
+  /* IE, Edge 対応 */
+  scrollbar-width: none;
+  /* Firefox 対応 */
+
+  &::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
+  }
+
+  .simplebar-track {
+    width: 20px;
+    // border: solid 1px $color-e6;
+    // background: $color-fff;
+    background: $color-orange-lightGray;
+    box-shadow: 0 1px 1px rgba($color-70, .1) inset;
+  }
+  
+  .simplebar-track .simplebar-scrollbar.simplebar-visible::before {
+    opacity: 1;
+  }
+  
+  .simplebar-track .simplebar-scrollbar::before {
+    // width: 10px;
+    width: 12px;
+    margin-inline: auto;
+    background: $color-primary;
+  }
+
+  @include media(sm) {
+
+    .simplebar-track {
+      width: 10px;
+    }
+    
+    .simplebar-track .simplebar-scrollbar::before {
+      width: 6px;
+    }
+
+  }
+
+}
+
+

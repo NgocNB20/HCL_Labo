@@ -1,0 +1,5 @@
+DELETE
+FROM
+    ORDERITEM
+WHERE
+    ORDERSLIPID = /*orderSlipId*/'1001'

@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "817246bf-a024-4065-887e-5b2ff4769949",
+		"name": "hclabo-logistic-method-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "配送方法取得 (getByDeliveryMethodSeq) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法一覧取得 (getMethods) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法取得 (getByDeliveryMethodSeq) - NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法登録 (regist) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.deliveryMethodResponse).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveryMethodRequest\": {\r\n        \"deliveryMethodSeq\" : \"\",\r\n        \"deliveryMethodName\":\"佐川急便test\",\r\n        \"deliveryMethodDisplayNamePC\":\"\",\r\n        \"openStatusPC\":\"1\",\r\n        \"deliveryNotePC\":\"\",\r\n        \"deliveryMethodType\":\"1\",\r\n        \"equalsCarriage\": 200,\r\n        \"largeAmountDiscountPrice\":\"\",\r\n        \"largeAmountDiscountCarriage\":\"\",\r\n        \"shortfallDisplayFlag\":\"\",\r\n        \"deliveryLeadTime\":\"\",\r\n        \"deliveryChaseURL\":\"\",\r\n        \"deliveryChaseURLDisplayPeriod\":\"\",\r\n        \"possibleSelectDays\":\"\",\r\n        \"receiverTimeZone1\":\"\",\r\n        \"receiverTimeZone2\":\"\",\r\n        \"receiverTimeZone3\":\"\",\r\n        \"receiverTimeZone4\":\"\",\r\n        \"receiverTimeZone5\":\"\",\r\n        \"receiverTimeZone6\":\"\",\r\n        \"receiverTimeZone7\":\"\",\r\n        \"receiverTimeZone8\":\"\",\r\n        \"receiverTimeZone9\":\"\",\r\n        \"receiverTimeZone10\":\"\",\r\n        \"orderDisplay\":\"\"\r\n    },\r\n    \"deliveryMethodTypeCarriageRequestList\": [\r\n        {\r\n            \"deliveryMethodSeq\":\"\",\r\n            \"prefectureType\": \"01\",\r\n            \"maxPrice\":40,\r\n            \"carriage\":50\r\n        }\r\n    ]\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法登録 (regist) - BAD REQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveryMethodRequest\": {\r\n        \"deliveryMethodSeq\" : \"\",\r\n        \"deliveryMethodName\":\"総合テスト・配送方法【非公開１】\",\r\n        \"deliveryMethodDisplayNamePC\":\"\",\r\n        \"openStatusPC\":\"1\",\r\n        \"deliveryNotePC\":\"\",\r\n        \"deliveryMethodType\":\"1\",\r\n        \"equalsCarriage\": 200,\r\n        \"largeAmountDiscountPrice\":\"\",\r\n        \"largeAmountDiscountCarriage\":\"\",\r\n        \"shortfallDisplayFlag\":\"\",\r\n        \"deliveryLeadTime\":\"\",\r\n        \"deliveryChaseURL\":\"\",\r\n        \"deliveryChaseURLDisplayPeriod\":\"\",\r\n        \"possibleSelectDays\":\"\",\r\n        \"receiverTimeZone1\":\"\",\r\n        \"receiverTimeZone2\":\"\",\r\n        \"receiverTimeZone3\":\"\",\r\n        \"receiverTimeZone4\":\"\",\r\n        \"receiverTimeZone5\":\"\",\r\n        \"receiverTimeZone6\":\"\",\r\n        \"receiverTimeZone7\":\"\",\r\n        \"receiverTimeZone8\":\"\",\r\n        \"receiverTimeZone9\":\"\",\r\n        \"receiverTimeZone10\":\"\",\r\n        \"orderDisplay\":\"\"\r\n    },\r\n    \"deliveryMethodTypeCarriageRequestList\": [\r\n        {\r\n        }\r\n    ]\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法データチェック (check) - NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"checked OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveryMethodSeq\" : \"100111\",\r\n    \"deliveryMethodName\":\"佐川急便test12\",\r\n    \"deliveryMethodDisplayNamePC\":\"\",\r\n    \"openStatusPC\":\"1\",\r\n    \"deliveryNotePC\":\"\",\r\n    \"deliveryMethodType\":\"1\",\r\n    \"equalsCarriage\": 200,\r\n    \"largeAmountDiscountPrice\":\"\",\r\n    \"largeAmountDiscountCarriage\":\"\",\r\n    \"shortfallDisplayFlag\":\"\",\r\n    \"deliveryLeadTime\":\"\",\r\n    \"deliveryChaseURL\":\"\",\r\n    \"deliveryChaseURLDisplayPeriod\":\"\",\r\n    \"possibleSelectDays\":\"\",\r\n    \"receiverTimeZone1\":\"\",\r\n    \"receiverTimeZone2\":\"\",\r\n    \"receiverTimeZone3\":\"\",\r\n    \"receiverTimeZone4\":\"\",\r\n    \"receiverTimeZone5\":\"\",\r\n    \"receiverTimeZone6\":\"\",\r\n    \"receiverTimeZone7\":\"\",\r\n    \"receiverTimeZone8\":\"\",\r\n    \"receiverTimeZone9\":\"\",\r\n    \"receiverTimeZone10\":\"\",\r\n    \"orderDisplay\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法更新 (update) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.deliveryMethodResponse).not.eql(\"null\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveryMethodRequest\":{\r\n        \"deliveryMethodSeq\" : \"1003\",\r\n        \"deliveryMethodName\":\"佐川急便test12345\",\r\n        \"deliveryMethodDisplayNamePC\":\"佐川急便test12345\",\r\n        \"openStatusPC\":\"1\",\r\n        \"deliveryNotePC\":\"\",\r\n        \"deliveryMethodType\":\"1\",\r\n        \"equalsCarriage\": 200,\r\n        \"largeAmountDiscountPrice\":\"\",\r\n        \"largeAmountDiscountCarriage\":\"\",\r\n        \"shortfallDisplayFlag\":\"0\",\r\n        \"deliveryLeadTime\":\"\",\r\n        \"deliveryChaseURL\":\"\",\r\n        \"deliveryChaseURLDisplayPeriod\":\"\",\r\n        \"possibleSelectDays\":\"\",\r\n        \"receiverTimeZone1\":\"\",\r\n        \"receiverTimeZone2\":\"\",\r\n        \"receiverTimeZone3\":\"\",\r\n        \"receiverTimeZone4\":\"\",\r\n        \"receiverTimeZone5\":\"\",\r\n        \"receiverTimeZone6\":\"\",\r\n        \"receiverTimeZone7\":\"\",\r\n        \"receiverTimeZone8\":\"\",\r\n        \"receiverTimeZone9\":\"\",\r\n        \"receiverTimeZone10\":\"\",\r\n        \"orderDisplay\":\"\"\r\n    },\r\n    \"deliveryMethodTypeCarriageRequestList\": [\r\n        {\r\n            \"deliveryMethodSeq\":\"\",\r\n            \"prefectureType\": \"01\",\r\n            \"maxPrice\": 20,\r\n            \"carriage\": 30\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/1003",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法更新 (update) - ERROR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deliveryMethodRequest\":{\r\n        \"deliveryMethodSeq\" : \"10119\",\r\n        \"deliveryMethodName\":\"佐川急便test123\",\r\n        \"deliveryMethodDisplayNamePC\":\"佐川急便test123\",\r\n        \"openStatusPC\":\"1\",\r\n        \"deliveryNotePC\":\"\",\r\n        \"deliveryMethodType\":\"1\",\r\n        \"equalsCarriage\": 200,\r\n        \"largeAmountDiscountPrice\":\"\",\r\n        \"largeAmountDiscountCarriage\":\"\",\r\n        \"shortfallDisplayFlag\":\"0\",\r\n        \"deliveryLeadTime\":\"\",\r\n        \"deliveryChaseURL\":\"\",\r\n        \"deliveryChaseURLDisplayPeriod\":\"\",\r\n        \"possibleSelectDays\":\"\",\r\n        \"receiverTimeZone1\":\"\",\r\n        \"receiverTimeZone2\":\"\",\r\n        \"receiverTimeZone3\":\"\",\r\n        \"receiverTimeZone4\":\"\",\r\n        \"receiverTimeZone5\":\"\",\r\n        \"receiverTimeZone6\":\"\",\r\n        \"receiverTimeZone7\":\"\",\r\n        \"receiverTimeZone8\":\"\",\r\n        \"receiverTimeZone9\":\"\",\r\n        \"receiverTimeZone10\":\"\",\r\n        \"orderDisplay\":\"\"\r\n    },\r\n    \"deliveryMethodTypeCarriageRequestList\": [\r\n        {\r\n            \"deliveryMethodSeq\":\"\",\r\n            \"prefectureType\": \"01\",\r\n            \"maxPrice\": 20,\r\n            \"carriage\": 30\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods/10119",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"10119"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法一覧更新 (updateList) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update-OK：listItem\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.shippingMethodListResponse).to.have.lengthOf(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"shippingMethodListUpdate\" : [\r\n        {\r\n            \"deliveryMethodSeq\" : \"1008\",\r\n            \"deliveryMethodName\":\"佐川急便testList1\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList1\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"\r\n        },\r\n        {\r\n            \"deliveryMethodSeq\" : \"1009\",\r\n            \"deliveryMethodName\":\"佐川急便testList2\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList2\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"\r\n        },\r\n        {\r\n            \"deliveryMethodSeq\" : \"1010\",\r\n            \"deliveryMethodName\":\"佐川急便testList3\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList3\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"      \r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "配送方法一覧更新 (updateList) - ERROR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update-OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"shippingMethodListUpdate\" : [\r\n        {\r\n            \"deliveryMethodSeq\" : \"100939\",\r\n            \"deliveryMethodName\":\"佐川急便testList1\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList1\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"\r\n        },\r\n        {\r\n            \"deliveryMethodSeq\" : \"100999\",\r\n            \"deliveryMethodName\":\"佐川急便testList2\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList2\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"\r\n        },\r\n        {\r\n            \"deliveryMethodSeq\" : \"103310\",\r\n            \"deliveryMethodName\":\"佐川急便testList3\",\r\n            \"deliveryMethodDisplayNamePC\":\"佐川急便testList3\",\r\n            \"openStatusPC\":\"1\",\r\n            \"deliveryNotePC\":\"\",\r\n            \"deliveryMethodType\":\"1\",\r\n            \"equalsCarriage\": 200,\r\n            \"largeAmountDiscountPrice\":\"\",\r\n            \"largeAmountDiscountCarriage\":\"\",\r\n            \"shortfallDisplayFlag\":\"0\",\r\n            \"deliveryLeadTime\":\"\",\r\n            \"deliveryChaseURL\":\"\",\r\n            \"deliveryChaseURLDisplayPeriod\":\"\",\r\n            \"possibleSelectDays\":\"\",\r\n            \"receiverTimeZone1\":\"\",\r\n            \"receiverTimeZone2\":\"\",\r\n            \"receiverTimeZone3\":\"\",\r\n            \"receiverTimeZone4\":\"\",\r\n            \"receiverTimeZone5\":\"\",\r\n            \"receiverTimeZone6\":\"\",\r\n            \"receiverTimeZone7\":\"\",\r\n            \"receiverTimeZone8\":\"\",\r\n            \"receiverTimeZone9\":\"\",\r\n            \"receiverTimeZone10\":\"\",\r\n            \"orderDisplay\":\"\"      \r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" th:src="@{/assets/js/previewCategory.js}"></script>
+    <title>カテゴリー検索｜商品管理</title>
+    <script>
+        jQuery(function($) {
+
+            if (!$('input[type=checkbox][id=searchCategoryTypeArray2]').is(':checked')) {
+                $("dd.condition1 select").val("0");
+                $("#conditionValue1").val("");
+                $("dd.condition2 select").val("0");
+                $("#conditionValue2").val("");
+                $("dd.condition3 select").val("0");
+                $("#conditionValue3").val("");
+                $("dd.condition4 select").val("0");
+                $("#conditionValue4").val("");
+                $("dd.condition5 select").val("0");
+                $("#conditionValue5").val("");
+                $('#categoryConditionDetail').toggleClass('display_none');
+            } else {
+                $('#categoryConditionDetail').removeClass('display_none');
+            }
+
+            $('input[type=checkbox][id=searchCategoryTypeArray2]').change(function() {
+                if (!$('input[type=checkbox][id=searchCategoryTypeArray2]').is(':checked')) {
+                    $("dd.condition1 select").val("0");
+                    $("#conditionValue1").val("");
+                    $("dd.condition2 select").val("0");
+                    $("#conditionValue2").val("");
+                    $("dd.condition3 select").val("0");
+                    $("#conditionValue3").val("");
+                    $("dd.condition4 select").val("0");
+                    $("#conditionValue4").val("");
+                    $("dd.condition5 select").val("0");
+                    $("#conditionValue5").val("");
+                    $('#categoryConditionDetail').toggleClass('display_none');
+                } else {
+                    $('#categoryConditionDetail').removeClass('display_none');
+                }
+            });
+            
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+    </script>
+    <!-- プレビュー用ダイアログのdatepickerが後ろに隠れるためスタイル適用 -->
+    <style type="text/css">
+        .ui-datepicker {
+            z-index: 1003 !important;
+        }
+    </style>
+</head>
+<body id="goods">
+<div id="searchCategory" class="l-mainwrap">
+    <!--/* side */-->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!--/* header */-->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!--/* contents */-->
+            <div class="l-main">
+                <form th:action="@{/goods/category/}" th:object="${categoryModel}" method="post">
+                    <input type="hidden" name="limit" value="100" />
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">カテゴリー検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                            <ul>
+                                <li>
+                                    <input class="c-btn btn_move w150px" name="sideMenuSetting" type="submit" value="サイドメニュー設定" alt="サイドメニュー設定"/>
+                                </li>
+                                <li>
+                                    <input class="c-btn btn_move w130px" name="doRegist" type="submit" value="カテゴリー登録" alt="カテゴリー登録"/>
+                                </li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" id="resultIndex" name="resultIndex"/>
+                    <!--/* 検索 */-->
+                    <div class="l-section" id="allItemsSearch">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>カテゴリーID／カテゴリー名</dt>
+                                            <dd>
+                                                <input maxlength="120" th:field="*{categorySearchKeyword}" th:errorclass="error" type="text" class="c-form-control w420px" placeholder="ここに入力してください">
+                                                <div th:if="${#fields.hasErrors('categorySearchKeyword')}" th:errors="*{categorySearchKeyword}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <!--/* 詳細検索 */-->
+                                    <div class="c-detail-warp search mt20">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp wrap mb20">
+                                                    <dl>
+                                                        <dt>公開状態</dt>
+                                                        <dd>
+                                                            <select id="openStatus" title="公開状態" name="openStatus" th:errorclass="error" class="c-form-control">
+                                                                <option value="">選択してください</option>
+                                                                <option th:each="item : *{openStatusItems}" th:value="${item.key}" th:text="${item.value}" th:selected="${item.key} == *{openStatus}"></option>
+                                                            </select>
+                                                            <div th:if="${#fields.hasErrors('openStatus')}" th:errors="*{openStatus}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                    <div class="wrap_flex_wrap">
+                                                        <dl class="search-date">
+                                                            <dt>公開開始日</dt>
+                                                            <dd class="wrap_flex_center">
+                                                                <label class="c-datepicker">
+                                                                    <input th:field="*{searchCategoryOpenStartTimeFrom}" maxlength="10" autocomplete="off" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日">
+                                                                </label>
+                                                                <span class="ml10">〜</span>
+                                                                <label class="ml10 c-datepicker">
+                                                                    <input th:field="*{searchCategoryOpenStartTimeTo}" maxlength="10" autocomplete="off" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日">
+                                                                </label>
+                                                                <ul class="c-list-left list_sp5 mt10 w100p">
+                                                                    <li><button id="targetDate_today_searchCategoryOpenStartTime" class="c-btn-small" type="button">今日</button></li>
+                                                                    <li><button id="targetDate_yesterday_searchCategoryOpenStartTime" class="c-btn-small" type="button">昨日</button></li>
+                                                                    <li><button id="targetDate_crrentMonth_searchCategoryOpenStartTime" class="c-btn-small" type="button">今月</button></li>
+                                                                    <li><button id="targetDate_prevMonth_searchCategoryOpenStartTime" class="c-btn-small" type="button">先月</button></li>
+                                                                    <li><button id="targetDate_clear_searchCategoryOpenStartTime" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                                </ul>
+                                                                <div th:if="${#fields.hasErrors('searchCategoryOpenStartTimeFrom')}" th:errors="*{searchCategoryOpenStartTimeFrom}" class="c-error-txt mt5"></div>
+                                                                <div th:if="${#fields.hasErrors('searchCategoryOpenStartTimeTo')}" th:errors="*{searchCategoryOpenStartTimeTo}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="wrap_flex_wrap">
+                                                        <dl class="search-date">
+                                                            <dt>公開終了日</dt>
+                                                            <dd class="wrap_flex_center">
+                                                                <label class="c-datepicker">
+                                                                    <input th:field="*{searchCategoryOpenEndTimeFrom}" maxlength="10" autocomplete="off" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日">
+                                                                </label>
+                                                                <span class="ml10">〜</span>
+                                                                <label class="ml10 c-datepicker">
+                                                                    <input th:field="*{searchCategoryOpenEndTimeTo}" maxlength="10" autocomplete="off" th:errorclass="error" type="text" class="c-form-control" placeholder="年/月/日">
+                                                                </label>
+                                                                <ul class="c-list-left list_sp5 mt10 w100p">
+                                                                    <li><button id="targetDate_today_searchCategoryOpenEndTime" class="c-btn-small" type="button">今日</button></li>
+                                                                    <li><button id="targetDate_yesterday_searchCategoryOpenEndTime" class="c-btn-small" type="button">昨日</button></li>
+                                                                    <li><button id="targetDate_crrentMonth_searchCategoryOpenEndTime" class="c-btn-small" type="button">今月</button></li>
+                                                                    <li><button id="targetDate_prevMonth_searchCategoryOpenEndTime" class="c-btn-small" type="button">先月</button></li>
+                                                                    <li><button id="targetDate_clear_searchCategoryOpenEndTime" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                                </ul>
+                                                                <div th:if="${#fields.hasErrors('searchCategoryOpenEndTimeFrom')}" th:errors="*{searchCategoryOpenEndTimeFrom}" class="c-error-txt mt5"></div>
+                                                                <div th:if="${#fields.hasErrors('searchCategoryOpenEndTimeTo')}" th:errors="*{searchCategoryOpenEndTimeTo}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <article class="search_data_smp">
+                                                        <dl>
+                                                            <dt>カテゴリー種別</dt>
+                                                            <dd class="wrap_flex_wrap mt15">
+                                                                <ul class="c-list-center list_sp20">
+                                                                    <li th:each="item : *{searchCategoryTypeItems}">
+                                                                        <label class="c-form-control">
+                                                                            <input type="checkbox" th:field="*{searchCategoryTypeArray}" th:value="${item.key}" th:checked="${item.key} == *{searchCategoryTypeArray}">
+                                                                            <i th:classappend="${#fields.hasErrors('searchCategoryTypeArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </dd>
+                                                            <dd class="wrap_flex_wrap">
+                                                                <ul class="ml5">
+                                                                    <div th:if="${#fields.hasErrors('searchCategoryTypeArray')}" th:errors="*{searchCategoryTypeArray}" class="c-error-txt mt5"></div>
+                                                                </ul>
+                                                            </dd>
+                                                        </dl>
+                                                        <div id="categoryConditionDetail" th:classappend="wrap_flex_wrap">
+                                                            <div class="ml70">
+                                                                <div class="search_data_smp pt5">
+                                                                    <dl>
+                                                                        <dt>条件項目</dt>
+                                                                        <dd class="condition1">
+                                                                            <select id="conditionColumn1" title="条件項目" name="conditionColumn1" class="c-form-control">
+                                                                                <option th:each="item : *{conditionColumnItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                                        th:selected="${item.key} == *{conditionColumn1}">
+                                                                                </option>
+                                                                            </select>
+                                                                            <div id="conditionColumn1Error" th:if="${#fields.hasErrors('conditionColumn1')}" th:errors="*{conditionColumn1}" class="c-error-txt mt5"></div>
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <dl>
+                                                                        <dt class="pt30"></dt>
+                                                                        <dd class="h28px">に</dd>
+                                                                    </dl>
+                                                                    <div>
+                                                                        <div class="wrap_flex">
+                                                                            <dl>
+                                                                                <dt>条件値</dt>
+                                                                                <dd>
+                                                                                    <input maxlength="100"  id="conditionValue1" th:errorclass="error" th:field="*{conditionValue1}" type="text" class="c-form-control w120px">
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <dl>
+                                                                                <dt class="pt30"></dt>
+                                                                                <dd class="h28px">の指定がある</dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                        <div th:if="${#fields.hasErrors('conditionValue1')}" th:errors="*{conditionValue1}" class="c-error-txt mt5"></div>
+                                                                    </div>
+                                                                   
+                                                                </div>
+                                                                <div class="search_data_smp pt5">
+                                                                    <dl>
+                                                                        <dt style="display: none">条件項目</dt>
+                                                                        <dd class="condition2">
+                                                                            <select id="conditionColumn2" title="条件項目" name="conditionColumn2" class="c-form-control">
+                                                                                <option th:each="item : *{conditionColumnItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                                        th:selected="${item.key} == *{conditionColumn2}">
+                                                                                </option>
+                                                                            </select>
+                                                                            <div id="conditionColumn2Error" th:if="${#fields.hasErrors('conditionColumn2')}" th:errors="*{conditionColumn2}" class="c-error-txt mt5"></div>
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <dl>
+                                                                        <dt></dt>
+                                                                        <dd class="h38px pt5">に</dd>
+                                                                    </dl>
+                                                                    <div>
+                                                                        <div class="wrap_flex">
+                                                                            <dl>
+                                                                                <dt style="display: none">条件値</dt>
+                                                                                <dd>
+                                                                                    <input id="conditionValue2" maxlength="100" th:errorclass="error" th:field="*{conditionValue2}" type="text" class="c-form-control w120px">
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <dl>
+                                                                                <dt></dt>
+                                                                                <dd class="h38px pt5">の指定がある</dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                        <div th:if="${#fields.hasErrors('conditionValue2')}" th:errors="*{conditionValue2}" class="c-error-txt mt5"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="search_data_smp pt5">
+                                                                    <dl>
+                                                                        <dt style="display: none">条件項目</dt>
+                                                                        <dd class="condition3">
+                                                                            <select id="conditionColumn3" title="条件項目" name="conditionColumn3" class="c-form-control">
+                                                                                <option th:each="item : *{conditionColumnItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                                        th:selected="${item.key} == *{conditionColumn3}">
+                                                                                </option>
+                                                                            </select>
+                                                                            <div id="conditionColumn3Error" th:if="${#fields.hasErrors('conditionColumn3')}" th:errors="*{conditionColumn3}" class="c-error-txt mt5"></div>
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <dl>
+                                                                        <dt></dt>
+                                                                        <dd class="h38px pt5">に</dd>
+                                                                    </dl>
+                                                                    <div>
+                                                                        <div class="wrap_flex">
+                                                                            <dl>
+                                                                                <dt style="display: none">条件値</dt>
+                                                                                <dd>
+                                                                                    <input id="conditionValue3" maxlength="100" th:errorclass="error" th:field="*{conditionValue3}" type="text" class="c-form-control w120px">
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <dl>
+                                                                                <dt></dt>
+                                                                                <dd class="h38px pt5">の指定がある</dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                        <div th:if="${#fields.hasErrors('conditionValue3')}" th:errors="*{conditionValue3}" class="c-error-txt mt5"></div>
+                                                                    </div>
+                                                                    </div>
+                                                                <div class="search_data_smp pt5">
+                                                                    <dl>
+                                                                        <dt style="display: none">条件項目</dt>
+                                                                        <dd class="condition4">
+                                                                            <select id="conditionColumn4" title="条件項目" name="conditionColumn4" class="c-form-control">
+                                                                                <option th:each="item : *{conditionColumnItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                                        th:selected="${item.key} == *{conditionColumn4}">
+                                                                                </option>
+                                                                            </select>
+                                                                            <div id="conditionColumn4Error" th:if="${#fields.hasErrors('conditionColumn4')}" th:errors="*{conditionColumn4}" class="c-error-txt mt5"></div>
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <dl>
+                                                                        <dt></dt>
+                                                                        <dd class="h38px pt5">に</dd>
+                                                                    </dl>
+                                                                    <div>
+                                                                        <div class="wrap_flex">
+                                                                            <dl>
+                                                                                <dt style="display: none">条件値</dt>
+                                                                                <dd>
+                                                                                    <input id="conditionValue4" maxlength="100" th:errorclass="error" th:field="*{conditionValue4}" type="text" class="c-form-control w120px">
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <dl>
+                                                                                <dt></dt>
+                                                                                <dd class="h38px pt5">の指定がある</dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                        <div th:if="${#fields.hasErrors('conditionValue4')}" th:errors="*{conditionValue4}" class="c-error-txt mt5"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="search_data_smp pt5">
+                                                                    <dl>
+                                                                        <dt style="display: none">条件項目</dt>
+                                                                        <dd class="condition5">
+                                                                            <select id="conditionColumn5" title="条件項目" name="conditionColumn5" class="c-form-control">
+                                                                                <option th:each="item : *{conditionColumnItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                                        th:selected="${item.key} == *{conditionColumn5}">
+                                                                                </option>
+                                                                            </select>
+                                                                            <div id="conditionColumn5Error" th:if="${#fields.hasErrors('conditionColumn5')}" th:errors="*{conditionColumn5}" class="c-error-txt mt5"></div>
+                                                                        </dd>
+                                                                    </dl>
+                                                                    <dl>
+                                                                        <dt></dt>
+                                                                        <dd class="h38px pt5">に</dd>
+                                                                    </dl>
+                                                                    <div>
+                                                                        <div class="wrap_flex">
+                                                                            <dl>
+                                                                                <dt style="display: none">条件値</dt>
+                                                                                <dd>
+                                                                                    <input id="conditionValue5" maxlength="100" th:errorclass="error" th:field="*{conditionValue5}" type="text" class="c-form-control w120px">
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <dl>
+                                                                                <dt></dt>
+                                                                                <dd class="h38px pt5">の指定がある</dd>
+                                                                            </dl>
+                                                                        </div>
+                                                                        <div th:if="${#fields.hasErrors('conditionValue5')}" th:errors="*{conditionValue5}" class="c-error-txt mt5"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                                <div class="c-detail-warp search_data_smp wrap mt20">
+                                                    <dl>
+                                                        <dt>フロント表示</dt>
+                                                        <dd>
+                                                            <ul class="c-list-left list_sp20 mr40 mt15">
+                                                                <li th:each="item : *{frontDisplayItems}">
+                                                                    <label class="c-form-control">
+                                                                        <input type="checkbox" th:field="*{frontDisplayArray}" th:value="${item.key}" th:checked="${item.key} == *{frontDisplayArray}">
+                                                                        <i th:classappend="${#fields.hasErrors('frontDisplayArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                    </label>
+                                                                </li>
+                                                            </ul>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="c-detail-warp search_data_smp wrap mt10">
+                                                    <dl>
+                                                        <ul class="c-list-left list_sp20 mr40">
+                                                            <dt class="pt10">プレビュー日時</dt>
+                                                            <a href="#" class="txt_black mb-5" tooltip-position='right'
+                                                               data-c-tooltip="検索結果「プレビュー」の表示基準日時になります。
+また、検索結果「フロント表示」の判定基準日時にもなります。">
+                                                                <i class="ml10 w100p material-icons help_outline"></i>
+                                                            </a>
+                                                        </ul>
+                                                        <dd>
+                                                            <div class="wrap_flex_center">
+                                                                <label class="c-datepicker w150px">
+                                                                    <input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+                                                                </label>
+                                                                <input type="text" th:field="*{previewTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+                                                            </div>
+                                                            <div id="previewDateError" th:if="${#fields.hasErrors('previewDate')}" th:errors="*{previewDate}" class="c-error-txt mt5"></div>
+                                                            <div id="previewTimeError" th:if="${#fields.hasErrors('previewTime')}" th:errors="*{previewTime}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top ai_flex-start">
+                                            <button class="c-btn btn_regular" type="submit" name="doSearch">検索する</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/* 検索結果 */-->
+                        <article th:if="*{isResult}" class="l-article">
+                            <input type="hidden" id="pageNumber" th:field="*{pageNumber}" />
+                            <input type="hidden" id="orderField" th:field="*{orderField}" />
+                            <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} == 0">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} != 0">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true,duplicateSelectFlag=true)}"></div>
+                                    </div>
+                                    <table id="search_result" class="c-tbl large60 tbl_search_category">
+                                        <thead>
+                                        <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                            <th class="number">#</th>
+                                            <th class="w130px">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerCategoryId">カテゴリーID
+                                                    <th:block th:if="*{orderField} == 'categoryId'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a></th>
+                                            <th class="w200px">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerCategoryName">カテゴリー名
+                                                    <th:block th:if="*{orderField} == 'categoryName'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a>
+                                            </th>
+                                            <th class="w110px">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerOpenGoodsCount">公開商品数
+                                                    <th:block th:if="*{orderField} == 'openGoodsCount'">
+                                                        <span th:text="${sortStr}"></span>
+                                                    </th:block>
+                                                </a>
+                                            </th>
+                                            <th class="status w100px">
+                                                フロント表示
+                                            </th>
+                                            <th class="time" th:classappend="*{previewDate != null} ? 'w200px' : 'w80px'">
+                                                プレビュー
+                                            </th>
+                                            <th>
+                                                <span>商品ひもづけ条件</span>
+                                            </th>
+                                            <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                <th class="delete"></th>
+                                            </th:block>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="resultItems">
+                                        <tr th:each="item,stat : *{resultItems}">
+                                            <td class="number">
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                </th:block>
+                                                <span th:text="${item.resultNo}" />
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td class="category_id">
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                </th:block>
+                                                <span th:text="${item.categoryId}" />
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td>
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                </th:block>
+                                                <span th:text="${item.categoryName}" />
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td>
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                </th:block>
+                                                <span th:text="${item.openGoodsCount}" />
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td class="status">
+                                                <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                    <span th:if="${item.frontDisplay} == '0'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.frontDisplay)}" class="c-status01 ico_gray"></span>
+                                                    <span th:if="${item.frontDisplay} == '1'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.frontDisplay)}" class="c-status01 ico_blue"></span>
+                                                </a></td>
+                                            <td class="time" th:style="*{previewDate != null} ? '' : 'text-align:center;'">
+                                                <div th:classappend="*{previewDate != null} ? 'wrap_flex_center' : ''" >
+                                                    <button type="button" title="プレビュー" class="c-btn-icon" th:data-cid="${item.categoryId}" th:id="'category-preview_btn-'+${stat.index}"><i class="material-icons search"></i></button>
+                                                    <th:block th:if="${item.frontDisplayReferenceDate != null}">
+                                                        <span id="frontDisplayReferenceDate" th:text="${#date.convert(item.frontDisplayReferenceDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                                                    </th:block>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <a th:href="@{/goods/category/input/(listScreen=true,categoryId=${item.categoryId})}">
+                                                </th:block>
+                                                <span th:utext="${item.categoryCondition}" />
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td class="delete">
+                                                <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                    <button class="c-btn-icon" type="submit" th:id="'doRemove' + '-' + ${stat.index}" name="doRemove" onclick="return simpleDeleteCategoryConfirm2(this);"><i class="material-icons clear"></i></button>
+                                                    <input type="hidden" id="deleteTargetIndex" name="deleteTargetIndex" th:value="${stat.index}"/>
+                                                </th:block>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div id="preview_dialog" style="display:none;">
+                        <div class="c-detail-warp">
+                            <dl>
+                                <dd>
+                                    <div class="wrap_flex_center">
+                                        <label class="c-datepicker w150px">
+                                            <input type="text" id="dialogPreviewDate" name="dialogPreviewDate" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日">
+                                        </label>
+                                        <input type="text" id="dialogPreviewTime" name="dialogPreviewTime" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00">
+                                    </div>
+                                    <div id="dialogPreviewDateErr" style="display: none;" class="c-error-txt mt5"></div>
+                                    <div id="dialogPreviewTimeErr" style="display: none;" class="c-error-txt mt5"></div>
+                                    <!--プレビュー遷移用URLプロパティ値-->
+                                    <input type="hidden" id="websiteUrl" th:value="${@environment.getProperty('web.site.url')}"/>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

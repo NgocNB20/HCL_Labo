@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  _c-error
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+// c-global-error
+// -----------------------------------------------------------------
+.c-global-error {
+  padding: 22px 28px;
+  border: 1px solid $color-f00;
+  @include font-style(16, 25);
+  color: $color-f00;
+
+  li {
+    text-indent: -1.3rem;
+    padding-left: 1.6rem;
+
+    &::before {
+      content: "・";
+      margin-right: 5px;
+    }
+  }
+
+  @include media(sm) {
+    padding: vwset(15) vwset(15) vwset(15) vwset(12);
+    @include font-sp-style(15, 25);
+  }
+
+  // 上下左右マージン
+  &--margin-m {
+    margin-block: 40px;
+
+    @include media(sm) {
+      margin-block: vwset(25);
+      margin-inline: vwset(20);
+    }
+  }
+
+  // 左右マージン
+  &--margin-m-inline {
+
+    @include media(sm) {
+      margin-inline: vwset(20);
+    }
+  }
+
+  // 上下マージン
+  &--margin-m-block {
+    margin-block: 40px;
+
+    @include media(sm) {
+      margin-block: vwset(25);
+    }
+  }
+
+
+  // 下マージン
+  &--margin-m-bottom {
+    margin-bottom: 40px;
+
+    @include media(sm) {
+      margin-bottom: vwset(25);
+    }
+  }
+
+
+}
+
+
+// c-field-error  
+// -----------------------------------------------------------------
+
+.c-field-error {
+  @include font-style(15,19);
+  color: $color-f00;
+  margin-top: 10px;
+
+  @include media(sm) {
+    @include font-sp-style(13,24);
+    margin-top: vwset(7);
+  }
+}
+
+
+
+// c-reception (global-info-message)
+// -----------------------------------------------------------------
+
+// 命名が2パターンあるため、両クラスに設定しておく
+.c-reception,
+.global-info-message {
+  margin-block: 40px;
+  padding: 22px 28px;
+  border: 1px solid $color-secondary;
+  @include font-style(16, 25);
+  color: $color-secondary;
+
+  @include media(sm) {
+    margin: vwset(25) vwset(20);
+    padding: vwset(15) vwset(15) vwset(15) vwset(12);
+    @include font-sp-style(15, 25);
+  }
+}

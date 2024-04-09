@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+// フリーエリア用CSS 
+
+.free-area-header1 {
+  $this: &;
+  background: $color-orange-lightGray;
+
+  a {
+    display: block;
+    border-top: solid 1px #E4E4E4;
+    padding: 8px;
+    @include font-style(16, 22, bold);
+    text-align: center;
+
+    @include media(sm) {
+      padding: vwset(8) vwset(5);
+      @include font-sp-style(13);
+    }
+
+    &:hover {
+      @include media(lg) {
+        opacity: .5;
+      }
+    }
+  }
+}
+
+

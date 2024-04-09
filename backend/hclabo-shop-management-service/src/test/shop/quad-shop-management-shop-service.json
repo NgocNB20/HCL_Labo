@@ -1,0 +1,84 @@
+{
+  "info": {
+    "_postman_id": "32d167f1-47cd-4983-814d-e11d1ba2e3a0",
+    "name": "hclabo-shop-management-shop-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "ショップ情報取得(get)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"delete OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8880/configurations/shop",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8880",
+          "path": [
+            "configurations",
+            "shop"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ショップ情報更新(update)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"delete OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"shopId\": \"HIT-MALL OF TUAN\",\r\n    \"shopNamePC\": \"総合テスト実施中\",\r\n    \"urlPC\": \"https://e4-granada.itechh.ne.jp/\",\r\n    \"shopOpenStatusPC\": \"0\",\r\n    \"shopOpenStartTimePC\": \"2022-01-09T08:51:00.000+00:00\",\r\n    \"shopOpenEndTimePC\": \"2022-10-15T09:00:00.000+00:00\",\r\n    \"metaDescription\": \"総合テスト実施中\",\r\n    \"metaKeyword\": \"総合,テスト,実施中,です\",\r\n    \"versionNo\": 33,\r\n    \"autoApprovalFlag\": \"0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8880/configurations/shop",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8880",
+          "path": [
+            "configurations",
+            "shop"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

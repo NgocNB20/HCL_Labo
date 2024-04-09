@@ -1,0 +1,139 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # サーバポート
+  port: ${SERVER_PORT:8880}
+  servlet:
+    session:
+      # セッションタイムアウト（分）
+      # PCIDSS準拠対象外の場合は15分でなくてもOK
+      timeout: 30000
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/analytics-service}
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    # ファイル（CSV・ZIP等）アップロード時の制御
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  mvc:
+    async:
+      request-timeout: '-1'
+  ### Thymeleaf用プロパティファイル
+  thymeleaf:
+    # テンプレートキャッシュは行わない（html修正が即画面反映される）
+    cache: 'false'
+    # 新デザイン組み込を実施する際にThymeleaf上のcheckboxが上手くレンダリングできない事象を解決するための設定
+    render-hidden-markers-before-checkboxes: 'true'
+  # Rabbit Message Queue configuration
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  sleuth:
+    sampler:
+      rate: 10
+      probability: 0.1
+    enabled: 'true'
+    async:
+      enabled: 'false'
+  zipkin:
+    enabled: true
+    sender:
+      type: web
+    base-url: http://localhost:9411/
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+### MongoDB用プロパティファイル
+mongo:
+  name: ${MONGO_NAME:hclabo_analytics}
+  url: mongodb://${MONGO_USER:hclabo_analytics}:${MONGO_PASS:password}@${DATABASE_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_AUTHDB:hclabo_analytics}
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 物流サービス
+base-path-logistic-service: http://localhost:18080/logistic-service
+# 受注サービス
+base-path-order-service: http://localhost:18080/order-service
+# 決済サービス
+base-path-payment-service: http://localhost:18080/payment-service
+# 販売企画サービス
+base-path-price-planning-service: http://localhost:18080/price-planning-service
+# 商品サービス
+base-path-product-service: http://localhost:18080/product-service
+# プロモーションサービス
+base-path-promotion-service: http://localhost:18080/promotion-service
+# ユーザーサービス
+base-path-user-service: http://localhost:18080/user-service
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: http://localhost:18080/customize-service
+queue:
+  ordersearchdownloadordercsv:
+    routing: order-search-download-order-csv-routing
+    direct: order-search-download-order-csv-direct
+  ordersearchdownloadshipmentcsv:
+    routing: order-search-download-shipment-csv-routing
+    direct: order-search-download-shipment-csv-direct
+  ordersearchregistupdate:
+    direct: order-search-regist-update-direct
+    routing: order-search-regist-update-routing
+  reportsregist:
+    direct: order-sales-regist-direct
+    routing: order-sales-regist-routing
+  goodssaledownloadordercsv:
+    routing: goods-sales-download-csv-routing
+    direct: goods-sales-download-csv-direct
+  ordersalesdownloadcsv:
+    direct: order-sales-download-csv-direct
+    routing: order-sales-download-csv-routing
+#
+# Log用プロパティファイル
+#
+logging:
+  config: classpath:config/hitmall/log/logback-lo.xml
+## 集計用リンク決済ID
+aggregation:
+  pay:
+    id:
+      linkpayment: '9999'
+## CSVダウンロードパス
+orderCsvAsynchronous:
+  file:
+    path: C:/var/home/hclabo/common/download/order/
+## CSVダウンロードパス
+orderSalesCsvAsynchronous:
+  file:
+    path: C:/var/home/hclabo/common/download/ordersales/
+# 保存先
+shipmentCsvAsynchronous:
+  file:
+    path: C:/var/home/hclabo/common/download/shipment/
+## CSVダウンロードパス
+soldGoodsCsvAsynchronous:
+  file:
+    path: C:/var/home/hclabo/common/download/soldgoods/
+########### HIT-MALL独自設定 ###########

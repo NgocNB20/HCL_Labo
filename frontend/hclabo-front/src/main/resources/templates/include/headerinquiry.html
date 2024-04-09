@@ -1,0 +1,15 @@
+<th:block id="header_inquiry" th:fragment="headerinquiry(screen)">
+      <div class="l-breadcrumbs">
+        <div class="l-breadcrumbs__inner">
+          <div class="l-breadcrumbs__list">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+            <th:block th:if="*{screen eq 'inquiry'}">
+                <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">お問い合わせ</span></div>
+            </th:block>
+            <th:block th:if="*{screen eq 'confirm'}">
+                <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">お問い合わせ認証</span></div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+</th:block>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	 xmlns:th="https://www.thymeleaf.org"
+	 xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+	 xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	 lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>会員詳細｜会員管理</title>
+</head>
+
+<body id="memberinfo">
+<div id="searchMember" class="l-mainwrap">
+  <div th:replace="~{include/sidemenu}"></div>
+  <main class="l-page">
+  <div th:replace="~{include/header}"></div>
+    <div class="l-container">
+      <div class="l-main">
+        <form th:action="@{/memberinfo/details}" th:object="${memberInfoDetailsModel}" method="post">
+          <input type="hidden" id="pageNumber" name="pageNumber"/>
+          <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替"/>
+          <div class="l-pagetitle_wrap">
+            <h1 class="c-pagetitle_h1">会員詳細</h1>
+            <th:block th:if="*{!isTemporaryMember()}"> <h2 class="c-pagetitle_h2" th:text="*{memberInfoName + ' 様'}"></h2></th:block>
+            <th:block sec:authorize="hasAnyAuthority('SHOP:4')">
+              <th:block th:if="*{isInquiryFlag}">
+                <ul>
+                  <li>
+                    <a class="c-btn btn_move w250px" th:href="@{/inquiry/(id=*{memberInfoId})}">この会員のお問い合わせを見る</a>
+                  </li>
+                </ul>
+              </th:block>
+            </th:block>
+          </div>
+          <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+            <ul th:each="message : ${allMessages}">
+              <li th:text="${message}"></li>
+            </ul>
+          </div>
+
+          <div class="l-section_column">
+            <div class="l-section_inner">
+              <article class="l-article">
+                <div class="l-article_title">
+                  <h2 class="c-pagetitle_h3">お客様情報</h2>
+                  <div class="c-open-btn"><i></i></div>
+                </div>
+                <div class="l-article_inner">
+                  <div class="l-inner_wrap">
+                    <dl class="c-dl-base dt_w120px c-btm_line">
+                      <div>
+                        <dt>会員SEQ</dt>
+                        <dd th:text="*{memberInfoSeq}"></dd>
+                      </div>
+                      <div>
+                        <dt>会員ID</dt>
+                        <dd  th:text="*{memberInfoId}"></dd>
+                      </div>
+                    </dl>
+                    <th:block th:if="*{!isTemporaryMember()}">
+                    <div class="wrap_flex_equivalent">
+                      <div class="col mr25">
+                        <dl class="c-dl-base dt_w120px">
+                          <div>
+                            <dt>氏名</dt>
+                            <dd th:text="*{memberInfoName}"></dd>
+                          </div>
+                          <div>
+                            <dt>フリガナ</dt>
+                            <dd th:text="*{memberInfoKana}"></dd>
+                          </div>
+                          <div>
+                            <dt>郵便番号</dt>
+                            <dd th:text="*{memberInfoZipCode}"></dd>
+                          </div>
+                          <div>
+                            <dt>住所</dt>
+                            <dd th:text="*{memberInfoAddress}"></dd>
+                          </div>
+                        </dl>
+                      </div>
+                      <div class="col">
+                        <dl class="c-dl-base dt_w120px">
+                          <div>
+                            <dt>電話番号</dt>
+                            <dd th:text="*{memberInfoTel}"></dd>
+                          </div>
+                          <div>
+                            <dt>性別</dt>
+                            <dd th:text="*{memberInfoSex.label}"></dd>
+                          </div>
+                          <div>
+                            <dt>生年月日</dt>
+                            <dd th:text="*{#date.convert(memberInfoBirthday, 'yyyy/MM/dd')}"></dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
+                    </th:block>
+                    <th:block th:if="*{isTemporaryMember()}">
+                      <div class="member-pre">
+                         <div class="member-pre-text">会員情報がありません</div>
+                      </div>
+                    </th:block>
+                  </div>
+                </div>
+              </article>
+
+              <article class="l-article">
+                <div class="l-article_title">
+                  <h2 class="c-pagetitle_h3">メールマガジンの購読</h2>
+                  <div class="c-open-btn"><i></i></div>
+                </div>
+                <div class="l-article_inner">
+                  <div class="l-inner_wrap">
+                    <dl class="c-dl-base dt_w160px">
+                      <div>
+                        <dt>メールマガジンの購読</dt>
+                        <th:block th:if="*{mailMagazine}" ><dd>希望する</dd></th:block>
+                        <th:block th:if="*{!mailMagazine}" ><dd>希望しない</dd></th:block>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </article>
+
+              <article class="l-article">
+                <div class="l-article_title">
+                  <h2 class="c-pagetitle_h3">受注履歴</h2>
+                  <div class="c-open-btn"><i></i></div>
+                </div>
+                <th:block th:if="*{!isOrderHistoryExist}">
+                  <div class="l-article_inner" style="display: block;">
+                    <div class="l-inner_wrap">
+                      <div>受注履歴がありません</div>
+                    </div>
+                  </div>
+                </th:block>
+                <th:block th:if="*{isOrderHistoryExist}" >
+                  <div class="l-article_inner">
+                    <div class="l-inner_wrap">
+                      <div class="count" th:text="*{'全' + totalCount + '件'}"></div>
+                      <table class="c-tbl large tbl_relation_item mt15">
+                        <thead>
+                          <tr>
+                            <th class="number">#</th>
+                            <th class="w135px">受注番号</th>
+                            <th class="w105px">受注日</th>
+                            <th class="w110px">受注金額</th>
+                            <th class="w100px">受注状態</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <th:block th:each="item: *{orderHistoryItems}">
+                            <tr>
+                              <td class="number" th:text="${item.resultNo}"></td>
+                              <td class="alphabetic">
+                                <a th:href="@{/order/details/(orderCode=${item.orderCode},from=member)}">
+                                  <span th:text="${item.orderCode}"></span>
+                                </a>
+                              </td>
+                              <td class="times" th:text="${#date.convert(item.orderTime, 'yyyy/MM/dd')}"></td>
+                              <td class="price" th:text="${#number.convert(item.orderPrice) + '円'}"></td>
+                              <td th:text="${item.orderStatus}"></td>
+                            </tr>
+                          </th:block>
+                        </tbody>
+                      </table>
+                      <th:block sec:authorize="hasAnyAuthority('ORDER:4')">
+                        <div class="mt20">
+                          詳細情報をまとめて確認したい場合には<a th:href="@{/order/(memberInfoSeq=*{memberInfoSeq},md=list)}">こちら</a>より受注CSVをダウンロードしてください
+                        </div>
+                      </th:block>
+                      <div th:replace="~{include/pager::pager1}"></div>
+                    </div>
+                  </div>
+                </th:block>
+              </article>
+            </div>
+
+            <div class="l-section_side">
+              <article class="l-article">
+                <div class="l-article_title">
+                  <h2 class="c-pagetitle_h3">会員状態情報</h2>
+                  <div class="c-open-btn"><i></i></div>
+                </div>
+                <div class="l-article_inner">
+                  <div class="l-inner_wrap">
+                    <dl class="c-dl-base dt_w120px">
+                      <div>
+                         <dt>状態</dt>
+                         <dd th:text="*{memberInfoStatus.label}"></dd>
+                      </div>
+                      <div>
+                        <dt>入会日</dt>
+                        <dd class="c-times_inner" th:text="*{admissionYmd}"></dd>
+                      </div>
+                      <div>
+                        <dt>退会日</dt>
+                        <dd class="c-times_inner" th:text="*{secessionYmd}"></dd>
+                      </div>
+                      <div>
+                        <dt>登録日時</dt>
+                        <dd class="c-times_inner" th:text="*{#date.convert(registTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+                      </div>
+                      <div>
+                        <dt>更新日時</dt>
+                        <dd class="c-times_inner" th:text="*{#date.convert(updateTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </article>
+
+              <article class="l-article">
+                <div class="l-article_title">
+                  <h2 class="c-pagetitle_h3">最終ログイン情報</h2>
+                  <div class="c-open-btn"><i></i></div>
+                </div>
+                <div class="l-article_inner">
+                  <div class="l-inner_wrap">
+                    <dl class="c-dl-nobase">
+                      <div>
+                        <dt>日時</dt>
+                        <dd class="c-times_inner" th:text="*{#date.convert(lastLoginTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+                      </div>
+                      <div>
+                        <dt>ユーザーエージェント</dt>
+                        <dd th:text="*{lastLoginUserAgent}"></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="l-pagebtn-nav">
+            <div class="l-pagebtn-nav_inner">
+              <div class="c-back">
+                <a class="c-btn btn_back icon_left" th:if="*{from} == 'member'" th:href= "@{/memberinfo/?md=list}"><i class="material-icons navigate_before"></i>戻る</a>
+                <a class="c-btn btn_back icon_left" th:if="*{from} == 'order'"  th:href= @{/order/details/(orderCode=*{orderCode},from=order)}><i class="material-icons navigate_before"></i>戻る</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div th:replace="~{include/footer}"></div>
+  </main>
+</div>
+</body>
+</html>

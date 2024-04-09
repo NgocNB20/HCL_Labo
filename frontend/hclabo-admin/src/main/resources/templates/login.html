@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+    xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>ログイン画面</title>
+</head>
+
+<body class="login">
+	<div id="page" class="l-mainwrap">
+		<main class="l-page">
+			<div class="l-login-wrap">
+				<form id="loginForm" th:action="@{/login/}" method="post">
+					<div class="logo"><img th:src="@{/assets/images/login_logo.png}" alt="HIT-MALL"></div>
+					<th:block th:if="${param.error} and ${session.SPRING_SECURITY_LAST_EXCEPTION} != null">
+						<div class="c-error-txt mt5 mb10" th:utext="*{session.SPRING_SECURITY_LAST_EXCEPTION.message}"></div>
+					</th:block>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<dl>
+						<dt>ユーザーID</dt>
+						<dd>
+							<input type="text" class="c-form-control" placeholder="ユーザーID" id="administratorId" name="username" maxlength="20">
+						</dd>
+					</dl>
+					<dl>
+						<dt>パスワード</dt>
+						<dd>
+							<input type="password" class="c-form-control" placeholder="パスワード" id="administratorPassWord" name="password">
+						</dd>
+					</dl>
+					<div class="l-btn">
+						<button class="c-btn btn_regular" type="submit">ログインする</button>
+					</div>
+				</form>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

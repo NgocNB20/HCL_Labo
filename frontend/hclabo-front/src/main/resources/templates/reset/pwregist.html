@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-reset">
+    <div class="l-mainwrap">
+
+        <div th:replace="~{include/header}"></div>
+        <main class="l-page">
+            <div th:replace="~{include/header_reset}"></div>
+
+            <div class="l-section">
+                <div class="l-section__inner" th:object="${resetPwregistModel}">
+                    <h2 class="c-title-page"><strong>パスワードをお忘れの方</strong></h2>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <th:block th:if="*{!isErrorUrl()}">
+                        <form name="form1" th:action="@{/reset/pwregist}" method="post">
+                            <div class="l-form">
+                                <div class="l-form__area">
+                                    <h3 class="c-title-line">パスワード変更</h3>
+                                    <p class="c-text--m">変更する新しいパスワードをご入力の上、｢変更する｣ボタンを押すと、パスワードが変更されます。</p>
+                                    <dl class="l-form__list c-margin--s">
+                                        <dt>
+                                            <span>新しいパスワード <br class="l-lg"><span class="l-form__list-memo">（半角英数記号7~20文字）</span></span><span class="c-require">必須</span>
+                                        </dt>
+                                        <dd>
+                                            <p class="c-text--s">半角の英字・数字・記号を2種類以上混在させた7文字以上20文字以内（推奨8文字以上）<br>※数字のみ、同じ文字の連続を避け、第三者に推測されにくいものを設定してください。</p>
+                                            <div class="password-wrap c-margin--xs">
+                                                <input type="password" onchange="setPasswordConfirm()" id="memberInfoNewPassWord" placeholder="ここに入力してください" maxlength="20" class="c-input js-password-input" th:field="*{memberInfoNewPassWord}" th:errorclass="field-error">
+                                                <button name="" type="button" class="l-form__password js-password-btn">
+                                                    <span></span><p>パスワードを表示</p>
+                                                </button>
+                                            </div>
+                                            <input type="hidden" id="memberInfoNewPassWordConfirm" th:field="*{memberInfoNewPassWordConfirm}" />
+                                            <div th:if="${#fields.hasErrors('memberInfoNewPassWord')}" th:errors="*{memberInfoNewPassWord}" class="c-field-error"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="c-button-wrap">
+                                <button name="doOncePassWordReset" class="c-button c-button--primary c-button--width-l">変更する</button>
+                            </div>
+                        </form>
+                    </th:block>
+                </div>
+            </div>
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+    <script type="text/javascript">
+    function setPasswordConfirm(){
+    var newPassword = document.getElementById("memberInfoNewPassWord").value;
+    document.getElementById("memberInfoNewPassWordConfirm").value = newPassword;
+    }
+    </script>
+
+</body>
+</html>

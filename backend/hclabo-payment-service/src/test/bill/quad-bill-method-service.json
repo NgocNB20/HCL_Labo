@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "57f9b8ff-e0ab-490b-ba09-a5bd6ade10e2",
+		"name": "hclabo-bill-method-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "マルチペイメント決済結果通知 (regist notifications )",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist error\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessId\" : \"83a2637dd8a46ed1f4878ef79f88fea3\",\r\n    \"shopId\" : \"tshop00049879\",\r\n    \"shopPass\" : \"kzwbsg5v\",\r\n    \"accessPass\":\"785f9d5a04ecc690c161bd07e99c582c\",\r\n    \"orderId\" : \"ST2111110004-001\",\r\n    \"amount\" : 3080,\r\n    \"tax\": 1000,\r\n    \"tranDate\" : \"20211202190744\",\r\n    \"errCode\" :\"E21\",\r\n    \"errInfo\" : \"E21020002\",\r\n    \"payType\" : \"3\",\r\n    \"currency\" : \"JPN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/bills/mulpay/notifications",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"bills",
+						"mulpay",
+						"notifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "マルチペイメント決済結果通知 OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accessId\" : \"test1234\",\r\n    \"shopId\" : \"HIT-MALL\",\r\n    \"shopPass\" : \"kzwbsg5v\",\r\n    \"accessPass\":\"itec12345\",\r\n    \"orderId\" : \"ST2111110004-001\",\r\n    \"amount\" : 3080,\r\n    \"tax\": 1000,\r\n    \"tranDate\" : \"20211202190744\",\r\n    \"errCode\" :\"E21\",\r\n    \"errInfo\" : \"E21020002\",\r\n    \"payType\" : \"3\",\r\n    \"currency\" : \"JPN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/bills/mulpay/notifications",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"bills",
+						"mulpay",
+						"notifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "再オーソリ不整合チェック (check) getOrderCode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderCode\" : \"ST2111120006\",\r\n    \"errInfo\": \"E01060001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/bills/authority/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"bills",
+						"authority",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "再オーソリ不整合チェック (check) getErrInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"errInfo\": \"E01060001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/bills/authority/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"bills",
+						"authority",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "再オーソリ不整合チェック (check)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/bills/authority/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"bills",
+						"authority",
+						"check"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

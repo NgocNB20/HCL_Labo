@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>無権限エラー画面</title>
+</head>
+
+<body class="login">
+<div id="page" class="l-mainwrap min_h650px">
+    <main class="l-page">
+        <div class="l-login-wrap l-error-wrap mb40">
+            <div class="logo"><img src="/admin/assets/images/icon/caution.svg" alt="HIT-MALL"></div>
+            <div class="l-conttitle_wrap">
+                <h1 class="c-pagetitle_h1">リクエストは拒否されました。</h1>
+            </div>
+            <div th:if="${allMessages}">
+                <ul th:each="message : ${allMessages}" class="mt5">
+                    <li><p th:utext="${message}"></p></li>
+                </ul>
+            </div>
+            <p th:if="!${allMessages}">ご利用の運営者アカウントには、処理を実行するために必要な権限が設定されていません。</p>
+            <div class="l-btn">
+                <a class="c-btn btn_regular" th:href="@{/(from=error)}">TOP画面へ</a>
+            </div>
+        </div>
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+<script type="text/javascript">
+    function doDownload(target, action){
+        $('#params').attr('name', action);
+        $('#globalMessage').remove();
+        if (target.getAttribute('data-download')) {
+            $('#examResultsPdf').val(target.getAttribute('data-download'));
+        } else {
+            $('#examResultsPdf').val('');
+        }
+    }
+  </script>
+</head>
+
+<body id="gotop" class="mypage">
+	<div class="l-mainwrap">
+		<div th:replace="~{include/header}"></div>
+		<!-- main -->
+		<main class="l-page">
+			<div th:replace="~{include/header_mypage::headermypage('history')}"></div>
+			<form id="formHistory" th:action="@{/member/history/detail(ocd=*{ocd})}" th:object="${memberHistoryModel}" method="post">
+				<div class="l-container">
+					<div class="l-container__inner">
+						<div th:replace="~{include/sidemenumember :: sidemenumember('history')}"></div>
+					    <input type="hidden" id="params" name="params"/>
+					    <input type="hidden" id="examResultsPdf" name="examResultsPdf"/>
+
+                        <div class="l-main">
+							<h2 class="c-title-page p-mypage__title-page"><strong>注文履歴</strong></h2>
+							<div id="globalMessage" th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+								<ul th:each="message : ${allMessages}">
+									<li th:utext="${message}"></li>
+								</ul>
+							</div>
+
+							<div class="c-margin--inline-m">
+								<div class="c-history-info c-history-info--2col c-history-info--wrap">
+									<div class="c-text--m">
+										<dl>
+											<dt class="c-history-info__title">ご注文日</dt>
+											<dd class="c-history-info__detail" th:text="*{#date.convert(orderTime, 'yyyy/MM/dd HH:mm')}"></dd>
+											<dt class="c-history-info__title">ご注文状況</dt>
+											<dd class="c-history-info__detail">
+												<th:block th:switch="*{statusValue}">
+													<div th:case="0" class="c-label-status c-label-status--orange"><p class="c-text--s" th:text="*{status}"></p></div>
+													<div th:case="1" class="c-label-status c-label-status--secondary"><p class="c-text--s" th:text="*{status}"></p></div>
+													<div th:case="2" class="c-label-status c-label-status--black"><p class="c-text--s" th:text="*{status}"></p></div>
+													<div th:case="3" class="c-label-status c-label-status--black"><p class="c-text--s"  th:text="*{status}"></p></div>
+													<div th:case="キャンセル" class="c-label-status c-label-status--black"><p class="c-text--s"  th:text="*{status}"></p></div>
+												</th:block>
+											</dd>
+											<dt class="c-history-info__title">お支払い方法</dt>
+											<dd class="c-history-info__detail">
+												[[*{settlementMethodName}]]
+												<th:block id="isCredit" th:if="*{isCredit()}">
+													[[*{paymentTypeDisplay}]]
+													<th:block id="isInstallment" th:if="*{isInstallment()}">[[' ' + *{paytimes} + '回']]</th:block>
+												</th:block>
+											</dd>
+											<dt class="c-history-info__title">お支払い手段</dt>
+											<th:block th:if="*{isLinkPay()}">
+												<dd class="c-history-info__detail" th:text="*{payTypeName}"></dd>
+											</th:block>
+											<th:block th:if="*{!isLinkPay()}">
+											    <dd class="c-history-info__detail">-</dd>
+											</th:block>
+											<dt class="c-history-info__title">ご注文番号</dt>
+											<dd class="c-history-info__detail" th:text="*{orderCode}"></dd>
+											<dt class="c-history-info__title">お支払い合計（税込）</dt>
+											<dd class="c-history-info__detail" th:text="|*{#number.convert(orderPrice)}円|"></dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+
+							<div class="c-margin--inline-m">
+								<h3 class="c-title-line">ご請求額の内訳</h3>
+								<div class="p-mypage__history-bill">
+									<dl class="l-form__list">
+										<dt>商品合計（税抜）</dt>
+										<dd><p class="c-text--m" th:text="|*{#number.convert(goodsPriceTotal)}円|"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>送料（税抜）</dt>
+										<dd><p class="c-text--m" th:text="|*{#number.convert(carriage)}円|"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>手数料（税抜）</dt>
+										<dd><p class="c-text--m" th:text="|*{#number.convert(settlementCommission)}円|"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>消費税<br class="l-sm">（消費税内訳）</dt>
+										<dd>
+											<p class="c-text--m" th:text="|*{#number.convert(taxPrice)}円|"></p>
+											<table class="p-mypage__history-tax">
+												<tr>
+													<th>（10%対象金額</th>
+													<th th:text="|*{#number.convert(standardTaxTargetPrice)}円）|"></th>
+													<td th:text="|*{#number.convert(standardTaxPrice)}円|"></td>
+												</tr>
+												<tr>
+													<th>（8%対象金額</th>
+													<th th:text="|*{#number.convert(reducedTaxTargetPrice)}円）|"></th>
+													<td th:text="|*{#number.convert(reducedTaxPrice)}円|"></td>
+												</tr>
+											</table>
+										</dd>
+									</dl>
+									<th:block th:each="item : *{orderAdditionalChargeItems}">
+										<dl class="l-form__list">
+											<dt th:text="${item.additionalDetailsName} + '（税抜）'" ></dt>
+											<dd class="c-text--m" th:text="|${#number.convert(item.additionalDetailsPrice)}円|"></dd>
+										</dl>
+									</th:block>
+									<th:block id="isUseCoupon" th:if="*{isUseCoupon()}">
+										<dl class="l-form__list">
+											<dt th:text="*{couponName}"></dt>
+											<dd class="c-text--m" th:text="|*{#number.convert(couponDiscountPrice)}円|"></dd>
+										</dl>
+									</th:block>
+									<dl class="l-form__list">
+										<dt>お支払い合計<br class="l-sm">（税込）</dt>
+										<dd>
+											<p><strong><span th:remove="tag" th:text="|*{#number.convert(orderPrice)}円|"></span></strong></p>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<div class="c-margin--inline-m p-mypage__history-product">
+								<h3 class="c-title-line">購入商品情報</h3>
+								<div class="c-product c-product--orderlist c-margin--m">
+									<th:block th:each="item : *{orderDeliveryItem.goodsListItems}">
+										<div class="c-product__item">
+											<div class="c-product__item-inner">
+												<div class="c-product__item-image">
+													<th:block th:if="${item.noveltyGoodsType == '1' || !item.isGoodsOpen()}">
+														<img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" height="180" width="180" decoding="async" loading="lazy">
+													</th:block>
+													<th:block th:if="${item.noveltyGoodsType != '1' && item.isGoodsOpen()}">
+														<a th:href="@{/goods/detail(gcd=${item.gcd})}">
+															<img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" height="180" width="180" decoding="async" loading="lazy">
+														</a>
+													</th:block>
+												</div>
+												<div class="c-product__item-overview">
+													<div class="c-product__item-group">
+														<div class="c-product__item-description">
+                                                            <th:block th:if="${item.noveltyGoodsType == '1' || !item.isGoodsOpen()}">
+    															<div class="c-product__item-title" style="text-decoration: none">
+    																<span th:remove="tag" th:text="${#strings.toString(item.taxRate) == '8' ? item.goodsGroupName + ' ※' : item.goodsGroupName}"></span>
+    															</div>
+                                                            </th:block>
+                                                            <th:block th:if="${item.noveltyGoodsType != '1' && item.isGoodsOpen()}">
+                                                                <div class="c-product__item-title">
+    																<a th:href="@{/goods/detail(gcd=${item.gcd})}" th:text="${#strings.toString(item.taxRate) == '8' ? item.goodsGroupName + ' ※' : item.goodsGroupName}"></a>
+                                                                </div>
+                                                            </th:block>
+															<div class="c-product__item-text">
+																<th:block id="isUnit1" th:if="${item.isUnit1()}">
+																	<span th:remove="tag" th:text="|${item.unitTitle1}：${item.unitValue1}|"></span>
+																</th:block>
+																<th:block id="isUnit2" th:if="${item.isUnit2()}">
+																	<br/>
+																	<span th:remove="tag" th:text="|${item.unitTitle2}：${item.unitValue2}|"></span>
+																</th:block>
+															</div>
+															<div class="c-product__item-price">
+																<span>単価：</span>
+																<div class="c-product__item-price-unit"><span th:remove="tag" th:text="${#number.convert(item.goodsPrice)}"></span><span>円 (税抜)</span></div>
+															</div>
+															<div class="c-product__item-quantity">
+																<span>個数：</span>
+																<span th:remove="tag" th:text="${#number.convert(item.goodsCount)}"></span>
+															</div>
+															<div class="c-product__item-price">
+																<span>小計：</span>
+																<div class="c-product__item-price-unit">
+																	<span th:remove="tag" th:text="${#number.convert(item.subTotalGoodsPrice)}"></span> <span>円 (税抜)</span>
+																</div>
+															</div>
+														</div>
+														<div class="c-product__item-state">
+														<th:block th:if="${item.noveltyGoodsType != '1'}">
+															<div class="p-mypage__history-exam">
+																<dl class="p-mypage__history-kit">
+																	<dt>検査キット番号：</dt>
+																	<dd>
+																		<th:block th:if="${item.examStatus != null} and (${item.examStatus.value == 'E'} or ${item.examStatus.value == 'M'})">
+																			<a th:href="|#${item.examKitCode}|" class="js-anchor c-textlink c-textlink--text" data-scroll="" th:text="${item.examKitCode}"></a>
+																		</th:block>
+																		<th:block th:unless="${item.examStatus != null} and (${item.examStatus.value == 'E'} or ${item.examStatus.value == 'M'})">
+																			<span th:text="${item.examKitCode}" th:remove="tag"></span>
+																		</th:block>
+																	</dd>
+																</dl>
+																<th:block th:if="*{isDisplayExamStatus()}">
+																	<div class="p-mypage__history-state">
+																		<dl>
+																			<dt>検査状態：</dt>
+																			<dd>
+																				<th:block th:switch="${item.examStatus == null ? '' : item.examStatus.value}">
+																					<div th:case="W" class="c-label-status2 c-label-status2--black"><span th:remove="tag" th:text="${item.examStatus.label}"></span></div>
+																					<div th:case="R" class="c-label-status2 c-label-status2--gray"><span th:remove="tag" th:text="${item.examStatus.label}"></span></div>
+																					<div th:case="M" class="c-label-status2 c-label-status2--orange"><span th:remove="tag" th:text="${item.examStatus.label}"></span></div>
+																					<div th:case="E" class="c-label-status2 c-label-status2--secondary"><span th:remove="tag" th:text="${item.examStatus.label}"></span></div>
+																				</th:block>
+																			</dd>
+																		</dl>
+																	</div>
+																</th:block>
+															</div>
+															<th:block th:if="${item.isDownloadPdf()}">
+																<div class="p-mypage__history-download c-margin--xs">
+																	<button class="c-button c-button--primary-line c-button--width-s" th:attr="data-download=${item.examResultsPdf}" onclick="doDownload(this, 'doExamResultsDownload')">
+																		<svg viewBox="0 0 20 19" style="width: 20px;"><use xlink:href="/assets/images/icon/download.svg#download"></use></svg>
+																		<p>検査結果ダウンロード</p>
+																	</button>
+																</div>
+															</th:block>
+														</th:block>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="c-margin--inline-m" id="examresults_content" th:if="*{isExamResultsListNotEmpty}">
+								<h3 class="c-title-line p-mypage__history-result-title">
+									検査結果
+									<div class="p-mypage__history-download">
+										<button class="c-button c-button--primary-line c-button--width-s" onclick="doDownload(this, 'doExaminationRuleDownload')">
+											<svg viewBox="0 0 20 19" style="width: 20px;"><use xlink:href="/assets/images/icon/download.svg#download"></use></svg>
+											<p>診療・診察時のお願い</p>
+										</button>
+									</div>
+								</h3>
+
+								<th:block th:each="item : *{examKitItemList}">
+									<div class="p-mypage__history-result">
+										<div class="p-mypage__history-result-description" th:id="${item.examKitCode}">
+											<dl class="p-mypage__history-result-kit">
+												<dt>検査キット番号：</dt><dd th:text="${item.examKitCode}"></dd>
+											</dl>
+											<div>
+												<dl class="p-mypage__history-result-num">
+													<dt>検体番号：</dt><dd th:text="${item.specimenCode}"></dd>
+												</dl>
+												<dl class="p-mypage__history-result-date">
+													<dt>受付日：</dt><dd th:text="${item.receptionDate}"></dd>
+												</dl>
+											</div>
+										</div>
+										<dl class="p-mypage__history-result-comment">
+											<dt>[検体コメント]</dt>
+											<dd th:utext="${item.specimenComment}"></dd>
+										</dl>
+										<div class="p-mypage__history-result-detail c-scroll" data-simplebar data-simplebar-auto-hide="false">
+											<table>
+												<tr>
+													<th>検査項目コード</th>
+													<th>検査項目名称</th>
+													<th>異常値区分</th>
+													<th>検査結果値</th>
+													<th>単位</th>
+													<th>表示基準値</th>
+													<th>測定法</th>
+													<th>検査完了日</th>
+												</tr>
+												<tr th:each="resultitem : ${item.examResultList}">
+													<td th:text="${resultitem.examItemCode}"></td>
+													<td th:text="${resultitem.examItemName}"></td>
+													<td th:text="${resultitem.abnormalValueType != null ? resultitem.abnormalValueType.value : ''}"></td>
+													<td th:text="${resultitem.examResultValue}"></td>
+													<td th:text="${resultitem.unit}"></td>
+													<td th:text="${resultitem.standardValue}"></td>
+													<td th:text="${resultitem.comment1}" class="c-text--left"></td>
+													<td th:text="${resultitem.examCompletedDate}"></td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</th:block>
+							</div>
+
+							<div class="c-margin--inline-m">
+								<h3 class="c-title-line">お届け先 <small>※配送伝票のお届け先</small></h3>
+								<div class="c-margin--xxs">
+									<dl class="l-form__list">
+										<dt>氏名</dt>
+										<dd><p class="c-text--m" th:text="*{orderDeliveryItem.receiverLastName} + ' ' + *{orderDeliveryItem.receiverFirstName}"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>フリガナ</dt>
+										<dd><p class="c-text--m" th:text="*{orderDeliveryItem.receiverLastKana} + ' ' + *{orderDeliveryItem.receiverFirstKana}"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>電話番号</dt>
+										<dd><p class="c-text--m" th:text="*{orderDeliveryItem.receiverTel}"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>住所</dt>
+										<dd><p class="c-text--m" th:with="address3=*{orderDeliveryItem.receiverAddress3} ?: ''">[['〒' + *{orderDeliveryItem.receiverZipCode1} + '-' + *{orderDeliveryItem.receiverZipCode2}]]<br>[[*{orderDeliveryItem.receiverPrefecture} + ' ' + *{orderDeliveryItem.receiverAddress1} + ' ' + *{orderDeliveryItem.receiverAddress2} + ' ' + ${address3}]]</p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>配送方法</dt>
+										<dd th:with="code=*{orderDeliveryItem.deliveryCode} ?: ''">
+											<p class="c-text--m">
+												[[*{orderDeliveryItem.deliveryMethodName}]]
+												<th:block th:if="*{orderDeliveryItem.isExistsReceiverDate()}" >
+													<br>お届け希望日: [[*{orderDeliveryItem.receiverDate}]]
+												</th:block>
+												<th:block th:if="*{orderDeliveryItem.isExistsReceiverTimeZone()}" >
+													<br>お届け希望時間帯: [[*{orderDeliveryItem.receiverTimeZone}]]
+												</th:block>
+												<br>伝票番号: [[${code}]]
+												<th:block th:if="*{orderDeliveryItem.isDeliveryChaseURLOpen()}" >
+													<br>※詳しい配送状況は<a th:href="@{*{orderDeliveryItem.deliveryChaseURL}}" target="_blank" class="c-textlink c-inlinelink">こちら</a>
+												</th:block>
+											</p>
+										</dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>配送メモ</dt>
+										<dd><p class="c-text--m" th:utext="*{#pre.convert(orderDeliveryItem.deliveryNote)}"></p></dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>配送状況</dt>
+										<dd><p class="c-text--m" th:text="*{orderDeliveryItem.shipmentStatus.label}"></p></dd>
+									</dl>
+								</div>
+							</div>
+
+							<div class="c-margin--inline-m">
+								<h3 class="c-title-line">お支払い情報</h3>
+								<div class="c-margin--xxs">
+									<dl class="l-form__list">
+										<dt>お支払い方法</dt>
+										<dd>
+										    <p class="c-text--m">
+										        <span th:text="*{settlementMethodName}" th:remove="tag"></span>
+										        <th:block th:if="*{isLinkPay()}">
+                                                    <br><span th:text="*{payTypeName}" th:remove="tag"></span>
+                                                </th:block>
+										    </p>
+										</dd>
+									</dl>
+									<th:block id="isConveni" th:if="*{isConveni()}">
+									    <dl class="l-form__list">
+									        <dt>決済方法詳細</dt>
+									        <dd>
+                                                <p class="c-text--m">
+                                                    コンビニ名：<span th:text="*{convenienceName}" th:remove="tag"></span>
+										            <th:block id="isConveni1" th:if="*{isConveni1()}">
+										                <br>お客様番号：<span th:text="*{receiptNo}" th:remove="tag"></span>
+										                <br>確認番号：<span th:text="*{confNo}" th:remove="tag"></span>
+										            </th:block>
+										            <th:block id="isConveni2" th:if="*{isConveni2()}">
+										                <br>オンライン決済番号：<span th:text="*{receiptNoWithHyphen}" th:remove="tag"></span>
+										            </th:block>
+										            <th:block id="isConveni3" th:if="*{isConveni3()}">
+										                <br>払込票番号：<span th:text="*{receiptNo}" th:remove="tag"></span>
+										            </th:block>
+										            <th:block id="isConveni4" th:if="*{isConveni4()}">
+										                <br>第１番号（５桁）：<span th:text="*{confNo}" th:remove="tag"></span>
+										                <br>第２番号（１２桁）：<span th:text="*{receiptNo}" th:remove="tag"></span>
+										            </th:block>
+										            <th:block id="isConveni5" th:if="*{isConveni5()}">
+										                <br>受付番号：<span th:text="*{receiptNo}" th:remove="tag"></span>
+										                <br>確認番号：<span th:text="*{confNo}" th:remove="tag"></span>
+										            </th:block>
+                                                    <br>お支払い期限：<span th:text="*{#date.convert(paymentTimeLimitDate, 'yyyy年MM月dd日')}" th:remove="tag"></span>
+                                                </p>
+                                            </dd>
+                                        </dl>
+									</th:block>
+									<dl class="l-form__list">
+										<dt>ご請求先</dt>
+										<dd>
+											<p class="c-text--m">
+												<span th:remove="tag" th:text="|*{orderBillingAddressItem.billingLastName}　*{orderBillingAddressItem.billingFirstName} , *{orderBillingAddressItem.billingLastKana}　*{orderBillingAddressItem.billingFirstKana} |"></span><br>
+												<span th:remove="tag" th:text="*{orderBillingAddressItem.billingTel}"></span><br>
+												<span th:remove="tag" th:with="address3=*{orderBillingAddressItem.billingAddress3} ?: ''">[['〒' + *{orderBillingAddressItem.billingZipCode1} + '-' + *{orderBillingAddressItem.billingZipCode2}]]<br>[[*{orderBillingAddressItem.billingPrefecture} + ' ' + *{orderBillingAddressItem.billingAddress1} + ' ' + *{orderBillingAddressItem.billingAddress2} + ' ' + ${address3}]]</span>
+											</p>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<div class="c-button-wrap p-mypage__button-wrap">
+								<a th:href="@{/member/history/(asc=*{pageInfo.orderAsc},pnum=*{pageInfo.pnum})}" class="c-button c-button--primary c-button--width-m">注文履歴一覧へ戻る</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</main>
+		<div th:replace="~{include/footer}" ></div>
+	</div>
+	<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

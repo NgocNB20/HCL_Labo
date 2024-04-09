@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-news {
+
+  &__contents {
+    @include media(sm) {
+      margin-inline: vwset(20);
+    }
+  }
+
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <title>問い合わせ詳細｜店舗管理</title>
+    <meta th:replace="~{include/head}" />
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+    <script language="JavaScript">
+        $(function () {
+            new CharCount(document.getElementById('memo'), 'limit');
+            new CharCount(document.getElementById('inputCompletion'), 'limit');
+        })
+    </script>
+</head>
+
+<body id="shop">
+<div id="inquiryShop" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/inquiry/update/}" th:object="${inquiryUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">問い合わせ詳細</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section_column" id="mainContainer">
+                        <div class="l-section_inner">
+                            <!-- お問い合わせ内容 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">問い合わせ内容</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap pb10">
+                                        <div class="c-contact_detail">
+                                            <th:block th:each="item, stat: *{inquiryDetailItems}">
+                                                <div th:classappend="${item.requestType == '1'} ? my_contact : contact">
+                                                    <div class="message w100p">
+                                                        <div class="status">
+                                                            <div class="name">
+                                                                <th:block th:if="${item.operator != null}">
+                                                                    <span th:text="${item.operator}"></span>
+                                                                </th:block>
+                                                                <th:block th:if="${item.operator == null}">
+                                                                    <span th:text="${item.inquiryMan}"></span>
+                                                                </th:block>
+                                                            </div>
+                                                            <div class="times" th:text="${#date.convert(item.inquiryTime, 'yyyy/MM/dd HH:mm:ss')}"></div>
+                                                        </div>
+                                                        <div class="inner" th:utext="${#pre.convert(item.inquiryBody)}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- お問い合わせ内容入力（HTML可） -->
+                            <th:block th:if="*{!isCompletion}">
+                                <article class="l-article">
+                                    <div class="l-article_title">
+                                        <h2 class="c-pagetitle_h3">問い合わせ送信内容入力（HTML可）</h2>
+                                        <div class="c-open-btn"><i></i></div>
+                                    </div>
+                                    <div class="l-article_inner">
+                                        <div id="inputCompletion" class="l-inner_wrap">
+                                            <textarea limit="4000" onchange="setCompletionReport()" id="inputCompletionReport" class="c-form-control w100p" rows="9" name="" placeholder="入力してください" th:field="*{inputCompletionReport}" th:errorclass="error"></textarea>
+                                            <div id="inputCompletionReportError" th:if="*{#fields.hasErrors('inputCompletionReport')}" th:errors="*{inputCompletionReport}" class="c-error-txt mt5"></div>
+                                            <input type="hidden" id="inputInquiryBody" th:field="*{inputInquiryBody}"/>
+                                            <div class="mt20 wrap_flex ai_start">
+                                                <ul class="c-list-left list_sp30">
+                                                    <li>
+                                                        <label class="c-form-control"><input type="checkbox" th:field="*{sendMailFlag}" th:checked="*{sendMailFlag}"><i></i>メール送信</label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="c-form-control"><input type="checkbox" th:field="*{completionReportFlag}" th:checked="*{completionReportFlag}"><i></i>問い合わせを完了する</label>
+                                                    </li>
+                                                </ul>
+                                                <input type="hidden" id="isCompletionBtnClicked" value="false"/>
+                                                <button class="c-btn btn_regular col_left" type="submit" id="doCompletion" name="doCompletion">送信内容を確認</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </th:block>
+                        </div>
+
+                        <div class="l-section_side">
+
+                            <!-- お問い合わせ情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">問い合わせ情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-nobase">
+                                            <div>
+                                                <dt>問い合わせ番号</dt>
+                                                <dd th:text="*{inquiryCode}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>問い合わせ分類名</dt>
+                                                <dd th:text="*{inquiryGroupName}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>問い合わせ状態</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <select id="inquiryStatus" class="c-form-control" name="inquiryStatus" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                           <option th:each="item : *{inquiryStatusItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{inquiryStatus}"></option>
+                                                    </select>
+                                                    <input type="hidden" id="isRegistStatusBtnClicked" value="false"/>
+                                                    <button class="c-btn-small_over ml10" type="submit" id="doOnceRegistStatus" name="doOnceRegistStatus">変更</button>
+                                                </dd>
+                                                <div id="inquiryStatusError" th:if="${#fields.hasErrors('inquiryStatus')}" th:errors="*{inquiryStatus}" class="c-error-txt mt5"></div>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- お客様情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">お客様情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div class="l-article-un ptb20lr10 mb25">
+                                            <dl class="c-dl-nobase">
+                                                <div>
+                                                    <dt>会員IDメールアドレス</dt>
+                                                    <th:block sec:authorize="hasAnyAuthority('MEMBER:4')">
+                                                        <th:block th:if="*{isMemberTransition}">
+                                                            <a th:href="@{/memberinfo/details(memberInfoSeq=*{memberInfoSeq},from=member)}">⇒この会員情報を確認する</a>
+                                                        </th:block>
+                                                    </th:block>
+                                                    <dd class="txt_center">
+                                                        <input type="text" class="c-form-control w100p" placeholder="入力してください" value="" th:field="*{memberInfoId}" maxlength="160" th:errorclass="error">
+                                                        <div th:id="memberInfoIdError" th:if="*{#fields.hasErrors('memberInfoId')}" th:errors="*{memberInfoId}" class="c-error-txt mt5 txt_left"></div>
+                                                        <input type="hidden" id="isOnceRelationMemberBtnClicked" value="false"/>
+                                                        <th:block th:if="*{!isDispMemberDeleteButton}">
+                                                            <button class="c-btn-small_over mt10" id="doOnceRelationMember" name="doOnceRelationMember" type="submit">会員と紐づける</button>
+                                                        </th:block>
+                                                        <th:block th:if="*{isDispMemberDeleteButton}">
+                                                            <button class="c-btn-small_over mt10" id="doOnceRelationMemberRelease" type="submit" name="doOnceRelationMemberRelease" >会員との紐づけ解除</button>
+                                                        </th:block>
+                                                    </dd>
+                                                </div>
+                                            </dl>
+                                        </div>
+                                        <div class="mb25">
+                                            <div th:text="*{inquiryLastName + ' ' + inquiryFirstName}"></div>
+                                            <div th:text="*{inquiryLastKana + ' ' + inquiryFirstKana}"></div>
+                                        </div>
+                                        <dl class="c-dl-nobase">
+                                            <div>
+                                                <dt>メールアドレス</dt>
+                                                <dd th:text="*{inquiryMail}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>電話番号</dt>
+                                                <dd th:text="*{inquiryTel}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 管理メモ -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">管理メモ</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div id="memo" class="l-inner_wrap">
+                                        <textarea th:field="*{memo}" limit="2000" class="c-form-control w100p" rows="4" name="" placeholder="入力してください" th:errorclass="error"></textarea>
+                                        <div th:id="memoError" th:if="*{#fields.hasErrors('memo')}" th:errors="*{memo}" class="c-error-txt mt5"></div>
+                                        <div class="txt_center">
+                                            <input type="hidden" id="isOnceRegistMemoBtnClicked" value="false"/>
+                                            <button class="c-btn-small_over mt10 w100px" id="doOnceRegistMemo" type="submit" name="doOnceRegistMemo">変更</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/inquiry/(md=list)}"><i class="material-icons navigate_before"></i>戻る</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}" ></div>
+    </main>
+</div>
+  <script type="text/javascript">
+  function setCompletionReport(){
+    var completionReport = document.getElementById("inputCompletionReport").value;
+    document.getElementById("inputInquiryBody").value = completionReport;
+  }
+  </script>
+</body>
+</html>

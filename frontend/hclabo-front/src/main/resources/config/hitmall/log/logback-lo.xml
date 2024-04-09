@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+  <appender name="APPLICATIONLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <Append>true</Append>
+    <File>C:/var/home/hclabo/log/apps/front/FrontApplication.log</File>
+    <encoder>
+      <pattern>%d [${springAppName:-},%X{traceId:-},%X{spanId:-}] %-7c %m%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>C:/var/home/hclabo/log/apps/front/FrontApplication.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+  </appender>
+  <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <Append>true</Append>
+    <File>C:/var/home/hclabo/log/apps/front/Front.log</File>
+    <encoder>
+      <pattern>%d [${springAppName:-},%X{traceId:-},%X{spanId:-}] [%t] %-5p %c - %m%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>C:/var/home/hclabo/log/apps/front/Front.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+  </appender>
+  <appender name="DYNAMIC_VALIDATOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <Append>true</Append>
+    <File>C:/var/home/hclabo/log/apps/front/DynamicValidator.log</File>
+    <encoder>
+      <pattern>%d [${springAppName:-}] [%t] %-5p - %m%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>C:/var/home/hclabo/log/apps/front/DynamicValidator.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+  </appender>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf8</charset>
+    </encoder>
+  </appender>
+  <logger name="LOGICAL" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="ACTION" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="ACCESS" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="SESSION" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="FREE" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="EXCEPT" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="SQLEXCP" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APPLICATIONLOG"/>
+  </logger>
+  <logger name="jp.co.itechh.quad.front.annotation.validator.util" additivity="false" level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="DYNAMIC_VALIDATOR"/>
+  </logger>
+  <logger name="jp.co.itechh.quad.core" additivity="false" level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APP"/>
+  </logger>
+  <logger name="org.seasar.doma.jdbc" additivity="false" level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APP"/>
+  </logger>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="APP"/>
+  </root>
+</configuration>

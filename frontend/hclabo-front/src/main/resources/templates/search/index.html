@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<th:block th:with="canonical='true', addRobots='noindex'" >
+	<meta th:replace="~{include/head}" />
+</th:block>
+<script type="text/javascript" th:src="@{/assets/js/goodsIcon.js}"></script>
+</head>
+
+<body id="gotop" class="p-search p-product-list" th:object="${searchModel}">
+	<div class="l-mainwrap">
+		<div th:replace="~{include/header}"></div>
+
+		<main class="l-page">
+		    <div class="l-breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+                <div class="l-breadcrumbs__inner">
+                    <div class="l-breadcrumbs__list">
+                        <div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem">
+                            <span class="l-breadcrumbs__link">
+                                <a property="item" typeof="WebPage" title="TOP" th:href="@{/}" class="c-textlink c-textlink--hover">TOP</a>
+                                <meta property="position" content="1" />
+                            </span>
+                        </div>
+                        <div class="l-breadcrumbs__item">
+                            <span class="l-breadcrumbs__current">検索結果</span>
+                            <meta property="position" content="2" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+		    <div class="l-container">
+			    <div class="l-container__inner">
+				    <div class="l-side l-lg">
+				        <form id="formreset" method="post" th:action="@{/search/}" class="l-side-search">
+    				        <strong class="l-side-search__title">
+                                <svg viewBox="0 0 23 23" width="20"><use xlink:href="/assets/images/icon/search.svg#search"></use></svg>
+                                <span>検索</span>
+                            </strong>
+                            <div class="l-side-search__contents">
+                                <p class="l-side-search__contents-title" trong="">キーワード</p>
+                                <input type="text" th:field="*{keyword}" size="20" maxlength="100" class="c-input" placeholder="キーワードを入力" th:errorclass="field-error"/>
+                                <div th:if="${#fields.hasErrors('keyword')}" th:errors="*{keyword}" class="c-field-error"></div>
+                            </div>
+                            <div class="l-side-search__contents">
+                                <p class="l-side-search__contents-title">カテゴリーから絞る</p>
+                                <div class="c-select">
+                                    <select class="c-select__inner" name="condCid" th:classappend="${#fields.hasErrors('condCid')} ? 'field-error'">
+                                        <option value="" selected="selected">選択してください</option>
+                                        <option th:each="condCidItem : *{condCidItems}" th:value="${condCidItem.get('value')}"
+												th:selected="${condCidItem.get('value')} == *{condCid}">
+											<th:block th:switch="${condCidItem.get('level')}">
+												<span th:case="1" th:text="${condCidItem.get('label')}"></span>
+												<span th:case="2" th:text="${'　└' + condCidItem.get('label')}"></span>
+												<span th:case="3" th:text="${'　　└' + condCidItem.get('label')}"></span>
+												<span th:case="4" th:text="${'　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="5" th:text="${'　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="6" th:text="${'　　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="7" th:text="${'　　　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="8" th:text="${'　　　　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="9" th:text="${'　　　　　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="10" th:text="${'　　　　　　　　└' + condCidItem.get('label')}"></span>
+												<span th:case="*" th:text="${'　　　　　　　　　└' + condCidItem.get('label')}"></span>
+											</th:block>
+										</option>
+                                    </select>
+                                </div>
+								<div th:if="${#fields.hasErrors('condCid')}" th:errors="*{condCid}" class="c-field-error"></div>
+                            </div>
+                            <div class="l-side-search__contents">
+                                <p class="l-side-search__contents-title">価格で絞る<br><small>※税抜価格で検索されます</small></p>
+                                <div class="l-side-search__contents-price">
+                                    <input type="text" name="ll" th:field="*{ll}" size="8" maxlength="8" inputmode="numeric" class="c-input" th:errorclass="field-error" />
+                                    <span>～</span>
+                                    <input type="text" name="ul" th:field="*{ul}" size="8" maxlength="8" inputmode="numeric" class="c-input" th:errorclass="field-error" />
+                                </div>
+                                <div th:if="${#fields.hasErrors('ll')}" th:errors="*{ll}" class="c-field-error"></div>
+                                <div th:if="${#fields.hasErrors('ul')}" th:errors="*{ul}" class="c-field-error"></div>
+                            </div>
+                            <div class="l-side-search__contents">
+                                <p class="l-side-search__contents-title">その他</p>
+                                <label class="c-checkbox">
+                                    <span class="c-checkbox__box">
+                                        <input name="" type="checkbox" value="" th:field="*{st}">
+                                        <span></span>
+                                    </span>
+                                    <p>在庫あり</p>
+                                </label>
+                            </div>
+                            <input type="hidden" id="fromView" name="fromView" th:value="search" />
+                            <nav>
+                                <button name="doSearch" type="submit" class="c-button c-button--primary">
+                                    <svg viewBox="0 0 23 23" width="20">
+                                        <use xlink:href="/assets/images/icon/search.svg#search"></use>
+                                    </svg>
+                                    <p>検索する</p>
+                                </button>
+                                <button name="reset" type="button" class="c-button c-button--bbb-line">
+                                    <p>条件をリセット</p>
+                                </button>
+                            </nav>
+					    </form>
+					    <hm:freearea key="lside__banner"/>
+				    </div>
+				    <div class="l-main">
+					    <h2 class="c-title-page"><strong>検索結果</strong></h2>
+			            <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+				            <ul th:each="message : ${allMessages}">
+					            <li th:utext="${message}"></li>
+				            </ul>
+			            </div>
+                        <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+                            入力内容をご確認ください。
+                        </div>
+					    <th:block th:if="*{isNoGoods()}">
+                            <div class="p-search__header">
+                                <button class="c-button c-button--primary-line js-search-open l-sm">
+                                    <svg viewBox="0 0 18 17">
+                                        <use xlink:href="/assets/images/icon/sort.svg#sort"></use>
+                                    </svg>
+                                    <p>絞り込み</p>
+                                </button>
+                            </div>
+						    <p class="c-nodata">該当する商品がありません。</p>
+					    </th:block>
+					    <th:block th:if="*{!isNoGoods()}" th:with="additionalParam=@{fromView=search,q=*{keyword},condCid=*{condCid},ll=*{ll},ul=*{ul},st=*{st}}">
+					        <div class="p-search__header">
+                                <button class="c-button c-button--primary-line js-search-open l-sm">
+                                    <svg viewBox="0 0 18 17">
+                                        <use xlink:href="/assets/images/icon/sort.svg#sort"></use>
+                                    </svg>
+                                    <p>絞り込み</p>
+                                </button>
+                                <div th:replace="~{include/pager::pager2(url='/search/',viewTypeDisplayFlag=true,displayCount='件')}"></div>
+                            </div>
+		                    <div class="search__list">
+				                <th:block th:if="${pageInfo.isViewTypeThumbnail()}">
+				                    <div class="c-product c-product--thumb">
+				                        <th:block th:each="itemsItems : *{goodsGroupThumbnailItemsItems}">
+					                        <th:block th:each="item : ${itemsItems}">
+				                                <div class="c-product__item">
+					                                <a th:href="@{/goods/detail(ggcd=${item.ggcd},cid=${item.cid})}">
+					                                    <div class="c-product__item-image">
+					                                        <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="210" width="210" decoding="async" loading="lazy">
+					                                    </div>
+                                                        <div class="c-product__item-icon">
+                                                            <th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+                                                                <span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+                                                            </th:block>
+                                                        </div>
+                                                        <div class="c-product__item-title">
+                                                            <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                                                        </div>
+                                                        <div class="c-product__item-price">
+                                                            <div class="c-product__item-price-unit">
+                                                                <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                                                <span>円 (税込)</span>
+                                                            </div>
+                                                        </div>
+							                            <th:block th:if="${item.isStockStatusDisplay()}">
+															<!--/* 非販売 */-->
+															<span th:if="${item.isStockNoSaleIconDisp()}" th:remove="tag">
+																<div class="c-product__item-stock">販売しておりません</div>
+															</span>
+															<!--/* 販売期間終了 */-->
+															<span th:if="${item.isStockSoldOutIconDisp()}" th:remove="tag">
+																<div class="c-product__item-stock">販売終了しました</div>
+															</span>
+															<!--/* 販売前 */-->
+															<span th:if="${item.isStockBeforeSaleIconDisp()}" th:remove="tag">
+																<div class="c-product__item-stock">販売開始前</div>
+															</span>
+															<!--/* 在庫切れ */-->
+															<span th:if="${item.isStockNoStockIconDisp()}" th:remove="tag">
+																<div class="c-product__item-stock">SOLD OUT</div>
+															</span>
+															<!--/* 残りわずか */-->
+															<span th:if="${item.isStockFewIconDisp()}" th:remove="tag">
+																<div class="c-product__item-stock">残りわずか</div>
+															</span>
+			                                            </th:block>
+						                            </a>
+					                            </div>
+						                    </th:block>
+					                    </th:block>
+					                </div>
+					            </th:block>
+					            <th:block th:if="${pageInfo.isViewTypeList()}">
+                                    <div class="c-product c-product--list">
+                                        <th:block th:each="item: *{goodsGroupListItems}">
+                                            <div class="c-product__item">
+                                                <a th:href="@{/goods/detail(ggcd=${item.ggcd},cid=${item.cid})}">
+                                                    <div class="c-product__item-image">
+                                                        <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="210" width="210" decoding="async" loading="lazy">
+                                                    </div>
+                                                    <div class="c-product__item-overview">
+                                                        <div class="c-product__item-icon">
+                                                            <th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+                                                                <span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+                                                            </th:block>
+                                                        </div>
+                                                        <div class="c-product__item-group">
+                                                            <div class="c-product__item-description">
+                                                                <div class="c-product__item-title">
+                                                                    <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                                                                </div>
+                                                                <div class="c-product__item-text">
+                                                                    <span th:utext="${#pre.convert(item.goodsNote1, false)}" th:remove="tag"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="c-product__item-state">
+                                                                <div class="c-product__item-price">
+                                                                    <div class="c-product__item-price-unit">
+                                                                        <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                                                        <span>円 (税込)</span>
+                                                                    </div>
+                                                                </div>
+                                                                <th:block th:if="${item.isStockStatusDisplay()}">
+                                                                    <!--/* 非販売 */-->
+                                                                    <span th:if="${item.isStockNoSaleIconDisp()}" th:remove="tag">
+                                                                        <div class="c-product__item-stock">販売しておりません</div>
+                                                                    </span>
+                                                                    <!--/* 販売期間終了 */-->
+                                                                    <span th:if="${item.isStockSoldOutIconDisp()}" th:remove="tag">
+                                                                        <div class="c-product__item-stock">販売終了しました</div>
+                                                                    </span>
+                                                                    <!--/* 販売前 */-->
+                                                                    <span th:if="${item.isStockBeforeSaleIconDisp()}" th:remove="tag">
+                                                                        <div class="c-product__item-stock">販売開始前</div>
+                                                                    </span>
+                                                                    <!--/* 在庫切れ */-->
+                                                                    <span th:if="${item.isStockNoStockIconDisp()}" th:remove="tag">
+                                                                        <div class="c-product__item-stock">SOLD OUT</div>
+                                                                    </span>
+                                                                    <!--/* 残りわずか */-->
+                                                                    <span th:if="${item.isStockFewIconDisp()}" th:remove="tag">
+                                                                        <div class="c-product__item-stock">残りわずか</div>
+                                                                    </span>
+                                                                </th:block>
+                                                            </div>
+                                                        </div>
+                                                        <th:block th:if="${!(!item.isGoodsNote2() and !item.isGoodsNote3())}">
+                                                            <div class="p-product-list-exam c-exam">
+                                                                <dl class="c-exam--type01">
+                                                                    <th:block th:if="${item.isGoodsNote2()}">
+                                                                        <dt class="c-exam__sum" th:utext="${#pre.convert(item.goodsNote2, false)}"></dt>
+                                                                    </th:block>
+                                                                    <th:block th:if="${item.isGoodsNote3()}">
+                                                                        <dd th:utext="${#pre.convert(item.goodsNote3, false)}"></dd>
+                                                                    </th:block>
+                                                                </dl>
+                                                            </div>
+                                                        </th:block>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </th:block>
+					            <div class="p-search__count">全 <span class="p-search__count-sum" th:text="*{pageInfo.total}"></span> 商品</div>
+			                    <div th:replace="~{include/pager::pager1(url='/search/')}"></div>
+		                    </div>
+		                </th:block>
+				    </div>
+			    </div>
+		    </div>
+
+		    <div class="c-search l-sm">
+                <div class="c-search__back"></div>
+				<form id="formresetsm" method="post" th:action="@{/search/}">
+				    <div class="c-search__title">
+                        <p>
+                            <svg viewBox="0 0 18 17"><use xlink:href="/assets/images/icon/sort.svg#sort"></use></svg>
+                            <span>絞り込み検索</span>
+                        </p>
+                        <button type="button" class="js-search-close"><span></span> <span></span></button>
+                    </div>
+                    <div class="c-search__contents">
+                        <p class="c-search__contents-title">キーワード</p>
+                        <input type="text" th:field="*{keyword}" size="20" maxlength="100" class="c-input" placeholder="キーワードを入力" th:errorclass="field-error" />
+                        <div th:if="${#fields.hasErrors('keyword')}" th:errors="*{keyword}" class="c-field-error"></div>
+                    </div>
+					<div class="c-search__contents">
+						<p class="c-search__contents-title">カテゴリーから絞る</p>
+						<div class="c-select">
+							<select class="c-select__inner" name="condCid" th:classappend="${#fields.hasErrors('condCid')} ? 'field-error'">
+								<option value="">選択してください</option>
+								<option th:each="condCidItem : *{condCidItems}" th:value="${condCidItem.get('value')}"
+										th:selected="${condCidItem.get('value')} == *{condCid}">
+									<th:block th:switch="${condCidItem.get('level')}">
+										<span th:case="1" th:text="${condCidItem.get('label')}"></span>
+										<span th:case="2" th:text="${'　└' + condCidItem.get('label')}"></span>
+										<span th:case="3" th:text="${'　　└' + condCidItem.get('label')}"></span>
+										<span th:case="4" th:text="${'　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="5" th:text="${'　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="6" th:text="${'　　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="7" th:text="${'　　　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="8" th:text="${'　　　　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="9" th:text="${'　　　　　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="10" th:text="${'　　　　　　　　└' + condCidItem.get('label')}"></span>
+										<span th:case="*" th:text="${'　　　　　　　　　└' + condCidItem.get('label')}"></span>
+									</th:block>
+								</option>
+							</select>
+							<div th:if="${#fields.hasErrors('condCid')}" th:errors="*{condCid}" class="c-field-error"></div>
+						</div>
+					</div>
+					<div class="c-search__contents">
+                        <p class="c-search__contents-title">価格で絞る&nbsp;&nbsp;<small>※税抜価格で検索されます</small></p>
+                        <div class="c-search__contents-price">
+                            <input type="text" name="ll" th:field="*{ll}" size="8" maxlength="8" inputmode="numeric" class="c-input" th:errorclass="field-error" />
+                            <div th:if="${#fields.hasErrors('ll')}" th:errors="*{ll}" class="c-field-error"></div>
+                            <span>～</span>
+                            <input type="text" name="ul" th:field="*{ul}" size="8" maxlength="8" inputmode="numeric" class="c-input" th:errorclass="field-error" />
+                            <div th:if="${#fields.hasErrors('ul')}" th:errors="*{ul}" class="c-field-error"></div>
+                        </div>
+                    </div>
+                    <div class="c-search__contents">
+                        <p class="c-search__contents-title">その他</p>
+                        <label class="c-checkbox"><span class="c-checkbox__box"><input name="" type="checkbox" value="" th:field="*{st}"> <span></span></span>
+                            <p>在庫あり</p>
+                        </label>
+                    </div>
+					<input type="hidden" id="fromView" name="fromView" th:value="search" />
+					<nav>
+					    <button name="doSearch" type="submit" class="c-button c-button--primary">
+                            <svg viewBox="0 0 23 23" width="20"><use xlink:href="/assets/images/icon/search.svg#search"></use></svg>
+                            <p>検索する</p>
+                        </button>
+                        <button name="reset" type="button" class="c-button c-button--bbb-line">
+                            <p>条件をリセット</p>
+                        </button>
+					</nav>
+				</form>
+			</div>
+		</main>
+		<div th:replace="~{include/footer}" ></div>
+	</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

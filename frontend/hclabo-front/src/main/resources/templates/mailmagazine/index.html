@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<th:block th:with="canonical='true'" >
+<meta th:replace="~{include/head}" />
+</th:block>
+</head>
+<body id="gotop" class="p-mailmagazine">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+    <main class="l-page">
+      <div th:replace="~{include/breadcrumb_mail_magazine}"></div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>メールマガジン</strong></h2>
+          <div class="l-form">
+            <div class="l-form__area">
+                <h3 class="c-title-line">メールマガジン登録</h3>
+                <p class="c-text--m">みんなの郵送検査室より商品の最新情報やおすすめの商品・お得な情報等を不定期でメール配信いたします。<br>メールマガジン配信をご希望の方は、｢登録する｣ボタンを押し、メールアドレスをご入力ください。<br>携帯メールアドレスを入力していただいた方には、携帯用メールマガジンを配信いたします。</p>
+				<div class="c-button-wrap c-button-wrap--margin-s">
+				    <a th:href="@{/mailmagazine/regist}" class="c-button c-button--primary c-button--width-m">登録する</a>
+				</div>
+            </div>
+            <div class="l-form__area">
+                <h3 class="c-title-line">メールマガジン解除</h3>
+                <p class="c-text--m">メールマガジンの解除をご希望の方は、｢解除する｣ボタンを押し、ご登録メールアドレスを入力していただき、メールマガジンの解除を行ってください。</p>
+                <div class="c-button-wrap c-button-wrap--margin-s">
+                    <a th:href="@{/mailmagazine/cancel}" class="c-button c-button--primary-line c-button--width-m">解除する</a>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+    </div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

@@ -1,0 +1,13 @@
+<!--/* PC用サイドメニュー ※呼び出し元は各画面のHTMLから記載する */-->
+<th:block th:fragment="category(viewLevel)">
+	<head>
+		<script type="text/javascript" th:src="@{/common/js/sideMenuCategory.js}"></script>
+	</head>
+
+	<div class="l-side l-lg" id="sidemenuPageItems-1_hideTarget">
+		<input type="hidden" id="viewLevel" th:value="${viewLevel}" /> <!--/* sideMenuCategory.jsで使用 */-->
+		<ul class="l-category" id="sidemenuPageItems-1"> <!--/* sideMenuCategory.jsでここにHTMLが生成される */-->
+		</ul>
+		<hm:freearea key="lside__banner"/>
+	</div>
+</th:block>

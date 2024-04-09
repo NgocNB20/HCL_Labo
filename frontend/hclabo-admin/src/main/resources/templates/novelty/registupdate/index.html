@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>ノベルティプレゼント条件登録更新｜店舗管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/treeTableForCategory.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/thickbox.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/registupdateRelationAjax.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/thickbox.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/admin.goods.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+
+    <script>
+        // 入力制御
+        jQuery(function($){
+            // for display goodsCountFlag
+            let productCount = $('#goodsCountFlg').val();
+            if (productCount && typeof productCount !== 'undefined') {
+                alert('商品情報条件に該当する商品(規格)は【' + productCount + '】件です。');
+            }
+
+            const orderInputEl = document.querySelectorAll('#order_conditions .l-article_inner input');
+
+            let radio_discount = $('.c-form-control input[name="enclosureUnitType"]:checked').val();
+            if (radio_discount === "0") {
+                conditionActive(orderInputEl, false);
+            } else if (radio_discount === "1") {
+                conditionActive(orderInputEl, true);
+            }
+
+            $('input[name="enclosureUnitType"]').on('change', function () {
+                if (this.value === '0') {
+                    conditionActive(orderInputEl, false);
+                } else if (this.value === '1') {
+                    conditionActive(orderInputEl, true);
+                }
+            });
+
+            $("#doOnceDelete").click(function() {
+                return (window.confirm("削除すると、元に戻すことはできません。"));
+            });
+        });
+
+        function conditionActive(elementList, state) {
+            Array.from(elementList).forEach(el => {
+                $(el).attr('disabled', state);
+                if (state) {
+                    if (el.type === 'checkbox') {
+                        $(el).prop('checked', false);
+                    }
+                    if (el.type === 'text') {
+                        $(el).val(null);
+                    }
+                }
+            });
+        }
+
+        function setCheckBoxExclusionNoveltyValue(index) {
+            let name = 'exclusionNoveltyItems[' + index +'].exclusionNoveltyCheck';
+            let input = $("input[name='" + name + "']");
+            if (input.is(':checked')) {
+                input.val("true");
+            } else {
+                input.val("false");
+            }
+        }
+    </script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(function () {
+            let exclusionList = /*[[${noveltyRegistUpdateModel.exclusionNoveltyItems}]]*/ '[]';
+            if (exclusionList) {
+                $('#exclusionsForRegist_registupdate').append('<ul></ul>')
+                exclusionList.forEach(function listExclusion(e, idx) {
+
+                    let attributeI = '<i></i>';
+                    let checked = e.exclusionNoveltyCheck ? 'value="true" checked' : 'value="false"';
+                    let node = '<li class="mb10" id="' + e.exclusionNoveltySeq + '">\n' +
+                        '<label class="c-form-control">' +
+                        '<input type="hidden" name="_exclusionNoveltyItems[' + idx + '].exclusionNoveltyCheck" value="on">' +
+                        '<input type="checkbox" name="exclusionNoveltyItems[' + idx + '].exclusionNoveltyCheck" ' + checked + ' onclick="setCheckBoxExclusionNoveltyValue(' + idx + ');">' +
+                        attributeI + '<span>' + e.exclusionNoveltyName + '</span>' +
+                        '</label>\n' +
+                        '</li>\n';
+
+                    $('#exclusionsForRegist_registupdate ul').append(node);
+                })
+            }
+        })
+        /*]]>*/
+    </script>
+
+
+</head>
+
+<body id="shop">
+<div id="noveltyRegistShop" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form enctype="multipart/form-data" th:action="@{/novelty/registupdate/}"
+                      th:object="${noveltyRegistUpdateModel}" method="post"
+                      onsubmit="return errorCheckOnclickConfirmButton();">
+                    <input type="hidden" th:field="*{md}"/>
+                    <input type="hidden" th:field="*{noveltyPresentConditionSeq}"/>
+                    <div th:if="*{isGoodsCountFlag}">
+                        <input type="hidden" id="goodsCountFlg" th:field="*{goodsCount}">
+                    </div>
+
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">ノベルティプレゼント条件登録更新</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                            <ul>
+                                <li>
+                                    <input th:if="*{isUpdateMode}"  class="c-btn btn_del w150px" type="submit" value = "削除" id="doOnceDelete" name="doOnceDelete"/>
+                                </li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <!--/* エラーメッセージ */-->
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section_column" id="mainContainer">
+                        <div class="l-section_inner">
+                            <!-- 基本情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">基本情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w160px">
+                                            <div class="edit">
+                                                <dt class="w180px">条件名<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <input type="text" th:field="*{noveltyPresentName}" maxlength="120"
+                                                           class="c-form-control w100p" placeholder="入力してください"
+                                                           th:errorclass="error">
+                                                    <div th:if="${#fields.hasErrors('noveltyPresentName')}"
+                                                         th:errors="*{noveltyPresentName}"
+                                                         class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt class="w180px">同梱単位<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <div class="flex_w_wrap">
+                                                        <ul class="c-list-left list_sp20 mr40 mt10">
+                                                            <li>
+                                                                <label class="c-form-control"><input type="radio"
+                                                                                                     name="enclosureUnitType"
+                                                                                                     th:field="*{enclosureUnitType}"
+                                                                                                     value="0"
+                                                                                                     th:checked="*{enclosureUnitType} == '0'"><i
+                                                                        th:classappend="${#fields.hasErrors('enclosureUnitType')} ? 'error'"></i>受注単位</label>
+                                                            </li>
+                                                            <li>
+                                                                <label class="c-form-control"><input type="radio"
+                                                                                                     name="enclosureUnitType"
+                                                                                                     th:field="*{enclosureUnitType}"
+                                                                                                     value="1"><i
+                                                                        th:classappend="${#fields.hasErrors('enclosureUnitType')} ? 'error'"></i>受注商品単位</label>
+                                                            </li>
+                                                            <a href="#" class="txt_black mb-5" tooltip-position='right'
+                                                               data-c-tooltip="【受注単位】 条件に該当する受注に対して、１つノベルティ商品を同梱
+【受注商品単位】 「商品情報条件」に該当する商品に対して、購入数分のノベルティ商品を同梱">
+                                                                <i class="ml10 w100p material-icons help_outline"></i>
+                                                            </a>
+                                                        </ul>
+                                                </dd>
+                                                <div th:if="${#fields.hasErrors('enclosureUnitType')}"
+                                                     th:errors="*{enclosureUnitType}" class="c-error-txt mt5"></div>
+                                            </div>
+                                            <div class="edit">
+                                                <dt class="w180px">条件状態<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <select id="noveltyPresentState" class="c-form-control"
+                                                            name="noveltyPresentState" th:errorclass="error">
+                                                        <option th:each="item : *{noveltyPresentStateItems}"
+                                                                th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{noveltyPresentState}">
+                                                        </option>
+                                                    </select>
+                                                    <div id="noveltyPresentStateError"
+                                                         th:if="${#fields.hasErrors('noveltyPresentState')}"
+                                                         th:errors="*{noveltyPresentState}"
+                                                         class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt class="w180px">プレゼント期間<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <div class="wrap_flex_wrap wrap_flex_center">
+                                                        <label class="c-datepicker">
+                                                            <input type="text" class="c-form-control w150px"
+                                                                   placeholder="年/月/日"
+                                                                   th:field="*{noveltyPresentStartDate}"
+                                                                   autocomplete="off" maxlength="10"
+                                                                   th:errorclass="error">
+                                                        </label>
+                                                        <input type="text" class="c-form-control w100px ml10"
+                                                               placeholder="00:00:00"
+                                                               th:field="*{noveltyPresentStartTime}" maxlength="8"
+                                                               th:errorclass="error">
+                                                        <span class="ml10 mr10">〜</span>
+                                                        <label class="c-datepicker">
+                                                            <input type="text" class="c-form-control w150px"
+                                                                   placeholder="年/月/日"
+                                                                   th:field="*{noveltyPresentEndDate}"
+                                                                   autocomplete="off" maxlength="10"
+                                                                   th:errorclass="error">
+                                                        </label>
+                                                        <input type="text" class="c-form-control w100px ml10"
+                                                               placeholder="00:00:00"
+                                                               th:field="*{noveltyPresentEndTime}" maxlength="8"
+                                                               th:errorclass="error">
+                                                    </div>
+                                                    <div>
+                                                        <div id="noveltyPresentStartDateError"
+                                                             th:if="${#fields.hasErrors('noveltyPresentStartDate')}"
+                                                             th:errors="*{noveltyPresentStartDate}"
+                                                             class="c-error-txt mt5"></div>
+                                                        <div id="noveltyPresentStartTimeError"
+                                                             th:if="${#fields.hasErrors('noveltyPresentStartTime')}"
+                                                             th:errors="*{noveltyPresentStartTime}"
+                                                             class="c-error-txt mt5"></div>
+                                                        <div id="noveltyPresentEndDateError"
+                                                             th:if="${#fields.hasErrors('noveltyPresentEndDate')}"
+                                                             th:errors="*{noveltyPresentEndDate}"
+                                                             class="c-error-txt mt5"></div>
+                                                        <div id="noveltyPresentEndTimeError"
+                                                             th:if="${#fields.hasErrors('noveltyPresentEndTime')}"
+                                                             th:errors="*{noveltyPresentEndTime}"
+                                                             class="c-error-txt mt5"></div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt class="w180px">ノベルティ商品番号<span class="ico_required">必須</span></dt>
+                                                <div class="wrap_flex_y flex_grow">
+                                                    <dd>
+                            <textarea class="c-form-control w100p" rows="5" name="noveltyGoodsCode" placeholder="入力してください"
+                                      th:field="*{noveltyGoodsCode}" th:errorclass="error"></textarea>
+                                                    </dd>
+                                                    <div class="c-annotation mt5">
+                                                        ※対象商品の商品番号を改行図切りで入力してください。設定した順に在庫がある商品がプレゼントされます
+                                                    </div>
+                                                    <div id="noveltyGoodsCodeError"
+                                                         th:if="${#fields.hasErrors('noveltyGoodsCode')}"
+                                                         th:errors="*{noveltyGoodsCode}" class="c-error-txt mt5"></div>
+                                                </div>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 会員情報条件 -->
+                            <article id="order_conditions" class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">会員情報条件</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap product_description">
+                                        <dl class="c-dl-base dt_w160px">
+                                            <div class="edit">
+                                                <dt>プレゼント数制限</dt>
+                                                <dd>
+                                                    <div class="c-input-label">
+                                                        <label class="mr10">お一人様</label>
+                                                        <input type="text" class="c-form-control w150px price"
+                                                               th:field="*{prizeGoodsLimit}" placeholder="10"
+                                                               maxlength="8" th:errorclass="error">
+                                                        <label>個まで</label>
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('prizeGoodsLimit')}"
+                                                         th:errors="*{prizeGoodsLimit}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt>入会期間</dt>
+                                                <dd>
+                                                    <div class="flex_w_wrap wrap_flex_center">
+                                                        <label class="c-datepicker">
+                                                            <input type="text" class="c-form-control w150px"
+                                                                   placeholder="年/月/日"
+                                                                   th:field="*{admissionStartDate}" maxlength="10"
+                                                                   autocomplete="off" th:errorclass="error">
+                                                        </label>
+                                                        <span class="ml10 mr10">〜</span>
+                                                        <label class="c-datepicker">
+                                                            <input type="text" class="c-form-control w150px"
+                                                                   placeholder="年/月/日" th:field="*{admissionEndDate}"
+                                                                   maxlength="10" autocomplete="off"
+                                                                   th:errorclass="error">
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <div th:if="${#fields.hasErrors('admissionStartDate')}"
+                                                             th:errors="*{admissionStartDate}"
+                                                             class="c-error-txt mt5"></div>
+                                                        <div th:if="${#fields.hasErrors('admissionEndDate')}"
+                                                             th:errors="*{admissionEndDate}"
+                                                             class="c-error-txt mt5"></div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt>メールメガジン</dt>
+                                                <dd>
+                                                    <ul class="c-list-left list_sp20">
+                                                        <li>
+                                                            <label class="c-form-control">
+                                                                <input type="checkbox" th:field="*{magazineSendFlag}"
+                                                                       th:checked="*{magazineSendFlag eq '0'}"
+                                                                       value="0"><i></i>配信中
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                    <div th:if="${#fields.hasErrors('magazineSendFlag')}"
+                                                         th:errors="*{magazineSendFlag}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 商品情報条件 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">商品情報条件</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap c-edit">
+                                        <dl class="c-dl-base dt_w160px">
+                                            <div class="delivery_target c-edit">
+                                                <div class="c-dl-base w40p">
+                                                    <div class="edit">
+                                                        <dt>商品管理番号</dt>
+                                                        <div class="wrap_flex_y flex_grow">
+                                                            <dd>
+                                <textarea class="c-form-control w100p" style="height: 80px" rows="5" name="goodsGroupCode" placeholder="入力してください"
+                                          th:field="*{goodsGroupCode}" th:errorclass="error"></textarea>
+                                                            </dd>
+                                                            <div class="c-annotation mt5">※複数入力可能（改行で区切る）
+                                                            </div>
+                                                            <div th:if="${#fields.hasErrors('goodsGroupCode')}"
+                                                                 th:errors="*{goodsGroupCode}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="edit">
+                                                        <dt>カテゴリーID</dt>
+                                                        <div class="wrap_flex_y flex_grow">
+                                                            <dd>
+                                <textarea class="c-form-control w100p" style="height: 80px" rows="5" name="categoryId" placeholder="入力してください"
+                                          th:field="*{categoryId}" th:errorclass="error"></textarea>
+                                                            </dd>
+                                                            <div class="c-annotation mt5">※複数入力可能（改行で区切る）
+                                                            </div>
+                                                            <div th:if="${#fields.hasErrors('categoryId')}"
+                                                                 th:errors="*{categoryId}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="edit">
+                                                        <dt>商品名</dt>
+                                                        <div class="wrap_flex_y flex_grow">
+                                                            <dd>
+                                <textarea class="c-form-control w100p" style="height: 80px" rows="5" name="goodsName" placeholder="入力してください"
+                                          th:field="*{goodsName}" th:errorclass="error"></textarea>
+                                                            </dd>
+                                                            <div class="c-annotation mt5">※複数入力可能（改行で区切る）
+                                                            </div>
+                                                            <div th:if="${#fields.hasErrors('goodsName')}"
+                                                                 th:errors="*{goodsName}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="c-dl-base w40p mr70">
+                                                    <div class="edit">
+                                                        <dt>商品番号</dt>
+                                                        <div class="wrap_flex_y flex_grow">
+                                                            <dd>
+                                  <textarea class="c-form-control w100p"  style="height: 80px" rows="5" name="goodsCode" placeholder="入力してください"
+                                            th:field="*{goodsCode}" th:errorclass="error"></textarea>
+                                                            </dd>
+                                                            <div class="c-annotation mt5">※複数入力可能（改行で区切る）
+                                                            </div>
+                                                            <div th:if="${#fields.hasErrors('goodsCode')}"
+                                                                 th:errors="*{goodsCode}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="edit" style="height: 103px">
+                                                        <dt>アイコン</dt>
+                                                        <div style="height: 100%; width:100%; overflow-x: auto" >
+                                                            <dd>
+                                                                <table>
+                                                                   <tbody>
+                                                                       <th:block th:each="iconItem,count : *{iconItems}">
+                                                                           <tr>
+                                                                               <label class="c-form-control mr10">
+                                                                                   <input th:field="*{iconChecked}" th:name="${'iconItems['+count.index+ '].iconCheck'}" th:id="${'a'+count.count}"  type="checkbox"
+                                                                                          th:checked="${iconItem.iconSeq} == *{iconChecked}"
+                                                                                          th:value="${iconItem.iconSeq}"><i class="mr5"></i>
+                                                                                   <span th:text="${iconItem.iconName}"></span>
+                                                                               </label>
+                                                                           </tr>
+                                                                       </th:block>
+                                                                   </tbody>
+                                                                </table>
+                                                            </dd>
+                                                        </div>
+                                                    </div>
+                                                    <div class="edit">
+                                                        <dt>検索キーワード</dt>
+                                                        <div class="wrap_flex_y flex_grow">
+                                                            <dd>
+                                <textarea class="c-form-control w100p" style="height: 80px" rows="5" name="searchkeyword" placeholder="入力してください"
+                                          th:field="*{searchkeyword}" th:errorclass="error"></textarea>
+                                                            </dd>
+                                                            <div class="c-annotation mt5">※複数入力可能（改行で区切る）
+                                                            </div>
+                                                            <div th:if="${#fields.hasErrors('searchkeyword')}"
+                                                                 th:errors="*{searchkeyword}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </dl>
+                                        <ul class="c-list-righ mt50">
+                                            <li>
+                                                <button class="c-btn btn_back" type="submit" id="doCheckGoods" name="doCheckGoods">商品数確認</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 受注情報条件 -->
+                            <article id="order_conditions" class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">受注情報条件</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap product_description">
+                                        <dl class="c-dl-base dt_w160px">
+                                            <div class="edit">
+                                                <dt>商品金額合計</dt>
+                                                <dd>
+                                                    <div class="c-input-label">
+                                                        <input type="text" class="c-form-control w150px price"
+                                                               th:field="*{goodsPriceTotal}" placeholder="5000"
+                                                               maxlength="8" th:errorclass="error">
+                                                        <label>円以上</label>
+
+                                                        <label class="ml20 mr10 c-form-control">
+                                                            <input  type="checkbox"
+                                                                   th:field="*{goodsPriceTotalFlag}"
+                                                                   th:checked="*{goodsPriceTotalFlag eq '0'}"
+                                                                   value="0"><i></i>
+                                                            <span>対象商品のみ</span>
+                                                        </label>
+                                                        <div class="c-annotation ml20">
+                                                            ※商品情報条件に該当する商品のみの金額を合計し、判定します
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('prizeGoodsLimit')}"
+                                                         th:errors="*{prizeGoodsLimit}" class="c-error-txt mt5"></div>
+                                                    <div th:if="${#fields.hasErrors('goodsPriceTotalFlag')}"
+                                                         th:errors="*{goodsPriceTotalFlag}"
+                                                         class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 管理メモ -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">管理メモ</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <textarea class="c-form-control w100p" rows="6" th:field="*{memo}" th:errorclass="error"></textarea>
+                                        <div th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}" class="c-error-txt mt5"></div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side w360px">
+                            <!-- 除外条件 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">除外条件</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div class="c-list-20"
+                                             id="exclusionsForRegist_registupdate"></div>
+                                    </div>
+                                </div>
+                            </article>
+                            <!-- 追尾ボタン -->
+                            <div class="l-pagebtn-nav">
+                                <div class="l-pagebtn-nav_inner">
+                                    <div class="c-back">
+                                        <th:block th:if="*{isUpdateMode}">
+                                            <a class="c-btn btn_back icon_left" th:href="@{/novelty/(md=list)}"><i
+                                                    class="material-icons navigate_before"></i>戻る</a>
+                                        </th:block>
+                                        <th:block th:if="*{!isUpdateMode}">
+                                            <a class="c-btn btn_back icon_left"
+                                               th:href="@{/novelty/}"><i
+                                                    class="material-icons navigate_before"></i>戻る</a>
+                                        </th:block>
+                                    </div>
+                                    <div class="col_left">
+                                        <input type="hidden" id="isConfirmBtnClicked" value="false"/>
+                                        <button th:if="*{isUpdateMode}" class="c-btn btn_regular" type="submit" name="doOnceRegist" id="doOnceRegist">更新</button>
+                                        <button th:if="*{!isUpdateMode}" class="c-btn btn_regular" type="submit" name="doOnceRegist" id="doOnceRegist">登録</button>
+                                    </div>
+                                </div>
+                            </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

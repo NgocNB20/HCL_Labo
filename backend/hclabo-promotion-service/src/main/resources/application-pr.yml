@@ -1,0 +1,194 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+### Spring Web/MVC用プロパティファイル
+server:
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # --------------------
+  # サーバポート
+  # --------------------
+  port: ${SERVER_PORT:8780}
+  # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+  # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+  servlet:
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/promotion-service}
+    # セッションタイムアウト（分）
+    # PCIDSS準拠対象外の場合は15分でなくてもOK
+    session:
+      timeout: 15m
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  # spring.mvc.async.request-timeout=3m
+  mvc:
+    async:
+      request-timeout: -1
+  # 新デザイン組み込を実施する際にThymeleaf上のcheckboxが上手くレンダリングできない事象を解決するための設定
+  thymeleaf:
+    cache: false
+    render-hidden-markers-before-checkboxes: true
+  ### Spring JDBC用プロパティファイル
+  # Connect To PostgreSQL Setting
+  # ------------------------------
+  # DB接続基本設定
+  # ------------------------------
+  datasource:
+    hikari:
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # 新しいconnectionが生成され、Poolに追加される前に実行されるSQL query
+      connection-init-sql: SELECT 1
+      # コネクションタイムアウト（ミリ秒）
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      # ------------------------------
+      # コネクションタイム設定
+      # ------------------------------
+      # アイドルタイムアウト（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # コネクション 最大ライフタイム（ミリ秒）
+      # connection Poolによって確保されたconnectionの最大Life Time
+      max-lifetime: 1800000
+      # Connection Pool Setting（hikariCP）
+      # ------------------------------
+      # コネクション数設定
+      # ------------------------------
+      # connection Poolで使用する最大のconnection数
+      maximum-pool-size: 30
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+      # 読み取り専用モードでオープンするか否か（true=する／false=しない）
+      read-only: false
+    ### Spring JDBC用プロパティファイル
+    # Connect To PostgreSQL Setting
+    # ------------------------------
+    # DB接続基本設定
+    # ------------------------------
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_promotion}
+    username: ${POSTGRESQL_USER:hclabo_promotion}
+    password: ${POSTGRESQL_PASS:password}
+  rabbitmq:
+    # ------------------------------
+    # Rabbit Message Queue configuration
+    # ------------------------------
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  # ログにユニークIDのコンフィグレーション
+  sleuth:
+    async:
+      enabled: false
+    enabled: true
+    sampler:
+      probability: 1.0
+      rate: 10
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: false
+    base-url:
+    sender:
+      type: web
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  dialect: postgres
+  fetch-size: 100
+  sql-file-repository: NO_CACHE
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 物流サービス
+base-path-logistic-service: ${BASE_PATH_LOGISTIC_SERVICE}
+# 商品サービス
+base-path-product-service: ${BASE_PATH_PRODUCT_SERVICE}
+# ユーザーサービス
+base-path-user-service: ${BASE_PATH_USER_SERVICE}
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: ${BASE_PATH_CUSTOMIZE_SERVICE}
+queue:
+  # クリアバッチ
+  clear:
+    direct: promotion-clear-direct
+    routing: promotion-clear-routing
+  # お気に入り
+  wishlistdelete:
+    direct: promotion-wishlist-delete-direct
+    routing: promotion-wishlist-delete-routing
+#
+# Log用プロパティファイル
+#
+logging:
+  config: classpath:config/hitmall/log/logback-pr.xml
+## お気に入り登録商品最大数 PC/MB兼用
+wishlist:
+  goods:
+    max: 20
+## カート投入可能商品件数
+max:
+  cart:
+    goods:
+      count: 3
+# 商品画像アップロード先絶対パス
+# デザイン画像アップロード先絶対パス
+goodsimage:
+  d_images:
+    directory: /app/public_html/d_images
+  input:
+    directory: /app/common/g_images_input
+## 商品画像相対パス(HTML・JSONで表示する場合に利用)
+images:
+  path:
+    goods: /g_images
+    goods.resize:
+      # パターン②の高解像度：商品詳細の大画像（2倍）
+      p2x2: /resize/p2x2
+      # パターン①の高解像度：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像（2倍）
+      p1x2: /resize/p1x2
+      # パターン①：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像
+      p1: /resize/p1
+      # パターン②：商品詳細の大画像
+      p2: resize/p2
+##############
+period-time-clear-batch: 70
+# メール件名ショップ名
+subject:
+  shop:
+    name: 【みんなの郵送検査室】
+########### HIT-MALL独自設定 ###########
+###########カスタマイズ設定 ###########
+# 同一注文内総商品点数
+customize:
+  max:
+    order:
+      goods:
+        count: 6
+###########カスタマイズ設定 ###########

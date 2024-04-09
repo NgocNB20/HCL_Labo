@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.12</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>jp.co.itechh.quad.admin</groupId>
+	<artifactId>hclabo-admin</artifactId>
+	<version>${app-version}</version>
+	<name>hclabo-admin</name>
+	<description>hclabo admin package</description>
+
+	<properties>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.testSourceEncoding>UTF-8</project.build.testSourceEncoding>
+	</properties>
+	<dependencies>
+		<!-- 自動生成されたClient用jar -->
+		<!-- API用 -->
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-administrator-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-authorization-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-novelty-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-stock-display-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-zipcode-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-zipcode-update-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-officezipcode-update-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-novelty-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-linkpay-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.analytics-service</groupId>
+			<artifactId>hclabo-analytics-batch-management-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.analytics-service</groupId>
+			<artifactId>hclabo-analytics-access-keywords-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>jp.co.itechh.quad.analytics-service</groupId>
+            <artifactId>hclabo-analytics-reports-service-client</artifactId>
+            <version>${openapi-version}</version>
+        </dependency>
+
+
+        <dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-tax-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-method-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-convenience-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-bill-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-method-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-multiple-category-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.shop-management-service</groupId>
+			<artifactId>hclabo-shop-management-shop-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-inquiry-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-inquiry-group-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-customer-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-mailmagazine-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.promotion-service</groupId>
+			<artifactId>hclabo-promotion-freearea-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-product-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-relation-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-category-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-icon-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-menu-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-inventory-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-special-charge-area-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-impossible-area-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-addressbook-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.shop-management-service</groupId>
+			<artifactId>hclabo-shop-management-news-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-authentication-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-regist-asynchronous-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-holiday-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-receiver-impossible-date-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.price-planning-service</groupId>
+			<artifactId>hclabo-price-planning-coupon-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.user-service</groupId>
+			<artifactId>hclabo-user-notification-sub-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.product-service</groupId>
+			<artifactId>hclabo-product-tag-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<!-- ここから受注用 API-->
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.order-service</groupId>
+			<artifactId>hclabo-order-transaction-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.order-service</groupId>
+			<artifactId>hclabo-order-orderreceived-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.order-service</groupId>
+			<artifactId>hclabo-order-novelty-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.logistic-service</groupId>
+			<artifactId>hclabo-logistic-shippingslip-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-billingslip-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.price-planning-service</groupId>
+			<artifactId>hclabo-price-planning-salesslip-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.promotion-service</groupId>
+			<artifactId>hclabo-promotion-orderslip-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.payment-service</groupId>
+			<artifactId>hclabo-payment-mulpay-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jp.co.itechh.quad.analytics-service</groupId>
+			<artifactId>hclabo-analytics-order-search-service-client</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>jp.co.itechh.quad.hclabo-customize-service</groupId>
+            <artifactId>hclabo-customize-examination-service-client</artifactId>
+            <version>${openapi-version}</version>
+        </dependency>
+
+		<!-- ここまで受注用 API-->
+
+		<!-- END API-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version><!--$NO-MVN-MAN-VER$ -->
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+
+		<!-- HotDeploy用 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-sleuth-zipkin -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+			<version>3.1.6</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version><!--$NO-MVN-MAN-VER$-->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<!-- フォントファイルのフィルタリングを除外 -->
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>eot</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<!-- 実行可能なJarファイルをビルドするために -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<excludes>
+						<exclude>application*.yml</exclude>
+						<exclude>static/**</exclude>
+						<exclude>templates/**</exclude>
+					</excludes>
+					<archive>
+						<manifest>
+							<mainClass>jp.co.itechh.quad.admin.AdminApplication</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>./resources/</Class-Path>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>lo</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>application-it.yml</exclude>
+							<exclude>application-pr.yml</exclude>
+							<exclude>application-st.yml</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+			<properties>
+				<active.profile>lo</active.profile>
+				<app-version>4.0.0-SNAPSHOT</app-version>
+				<openapi-version>4.0.0-SNAPSHOT</openapi-version>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>it</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>application-lo.yml</exclude>
+							<exclude>application-pr.yml</exclude>
+							<exclude>application-st.yml</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+			<properties>
+				<active.profile>it</active.profile>
+				<app-version>4.0.0-SNAPSHOT</app-version>
+				<openapi-version>4.0.0-SNAPSHOT</openapi-version>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>st</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>application-it.yml</exclude>
+							<exclude>application-lo.yml</exclude>
+							<exclude>application-pr.yml</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+			<properties>
+				<active.profile>st</active.profile>
+				<app-version>4.0.0-SNAPSHOT</app-version>
+				<openapi-version>4.0.0-SNAPSHOT</openapi-version>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>pr</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>application-it.yml</exclude>
+							<exclude>application-lo.yml</exclude>
+							<exclude>application-st.yml</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+			<properties>
+				<active.profile>pr</active.profile>
+				<app-version>4.0.0-SNAPSHOT</app-version>
+				<openapi-version>4.0.0-SNAPSHOT</openapi-version>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

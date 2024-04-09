@@ -1,0 +1,8 @@
+SELECT
+    *
+FROM
+    ORDERSLIP
+WHERE
+        ORDERSTATUS = /*orderStatus*/'DRAFT'
+ORDER BY
+        REGISTDATE ASC

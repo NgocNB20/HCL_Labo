@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.l-breadcrumbs {
+  @include font-style(13, 18);
+  background: $color-orange-lightGray;
+
+  &__inner {
+    @include width(100%, 40px, vwset(20));
+    margin-block: 0 60px;
+    padding-block: 11px;
+    position: relative;
+  }
+
+  &__list {
+    color: $color-70;
+  }
+
+  &__item {
+    display: inline;
+  }
+
+  &__link:after {
+    content: ">";
+    margin-inline: 8px;
+    color: $color-bbb;
+    @include font-style(15, 18);
+  }
+
+  &__current {
+    color: $color-bbb;
+  }
+
+  @include media(sm) {
+    @include font-sp-style(10, 15);
+
+    &__inner {
+      margin-block: 0 vwset(30);
+    }
+
+    &__link:after {
+      @include font-style(12, 15);
+    }
+  }
+}

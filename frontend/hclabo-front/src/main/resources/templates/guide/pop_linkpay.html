@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+  <meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="c-pop p-guide">
+  <div class="c-pop__inner">
+    <div class="p-guide__unit">
+      <!-- guide/payment.html ＆ pop_linkpay.html 共通エリア -->
+      <hm:freearea key="linkpay"/>
+      <!-- //  guide/payment.html ＆ pop_linkpay.html 共通エリア -->
+    </div>
+    <div class="c-pop__close js-pop-close">
+      <div class="c-button c-button--close">
+        <p>CLOSE</p>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/assets/js/common-front.js}" defer="defer"></script>
+  <script th:src="@{/assets/js/main_custum.js}" defer="defer"></script>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

@@ -1,0 +1,111 @@
+<!--/* スマホ用サイドメニュー部品定義 ※呼び出し元は共通ヘッダーに記載済み */-->
+<th:block th:fragment="category(viewLevel)"> 
+	<head>
+		<script type="text/javascript" th:src="@{/common/js/sideMenuCategory_sp.js}"></script>
+	</head>
+	<nav id="nav-slide-sp" class="l-nav-slide l-sm">
+	<div class="l-hamburger__container l-sm">
+
+        <div class="l-hamburger__button">
+            <div class="l-header__links">
+                <a th:href="@{/member/history/}">
+                    <svg viewBox="0 0 20.6 28.2" width="20">
+                        <use xlink:href="/assets/images/icon/result.svg#result"></use>
+                    </svg>
+                    <p>検査結果を見る</p>
+                </a>
+            </div>
+        </div>
+        <div class="l-hamburger__unit-gray">
+            <div class="l-header__search">
+                <form method="GET" th:action="@{/search/}">
+                    <input type="hidden" name="fromView" value="header" />
+                    <input type="text" name="keyword" maxlength="100" placeholder="">
+                    <button name="doSearch" type="submit">
+                        <svg viewBox="0 0 23 23" width="23">
+                            <use xlink:href="/assets/images/icon/search.svg#search"></use>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="l-hamburger__unit">
+            <div class="l-category-wrap">
+                <input type="hidden" id="viewLevelSp" th:value="${viewLevel}" /> <!--/* sideMenuCategory.jsで使用 */-->
+                <ul class="l-category-sm">
+                    <li class="l-category-sm__level1" data-hierarchy="1">
+                        <div class="l-category-sm__button">
+                            <span class="l-category-sm__button-accordion js-accordion-button">
+                                <p class="c-textlink">
+                                    <svg viewBox="0 0 23 23" width="19">
+                                        <use xlink:href="/assets/images/icon/search.svg#search"></use>
+                                    </svg>
+                                    <span>症状から探す</span>
+                                </p>
+                            </span>
+                        </div>
+                        <div class="l-category-sm__block js-accordion-block">
+                            <ul class="l-category-sm__level2wrap">
+                                <li class="l-category-sm__level2" data-hierarchy="2">
+                                    <div class="l-category-sm__button">
+                                        <div class="l-category-sm__button-anchor">
+                                            <a th:href="@{/special?fkey=symptoms_men&amp;menu=no}">
+                                                <p class="c-textlink">男性の症状</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="l-category-sm__level2" data-hierarchy="2">
+                                    <div class="l-category-sm__button">
+                                        <div class="l-category-sm__button-anchor">
+                                            <a th:href="@{/special?fkey=symptoms_women&amp;menu=no}">
+                                                <p class="c-textlink">女性の症状</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <div class="l-nav-slide__body" id="sidemenuPageItemsSp-1_hideTarget">
+                        <div id="sidemenuPageItemsSp-1"> <!--/* sideMenuCategory.jsでここにHTMLが生成される */-->
+                    </div>
+                    </div>
+                    <li class="l-category-sm__level1">
+                        <div class="l-category-sm__button">
+                            <!-- TODO: リンク先未定 #40 -->
+                            <a href="/guide/shop" class="l-category-sm__button-anchor">
+                                <p class="c-textlink">
+                                    <svg viewBox="0 0 23.9 23.3" width="24">
+                                        <use xlink:href="/assets/images/icon/shop-logo.svg#shop-logo"></use>
+                                    </svg>
+                                    <span>初めての方へ</span>
+                                </p>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="l-category-sm__level1">
+                        <div class="l-category-sm__button">
+                            <!-- TODO: リンク先未定 #40 -->
+                            <a href="/guide/faq" class="l-category-sm__button-anchor">
+                                <p class="c-textlink">
+                                    <svg viewBox="0 0 23.6 24" width="24">
+                                        <use xlink:href="/assets/images/icon/faq.svg#faq"></use>
+                                    </svg>
+                                    <span>よくある質問</span>
+                                </p>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+		<hm:freearea key="lnavslide__banner"/>
+        <div class="l-hamburger__closebutton">
+            <div class="l-hamburger__close2 c-button c-button--close">
+                <p>CLOSE</p>
+            </div>
+        </div>
+    </div>
+    </nav>
+</th:block>

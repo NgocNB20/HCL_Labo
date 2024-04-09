@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+	<title>GMO決済キャンセル漏れアラート</title>
+</head>
+<body>
+<div>
+	<div>
+		<span th:text="${systemName} + ' でGMO決済キャンセル漏れ受注を検知しました。'"></span>
+	</div>
+	<br>
+	<div>
+		<span>以下の受注をご確認いただき、</span>
+	</div>
+	<div>
+		<span>GMOショップ管理サイトよりキャンセル処理（返金処理）を行ってください。</span>
+	</div>
+	<br>
+	<div>
+		<span>【受注】</span>
+	</div>
+	<div th:each="targetOrder, stat : ${targetOrderList}">
+		<span th:text="' 受注番号：' + ${targetOrder.orderCode} + '    GMO決済キャンセル期限：' + ${#dates.format(targetOrder.cancelLimit, 'yyyy/MM/dd')}"></span>
+	</div>
+	<br>
+	<div>
+		<span>以上</span>
+	</div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

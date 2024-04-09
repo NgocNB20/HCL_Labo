@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "1c355ae0-59ee-4b62-8fa8-69d1981987bc",
+		"name": "hclabo-user-mail-certification-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "メールアドレス変更対象会員情報取得(getCustomerInfoUpdateMail)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/mailaddresses/change/8487ded962cbf4f2710c80b327158dc3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"mailaddresses",
+						"change",
+						"8487ded962cbf4f2710c80b327158dc3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "メールアドレス変更対象会員情報取得(getCustomerInfoUpdateMail)- GET CONFIRM MAIL ERROR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/mailaddresses/change/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"mailaddresses",
+						"change",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワード再設定対象会員情報取得(getCustomerInfoResetPassword)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/password-reset/c3c29936891d3fed8f4bccea1c832b40",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"password-reset",
+						"c3c29936891d3fed8f4bccea1c832b40"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワード再設定対象会員情報取得(getCustomerInfoResetPassword)- MSGCD_CONFIRMMAILENTITYDTO_NULL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/password-reset/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"password-reset",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "確認メール情報取得(getConfirmMail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/confirms/c3c29936891d3fed8f4bccea1c832b40",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"confirms",
+						"c3c29936891d3fed8f4bccea1c832b40"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワードリセットメール送信(sendMailPasswordReset)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"sendMailPasswordReset OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\" : \"hang.hoangthu@vti.com.vn\",\r\n    \"dateOfBirth\":\"2000-11-12\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/password-reset-mails/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"password-reset-mails",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワードリセットメール送信(sendMailPasswordReset)- MSGCD_MEMBERINFOENTITYDTO_NULL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"sendMailPasswordReset MSGCD_MEMBERINFOENTITYDTO_NULL\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\" : \"tuan.truongngoc@vti.com.vn\",\r\n    \"dateOfBirth\":\"2000-11-12\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/password-reset-mails/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"password-reset-mails",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワードリセットメール送信(sendMailPasswordReset)- MSGCD_MEMBERINFOBIRTHDAY_FAIL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"sendMailPasswordReset MSGCD_MEMBERINFOBIRTHDAY_FAIL\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\" : \"hang.hoangthu@vti.com.vn\",\r\n    \"dateOfBirth\":\"2000-11-11\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/mail-certifications/password-reset-mails/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"mail-certifications",
+						"password-reset-mails",
+						"send"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

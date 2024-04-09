@@ -1,0 +1,181 @@
+########### 変更指標 ###########
+#
+# システム設定
+#
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  tomcat:
+    remoteip:
+      # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+      # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # サーバポート
+  port: ${SERVER_PORT:8380}
+  servlet:
+    session:
+      # web.xml
+      #
+      # セッションタイムアウト（分）
+      # PCIDSS準拠対象外の場合は15分でなくてもOK
+      timeout: 15m
+    # --------------------
+    # サーバコンテキストパス
+    # --------------------
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/order-service}
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  # spring.mvc.async.request-timeout=3m
+  mvc:
+    async:
+      request-timeout: '-1'
+  ### Thymeleaf用プロパティファイル
+  # テンプレートキャッシュは行わない（html修正が即画面反映される）
+  thymeleaf:
+    cache: false
+    render-hidden-markers-before-checkboxes: true
+  datasource:
+    hikari:
+      # 読み取り専用モードでオープンするか否か（true=する／false=しない）
+      read-only: false
+      # アイドルタイムアウト（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # 新しいconnectionが生成され、Poolに追加される前に実行されるSQL query
+      connection-init-sql: SELECT 1
+      maximum-pool-size: 25
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # コネクションタイムアウト（ミリ秒）
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      # connection Poolで使用する最大のconnection数
+      max-lifetime: 1800000
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+    # 接続情報
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_order}
+    username: ${POSTGRESQL_USER:hclabo_order}
+    password: ${POSTGRESQL_PASS:password}
+  # Rabbit MQ config
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  sleuth:
+    sampler:
+      rate: 10
+      probability: 1.0
+    enabled: true
+    async:
+      enabled: false
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: false
+    sender:
+      type: web
+    base-url:
+  # ファイル（CSV・ZIP等）アップロード時の制御
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  sql-file-repository: NO_CACHE
+  fetch-size: 100
+  dialect: postgres
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+# 各サービスのベースパス定義
+#
+# 分析サービス
+base-path-analytics-service: ${BASE_PATH_ANALYTICS_SERVICE}
+# 物流サービス
+base-path-logistic-service: ${BASE_PATH_LOGISTIC_SERVICE}
+# 受注サービス
+base-path-order-service: ${BASE_PATH_ORDER_SERVICE}
+# 決済サービス
+base-path-payment-service: ${BASE_PATH_PAYMENT_SERVICE}
+# 販売企画サービス
+base-path-price-planning-service: ${BASE_PATH_PRICE_PLANNING_SERVICE}
+# プロモーションサービス
+base-path-promotion-service: ${BASE_PATH_PROMOTION_SERVICE}
+# ユーザーサービス
+base-path-user-service: ${BASE_PATH_USER_SERVICE}
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: ${BASE_PATH_CUSTOMIZE_SERVICE}
+queue:
+  # ノベルティバッチ
+  novelty:
+    routing: order-novelty-routing
+    direct: order-novelty-direct
+  # 支払期限切れバッチ
+  expiredpayment:
+    routing: order-expiredpayment-routing
+    direct: order-expiredpayment-direct
+  # クリアバッチ
+  clear:
+    direct: order-clear-direct
+    routing: order-clear-routing
+  # 支払督促バッチ
+  reminderpayment:
+    routing: order-reminderpayment-routing
+    direct: order-reminderpayment-direct
+  # 出荷登録バッチ
+  shipmentregist:
+    routing: order-shipmentregist-routing
+    direct: order-shipmentregist-direct
+  # 決済代行入金結果受取予備処理バッチ
+  mulpaynotificationrecovery:
+    routing: order-mulpaynotificationrecovery-routing
+    direct: order-mulpaynotificationrecovery-direct
+  # 受注を入金済みにするバッチ
+  reflectdeposited:
+    direct: order-reflectdeposited-direct
+    routing: order-reflectdeposited-routing
+# Log用プロパティファイル
+logging:
+  config: classpath:config/hitmall/log/logback-it.xml
+# システム名称
+system:
+  name: みんなの郵送検査室
+#
+# アラートメールの設定
+#  ・マルチペイメントエラー報告
+#  ・注文処理エラー報告
+#  ・請求不整合報告
+alert:
+  mail:
+    # メールに記載するシステム名
+    system: みんなの郵送検査室 結合環境
+# 受注番号生成ハッシュ化ソルト
+# 受注番号生成ハッシュ化文字
+order:
+  code:
+    salt: HIT-MALL-SALT
+    char: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+##############
+period-time-cancel-unopen-batch: '70'
+########### HIT-MALL独自設定 ###########

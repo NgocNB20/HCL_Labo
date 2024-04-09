@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+// コーディング規約
+// 1. ファイル名に接頭辞が付いている場合、classNameにも接頭辞を付与します。
+// 2. ファイル名に接頭辞が付いていない場合、原則個別要素に影響しない内容を記述します。
+
+// plugins
+@use "Lib/_destyle";
+
+// Foundation
+@use "Foundation/variables";
+@use "Foundation/base";
+
+// Layouts
+@use "Layouts/l-base";
+@use "Layouts/l-footer";
+@use "Layouts/l-header";
+@use "Layouts/l-hamburger";
+@use "Layouts/l-category";
+@use "Layouts/l-category-sm";
+@use "Layouts/l-breadcrumbs";
+@use "Layouts/l-side";
+@use "Layouts/l-form";
+@use "Layouts/l-complete";
+// @use "Layouts/l-headermenu";   // case add category
+
+// Components
+@use "Components/c-form";
+@use "Components/c-button";
+@use "Components/c-textlink";
+@use "Components/c-baloon";
+@use "Components/c-pagination";
+@use "Components/c-error";
+@use "Components/c-title";
+@use "Components/c-product";
+@use "Components/c-modal";
+@use "Components/c-goodsviewer";
+@use "Components/c-search";
+@use "Components/c-exam";
+@use "Components/c-scroll";
+@use "Components/c-nodata";
+@use "Components/c-text";
+@use "Components/c-margin";
+@use "Components/c-button-wrap";
+@use "Components/c-label-status";
+@use "Components/c-history-list";
+@use "Components/c-history-info";
+@use "Components/c-history-chat";
+@use "Components/c-customer-input";
+@use "Components/c-terms";
+@use "Components/c-pop";
+// @use "Components/_c-sortbox";          // case goodslist sort
+// @use "Components/_c-count-quantity";   // case count ＋－
+
+
+// Projects
+@use "Projects/top";
+@use "Projects/product-list";
+@use "Projects/search";
+@use "Projects/product-detail";
+@use "Projects/cart";
+@use "Projects/login-user";
+@use "Projects/regist";
+@use "Projects/news";
+@use "Projects/special";
+@use "Projects/error";
+@use "Projects/mypage";
+@use "Projects/order";
+@use "Projects/order-select-address";
+@use "Projects/order-confirm";
+@use "Projects/order-complete";
+@use "Projects/guide";
+
+// Utilities
+// @use "Utilities/margin";
+// @use "Utilities/plugin";
+
+
+// other
+@use "other/freearea";
+
+

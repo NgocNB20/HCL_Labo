@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>店舗情報修正｜システム管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchShopInfo" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/shopinfo/}" th:object="${shopInfoModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">店舗情報修正</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- 店舗設定 -->
+                    <div class="l-section" id="mainContainer">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">店舗設定</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit">
+                                            <dt>店舗名<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                            	<input th:field="*{shopNamePC}" maxlength="80" th:errorclass="error" placeholder="入力してください" type="text" class="c-form-control w560px">
+                                            	<div th:if="${#fields.hasErrors('shopNamePC')}" th:errors="*{shopNamePC}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- メタ情報 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">メタ情報</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <p class="mb25">改行文字はFrontサイト出力時に削除されます。</p>
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit">
+                                            <dt>メタ説明文</dt>
+                                            <dd>
+                                            	<input th:field="*{metaDescription}" th:errorclass="error" maxlength="400" type="text" class="c-form-control w100p" placeholder="入力してください">
+                                            	<div th:if="${#fields.hasErrors('metaDescription')}" th:errors="*{metaDescription}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>メタキーワード</dt>
+                                            <dd>
+                                                <input th:field="*{metaKeyword}" th:errorclass="error" maxlength="400" type="text" class="c-form-control w100p" placeholder="入力してください">
+                                                <div th:if="${#fields.hasErrors('metaKeyword')}" th:errors="*{metaKeyword}" class="c-error-txt mt5"></div>
+                                                <div class="c-annotation mt5">※複数入力の場合は半角カンマで区切ってください。</div>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button name="doCancel" type="submit" class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <input type="hidden" id="isOnceUpdateBtnClicked" value="false"/>
+                                <button class="c-btn btn_regular" type="submit" id="doOnceUpdate" name="doOnceUpdate">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>権限グループ一覧｜システム設定</title>
+</head>
+
+<body id="system">
+<div id="searchAuth" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/administrator/auth/}" th:object="${administratorAuthModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">権限グループ一覧</h1>
+                        <th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+                        <ul>
+                            <li>
+                               <a th:href="@{/administrator/authregister(md=new)}" class="c-btn btn_move w190px">権限グループ登録</a>
+                            </li>
+                        </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <div class="l-section">
+                        <!-- 設定権限 -->
+                        <article class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <table id="search_result" class="c-tbl large60">
+                                        <thead>
+                                            <tr>
+                                                <th class="number">#</th>
+                                                <th>権限グループ名称</th>
+                                                <th:block  th:each="item: *{labelItems}">
+                                                    <th th:if="${item != null}">
+                                                        <span th:text="${item}" ></span>
+                                                    </th>
+                                                </th:block>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item, stat: *{authItemsItems}">
+                                                <th:block th:each="itemsub, statsub: ${item}">
+                                                   <th:block th:if="${statsub.index == 0}">
+                                                       <td class="number">
+                                                           <a th:href="@{/administrator/auth/detail(seq=*{adminSeqList[__${stat.index}__]})}">
+                                                               <span th:text="${itemsub}"></span>
+                                                           </a>
+                                                       </td>
+                                                   </th:block>
+                                                   <th:block th:if="${statsub.index == 1}">
+                                                       <td>
+                                                           <a th:href="@{/administrator/auth/detail(seq=*{adminSeqList[__${stat.index}__]})}">
+                                                               <span th:text="${itemsub}"></span>
+                                                           </a>
+                                                       </td>
+                                                   </th:block>
+                                                   <th:block th:if="${statsub.index > 1}">
+                                                       <td>
+                                                           <a th:href="@{/administrator/auth/detail(seq=*{adminSeqList[__${stat.index}__]})}">
+                                                               <span th:text="${itemsub}"></span>
+                                                           </a>
+                                                       </td>
+                                                   </th:block>
+                                               </th:block>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

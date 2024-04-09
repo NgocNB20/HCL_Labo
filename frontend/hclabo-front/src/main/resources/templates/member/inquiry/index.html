@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+    <div class="l-mainwrap">
+        <div th:replace="~{include/header}"></div>
+        <!-- main -->
+        <main class="l-page">
+            <div th:replace="~{include/header_mypage::headermypage('inquiry')}"></div>
+
+            <div class="l-container">
+                <div class="l-container__inner">
+                    <div th:replace="~{include/sidemenumember :: sidemenumember('inquiry')}"></div>
+
+                    <div class="l-main" th:object="${memberInquiryModel}">
+                        <h2 class="c-title-page p-mypage__title-page"><strong>お問い合わせ履歴</strong></h2>
+                        <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                            <ul th:each="message : ${allMessages}">
+                                <li th:utext="${message}"></li>
+                            </ul>
+                        </div>
+                        <div class="c-history-list c-margin--m c-margin--inline-m">
+                            <p class="c-text--m">お問い合わせいただいた履歴を表示します。<br>「詳細を見る」を押すとお問い合わせの詳細情報をご確認いただけます。<br>また該当するお問い合わせ情報が見つからない場合は窓口までお問い合わせください。</p>
+
+                            <th:block id="isEmptyMemberInquiryModelItems" th:if="*{isEmptyMemberInquiryModelItems()}">
+                                <div class="l-complete">
+                                    <div class="l-complete__inner">
+                                        <p class="l-complete__title">現在、お問い合わせはございません。</p>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                            <th:block id="isNotEmptyMemberInquiryModelItems" th:if="*{!isEmptyMemberInquiryModelItems()}">
+                                <div id="memberInquiryModelItems" class="c-history-list__area c-margin--m" th:each="item, stat : *{memberInquiryModelItems}">
+                                    <div class="c-history-list__block c-margin--xs">
+                                        <div class="c-history-list__status" th:switch="${item.inquiryStatusValue}">
+                                            <div th:case="0" class="c-label-status c-label-status--secondary"><p class="c-text--s" th:id="'inquiryStatus-'+${stat.index}" th:text="${item.inquiryStatus}"></p></div>
+                                            <div th:case="1" class="c-label-status c-label-status--orange"><p class="c-text--s" th:id="'inquiryStatus-'+${stat.index}" th:text="${item.inquiryStatus}"></p></div>
+                                            <div th:case="2" class="c-label-status c-label-status--black"><p class="c-text--s" th:id="'inquiryStatus-'+${stat.index}" th:text="${item.inquiryStatus}"></p></div>
+                                            <div class="c-history-list__button"><a th:href="@{/member/inquiry/detail(icd=${item.icd})}" id="goMemberInquiryDetail" class="c-button c-button--primary c-button--width-s">詳細を見る</a></div>
+                                        </div>
+                                        <div class="c-history-list__description">
+                                            <dl class="c-history-list__description-list">
+                                                <dt class="desc__title">お問い合わせ日：</dt>
+                                                <dd class="desc__text" th:id="'firstInquiryTime-'+${stat.index}" th:text="${#date.convert(item.firstInquiryTime)} + ' ' + ${#date.convert(item.firstInquiryTime,'HH:mm')}"></dd>
+                                            </dl>
+                                            <dl class="c-history-list__description-list">
+                                                <dt class="desc__title">お問い合わせ番号：</dt>
+                                                <dd class="desc__text" th:id="'inquiryCode-'+${stat.index}" th:text="${item.inquiryCode}"></dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-search__count">
+                                    全 <span class="p-search__count-sum"><th:block th:text="*{pageInfo.total}"></th:block></span> 件
+                                </div>
+                                <span class="c-pagination--page is-current" th:replace="~{include/pager::pager1(url='/member/inquiry/')}"></span>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script src="/assets/js/bundle.js" defer="defer"></script>
+
+
+</body></html>

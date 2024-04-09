@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-special {
+
+  &__contents {
+    @include media(sm) {
+      margin-inline: vwset(20);
+    }
+  }
+
+  &--noheader {
+    min-width: auto;
+  }
+}

@@ -1,0 +1,232 @@
+<div class="l-side">
+	<!-- ヘッダー -->
+	<header class="l-header">
+		<div class="l-header_inner">
+			<div class="l-header_logo">
+				<a a th:href="@{/order/}"><img src="/admin/assets/images/header_logo_md.png" alt=""></a>
+			</div>
+			<div class="c-menu">
+				<div class="js_open icon">
+					<i></i>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- サイドバー -->
+	<div class="l-side-cat">
+		<ul class="l-side-cat_parent">
+			<th:block sec:authorize="hasAnyAuthority('ORDER:4')">
+				<li id="g_order" class="order">
+					<div class="acdon"><i></i>
+						<div><span>受注管理</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<li id="l_searchOrder"><a th:href="@{/order/}" id="goOrderSearchPage-g0">
+								<div><span>受注検索</span></div>
+							</a></li>
+							<li id="l_shipmentupload"><a th:href="@{/order/shipmentUpload/}">
+								<div><span>出荷CSV登録</span></div>
+							</a></li>
+                            <li id="l_examkitreceivedupload"><a th:href="@{/order/examkitReceivedUpload/}">
+                                <div><span>検査キット受領登録</span></div>
+                            </a></li>
+                            <li id="l_examresultsupload"><a th:href="@{/order/examResultsUpload/}">
+                                <div><span>検査結果登録</span></div>
+                            </a></li>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('MEMBER:4')">
+				<li id="g_memberinfo" class="account">
+					<div class="acdon"><i></i>
+						<div><span>会員管理</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<li id="l_searchMember"><a th:href="@{/memberinfo/}">
+								<div><span>会員検索</span></div>
+							</a></li>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('GOODS:4')">
+				<li id="g_goods" class="product">
+					<div class="acdon"><i></i>
+						<div><span>商品管理</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<li id="l_searchGoods"><a th:href="@{/goods/}" id="goGoodsSearchPage">
+								<div><span>商品検索</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<li id="l_registGoods"><a th:href="@{/goods/registupdate(from=menu)}" id="goGoodsRegistPage">
+									<div><span>商品登録</span></div>
+								</a></li>
+							</th:block>
+							<li id="l_searchCategory"><a th:href="@{/goods/category/}" id="goCategoryListPage">
+								<div><span>カテゴリー検索</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<li id="l_registCategory"><a th:href="@{/goods/category/input/}" id="goCategoryInputPage">
+									<div><span>カテゴリー登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<li id="l_uploadGoods"><a th:href="@{/goods/bundledupload/csv/}" id="goGoodsBundledUploadPage">
+									<div><span>商品CSV登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<li id="l_imageUploadGoods"><a th:href="@{/goods/bundledupload/image/}" id="goGoodsImageBundledUploadPage">
+									<div><span>画像登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<li id="l_sideMenuSettings"><a th:href="@{/goods/category/sidemenusettings/}" id="goSideMenuSettingsPage">
+									<div><span>サイドメニュー設定</span></div>
+								</a></li>
+							</th:block>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('SHOP:4')">
+				<li id="g_shop" class="storefront">
+					<div class="acdon"><i></i>
+						<div><span>店舗管理</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<li id="l_newsSearchShop"><a th:href="@{/news/}" id="goNewsSearchPage-g2">
+								<div><span>ニュース検索</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_newsRegistShop"><a th:href="@{/news/registupdate/}" id="goNewsRegistPage-g">
+									<div><span>ニュース登録</span></div>
+								</a></li>
+							</th:block>
+							<li id="l_inquiryShop"><a th:href="@{/inquiry/}" id="goInquirySearchPage-g">
+								<div><span>問い合わせ検索</span></div>
+							</a></li>
+							<li id="l_iconListShop"><a th:href="@{/icon/}" id="goIconSearchPage-g">
+								<div><span>アイコン一覧</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_iconRegistShop"><a th:href="@{/icon/registupdate(md=new)}" id="goIconRegistPage-g">
+									<div><span>アイコン登録</span></div>
+								</a></li>
+							</th:block>
+							<li id="l_freeListShop"><a th:href="@{/freearea/}" id="goFreeAreaSearchPage-g">
+								<div><span>フリーエリア検索</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_freeRegistShop"><a th:href="@{/freearea/registupdate/}" id="goFreeAreaRegistPage-g">
+									<div><span>フリーエリア登録</span></div>
+								</a></li>
+							</th:block>
+							<li id="l_couponSearchShop"><a th:href="@{/coupon/}" id="goCouponSearchPage-g2">
+								<div><span>クーポン検索</span></div>
+							</a></li>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_couponRegistShop"><a th:href="@{/coupon/registupdate(md=new)}" id="goCouponRegistPage-g">
+									<div><span>クーポン登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_noveltySearchShop"><a th:href="@{/novelty/}" id="goNoveltySearchPage">
+									<div><span>ノベルティプレゼント条件検索</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+								<li id="l_noveltyRegistShop"><a th:href="@{/novelty/registupdate/}" id="goNoveltyRegistPage-g">
+									<div><span>ノベルティプレゼント条件登録</span></div>
+								</a></li>
+							</th:block>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('REPORT:4')">
+				<li id="g_totaling" class="report">
+					<div class="acdon"><i></i>
+						<div><span>レポート</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<th:block sec:authorize="hasAnyAuthority('REPORT:4')">
+								<li id="l_ordersales"><a th:href="@{/ordersales/}">
+									<div><span>受注・売上集計</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('REPORT:4')">
+								<li id="l_goodssales"><a th:href="@{/goodssales/}">
+									<div><span>商品販売個数集計</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('REPORT:4')">
+								<li id="l_searchKeywordAccording"><a th:href="@{/searchkeywordaccording/}">
+									<div><span>検索キーワード集計</span></div>
+								</a></li>
+							</th:block>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('SETTING:4','ADMIN:4','BATCH:4')">
+				<li id="g_system" class="settings">
+					<div class="acdon"><i></i>
+						<div><span>システム設定</span></div>
+					</div>
+					<div class="submenu">
+						<ul>
+							<th:block sec:authorize="hasAnyAuthority('SETTING:4')">
+								<li id="l_searchShopInfo"><a th:href="@{/shopinfo/}">
+									<div><span>店舗情報詳細</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('SETTING:4')">
+								<li id="l_searchSettlementMethod"><a th:href="@{/settlement/}">
+									<div><span>決済方法設定</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('SETTING:4')">
+								<li id="l_searchDeliveryMethod"><a th:href="@{/delivery/}">
+									<div><span>配送方法設定</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('ADMIN:4')">
+								<li id="l_searchAdministrator"><a th:href="@{/administrator/}">
+									<div><span>運営者一覧</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+								<li id="l_registAdministrator"><a th:href="@{/administrator/regist/(inputMd=new)}">
+									<div><span>運営者登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('ADMIN:4')">
+								<li id="l_searchAuth"><a th:href="@{/administrator/auth/}">
+									<div><span>権限グループ一覧</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+								<li id="l_registAuth"><a th:href="@{/administrator/authregister(md=new)}">
+									<div><span>権限グループ登録</span></div>
+								</a></li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('BATCH:4')">
+								<li id="l_batchManagement"><a th:href="@{/batchmanagement/}">
+									<div><span>バッチ管理</span></div>
+								</a></li>
+							</th:block>
+						</ul>
+					</div>
+				</li>
+			</th:block>
+		</ul>
+	</div>
+</div>

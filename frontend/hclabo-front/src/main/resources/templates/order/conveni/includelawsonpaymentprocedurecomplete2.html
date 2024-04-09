@@ -1,0 +1,32 @@
+<div class="l-form">
+    <div class="l-form__area">
+        <h3 class="c-title-line">コンビニ決済</h3>
+    	<dl class="l-form__list">
+    		<dt>お客様番号</dt>
+    		<dd >
+    		    <p class="c-text--m" th:text="${confirmModel.receiptNo}"></p>
+            </dd>
+    	</dl>
+    	<dl class="l-form__list">
+    		<dt>確認番号</dt>
+    		<dd >
+    		    <p class="c-text--m" th:text="${confirmModel.confNo}"></p>
+            </dd>
+    	</dl>
+    	<dl class="l-form__list">
+    		<dt>お支払い金額</dt>
+            <dd>
+                <p class="c-text--m" th:text="${#number.convert(confirmModel.billPrice)} + 円"></p>
+            </dd>
+    		<div class="c-confirm-list__detail">
+    			<dd></dd>
+    		</div>
+    	</dl>
+    	<dl class="l-form__list">
+    		<dt>お支払い期限</dt>
+            <dd>
+                <p class="c-text--m" th:text="${confirmModel.paymentTerm}"></p>
+            </dd>
+    	</dl>
+    </div>
+</div>

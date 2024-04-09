@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>カテゴリー登録更新｜商品管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/thickbox.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/thickbox.css}" />
+    <script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function dragDrop(ev) {
+            ev.preventDefault();
+            $("#imageUpload").prop("files", ev.dataTransfer.files).change();
+        }
+
+        function openUploadImage() {
+            $("#imageUpload").click();
+        }
+
+        $(function () {
+            // -------------------------------------------------------------------
+            // 商品画像プレビュー表示の初期化
+            // -------------------------------------------------------------------
+            initImagePreviewer();
+            prepareThickBox();
+
+            // -------------------------------------------------------------------
+            // 新HIT-MALL：画面リロード後の自動スクロール
+            // -------------------------------------------------------------------
+            var targetAutoScrollTagId = document.getElementById('targetAutoScrollTagId').value;
+            if (targetAutoScrollTagId !== '') {
+                var targetAutoScrollElement = document.getElementById(targetAutoScrollTagId);
+                targetAutoScrollElement.scrollIntoView({block: 'center'});
+            }
+        });
+
+        $(function() {
+            // -------------------------------------------------------------------
+            // 商品画像アップロードのinputタグのonchangeイベントをハンドリング
+            $("#imageUpload").change(function () {
+                if (fileSizeCheck('imageUpload') === false) {
+                    document.getElementById("imageUpload").value = null
+                    return false;
+                }
+                // 選択された画像をサーバーにアップロード
+                $("#doUploadImagePC").click();
+            });
+
+            // 更新の場合、親カテゴリーレンダリング
+            const categoryPathName = $("#categoryPathName").val();
+            if (categoryPathName) {
+                const parentCat = categoryPathName.split(' > ');
+                let catBody = '';
+                let catTr = '';
+                for (let i = 0; i < parentCat.length; i++) {
+                    if (i === 0) {
+                        catTr = '<tr><td class="cat_name"><div class="cat_top" style="padding-left: 10px;">' + parentCat[i] + '</div></td></tr>';
+                    } else {
+                        if (i % 2 !== 0) {
+                            catTr = '<tr class="stripe"><td class="cat_name"><div class="cat_end" style="margin-left:' + (i - 1) * 30 + 'px">' + parentCat[i] + '</div></td></tr>';
+                        } else {
+                            catTr = '<tr><td class="cat_name"><div class="cat_end" style="margin-left:' + (i - 1) * 30 + 'px">' + parentCat[i] + '</div></td></tr>';
+                        }
+                    }
+                    catBody = catBody + catTr;
+                }
+                $('#catBody').html(catBody);
+            }
+        })
+    </script>
+    <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+    <script language="JavaScript">
+        $(function () {
+            new CharCount(document.getElementById('freeTextPC'), 'limit');
+        })
+    </script>
+    <!-- 1.1.4.start -->
+    <script th:inline="javascript">
+        const goods = /*[[${categoryInputModel.goodsModelItems}]]*/ [];
+        const goodsSortDisplay = /*[[${categoryInputModel.goodsSortDisplay}]]*/ null;
+        const conditionColumns = /*[[${categoryInputModel.categoryConditionColumnItems}]]*/ [];
+        const conditionOperators = /*[[${categoryInputModel.categoryConditionOperatorItems}]]*/ [];
+        const linkedGoodsModelItems = /*[[${categoryInputModel.goodsModelItems}]]*/ [];
+        const categoryInputModel = /*[[${categoryInputModel}]]*/ {};
+    </script>
+    <script th:src="@{/assets/js/categoryRegistUpdate.js}"></script>
+    <!-- 1.1.4.end -->
+    <script type="text/javascript" th:src="@{/assets/js/previewCategory.js}"></script>
+</head>
+
+<body id="goods">
+<div id="registCategory" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/goods/category/input/}" th:object="${categoryInputModel}" method="post" enctype="multipart/form-data" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <!--画面リロード後の自動スクロールのターゲットポジション-->
+                    <input type="hidden" th:field="*{targetAutoScrollTagId}" />
+                    <input type="hidden" th:field="*{goodsGroupSeqSort}" id="goodsGroupSeqSort" />
+
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">カテゴリー登録更新</h1>
+                        <ul>
+                            <th:blick th:if="*{listScreen AND frontDisplay != null}">
+                            <li class="c-pagetitle_h3">
+                                フロント表示
+                                <span th:if="*{frontDisplay} == '0'" th:text="*{#enumtype.getLabel('HTypeFrontDisplayStatus',frontDisplay)}" class="c-status02 ico_gray"></span>
+                                <span th:if="*{frontDisplay} == '1'" th:text="*{#enumtype.getLabel('HTypeFrontDisplayStatus',frontDisplay)}" class="c-status02 ico_blue"></span>
+                            </li>
+                            </th:blick>
+                        </ul>
+                    </div>
+
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section" id="mainContainer">
+                        <!-- カテゴリー管理情報 -->
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">カテゴリー管理情報</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div th:class="*{!isListScreen} ? 'edit' : ''">
+                                            <dt>カテゴリーID<span class="ico_required" th:if="*{!listScreen}">必須</span></dt>
+                                            <th:block th:if="*{isListScreen}">
+                                                <dd>
+                                                    <span th:text="*{categoryId}"></span>
+                                                </dd>
+                                            </th:block>
+                                            <th:block th:if="*{!isListScreen}">
+                                                <dd>
+                                                    <input type="text" class="c-form-control w320px" placeholder="入力してください"
+                                                           th:field="*{categoryId}" maxlength="20" th:errorclass="error">
+                                                    <div id="categoryIdError" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </th:block>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>カテゴリー名<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <input type="text" class="c-form-control w320px" placeholder="入力してください"
+                                                       th:field="*{categoryName}" maxlength="120" th:errorclass="error">
+                                                <div id="categoryNameError" th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>カテゴリー種別<span class="ico_required" th:if="*{!listScreen}">必須</span></dt>
+                                            <dd>
+                                                <div class="flex_w_wrap">
+                                                    <ul class="wrap_flex_y list_sp20 mr40 mt10">
+                                                        <div>
+                                                            <li>
+                                                                <label th:classappend="*{scCategorySeq != null} ? 'c-form-control disabled-radio': 'c-form-control' ">
+                                                                    <input th:field="*{categoryType}" th:checked="*{categoryType} == '0'" th:disabled="*{scCategorySeq != null}" type="radio" value="0">
+                                                                    <i></i>手動
+                                                                    <div class="c-annotation ml20">※商品をこのカテゴリーに１つずつ追加します。</div>
+                                                                </label>
+                                                            </li>
+                                                        </div>
+                                                        <div class="mt20">
+                                                            <li>
+                                                                <label th:classappend="*{scCategorySeq != null} ? 'c-form-control disabled-radio': 'c-form-control' ">
+                                                                    <input th:field="*{categoryType}" th:checked="*{categoryType} == '1'" th:disabled="*{scCategorySeq != null}" type="radio" value="1">
+                                                                    <i></i>自動
+                                                                    <div class="c-annotation ml20">※既存の商品とこれから追加する商品で、
+                                                                        設定している条件と一致するものは、
+                                                                        自動的にこのカテゴリーに追加されます。</div>
+                                                                </label>
+                                                            </li>
+                                                        </div>
+
+                                                    </ul>
+                                                </div>
+                                            </dd>
+                                            <div class="c-error-txt mt5"></div>
+                                        </div>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- カテゴリー情報 -->
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">カテゴリー情報</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit">
+                                            <dt>公開状態<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <select id="categoryOpenStatusPC" class="c-form-control" name="categoryOpenStatusPC" th:errorclass="error">
+                                                    <option th:each="item : *{categoryOpenStatusPCItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{categoryOpenStatusPC}">
+                                                    </option>
+                                                </select>
+                                                <div id="categoryOpenStatusPCError" th:if="${#fields.hasErrors('categoryOpenStatusPC')}" th:errors="*{categoryOpenStatusPC}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>公開期間</dt>
+                                            <dd>
+                                                <div class="wrap_flex_wrap wrap_flex_center">
+                                                    <label class="c-datepicker">
+                                                        <input type="text" class="c-form-control w150px" placeholder="年/月/日"
+                                                               th:field="*{categoryOpenFromDatePC}" autocomplete="off" maxlength="10" th:errorclass="error">
+                                                    </label>
+                                                    <input type="text" class="c-form-control w100px ml10" placeholder="00:00:00"
+                                                           th:field="*{categoryOpenFromTimePC}" maxlength="8" th:errorclass="error">
+                                                    <span class="ml10 mr10">〜</span>
+                                                    <label class="c-datepicker">
+                                                        <input type="text" class="c-form-control w150px" placeholder="年/月/日"
+                                                               th:field="*{categoryOpenToDatePC}" autocomplete="off" maxlength="10" th:errorclass="error">
+                                                    </label>
+                                                    <input type="text" class="c-form-control w100px ml10" placeholder="00:00:00"
+                                                           th:field="*{categoryOpenToTimePC}" maxlength="8" th:errorclass="error">
+                                                </div>
+                                                <div>
+                                                    <div id="categoryOpenFromDatePCError" th:if="${#fields.hasErrors('categoryOpenFromDatePC')}" th:errors="*{categoryOpenFromDatePC}" class="c-error-txt mt5"></div>
+                                                    <div id="categoryOpenFromTimePCError" th:if="${#fields.hasErrors('categoryOpenFromTimePC')}" th:errors="*{categoryOpenFromTimePC}" class="c-error-txt mt5"></div>
+                                                    <div id="categoryOpenToDatePCError" th:if="${#fields.hasErrors('categoryOpenToDatePC')}" th:errors="*{categoryOpenToDatePC}" class="c-error-txt mt5"></div>
+                                                    <div id="categoryOpenToTimePCError" th:if="${#fields.hasErrors('categoryOpenToTimePC')}" th:errors="*{categoryOpenToTimePC}" class="c-error-txt mt5"></div>
+                                                </div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>メタ説明文</dt>
+                                            <dd>
+                                                <input type="text" class="c-form-control w100p" placeholder="入力してください"
+                                                       th:field="*{metaDescription}" maxlength="400" th:errorclass="error">
+                                                <div id="metaDescriptionError" th:if="${#fields.hasErrors('metaDescription')}" th:errors="*{metaDescription}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>フリーエリア<br>（HTML可）</dt>
+                                            <div id="freeTextPC" class="wrap_flex_y flex_grow">
+                                                <dd>
+                                                    <textarea limit="20000" class="c-form-control w100p" rows="5" name="" placeholder="入力してください"
+                                                              th:field="*{freeTextPC}" th:errorclass="error"></textarea>
+                                                </dd>
+                                                <div id="freeTextPCError" th:if="${#fields.hasErrors('freeTextPC')}" th:errors="*{freeTextPC}" class="c-error-txt mt5"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="edit" id="autoScrollCategoryImages">
+                                            <dt>カテゴリー画像</dt>
+                                            <dd>
+                                                <th:block th:if="*{isExistCategoryImagePathPC}">
+                                                    <div class="cat-container c-img imagePreviewer">
+                                                        <div class="cat-container-sub">
+                                                            <button class="c-btn-icon c-btn-white" type="submit" name="doDeleteImagePC"><i class="material-icons clear"></i></button>
+                                                            <img th:src="*{categoryImagePathPC}" th:alt="*{fileNamePC}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="c-img-txt"><th:block th:text="*{fileNamePC}"></th:block></div>
+                                                </th:block>
+                                                <th:block th:if="*{!isExistCategoryImagePathPC}">
+                                                    <input type="file" id="imageUpload" th:field="*{uploadCategoryImagePC}" accept="image/*" hidden th:errorclass="error"/>
+                                                    <div class="file_drop w100p" ondrop="dragDrop(event)" ondragover="allowDrop(event)">
+                                                        <img src="/admin/assets/images/icon/file_up.svg" alt="">
+                                                        <div class="txt">ここにファイルをドロップ　または</div>
+                                                        <button class="c-btn btn_back" type="button" onclick="openUploadImage();">ファイルを選択</button>
+                                                    </div>
+                                                    <input type="submit" id="doUploadImagePC" name="doUploadImagePC" hidden>
+                                                </th:block>
+                                                <div id="uploadCategoryImagePCError" th:if="${#fields.hasErrors('uploadCategoryImagePC')}" th:errors="*{uploadCategoryImagePC}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article th:class="${categoryInputModel.categoryType == '1' ?'l-article':'l-article display_none'}"
+                                 id="productSearchConditions">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">商品検索条件</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit">
+                                            <dt>商品の条件合致</dt>
+                                            <dd>
+                                                <div class="flex_w_wrap">
+                                                    <ul class="c-list-left list_sp20 mr40 mt10">
+                                                        <li>
+                                                            <label class="c-form-control">
+                                                                <input th:field="*{categoryConditionType}" th:checked="*{categoryConditionType} == '0'" type="radio" value="0"><i></i>すべての条件
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="c-form-control">
+                                                                <input th:field="*{categoryConditionType}" th:checked="*{categoryConditionType} == '1'" type="radio" value="1"><i></i>いずれかの条件
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </dd>
+                                            <div class="c-error-txt mt5"></div>
+                                        </div>
+                                        <th:block th:each="condition, stat : *{categoryConditionItems}">
+                                            <div class="edit" th:id="'conditionRow' + __${stat.index}__">
+                                                <dd class="max_w550px c-list-left">
+                                                    <select th:field="*{categoryConditionItems[__${stat.index}__].conditionColumn}" onchange="onChangeInput(this)" class="c-form-control mr15" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="columnItem : *{categoryConditionColumnItems}" th:value="${columnItem.key}" th:text="${columnItem.value}"
+                                                                th:selected="${columnItem.key} == __${condition.conditionColumn}__">選択してください
+                                                        </option>
+                                                    </select>
+                                                    <span class="mr5">が</span>
+                                                    <input class="c-form-control w150px mr15" maxlength="100" th:field="*{categoryConditionItems[__${stat.index}__].conditionValue}" th:errorclass="error">
+                                                    <select th:field="*{categoryConditionItems[__${stat.index}__].conditionOperator}" onchange="handleDisable(this)" class="c-form-control" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="operatorItem : *{categoryConditionOperatorItems}" th:value="${operatorItem.key}" th:text="${operatorItem.value}"
+                                                                th:selected="${operatorItem.key} == __${condition.conditionOperator}__">選択してください
+                                                        </option>
+                                                    </select>
+                                                <button class="c-btn-icon mt5" onclick="doDeleteCondition(this)" type="button"><i class="material-icons clear" style="padding-left: 15px;"></i></button>
+                                                </dd>
+                                                <div class="c-error-txt mt5"></div>
+                                            </div>
+                                        </th:block>
+                                    </dl>
+                                    <div id="unitItemsError" class="c-error-txt mt20" style="display: none">
+                                        <p class="mb5"><strong>[入力チェックエラー]</strong></p>
+                                        <table>
+                                            <th:block th:if="${#fields.hasErrors('categoryConditionItems')}">
+                                                <tr class="unitItemsError">
+                                                    <td th:if="${#fields.errors('categoryConditionItems')}" th:errors="*{categoryConditionItems}" class="unitItemsError"></td>
+                                                </tr>
+                                            </th:block>
+                                            <th:block th:each="item, stat: *{categoryConditionItems}">
+                                                <tr th:each="err : ${#fields.errors('categoryConditionItems[__${stat.index}__].conditionColumn')}" class="unitItemsError">
+                                                    <td th:text="${stat.index + 1} + '行目'"></td>
+                                                    <td class="pl5">条件項目</td>
+                                                    <td th:text="'： ' + ${err}" class="pl5"></td>
+                                                </tr>
+                                                <tr th:each="err : ${#fields.errors('categoryConditionItems[__${stat.index}__].conditionValue')}" class="unitItemsError">
+                                                    <td th:text="${stat.index + 1} + '行目'"></td>
+                                                    <td class="pl5">条件値</td>
+                                                    <td th:text="'： ' + ${err}" class="pl5"></td>
+                                                </tr>
+                                                <tr th:each="err : ${#fields.errors('categoryConditionItems[__${stat.index}__].conditionOperator')}" class="unitItemsError">
+                                                    <td th:text="${stat.index + 1} + '行目'"></td>
+                                                    <td class="pl5">条件式</td>
+                                                    <td th:text="'： ' + ${err}" class="pl5"></td>
+                                                </tr>
+                                            </th:block>
+                                        </table>
+                                    </div>
+                                    <div id="addConditionBtn" class="mt20 w520px txt_right more">
+                                        <button class="c-btn_add" id="btnAddCondition" type="button"><i></i><span>条件を追加</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article th:if="*{scCategorySeq != null}" class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">商品管理</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit regulations_display" id="categoryGoodsSortType">
+                                            <div th:if="*{categoryType eq '0'}" >
+                                                <dd>
+                                                    <input type="text" id="searchKeyword" onkeyup="onFilterDropDownProductSetting()" class="zip c-form-control w500px mr10" maxlength="20" placeholder="商品を検索してください">
+                                                    <button id="product_search_dialog_btn" type="button" class="c-btn btn_back">商品編集</button>
+                                                </dd>
+                                                <div class="c-error-txt mt5"></div>
+                                            </div>
+                                            <div class="tax_rate">
+                                                <dd>
+                                                    <select class="c-form-control w500px" id="categoryGoodsSortCondition" name="goodsSortDisplay">
+                                                        <option th:each="item : *{categoryGoodsSortItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{goodsSortDisplay}">選択してください
+                                                        </option>
+                                                    </select>
+                                                    <div id="categoryGoodsSortError" th:if="${#fields.hasErrors('goodsSortDisplay')}" th:errors="*{goodsSortDisplay}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                                <div class="c-error-txt mt5"></div>
+                                            </div>
+                                        </div>
+                                        <div class="edit display_none mb15" id="manualSortType">
+                                            <dd>
+                                                <span id="goodsSortManualChecked">0個の商品の移動先：</span>
+                                                <select class="c-form-control w100px" id="categoryGoodsSortManualCondition">
+                                                    <option th:each="item : *{categoryGoodsSortManualItems}" th:value="${item.key}" th:text="${item.value}">
+                                                        選択してください
+                                                    </option>
+                                                </select>
+                                                <span id="goodsSortManualTotal" class="pr10"> / 0</span>
+                                                <input id="positionSpecification" type="number" class="c-form-control w100px" disabled/>
+                                                <button type="button" id="btnOrderManual" class="c-btn btn_regular min_w100px">
+                                                    移動する
+                                                </button>
+                                            </dd>
+                                        </div>
+                                        <div id="sortManualErrors" class="mt10 c-error-txt"></div>
+                                        <div class="edit">
+                                            <table class="c-tbl tbl_relation_item edit mt20" id="goodsView">
+                                                <thead>
+                                                <tr>
+                                                    <th name="manual" th:class="${categoryInputModel.goodsSortDisplay eq '5' ? 'drag w40px' : 'drag w40px display_none'}"></th>
+                                                    <th name="manual" th:class="${categoryInputModel.goodsSortDisplay eq '5' ? 'check w40px' : 'check w40px display_none'}">
+                                                        <label class="c-form-control">
+                                                            <input id="checkAll" type="checkbox" name="" value=""><i></i>
+                                                        </label>
+                                                    </th>
+                                                    <th class="number text-center">#</th>
+                                                    <th class="w135px">商品管理番号</th>
+                                                    <th>商品名</th>
+                                                    <th class="w135px">フロント表示状態</th>
+                                                    <th th:if="*{categoryType eq '0'}" class="w50px"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="items_row">
+                                                <tr th:each="item, stat : *{goodsModelItems}" th:attr="goodsGroupSeq=${item.goodsGroupSeq}">
+                                                    <td name="manual" th:class="${categoryInputModel.goodsSortDisplay eq '5' ? 'drag' : 'drag display_none'}"><i class="material-icons menu"></i></td>
+                                                    <td name="manual" th:class="${categoryInputModel.goodsSortDisplay eq '5' ? 'check w40px' : 'check w40px display_none'}">
+                                                        <label class="c-form-control">
+                                                            <input type="checkbox" name="goodsCheck" onclick="doCheckGoods(this)" th:value="${item.goodsGroupSeq}"><i></i>
+                                                        </label>
+                                                    </td>
+                                                    <td th:text="${stat.index + 1}" th:attr="goodsGroupSeq=${item.goodsGroupSeq}" name="key" class="number text-center"></td>
+                                                    <td th:text="${item.goodsGroupCode}" class="alphabetic"></td>
+                                                    <td th:text="${item.goodsGroupName}"></td>
+                                                    <td>
+                                                        <span th:if="${item.frontDisplay} == '0'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.frontDisplay)}" class="c-status02 ico_gray"></span>
+                                                        <span th:if="${item.frontDisplay} == '1'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.frontDisplay)}" class="c-status02 ico_blue"></span>
+                                                    </td>
+                                                    <td th:if="*{categoryType eq '0'}">
+                                                        <button type="button" class="c-btn-icon" onclick="deleteGoods(this)"><i class="material-icons clear"></i></button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+
+                        <div id="product_search_dialog" style="display:none;" class="min_h300-px-im">
+                            <div id="globalMesDiv" style="display: none;" class="global-error-message">
+
+                            </div>
+                            <div class="c-detail-warp relation_item_search wrap">
+                                <dd>
+                                    <input id="searchKeywordDialog" type="text" class="c-form-control w900px" onkeyup="onFilterDropDownProductSetting()" placeholder="商品を検索してください">
+                                </dd>
+                                <div id="searchGoodsErr" style="display: none;" class="c-error-txt mt5"></div>
+                            </div>
+                            <div id="products_search_result" class="c-sticky-tbl-wrap">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" type="submit" name="doCancel"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left wrap_flex_center">
+                                <th:block th:if="*{listScreen}">
+                                    <div>
+                                        <p id="previewDateErr" style="display: none;" class="c-error-txt mt4"></p>
+                                        <p id="previewTimeErr" style="display: none;" class="c-error-txt mt4"></p>
+                                    </div>
+                                    <label class="c-datepicker w150px">
+                                        <input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+                                    </label>
+                                    <input type="text" th:field="*{previewTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+                                    <button type="button" title="プレビュー" id="category-details_preview_btn" class="c-btn btn_back min_w45px ml10 h38px mauto"><i class="material-icons search"></i></button>
+                                    <input type="hidden" id="websiteUrl" th:value="${@environment.getProperty('web.site.url')}"/>
+                                </th:block>
+                                <input type="hidden" id="isNextBtnClicked" value="false"/>
+                                <button class="c-btn btn_regular" type="submit" id="doOnceRegist" name="doOnceRegist">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+    <script type="text/javascript" th:src="@{/assets/js/treeTable.js}"></script>
+    <script>
+        $(document).ready(function() {
+            $("#targetCategory table tr").each(function () {
+                if ($(this).css('display') === 'none'){
+                    $(this).css('display', '');
+                }
+                if($(this).find('div.c-open-btn').hasClass('close'))
+                {
+                    $(this).find('div.c-open-btn').removeClass('close');
+                }
+            });
+            // stripeクラス自動的に追加されるため
+            $('.cat_top').closest('.c-open-btn').click();
+            $('.cat_top').closest('.c-open-btn').click();
+        })
+        $(function () {
+            if ($('.unitItemsError').length > 0) {
+                $('#unitItemsError').removeAttr('style');
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

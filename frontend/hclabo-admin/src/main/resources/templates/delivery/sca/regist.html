@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	  xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>配送方法設定 特別料金エリア登録 | システム設定</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!--/* contents */-->
+			<div class="l-main">
+				<form th:action="@{/delivery/sca/regist/}" th:object="${deliveryScaModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">配送方法設定</h1>
+						<h2 class="c-pagetitle_h2">特別料金エリア登録</h2>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<div class="l-section" id="mainContainer">
+						<div class="l-article">
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<div class="wrap_flex_equivalent">
+										<div class="col mr20">
+											<table class="c-tbl-base th_fntnormal">
+												<tbody>
+												<tr>
+													<th class="w190px">配送名称</th>
+													<td th:text="*{deliveryMethodName}"></td>
+												</tr>
+												<tr>
+													<th class="w190px">配送種別</th>
+													<td th:text="*{deliveryMethodType.label}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="col">
+											<table class="c-tbl-base th_fntnormal">
+												<tbody>
+												<tr>
+													<th class="w190px">公開状態</th>
+													<td th:text="*{openStatusPC.label}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<article class="l-article" id="mainContainer">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">特別料金エリア入力</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<dl class="c-dl-base dt_w160px">
+										<div class="edit ">
+											<dt>郵便番号<span class="ico_required">必須</span></dt>
+											<dd class="wrap_flex_center">
+												<input type="text" th:field ="*{zipCode}" th:errorclass="error" size="10" maxlength="7" class="zip c-form-control w150px mr10" placeholder="5530001">
+												<button class="c-btn btn_back ajaxzip3" name="doZipCodeSearch" type="submit">住所検索</button>
+											</dd>
+										</div>
+										<div th:if="${#fields.hasErrors('zipCode')}" class="c-error-txt mt-20">
+											<dt><dd id="zipCodeError" th:errors="*{zipCode}"></dd></dt>
+										</div>
+										<div>
+											<dt>住所</dt>
+											<dd th:text="*{ #strings.isEmpty(address) ? 'ー' : address}"></dd>
+										</div>
+										<div class="edit ">
+											<dt>送料（税抜）<span class="ico_required">必須</span></dt>
+											<dd class="c-input-label">
+												<input th:field ="*{carriage}" th:errorclass="error" size="10" type="text" class="c-form-control w130px count" placeholder="100">
+												<label>円</label>
+											</dd>
+										</div>
+										<div th:if="${#fields.hasErrors('carriage')}" class="c-error-txt mt-20">
+											<dt><dd id="carriageError" th:errors="*{carriage}"></dd></dt>
+										</div>
+									</dl>
+								</div>
+							</div>
+						</article>
+					</div>
+
+					<!--/* 追尾ボタン */-->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/delivery/sca/(dmcd=${deliveryScaModel.dmcd},prefectureName=${deliveryScaModel.prefectureName})}"><i class="material-icons navigate_before"></i>戻る</a>
+							</div>
+							<div class="col_left">
+								<input type="hidden" id="isOnceZipCodeAddBtnClicked" value="false"/>
+								<button class="c-btn btn_regular" type="submit" id="doOnceZipCodeAdd" name="doOnceZipCodeAdd">登録</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

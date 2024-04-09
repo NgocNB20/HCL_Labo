@@ -1,0 +1,77 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-title {
+
+  // ページ タイトル
+  &-page {
+    margin-bottom: 50px;
+
+    strong {
+      @include font-style(30, 44, 500);
+    }
+
+    @include media(sm) {
+      margin: 0 vwset(20) vwset(30);
+
+      strong {
+        @include font-sp-style(24, 35);
+      }
+    }
+  }
+
+  // コンテンツ タイトル
+  &-contents {
+    margin-block: 70px;
+    text-align: center;
+    @include font-style(32,46);
+
+    @include media(sm) {
+      margin-block: vwset(40);
+      @include font-sp-style(24,35);
+    }
+  }
+
+  // 見出し(大) 
+  &-line {
+    @include font-style(20, 34, 500);
+    margin-block: 50px 30px;
+    padding-bottom: 20px;
+    position: relative;
+    text-align: left;
+
+    &:after {
+      background: linear-gradient(to right, $color-primary 0%, 5%, $color-fff 5% 5.2%, $color-e6 5.2% 100%);
+      bottom: 0;
+      content: '';
+      height: 2px;
+      left: 0;
+      position: absolute;
+      width: 100%;
+    }
+
+    @include media(sm) {
+      @include font-sp-style(18, 30);
+      margin-block: vwset(30) vwset(30);
+      padding-bottom: vwset(20);
+
+      &:after {
+        background: linear-gradient(to right, $color-primary 0%, 15%, $color-fff 15% 15.3%, $color-e6 15.3% 100%);
+      }
+    }
+
+    // 左右マージン
+    &--margin-m-inline {
+
+      @include media(sm) {
+        margin-inline: vwset(20);
+      }
+    }
+
+  }
+
+
+}

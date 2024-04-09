@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>配送方法設定 倉庫休日CSV登録 ｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form enctype="multipart/form-data" th:action="@{/delivery/holiday/bundledupload/}" th:object="${deliveryHolidayBundledUploadModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <input type="hidden" th:field="*{year}" />
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">倉庫休日CSV登録</h2>
+                    </div>
+                    
+                    <!--/* エラーメッセージ */-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 検索 -->
+                    <div class="l-section" id="mainContainer">
+                        <article class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <h2 class="c-pagetitle_h3 fnt14" th:text="*{year + '年'}"></h2>
+                                    <div class="wrap_flex_equivalent mt25">
+                                        <div class="col mr20">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="w190px">配送ID</th>
+                                                    <td th:text="*{dmcd}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="w190px">公開状態</th>
+                                                    <td th:text="*{openStatusPC.label}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="w190px">配送名称</th>
+                                                    <td th:text="*{deliveryMethodName}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="w190px">配送種別</th>
+                                                    <td th:text="*{deliveryMethodType.label}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="mt40">
+                                        <div class="c-detail-warp search_data_smp wrap">
+                                            <dl class="mr0">
+                                                <dt>アップロードする倉庫休日データ</dt>
+                                                <dd>
+                                                    <div class="wrap_flex_center fileinputs">
+                                                        <input type="file" accept=".csv" id="uploadFile" name="uploadFile" th:value="*{uploadFile}" class="c-form-control w625px mr10 file" title="お届け不可日データ" onchange="uploadfileViewPath(this.id, this.value);" />
+                                                        <div class="fakefile">
+                                                            <input type="text" name="uploadFile_path" class="c-input-file" th:classappend="${#fields.hasErrors('uploadFile')}?'error':''"/>&nbsp;&nbsp;&nbsp;<button class="c-btn-small_over mr20" type="button">参照</button>
+                                                        </div>
+                                                        <input type="hidden" id="isOnceUploadBtnClicked" value="false"/>
+                                                        <button id="doOnceUpload" name="doOnceUpload" type="submit" class="c-btn btn_back icon"><i class="c-btn-icon upload"></i>一括アップロード</button>
+                                                    </div>
+                                                    <div id="uploadFileError" th:if="${#fields.hasErrors('uploadFile')}" th:errors="*{uploadFile}" class="c-error-txt mt5"></div>
+                                                    <div class="c-annotation mt5">
+                                                        ※アップロードするファイルの内容でデータの洗い替えを行います。
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" name="doReturn" class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

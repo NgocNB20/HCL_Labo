@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>サイドメニュー設定｜商品管理</title>
+<!--    <script type="text/javascript" th:src="@{/assets/js/thickbox.js}"></script>-->
+<!--    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>-->
+    <script type="text/javascript" th:src="@{/assets/js/previewCategory.js}"></script>
+
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/side-menu.css}" />
+</head>
+
+<body id="goods">
+<div id="sideMenuSettings" class="l-mainwrap side-menu">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/goods/category/sidemenusettings/}" th:object="${sideMenuSettingsModel}" method="post">
+                    
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">サイドメニュー設定</h1>
+                        <ul>
+                            <li>
+                                <a th:href="@{/goods/category/}" class="c-btn btn_move w130px">カテゴリー検索</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="global-message" th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!--/* js用エラーメッセージ */-->
+                    <div id="errorMessages" class="global-error-message" style="display: none"></div>
+                    <div class="l-section">
+                    <div class="l-section_column" id="mainContainer">
+                        <input type="hidden" id="registType" name="registType" th:value="*{registType}">
+                        <div class="l-section_left">
+                            <!-- カテゴリー管理情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title no_slide">
+                                    <h2 class="c-pagetitle_h3">カテゴリー一覧</h2>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div class="side-menu-scroll">
+                                            <table id="search_result" class="c-tbl tbl_search_member">
+                                                <thead>
+                                                <tr>
+                                                    <th class="check">
+                                                        <label class="c-form-control"><input id="selectAll" type="checkbox" name="" value=""><i></i></label>
+                                                    </th>
+                                                    <th class="categoryId">カテゴリーID</th>
+                                                    <th class="categoryName">カテゴリー名</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="category-list">
+                                                <th:block th:each="item, stat: *{sideMenuSettingsCategoryItemList}">
+                                                    <tr th:id="${item.categoryId} + '-tr'">
+                                                        <td class="check">
+                                                            <label class="c-form-control"><input type="checkbox" th:name="'resultItems-' + ${item.categoryId}" th:id="${item.categoryId} + '-category'" value="true"><i></i></label>
+                                                        </td>
+                                                        <td class="cat_id"><span th:id="${item.categoryId} + '-id'" th:text="${item.categoryId}"></span></td>
+                                                        <td class="cat_name"><span th:id="${item.categoryId} + '-name'" th:text="${item.categoryName}"></span></td>
+                                                    </tr>
+                                                </th:block>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        
+                        <div class="l-section-center">
+                            <div>
+                                <div class="l-section">
+                                    <a class="c-btn btn_back icon mt30" onclick="addItems()">追加 ▶</a>
+                                </div>
+                                <div class="l-section">
+                                    <a class="c-btn btn_back icon mt30" onclick="delItems()">◀ 削除</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="l-section_right">
+                            <!-- カテゴリー管理情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title no_slide">
+                                    <h2 class="c-pagetitle_h3">サイドメニュー構成</h2>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div class="c-error-txt mb20" id="unitItemsError" style="display: none">
+                                            <p class="mb5"><strong>[入力チェックエラー]</strong></p>
+                                            <table>
+                                                <th:block th:each="item: *{categoryTreeErrorItemList}">
+                                                    <tr class="unitItemsError">
+                                                        <td th:text="${item.index + 1} + '行目'"></td>
+                                                        <td th:text="'： ' + ${item.msg}" class="pl5"></td>
+                                                    </tr>
+                                                </th:block>
+                                            </table>
+                                        </div>
+                                        <div class="cf nestable-lists">
+                                            <div class="dd table side-menu-scroll" id="nestable">
+                                                <section th:replace="~{include/sidemenustructure::sidemenu(*{categoryTreeDtoList},0)}"></section>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="sideMenuSettingsList" id="nestable-output" th:value="*{sideMenuSettingsList}">
+                                        <input type="hidden" id="initId" value="0">
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="col_left wrap_flex_center">
+                                <th:block th:if="*{!#strings.isEmpty(cid)}">
+                                    <div>
+                                        <p id="previewDateErr" style="display: none;" class="c-error-txt mt4"></p>
+                                        <p id="previewTimeErr" style="display: none;" class="c-error-txt mt4"></p>
+                                    </div>
+                                    <label class="c-datepicker w150px">
+                                        <input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+                                    </label>
+                                    <input type="text" th:field="*{previewTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+                                    <button type="button" title="プレビュー" id="menu_preview_btn" class="c-btn btn_back min_w45px ml10 h38px mauto"><i class="material-icons search"></i></button>
+                                    <input type="hidden" id="websiteUrl" th:value="${@environment.getProperty('web.site.url')}"/>
+                                </th:block>
+                                <input type="hidden" id="isNextBtnClicked" value="false"/>
+                                <button class="c-btn btn_regular" type="submit" id="doConfirm" name="doConfirm" onclick="updateData()">確定</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+    <script th:src="@{/assets/js/sideMenuSettings.js}"></script>
+</div>
+</body>
+</html>
+

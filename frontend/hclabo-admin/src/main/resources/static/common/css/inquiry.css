@@ -1,0 +1,39 @@
+/* 問い合わせ詳細機能で使用 */
+.user {
+	background: #F0E68C;
+}
+.operator {
+	background: #98FB98;
+}
+table.dataListTable1 tr.user td,
+table.dataListTable2 tr.user td,
+table.dataListTable4 tr.user td,
+table.dataListTable1 td.user,
+table.dataListTable2 td.user,
+table.dataListTable4 td.user {
+	background: #F0E68C;
+}
+table.dataListTable1 tr.operator td,
+table.dataListTable2 tr.operator td,
+table.dataListTable4 tr.operator td,
+table.dataListTable1 td.operator,
+table.dataListTable2 td.operator,
+table.dataListTable4 td.operator {
+	background: #98FB98;
+}
+
+table.dataListTable1 td,
+table.dataListTable2 td,
+table.dataListTable4 td {
+	padding: 5px;
+	border-right: 1px solid #CAD0D5;
+	border-bottom: 1px solid #CAD0D5;
+	background-color: #FFF;
+	line-height: 1.3;
+	text-align: left;
+}
+
+table.dataListTable2 td table td {
+	border-right: none;
+	border-bottom: none;
+}

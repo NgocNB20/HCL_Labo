@@ -1,0 +1,1121 @@
+{
+	"info": {
+		"_postman_id": "e2edbc5d-db8f-4eca-91be-e933964d781f",
+		"name": "hclabo-payment-method-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "決済方法設定チェック(check)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodRequest\":\r\n        {\r\n            \"settlementMethodName\": \"クレジット（後決済）\",\r\n            \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n            \"openStatusPC\": \"1\",\r\n            \"settlementNotePC\": \"クレジット（後決済）\",\r\n            \"settlementMethodType\": \"0\",\r\n            \"settlementMethodCommissionType\": \"1\",\r\n            \"billType\": \"0\",\r\n            \"deliveryMethodSeq\": 1003,\r\n            \"equalsCommission\": 300,\r\n            \"settlementMethodPriceCommissionFlag\": \"0\",\r\n            \"largeAmountDiscountPrice\": \"0\",\r\n            \"largeAmountDiscountCommission\": \"1\",\r\n            \"orderDisplay\": \"0\",\r\n            \"maxPurchasedPrice\": 100,\r\n            \"paymentTimeLimitDayCount\": 0,\r\n            \"minPurchasedPrice\": 50,\r\n            \"cancelTimeLimitDayCount\": 0,\r\n            \"settlementMailRequired\": \"0\",\r\n            \"enableCardNoHolding\": true,\r\n            \"enableSecurityCode\": \"0\",\r\n            \"enable3dSecure\": false,\r\n            \"enableInstallment\": false,\r\n            \"enableBonusSinglePayment\": \"0\",\r\n            \"enableBonusInstallment\": \"0\",\r\n            \"enableRevolving\": false,\r\n            \"priceCommissionItemList\": [\r\n                {\r\n                    \"settlementMethodSeq\": 1234,\r\n                    \"maxPrice\": 10,\r\n                    \"commission\": 10\r\n                }\r\n            ]\r\n        },\r\n    \"settlementMethodSeq\": 1001,\r\n    \"commissionType\": \"01\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法設定チェック(check)- ERROR (commission larger than maxprice)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check ERROR \", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodRequest\":\r\n        {\r\n            \"settlementMethodName\": \"クレジット（後決済）\",\r\n            \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n            \"openStatusPC\": \"1\",\r\n            \"settlementNotePC\": \"クレジット（後決済）\",\r\n            \"settlementMethodType\": \"0\",\r\n            \"settlementMethodCommissionType\": \"0\",\r\n            \"billType\": \"0\",\r\n            \"deliveryMethodSeq\": 1003,\r\n            \"equalsCommission\": 300,\r\n            \"settlementMethodPriceCommissionFlag\": \"0\",\r\n            \"largeAmountDiscountPrice\": \"0\",\r\n            \"largeAmountDiscountCommission\": \"1\",\r\n            \"orderDisplay\": \"0\",\r\n            \"maxPurchasedPrice\": 100,\r\n            \"paymentTimeLimitDayCount\": 0,\r\n            \"minPurchasedPrice\": 50,\r\n            \"cancelTimeLimitDayCount\": 0,\r\n            \"settlementMailRequired\": \"0\",\r\n            \"enableCardNoHolding\": true,\r\n            \"enableSecurityCode\": \"0\",\r\n            \"enable3dSecure\": false,\r\n            \"enableInstallment\": false,\r\n            \"enableBonusSinglePayment\": \"0\",\r\n            \"enableBonusInstallment\": \"0\",\r\n            \"enableRevolving\": false,\r\n            \"priceCommissionItemList\": null\r\n        },\r\n    \"settlementMethodSeq\": 1001,\r\n    \"commissionType\": \"01\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法設定チェック(check)- ERROR (maxPrice zero)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodRequest\":\r\n        {\r\n            \"settlementMethodName\": \"クレジット（後決済）\",\r\n            \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n            \"openStatusPC\": \"1\",\r\n            \"settlementNotePC\": \"クレジット（後決済）\",\r\n            \"settlementMethodType\": \"0\",\r\n            \"settlementMethodCommissionType\": \"1\",\r\n            \"billType\": \"0\",\r\n            \"deliveryMethodSeq\": 1003,\r\n            \"equalsCommission\": 300,\r\n            \"settlementMethodPriceCommissionFlag\": \"0\",\r\n            \"largeAmountDiscountPrice\": \"0\",\r\n            \"largeAmountDiscountCommission\": \"1\",\r\n            \"orderDisplay\": \"0\",\r\n            \"maxPurchasedPrice\": 0,\r\n            \"paymentTimeLimitDayCount\": 0,\r\n            \"minPurchasedPrice\": 50,\r\n            \"cancelTimeLimitDayCount\": 0,\r\n            \"settlementMailRequired\": \"0\",\r\n            \"enableCardNoHolding\": true,\r\n            \"enableSecurityCode\": \"0\",\r\n            \"enable3dSecure\": false,\r\n            \"enableInstallment\": false,\r\n            \"enableBonusSinglePayment\": \"0\",\r\n            \"enableBonusInstallment\": \"0\",\r\n            \"enableRevolving\": false,\r\n            \"priceCommissionItemList\": null\r\n        },\r\n    \"settlementMethodSeq\": 1001,\r\n    \"commissionType\": \"01\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法設定チェック(check)- ERROR (equalCommission null)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodRequest\": {\r\n        \"settlementMethodName\": \"クレジット（後決済）\",\r\n        \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": null,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": null\r\n    },\r\n    \"settlementMethodSeq\": 1001,\r\n    \"commissionType\": \"01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (settlement request null)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodRequest\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (duplicate name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"ペイジー\",\r\n        \"settlementMethodDisplayNamePC\": \"ペイジー\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"ペイジー\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (status no select claim for PAYEASY)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"4\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"1\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (status no select claim for PRE PAYMENT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"X\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"1\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (status no select claim for CASH REGISTED MAIL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"4\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"1\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (status no select claim for BANK TRANSFER)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"4\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"1\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (receipt payment preclaim)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"B\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR ( convinience post claim)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"3\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"1\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (commission larger maxPurchasedPrice)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"0\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"0\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR ( purchasedMaxPrice null or zero)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 0,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (equalsCommission null)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": null,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            {\r\n                \"settlementMethodSeq\": 1234,\r\n                \"maxPrice\": 10,\r\n                \"commission\": 10\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法登録(regist)- ERROR (priceCommissionEntityList null)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodRequest\":\r\n    {\r\n        \"settlementMethodName\": \"testRegistb\",\r\n        \"settlementMethodDisplayNamePC\": \"testRegistb\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": [\r\n            \r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \r\n    \"paymentMethodRequest\":\r\n    { \r\n        \"settlementMethodName\": \"クレジット（後決済）\",\r\n        \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/1001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"1001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法更新(update)- ERROR (duplicate name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \r\n    \"paymentMethodRequest\":\r\n    { \r\n        \"settlementMethodName\": \"ペイジー\",\r\n        \"settlementMethodDisplayNamePC\": \"ペイジー\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"ペイジー\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/1001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"1001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法更新(update)- ERROR (method not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \r\n    \"paymentMethodRequest\":\r\n    { \r\n        \"settlementMethodName\": \"クレジット（後決済）\",\r\n        \"settlementMethodDisplayNamePC\": \"クレジット（後決済）\",\r\n        \"openStatusPC\": \"1\",\r\n        \"settlementNotePC\": \"クレジット（後決済）\",\r\n        \"settlementMethodType\": \"0\",\r\n        \"settlementMethodCommissionType\": \"1\",\r\n        \"billType\": \"0\",\r\n        \"deliveryMethodSeq\": 1003,\r\n        \"equalsCommission\": 300,\r\n        \"settlementMethodPriceCommissionFlag\": \"1\",\r\n        \"largeAmountDiscountPrice\": \"0\",\r\n        \"largeAmountDiscountCommission\": \"1\",\r\n        \"orderDisplay\": \"0\",\r\n        \"maxPurchasedPrice\": 100,\r\n        \"paymentTimeLimitDayCount\": 0,\r\n        \"minPurchasedPrice\": 50,\r\n        \"cancelTimeLimitDayCount\": 0,\r\n        \"settlementMailRequired\": \"0\",\r\n        \"enableCardNoHolding\": true,\r\n        \"enableSecurityCode\": \"0\",\r\n        \"enable3dSecure\": false,\r\n        \"enableInstallment\": false,\r\n        \"enableBonusSinglePayment\": \"0\",\r\n        \"enableBonusInstallment\": \"0\",\r\n        \"enableRevolving\": false,\r\n        \"priceCommissionItemList\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/10019",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"10019"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法一覧更新(updateList)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateList OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodListUpdate\": [\r\n        {\r\n            \"orderDisplayValue\": 1000,\r\n            \"settlementMethodSeq\": 1002\r\n        },\r\n        {\r\n            \"orderDisplayValue\": 1012,\r\n            \"settlementMethodSeq\": 1003\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法一覧更新(updateList) - ERROR ( method not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateList ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paymentMethodListUpdate\": [\r\n        {\r\n            \"orderDisplayValue\": 1000,\r\n            \"settlementMethodSeq\": 1002\r\n        },\r\n        {\r\n            \"orderDisplayValue\": 1012,\r\n            \"settlementMethodSeq\": 10099\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法一覧更新(updateList)- ERROR ( listRequest null )",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateList ERROR\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"paymentMethodListUpdate\": \r\n    [\r\n        \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法取得 (getBySettlementMethodSeq) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/1003",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"1003"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法取得 (getBySettlementMethodSeq) - ERROR (method deleted)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-Error\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/1004",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"1004"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法取得 (getBySettlementMethodSeq) - ERROR (method not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8480/payments/methods/10099",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods",
+						"10099"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "決済方法一覧取得 (get) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.paymentMethodListResponse).to.have.lengthOf(6);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8480/payments/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8480",
+					"path": [
+						"payments",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+    xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>問い合わせ分類設定 登録更新｜店舗管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="shop">
+<div id="inquiryShop" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/inquiry/inquirygroup/registupdate/}" th:object="${inquiryGroupRegistUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">問い合わせ分類設定</h1>
+						<h2 class="c-pagetitle_h2">登録更新</h2>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<!-- 問い合わせ分類詳細設定 -->
+					<div class="l-section" id="mainContainer">
+						<article class="l-article">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">問い合わせ分類設定</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<dl class="c-dl-base wrap_flex_wrap">
+										<div class="all w25p">
+											<dt>問い合わせ分類名 <span class="ico_required">必須</span></dt>
+											<dd>
+												<input type="text" th:field="*{inquiryGroupName}" class="c-form-control w240px" th:errorclass="error" placeholder="入力してください" value="公開">
+												<div th:id="inquiryGroupNameError" th:if="${#fields.hasErrors('inquiryGroupName')}" th:errors="*{inquiryGroupName}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+										<div class="all w25p">
+											<dt>公開状態 <span class="ico_required">必須</span></dt>
+											<dd>
+												<select id="openStatus" class="c-form-control" name="openStatus" th:errorclass="error">
+													<option value="">選択してください</option>
+													<option th:each="item : *{openStatusItems}" th:value="${item.key}" th:text="${item.value}" th:selected="${item.key} == *{openStatus}"></option>
+												</select>
+												<div id="openStatusError" th:if="${#fields.hasErrors('openStatus')}" th:errors="*{openStatus}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+									</dl>
+								</div>
+							</div>
+						</article>
+					</div>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/inquiry/inquirygroup}"><i class="material-icons navigate_before"></i>戻る</a>
+							</div>
+							<div class="col_left">
+								<input type="hidden" id="isConfirmBtnClicked" value="false"/>
+								<button class="c-btn btn_regular" id="doConfirm" name="doConfirm" type="submit">確認</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

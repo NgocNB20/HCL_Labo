@@ -1,0 +1,15 @@
+<div class="l-side l-lg" th:fragment="sidemenumember(current)"><!--/* SIDE */-->
+    <div class="l-side-mypage">
+        <ul>
+            <li><a th:href="@{/member/}" id="go-Member-Top-mn" class="c-textlink"><p>マイページトップ</p></a></li>
+            <li th:class="${current} == 'history' ? 'is-current' : ''"><a th:href="@{/member/history/?pnum=1}" id="go-Member-History-mn"><p>注文履歴</p></a></li>
+            <li th:class="${current} == 'abook' ? 'is-current' : ''"><a th:href="@{/member/abook/?pnum=1}" id="go-Member-Address-mn"><p>アドレス帳</p></a></li>
+            <li th:class="${current} == 'wishlist' ? 'is-current' : ''"><a th:href="@{/member/wishlist/?pnum=1}" id="go-Member-Wishlist-mn"><p>お気に入り</p></a></li>
+            <li th:class="${current} == 'change' ? 'is-current' : ''"><a th:href="@{/member/change/}" id="go-Member-Change-mn"><p>会員情報の変更</p></a></li>
+            <li th:class="${current} == 'mail' ? 'is-current' : ''"><a th:href="@{/member/mail/}" id="go-Member-Mail-mn"><p>メールアドレスの変更</p></a></li>
+            <li th:class="${current} == 'pass' ? 'is-current' : ''"><a th:href="@{/member/pass/}" id="go-Member-Password-mn"><p>パスワードの変更</p></a></li>
+            <li th:class="${current} == 'inquiry' ? 'is-current' : ''"><a th:href="@{/member/inquiry/?pnum=1}" id="go-Member-Inqury-mn"><p>お問い合わせ履歴</p></a></li>
+            <li th:class="${current} == 'delete' ? 'is-current' : ''"><a th:href="@{/member/delete/}" id="go-Member-Delete-mn"><p>退会手続き</p></a></li>
+        </ul>
+    </div>
+</div><!--/* SIDE */-->

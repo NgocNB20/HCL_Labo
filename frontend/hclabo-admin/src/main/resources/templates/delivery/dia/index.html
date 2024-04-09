@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>配送方法設定 配送不可エリア設定｜システム管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/dia/}" th:object="${deliveryDiaModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">配送不可エリア設定</h2>
+                        <ul>
+                            <li><a class="c-btn btn_move" th:href="@{/delivery/dia/regist/}">配送不可エリア登録</a></li>
+                        </ul>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="wrap_flex_equivalent">
+                                        <div class="col mr20">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="w190px">配送名称</th>
+                                                        <td th:text="*{deliveryMethodName}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w190px">配送種別</th>
+                                                        <td th:text="*{deliveryMethodType.label}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="w190px">公開状態</th>
+                                                        <td th:text="*{openStatusPC.label}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="c-detail-warp wrap mt40">
+                                        <dl>
+                                            <dt>絞り込み</dt>
+                                            <dd>
+                                                <div class="wrap_flex_center">
+                                                    <select class="c-form-control w160px mr10" th:field="*{prefectureName}" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="item : *{prefectureNameItems}" th:value="${item.key}" th:text="${item.value}"
+                                                             th:selected="${item.key} == *{prefectureName}">
+                                                        </option>
+                                                    </select>
+                                                    <span class="mr10">全件数:<span th:text="*{#number.convert(totalCount)} + '件'" th:remove="tag"></span></span>
+                                                    <button class="c-btn-small_over" type="submit" name="doReDisplay">再表示</button>
+                                                </div>
+                                                <div class="wrap_flex_center">
+                                                    <div th:if="${#fields.hasErrors('prefectureName')}" th:errors="*{prefectureName}" class="c-error-txt mt5"></div>
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="l-article" th:if="*{isResult}">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">配送不可能詳細</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" >
+                                    <table class="c-tbl large60 tbl_search_special_fee">
+                                        <thead>
+                                            <tr>
+                                                <th class="check"></th>
+                                                <th class="number">#</th>
+                                                <th class="w140px">郵便番号</th>
+                                                <th class="">住所</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item, stat: *{resultItems}">
+                                                <td class="check">
+                                                    <label class="c-form-control"><input type="checkbox" th:field="*{resultItems[__${stat.index}__].check}"><i></i></label>
+                                                </td>
+                                                <td class="number" th:text="${item.resultDataIndex}"></td>
+                                                <td class="alphabetic" th:text="${item.zipcode}"></td>
+                                                <td th:text="${item.addressList}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" id="pageNumber" name="pageNumber" />
+                                    <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" />
+                                    <!--ページネーション-->
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/delivery/}"><i class="material-icons navigate_before"></i>戻る</a>
+                            </div>
+                            <div class="col_left" th:if="*{isResult}">
+                                <button class="c-btn btn_regular" type="submit" name="doOnceDelete" onClick="return simpleDeleteConfirm();">削除</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

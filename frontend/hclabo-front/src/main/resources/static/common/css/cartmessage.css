@@ -1,0 +1,20 @@
+/* 
+ * カート追加成功時ダイアログ用スタイルシート
+ */
+@charset "UTF-8";
+
+/* タイトル部分
+---------------------------------------------------- */
+.TitleDialog .ui-dialog-titlebar {
+	background: none;
+	background-color:#fff;
+}
+.ui-widget-header .ui-icon {
+	background-image: url(@app.complement.url@/common/css/images/ui-icons_222222_256x240.png);
+}
+
+/* ボタン
+---------------------------------------------------- */
+#cartMessage .keepShopping {
+	cursor: pointer;
+}

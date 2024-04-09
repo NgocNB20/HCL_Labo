@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>問い合わせ詳細：送信内容確認｜店舗管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript">
+        $(function() {
+            var sendMailConfirmFlag = $("#sendMailConfirmFlag").val();
+            if (sendMailConfirmFlag == 'true') {
+                // 回答メール送信確認が必要な場合
+                $("#doOnceInquiryUpdate").click(function(event) {
+                    // ダイアログに「いいえ」と答えた場合、登録/更新処理を中断
+                    return confirm("回答を送信します。よろしいですか？");
+                });
+            }
+        });
+    </script>
+</head>
+
+<body id="shop">
+<div id="searchInquiry" class="l-mainwrap">
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/inquiry/update/confirm/}" th:object="${inquiryUpdateModel}" method="post">
+                    <input type="hidden" id="sendMailConfirmFlag"/>
+
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">問い合わせ詳細：送信内容確認</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section_column">
+                        <div class="l-section_inner">
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">問い合わせ内容</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap pb10">
+                                        <div class="c-contact_detail">
+                                            <th:block th:each="item, stat: *{confirmInquiryDetailItems}">
+                                                <div th:classappend="${item.requestType == '1'} ? my_contact : contact">
+                                                    <div class="message w100p">
+                                                        <div th:id="${item.bgColorInquiryDetailManClass != null && item.bgColorInquiryDetailManClass == 'left diff'} ? 'diff' : ''"
+                                                             th:class="${item.bgColorInquiryDetailManClass != null && item.bgColorInquiryDetailManClass == 'left diff'} ? ${item.bgColorInquiryDetailManClass + ' status'} : 'status'">
+                                                            <div class="name">
+                                                                <th:block th:if="${item.operator != null}">
+                                                                    <span th:text="${item.operator}"></span>
+                                                                </th:block>
+                                                                <th:block th:if="${item.operator == null}">
+                                                                    <span th:text="${item.inquiryMan}"></span>
+                                                                </th:block>
+                                                            </div>
+                                                            <div th:text="${#date.convert(item.inquiryTime, 'yyyy/MM/dd HH:mm:ss')}" th:class="${item.bgColorInquiryDetailTimeClass != null && item.bgColorInquiryDetailTimeClass == 'left diff'} ? ${item.bgColorInquiryDetailTimeClass + ' times'} : 'times'"></div>
+                                                        </div>
+                                                        <div th:class="${item.bgColorInquiryDetailBodyClass != null && item.bgColorInquiryDetailBodyClass == 'left diff'} ? ${item.bgColorInquiryDetailBodyClass + ' inner'} : 'inner'" th:utext="${#pre.convert(item.inquiryBody)}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side">
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">問い合わせ情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-nobase">
+                                            <div>
+                                                <dt>問い合わせ番号</dt>
+                                                <dd th:text="*{inquiryCode}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>問い合わせ分類名</dt>
+                                                <dd th:text="*{inquiryGroupName}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>問い合わせ状態</dt>
+                                                <dd th:text="*{#enumtype.getLabel('HTypeInquiryStatus', inquiryStatus)}" th:class="*{bgColorConfirmInquiryStatusClass != null && bgColorConfirmInquiryStatusClass == 'diff'} ? *{bgColorConfirmInquiryStatusClass} : ''"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">お客様情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-nobase">
+                                            <div class="c-btm_line_sml">
+                                                <dt>会員IDメールアドレス</dt>
+                                                <dd th:text="*{memberInfoId}"></dd>
+                                            </div>
+                                        </dl>
+                                        <div class="mb25">
+                                            <div th:text="*{inquiryLastName + ' ' + inquiryFirstName}"></div>
+                                            <div th:text="*{inquiryLastKana + ' ' + inquiryFirstKana}"></div>
+                                        </div>
+                                        <dl class="c-dl-nobase">
+                                            <div>
+                                                <dt>メールアドレス</dt>
+                                                <dd th:text="*{inquiryMail}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>電話番号</dt>
+                                                <dd th:text="*{inquiryTel}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">管理メモ</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap" th:utext="*{#pre.convert(memo)}">
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" name="doCancel"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <button class="c-btn btn_regular" name="doOnceInquiryUpdate">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+<script>
+    if(document.getElementsByClassName("diff").length> 0) {
+        document.getElementById("diff").scrollIntoView();
+    }
+</script>
+</body>
+</html>

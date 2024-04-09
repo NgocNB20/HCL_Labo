@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+ <title>運営者一覧｜システム設定</title>
+</head>
+
+<body id="system">
+<div id="searchAdministrator" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/administrator/}" th:object="${administratorModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">運営者一覧</h1>
+                        <th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+                            <ul>
+                                <li><button class="c-btn btn_move" type="submit"  name="doAdministratorRegist">運営者登録</button></li>
+                            </ul>
+                        </th:block>
+                    </div>
+
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" th:field="*{orderField}" />
+  					<input type="hidden" th:field="*{orderAsc}" />
+  					<input type="submit" id="doDisplayChange" name= "doDisplayChange" style="display:none" value="表示切替" />
+                    <div class="l-section">
+                        <!-- 設定権限 -->
+                        <article class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <table class="c-tbl large60" id="search_result">
+                                        <thead>
+                                        <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                            <th class="number">#</th>
+                                            <th class="w12p"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerAdministratorId">ユーザID<th:block th:if="*{orderField} == 'administratorId'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="w10p"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerAdministratorName">氏名<th:block th:if="*{orderField} == 'administratorName'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="w10p"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerAdministratorKana">フリガナ<th:block th:if="*{orderField} == 'administratorKana'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerMail">メールアドレス<th:block th:if="*{orderField} == 'mail'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="w90px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerAdministratorStatus">状態<th:block th:if="*{orderField} == 'administratorStatus'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="w120px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerUseStartDate">利用開始日<th:block th:if="*{orderField} == 'useStartDate'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="w120px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerUseEndDate">利用終了日<th:block th:if="*{orderField} == 'useEndDate'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+     										<th class="w15p"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerAdministratorGroupName">権限グループ<th:block th:if="*{orderField} == 'administratorGroupName'"><span th:remove="tag" th:text="${sortStr}"></span></th:block></a></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+										    <tr th:each="item: *{resultItems}">
+											    <td class="number"><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${item.resultNo}"></span></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"> <span th:remove="tag" th:text="${item.resultAdministratorId}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"> <span th:remove="tag" th:text="${item.resultAdministratorLastName} + ' ' + ${item.resultAdministratorFirstName}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"> <span th:remove="tag" th:text="${item.resultAdministratorLastKana} + ' ' + ${item.resultAdministratorFirstKana}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${item.resultMail}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${item.resultAdministratorStatus}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${#date.convert(item.resultUseStartDate)}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${#date.convert(item.resultUseEndDate)}" /></a></td>
+											    <td><a th:href="@{/administrator/details(administratorSeq=${item.administratorSeq})}"><span th:remove="tag" th:text="${item.resultAdministratorGroupName}" /></a></td>
+										    </tr>
+									    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}" ></div>
+    </main>
+</div>
+</body>
+</html>

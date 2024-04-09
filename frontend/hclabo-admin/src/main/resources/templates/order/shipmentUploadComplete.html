@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>出荷データアップロード結果｜受注管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="order">
+<div id="shipmentupload" class="l-mainwrap">
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/order/shipmentUpload/complete/}" th:object="${orderShipmentUploadModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">出荷データアップロード結果</h1>
+                    </div>
+
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">アップロード結果</h2>
+                            </div>
+                            <th:block th:if="*{isSuccess}">
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div class="fwb">出荷登録を受付けました。</div>
+                                        <div class="wrap_flex_equivalent mt30">
+                                            <div class="col max_w50p pr10">
+                                                <table class="c-tbl-base th_fntnormal">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th class="w190px">出荷データ</th>
+                                                        <td th:text="*{#number.convert(registCount) != null ? #number.convert(registCount) + ' 件' : '件'}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                            <th:block th:if="*{!isSuccess()}">
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <div>
+                                            <div class="fwb">アップロードファイルにエラーがあります。出荷登録はまだ行われていません。</div>
+                                            <div class="mt30">
+                                                <table class="c-tbl c-tbl-upload-error">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>エラー内容</th>
+                                                    </tr>
+                                                    <tr th:each="item: *{resultItems}">
+                                                        <td class="left">CSV:<span th:text="${item.rowNumber}" ></span>&nbsp;行目項目名:<span th:text="${item.columnLabel}"></span>&nbsp;<span th:text="${item.errContent}" ></span>&nbsp;</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                        </div>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/order/shipmentUpload/}"><i class="material-icons navigate_before"></i>戻る</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

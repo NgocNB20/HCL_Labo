@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-pop {
+  min-width: inherit;
+
+  &__inner {
+    overflow: hidden;
+    margin: 20px;
+  }
+
+  &__close {
+    margin: 40px auto;
+    text-align: center;
+  }
+
+  @include media(sm) {
+
+    &__inner {
+      margin: vwset(20);
+    }
+
+    &__close {
+      margin: vwset(40) auto;
+    }
+
+  }
+}

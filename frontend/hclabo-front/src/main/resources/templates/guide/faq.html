@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-guide">
+  <div class="l-mainwrap">
+	<div th:replace="~{include/header}"/>
+    
+    <main class="l-page p-guide-faq">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('faq')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>よくある質問</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="#anchor-guide-faq01" class="js-anchor" data-scroll="">ご注文・お支払いについて</a>
+          <a href="#anchor-guide-faq02" class="js-anchor" data-scroll="">商品の発送・受取方法について</a>
+          <a href="#anchor-guide-faq03" class="js-anchor" data-scroll="">採取について</a>
+          <a href="#anchor-guide-faq04" class="js-anchor" data-scroll="">商品のキャンセル・交換について</a>
+          <a href="#anchor-guide-faq05" class="js-anchor" data-scroll="">検査容器、検体の返送について</a>
+          <a href="#anchor-guide-faq06" class="js-anchor" data-scroll="">検査結果ログインについて</a>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">ご注文・お支払いについて</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">どのような支払い方法がありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">クレジットカード決済とPayPay決済、コンビニ決済、の3通りのお支払い方法があります。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">送料やその他手数料について教えてください。</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">送料は0円（全国一律）です。カード決済手数料、コンビニ決済時の手数料は必要ありません。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査キットを購入した後、検査代金は別にかかるものですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">検査キットの価格には、消費税、検査料や検査物の返送時の郵送料など、検査結果をご確認いただくまでの全ての料金が含まれています。<br>
+                      ご注文時のお支払代金以外には追加料金は発生しませんので、安心してご利用いただけます。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">パソコン、携帯電話の他に電話による注文もできますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">申し訳ありませんが、当社ではPCサイト、スマートフォンサイトからのご注文のみとなります。<br>
+                      お電話でのご注文、メールでのご注文は対応しておりませんので、ご了承ください。<br>
+                      お問い合わせがございましたら、お問い合わせフォームまたはお電話でご連絡をお願いいたします。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせフォームは<a href="/inquiry/" class="c-textlink c-inlinelink">こちら</a><br>お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">注文確認メールが届きません。きちんと注文できているか確認したいです。</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">ご注文内容を確認させていただきますので、コールセンターまでご連絡ください。<br>
+                      「ご注文確認メール」は、ご注文完了直後に自動送信いたしておりますが、お客様端末の迷惑メール設定などにより、お送りできない場合がございます。ご不明な点がございましたらお問い合わせフォームまたはお電話でご連絡をお願いいたします。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせフォームは<a href="/inquiry/" class="c-textlink c-inlinelink">こちら</a><br>お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査キット購入をクレジット払いにしたい場合、どのように明細に記載されますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">クレジットカードの明細には「みんなの郵送検査室」と記載されます。<br>性感染症に関する記載は一切ありませんのでご安心ください。　</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq02">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">商品の発送・受取方法について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">注文したいのですがどんな受け取り方法がありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">当社からの発送は基本ゆうパケットでのポスト投函となります。（発送後1日～３日前後）<br>また郵便局留め対応も可能です。</p>
+                    <p class="p-guide__text c-margin--xs">※お届け日・時間帯の指定はできません。<br>
+                      ※複数の商品をご注文の場合は、規定外サイズとなるため、郵便局のゆうパックへ変更させていただく場合がございますので予めご了承ください。（その場合の送料は無料です） </p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">商品を受け取る時、中に何が入っているかが、外から見てわからないようになっていますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text ">外装や送り状などから、検査キットであることがわからない梱包になっていますので、ご安心ください。<br>商品名や性感染症に関連する表記は入れておりません。</p>
+                    <ul class="p-guide__bullet-point c-margin--xs">
+                      <li>荷物の商品名は「雑貨」と記載しております。</li>
+                      <li>送り主名は「HCL」と記載しております。</li>
+                    </ul>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">早く商品を受け取りたいのですが・・・</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">平日（月～土）15時までにお申込み入金確認分は、当日発送対応いたします。<br>上記以外につきましては、翌営業日確認での発送となります。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">荷物の配送状況は確認できますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">発送時に「お問い合わせ番号(伝票番号)」をお知らせします。<br>
+                      特にお申し出いただかなくてもメールでお知らせします。
+                      </p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">自宅以外での受け取りは出来ますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">職場など、ご自宅とは違うご住所でもお受け取りが可能です。ご注文フォームにあります住所入力欄にてご指定ください。<br>
+                      自宅以外で受け取りたい方は、郵便局留めがおすすめです。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">郵便局留めで「匿名」は利用できますか</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">郵便局留めのお荷物(商品)をお受け取りの際には、ご本人様確認をするための書類が必要になります。<br>
+                      <strong>本人確認証：運転免許証・健康保険証・パスポート等（氏名とご住所の明記が必須）</strong><br>
+                      匿名でのお申込みはできませんのでご注意ください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq03">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">採取について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">血液が十分に採血できませんでした。血液量が少ないと検査に影響がありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">血液量が不十分な場合、正しい検査結果が出ない、また検査ができない場合があります。<br>
+                      血液量は正確な検査数値を出すために重要となります。わずかな血液で分析できる血液検査キットですが、血液量が少なすぎると検査不能となってしまいますので、検査ができるか不安な場合には電話もしくはメールにてご連絡ください。</p>
+                      <div class="p-guide__title-inner c-margin--xs">【採血のポイント】</div>
+                      <ol class="p-guide__ordered-list01">
+                        <li>採血前に必ず手を洗ってください（異物が混入すると検査結果に影響が出ることがあります）</li>
+                        <li>お風呂に入る、お湯に手を入れるなど指先を温めて下さい（使い捨てカイロなどで採血部位を温めるのも効果的です）</li>
+                        <li>手のマッサージをするなどして血行をよくしてください</li>
+                        <li>針を刺した後、手は心臓より下にして第一関節を少し圧迫して出血を促してください<br>
+                          （出血量が少ない場合は、手首から指先に血液を押し出すようにマッサージをしてください）</li>
+                        <li>指先の両側から血液が取れなかった際は指の腹部分のほうが血液が出やすい場合もあるので再度採血してください</li>
+                      </ol>
+                    <p class="p-guide__text c-margin--xs">※各検査キット取り扱い説明書の採血量を目安に採取をお願いします。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせフォームは<a href="/inquiry/" class="c-textlink c-inlinelink">こちら</a><br>お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">起床後に尿を採り忘れました。起床後ではなく、いつ採取した尿でも検査できますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">起床後ではない尿でも検査は可能ですが、尿を採取するタイミングによっては検査結果へ影響を及ぼす可能性があります。<br>
+                      よって起床後に採取できなかった場合、最後の排尿から2～3時間経過後の尿（出始めの尿）を採取してください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">生理中ですが、採取しても良いですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">尿、うがい液においては生理中に採取されても検査は実施可能ですが、膣分泌物・子宮頚管擦過物、大腸がんの検査での検体は正しい結果が得られない可能性があります。検体の採取はできる限り、生理中を避けて行ってください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">うがい液を採取する前に飲食をしてしまいました。結果に影響ありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">基本は起床後、飲食前やうがい、歯磨き前のタイミングでの採取を案内していますが、もし起床後に採取できなかった場合は、飲食または最後のうがいから1～2時間程度あけてから採取してください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">採取時に容器に入っている液をこぼしてしまいました。このままこの容器を使用して問題ないですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">採取した検体と検査液の濃度が適切でないと検査が出来ない、検査結果に影響が出る場合があります。よって万が一、容器内の液をこぼしたり、誤って捨ててしまった場合は、新しいキットをお送りさせていただきますので、お電話またはメールにてご連絡ください。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせフォームは<a href="/inquiry/" class="c-textlink c-inlinelink">こちら</a><br>お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査を受ける時期より早いタイミングで検査をしても問題ないですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">早期発見のためにはなるべく早い検査が大切ですが、「検査を受ける時期」より早い段階での検査は正しい結果が得られない可能性があります。<br>
+                      個人差があり、感染していても陰性（－）と出る場合があるため、改めて最終的な検査（確実な結果が分かる時期）をおすすめしています。<br>
+                      詳しくは<a href="" class="c-textlink c-inlinelink">検査を受ける時期</a>の一覧表をご確認ください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">採取前日に飲酒しても検査結果に影響はないですか。</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">前日に飲酒された場合でも検査結果に影響はありません。<br>
+                      ただし、飲酒直後の検体採取はお避けください。検体採取が正しく行われない場合があります。またうがい液の採取は飲酒に関わらず採取直前の飲食は避けいただくようお願いします。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査物はいつ採取してもいいのですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">採取する時間によって、検査の結果は変わりません。いつでもご都合のよい時に採取してください。</p>
+                    <div class="p-guide__title-inner c-margin--xs">【ご注意】</div>
+                    <p class="p-guide__text">排尿のタイミングや生理の時期、うがい前に避けていただきたいことなど、詳細は取り扱い説明書をよくお読みください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq04">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">商品のキャンセル・交換について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">注文しましたがキャンセルはできますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <div class="p-guide__title-inner c-margin--xs">【キット発送前のキャンセル】</div>
+                    <p class="p-guide__text">発送前のキャンセルは可能です。平日15時までのご注文は当日発送ですので、キャンセル時はすぐにお電話にてご連絡ください。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせ電話番号：0120-256-525</p>
+                    <div class="p-guide__title-inner c-margin--s">【キット発送後のキャンセル】</div>
+                    <p class="p-guide__text">返品扱いとなります<br>
+                      一度商品をお受け取りいただき、商品到着日より７日以内にメール又はお電話でご連絡下さい。<br>
+                      未開封の場合に限り、返送料とキャンセル料をお客様のご負担にて、対応させていただきます。<br>
+                      期間を過ぎてしまった場合、お受けできない場合がございますのでご注意下さい。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">商品が手元に届きましたが返品はできますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">お届け後7日以内、ご注文内容と異なっている場合や不良品の場合についてのみに限り承ります。<br>
+                      下記まで、お電話にてご連絡ください。事前のご連絡がない返送商品のご対応はお受けできませんのでご注意ください。<br>
+                      当社責任による検査キットの交換・ご返品の際の配送料金は当社負担とさせていただきます。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq05">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">検査容器、検体の返送について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">複数項目の検査ができるタイプは時期を分けて検査を受けることはできますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">複数項目のセット商品は一度にまとめて受けていただくこととなっており、時期を分けて検査を受ける（採取する）ことはできません。<br>
+                      ご注文頂いた項目全ての検体をまとめてご郵送お願いいたします。
+                      </p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">使用期限はありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">商品はご注文日より6ヶ月以内にご使用ください。<br>使用期限までであれば、いつでも検査をお受けいただけます。</p>
+                    <p class="p-guide__text c-margin--xs">＜使用期限の主な表示箇所＞<br>商品パッケージ袋の裏面　</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">複数人分のセット販売などはありますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">セット販売は行っておりませんが、複数個のご注文は可能です。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">処分に困る説明書なども一緒に返送していいですか。</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">「検査申込書お客様控」以外のご不要なものは、検体と一緒に同封の返信用封筒に入れてご返送ください。</p>
+                    <p class="p-guide__text c-margin--xs">＜血液検査（HIV・梅毒・B型肝炎・C型肝炎）を行ったお客様＞<br>
+                      使用・未使用に関わらず全てのランセット(血液採取器具)と消毒綿は、同封の医療廃棄物返送用袋にてご返送ください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査申込書を入れ忘れて返送してしまいました。どうすればいいですか。</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">「検査申込書」は、必ずご提出いただく必要があります。<br>検査が進められないケースがございますので、できるだけお早めに下記電話番号までご連絡ください。</p>
+                    <p class="p-guide__text c-margin--xs">お問い合わせ電話番号：0120-256-525</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">前回注文したキットと同じキットをまた購入したい場合、どのように注文すればよいですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">商品詳細ページで、「カートに入れる」ボタン下部にある「お気に入りアイテムに追加」ボタンを押すことで、会員様独自のリストとして登録することができます。<br>
+                    追加されたお気に入りアイテムは商品詳細ページ下部、あるいは会員メニューのお気に入りアイテムページより選択いただき、いつでも気に入った商品にアクセスすることができます。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+
+          </div>
+        </div>
+      </div>
+      
+      <div class="l-section p-guide__title-section" id="anchor-guide-faq06">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">検査結果ログインについて</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">注文してからどれ位の日数で検査結果がわかりますか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">検査をラボにて受付後、結果は最短翌日！ご注文から検査結果まで、約1週間で結果がわかります。※</p>
+                    <p class="p-guide__text c-margin--xs">＜ご注文→検査キットお届け＞ 当日15時までのご注文（平日） → 当日発送（最短1日）<br>
+                      ＜検査物のご返送→検査受付＞ 2日～5日（郵便事情により）<br>
+                      ＜ラボの検査実施＞ 1～7日（検査項目によって異なります）</p>
+                    <p class="p-guide__text c-margin--xs">※複数の検査項目が含まれた検査セットをお申込の場合には、検査が完了したものから随時、インターネットで検査結果を確認することが可能です。</p>
+                    <div class="p-guide__title-inner c-margin--xs">【ご注意】</div>
+                    <ul class="p-guide__bullet-point">
+                      <li>土日祝を含む場合は、もう少し日数がかかります。各地区の集配局(大きい郵便局)の郵便窓口よりご返送いただくと、通常のポスト投函より早く到着することが多いようです。お急ぎの場合、ご注文時は午前中にポスト投函、また大きな郵便局で午前中での差出をおすすめしております。</li>
+                      <li>沖縄・離島からのご返送は、検査物到着に日数がかかる場合がございます。</li>
+                    </ul>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+            <dl class="p-guide-faq__unit">
+              <dt class="p-guide-faq__question">検査結果はどのように確認するのですか？</dt>
+              <dd class="p-guide-faq__answer">
+                <div class="p-guide-faq__answer-inner">
+                  <div class="p-guide-faq__answertext">
+                    <p class="p-guide__text">みんなの郵送検査室サイト上の、「検査結果確認ページ」よりご確認いただけます。（ＰＤＦデータをダウンロード可能です）<br>
+                      パソコン、スマートフォンなどの各端末から確認できます。個人情報の観点から、メール文面やお電話による結果通知はおこなっておりませんのでご了承ください。</p>
+                  </div>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </main>
+
+	<div th:replace="~{include/footer}"/>
+  </div>
+  <script src="/assets/js/bundle.js" defer="defer"></script>
+</body></html>

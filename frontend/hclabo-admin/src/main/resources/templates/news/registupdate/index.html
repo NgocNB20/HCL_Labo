@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="https://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>ニュース登録更新｜店舗管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+	<script>
+        jQuery(function($){
+            var newsNotePC = $("#newsNotePC").val();
+            if (newsNotePC !== null && newsNotePC !== "") {
+                $('#newsDetails').prop("checked", true);
+                $('#newsNotePC').prop('disabled', false);
+                $('#newsUrlPC').prop('disabled', true);
+            }
+            //ニュース登録更新
+            $('input[name="newsDetailsType"]').on('change', function() {
+                var parentsDd = $(this).parents('dt').siblings('dd');
+                var input_radio_value = $('.c-form-control input[name="newsDetailsType"]:checked').val();
+                if(input_radio_value === 'url'){
+                    parentsDd.find('input').prop('disabled', false);
+                    $('.news_details').find('textarea').prop('disabled', true);
+                } else if(input_radio_value === 'details'){
+                    parentsDd.find('textarea').prop('disabled', false);
+                    $('.news_url').find('input').prop('disabled', true);
+                };
+            });
+        });
+    </script>
+	<script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+	<script language="JavaScript">
+		$(function () {
+			new CharCount(document.getElementById('newsBodyPC'), 'limit');
+			new CharCount(document.getElementById('newsNotePC'), 'limit');
+		})
+	</script>
+</head>
+
+<body id="shop">
+<div id="newsRegistShop" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!--/* contents */-->
+			<div class="l-main">
+				<form th:action="@{/news/registupdate}" th:object="${newsRegistUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">ニュース登録更新</h1>
+					</div>
+					
+					<!--/* エラーメッセージ */-->
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					
+					<div class="l-section" id="mainContainer">
+						<article class="l-article">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">基本設定</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<dl class="c-dl-base dt_fn13 dt_w160px mb20">
+										<div class="edit">
+											<dt>ニュース日時<span class="ico_required">必須</span></dt>
+											<dd>
+												<div class="wrap_flex_center">
+													<label class="c-datepicker w150px">
+														<input type="text" th:field="*{newsDate}" maxlength="10" autocomplete="off" class="c-form-control " placeholder="年/月/日" th:errorclass="error">
+													</label>
+													<input type="text" th:field="*{newsTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+												</div>
+												<div>
+													<div id="newsDateError" th:if="${#fields.hasErrors('newsDate')}" th:errors="*{newsDate}" class="c-error-txt mt5"></div>
+													<div id="newsTimeError" th:if="${#fields.hasErrors('newsTime')}" th:errors="*{newsTime}" class="c-error-txt mt5"></div>
+												</div>
+											</dd>
+										</div>
+										
+										<div class="edit">
+											<dt>タイトル（HTML可）</dt>
+											<dd>
+												<input type="text" th:field="*{titlePC}" maxlength="200" class="c-form-control w100p" placeholder="入力してください" th:errorclass="error">
+												<div id="titlePCError" th:if="${#fields.hasErrors('titlePC')}" th:errors="*{titlePC}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+										
+										<div id="newsBodyPC" class="edit">
+											<dt>本文（HTML可）</dt>
+											<dd>
+												<textarea limit="5000" class="c-form-control w100p" th:field="*{newsBodyPC}" rows="5" name="" placeholder="入力してください" th:errorclass="error"></textarea>
+												<div id="newsBodyPCError" th:if="${#fields.hasErrors('newsBodyPC')}" th:errors="*{newsBodyPC}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+									</dl>
+									<dl class="c-dl-base dt_fn13 dt_w160px mb20">
+										<div class="edit">
+											<dt>
+												<label class="c-form-control"><input type="radio" name="newsDetailsType" value="url" th:checked="*{newsNotePC} == null"><i></i>URL</label>
+											</dt>
+											<dd class="news_url">
+												<input type="text" th:field="*{newsUrlPC}" maxlength="200" class="c-form-control w100p" placeholder="入力してください" th:errorclass="error" th:disabled="*{newsNotePC} != null">
+												<div id="newsUrlPCError" th:if="${#fields.hasErrors('newsUrlPC')}" th:errors="*{newsUrlPC}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+										
+										<div id="newsNotePC" class="edit">
+											<dt>
+												<label class="c-form-control"><input type="radio" id="newsDetails" name="newsDetailsType" value="details" th:checked="*{newsNotePC} != null"><i></i>ニュース詳細<br>（HTML可）</label>
+											</dt>
+											<dd class="news_details">
+												<textarea limit="20000" class="c-form-control w100p" th:field="*{newsNotePC}" rows="5" name="" placeholder="入力してください" th:errorclass="error" th:disabled="*{newsNotePC} == null"></textarea>
+												<div id="newsNotePCError" th:if="${#fields.hasErrors('newsNotePC')}" th:errors="*{newsNotePC}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+									</dl>
+									<dl class="c-dl-base dt_fn13 dt_w160px">
+										<div class="edit">
+											<dt>公開状態<span class="ico_required">必須</span></dt>
+											<dd>
+												<select id="newsOpenStatusPC" class="c-form-control" name="newsOpenStatusPC" th:errorclass="error">
+													<option value="">選択してください</option>
+													<option th:each="item : *{newsOpenStatusPCItems}" th:value="${item.key}" th:text="${item.value}"
+															th:selected="${item.key} == *{newsOpenStatusPC}">
+													</option>
+												</select>
+												<div id="newsOpenStatusPCError" th:if="${#fields.hasErrors('newsOpenStatusPC')}" th:errors="*{newsOpenStatusPC}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+										
+										<div class="edit">
+											<dt>公開開始日時</dt>
+											<dd>
+												<div class="wrap_flex_center">
+													<label class="c-datepicker w150px">
+														<input type="text" class="c-form-control " th:field="*{newsOpenStartDatePC}" maxlength="10" autocomplete="off" placeholder="年/月/日" th:errorclass="error">
+													</label>
+													<input type="text" class="c-form-control w100px ml10" th:field="*{newsOpenStartTimePC}" maxlength="8" placeholder="00:00:00" th:errorclass="error">
+												</div>
+												<div>
+													<div id="newsOpenStartDatePCError" th:if="${#fields.hasErrors('newsOpenStartDatePC')}" th:errors="*{newsOpenStartDatePC}" class="c-error-txt mt5"></div>
+													<div id="newsOpenStartTimePCError" th:if="${#fields.hasErrors('newsOpenStartTimePC')}" th:errors="*{newsOpenStartTimePC}" class="c-error-txt mt5"></div>
+												</div>
+											</dd>
+										</div>
+										
+										<div class="edit">
+											<dt>公開終了日時</dt>
+											<dd>
+												<div class="wrap_flex_center">
+													<label class="c-datepicker w150px">
+														<input type="text" class="c-form-control " th:field="*{newsOpenEndDatePC}" maxlength="10" autocomplete="off" placeholder="年/月/日" th:errorclass="error">
+													</label>
+													<input type="text" class="c-form-control w100px ml10" th:field="*{newsOpenEndTimePC}" maxlength="8" placeholder="00:00:00" th:errorclass="error">
+												</div>
+												<div>
+													<div id="newsOpenEndDatePCError" th:if="${#fields.hasErrors('newsOpenEndDatePC')}" th:errors="*{newsOpenEndDatePC}" class="c-error-txt mt5"></div>
+													<div id="newsOpenEndTimePCError" th:if="${#fields.hasErrors('newsOpenEndTimePC')}" th:errors="*{newsOpenEndTimePC}" class="c-error-txt mt5"></div>
+												</div>
+											</dd>
+										</div>
+									</dl>
+								</div>
+							</div>
+						</article>
+					</div>
+					<!--/* 追尾ボタン */-->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<th:block th:if="*{originalNewsEntity != null}"><a class="c-btn btn_back icon_left" th:href="@{/news/(md=list)}"><i class="material-icons navigate_before"></i>戻る</a></th:block>
+								<th:block th:if="*{originalNewsEntity == null}"><a class="c-btn btn_back icon_left" th:href="@{/news/}"><i class="material-icons navigate_before"></i>戻る</a></th:block>
+							</div>
+							<div class="col_left">
+								<input type="hidden" id="isConfirmBtnClicked" value="false"/>
+								<button class="c-btn btn_regular" id="doConfirm" name="doConfirm" type="submit">確認</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

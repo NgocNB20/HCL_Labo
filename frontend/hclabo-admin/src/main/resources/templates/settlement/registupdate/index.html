@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>決済方法設定 登録更新｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+    <script language="JavaScript">
+        $(function () {
+            new CharCount(document.getElementById('settlementNotePC'), 'limit');
+        })
+    </script>
+</head>
+
+<body id="system">
+<div id="searchSettlementMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/settlement/registupdate/}" th:object="${settlementRegistUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">決済方法設定</h1>
+                        <h2 class="c-pagetitle_h2">登録更新</h2>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="submit" id="doChangeComissonType" name="doChangeComissonType" style="display:none;" />
+                    <input type="submit" id="doChangeSettlementMethodType" name="doChangeSettlementMethodType" style="display:none;" />
+                    <input type="submit" id="doChangeBillType" name="doChangeBillType" style="display:none;" />
+                    <input type="hidden" id="settlementMethodSeq"/>
+
+                    <div class="l-section_column" id="mainContainer">
+                        <div class="l-section_inner">
+                            <!-- 基本設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">基本設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px wrap_flex_wrap">
+                                            <th:block th:if="*{!isRegist}">
+                                                <div class="cannot-change w100p">
+                                                    <dt>決済ID</dt>
+                                                    <dd th:text="*{settlementMethodId}"></dd>
+                                                </div>
+                                            </th:block>
+                                            <div class="edit w100p">
+                                                <dt>決済名称<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <input type="text" th:field="*{settlementMethodName}" maxlength="60" class="c-form-control w480px" placeholder="入力してください" th:errorclass="error">
+                                                    <div id="settlementMethodNameError" th:if="${#fields.hasErrors('settlementMethodName')}" th:errors="*{settlementMethodName}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <th:block th:if="*{isRegist}">
+                                                <div class="cannot-change w50p">
+                                                    <dt>決済種別 <span class="ico_required">必須</span>
+                                                    </dt>
+                                                    <dd>
+                                                        <select id="settlementMethodType" class="c-form-control" name="settlementMethodType" onChange="actionExe('doChangeSettlementMethodType');" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{settlementMethodTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{settlementMethodType}"></option>
+                                                        </select>
+                                                        <div id="settlementMethodTypeError" th:if="${#fields.hasErrors('settlementMethodType')}" th:errors="*{settlementMethodType}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="cannot-change w50p">
+                                                    <dt>請求種別
+                                                        <th:block th:if="*{isRegist}">
+                                                            <span class="ico_required">必須</span>
+                                                        </th:block>
+                                                    </dt>
+                                                    <dd>
+                                                        <select id="billType" class="c-form-control" name="billType" onChange="actionExe('doChangeBillType');" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{billTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{billType}"></option>
+                                                        </select>
+                                                        <div id="billTypeError" th:if="${#fields.hasErrors('billType')}" th:errors="*{billType}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="edit w50p">
+                                                    <dt>手数料種別<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <select id="settlementMethodCommissionType" class="c-form-control" name="settlementMethodCommissionType" onChange="actionExe('doChangeComissonType');" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                               <option th:each="item : *{settlementMethodCommissionTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{settlementMethodCommissionType}"></option>
+                                                        </select>
+                                                        <div id="settlementMethodCommissionTypeError" th:if="${#fields.hasErrors('settlementMethodCommissionType')}" th:errors="*{settlementMethodCommissionType}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div th:unless="*{isSettlementMethodTypeLinkPayment}" class="edit w50p">
+                                                    <dt>利用可能最小金額<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <div class="c-input-label">
+                                                            <input placeholder="100" th:field="*{minPurchasedPrice}" maxlength="8" type="text" class="c-form-control w160px price" th:errorclass="error">
+                                                            <label>円 （税込）</label>
+                                                        </div>
+                                                        <div id="minPurchasedPriceError" th:if="${#fields.hasErrors('minPurchasedPrice')}" th:errors="*{minPurchasedPrice}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="edit w50p">
+                                                    <dt>督促/期限切れメール<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <select id="settlementMailRequired" class="c-form-control" name="settlementMailRequired" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{settlementMailRequiredItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{settlementMailRequired}"></option>
+                                                        </select>
+                                                        <div id="settlementMailRequiredError" th:if="${#fields.hasErrors('settlementMailRequired')}" th:errors="*{settlementMailRequired}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="edit w50p">
+                                                    <dt>対象配送方法</dt>
+                                                    <select id="deliveryMethodSeq" class="c-form-control" name="deliveryMethodSeq" th:errorclass="error">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="item : *{deliveryMethodSeqItems}" th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{deliveryMethodSeq}"></option>
+                                                    </select>
+                                                    <div id="deliveryMethodSeqError" th:if="${#fields.hasErrors('deliveryMethodSeq')}" th:errors="*{deliveryMethodSeq}" class="c-error-txt mt5"></div>
+                                                </div>
+                                            </th:block>
+                                            <th:block th:if="*{!isRegist}">
+                                                <div class="cannot-change w50p">
+                                                    <dt>決済種別 </dt>
+                                                    <dd th:text="*{settlementMethodTypeValue}"></dd>
+                                                </div>
+                                                <div class="cannot-change w50p">
+                                                    <dt>請求種別</dt>
+                                                    <dd th:text="*{billTypeItems.get(billTypeValue)}"></dd>
+                                                </div>
+                                                <div class="edit w50p">
+                                                    <dt>手数料種別<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <select id="settlementMethodCommissionType" class="c-form-control" name="settlementMethodCommissionType" onChange="actionExe('doChangeComissonType');" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                               <option th:each="item : *{settlementMethodCommissionTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{settlementMethodCommissionType}"></option>
+                                                        </select>
+                                                        <div id="settlementMethodCommissionTypeError" th:if="${#fields.hasErrors('settlementMethodCommissionType')}" th:errors="*{settlementMethodCommissionType}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div  th:unless="*{isSettlementMethodTypeLinkPayment}" class="edit w50p">
+                                                    <dt>利用可能最小金額<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <div class="c-input-label">
+                                                            <input th:field="*{minPurchasedPrice}" maxlength="8" type="text" class="c-form-control w160px txt_right" placeholder="入力してください" th:errorclass="error">
+                                                            <label>円 （税込）</label>
+                                                        </div>
+                                                        <div id="minPurchasedPriceError" th:if="${#fields.hasErrors('minPurchasedPrice')}" th:errors="*{minPurchasedPrice}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="edit w50p">
+                                                    <dt>督促/期限切れメール<span class="ico_required">必須</span></dt>
+                                                    <dd>
+                                                        <select id="settlementMailRequired" class="c-form-control" name="settlementMailRequired" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{settlementMailRequiredItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{settlementMailRequired}"></option>
+                                                        </select>
+                                                        <div id="settlementMailRequiredError" th:if="${#fields.hasErrors('settlementMailRequired')}" th:errors="*{settlementMailRequired}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="cannot-change w50p">
+                                                    <dt>対象配送方法</dt>
+                                                    <dd th:text="*{deliveryMethodName == null ? '―' : deliveryMethodName}"></dd>
+                                                </div>
+                                            </th:block>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 表示設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">表示設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px">
+                                            <div class="edit">
+                                                <dt>公開状態<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <select id="openStatusPC" class="c-form-control w300px" name="openStatusPC" th:errorclass="error">
+                                                        <option th:each="item : *{openStatusPCItems}" th:value="${item.key}" th:text="${item.value}"
+                                                               th:selected="${item.key} == *{openStatusPC}"></option>
+                                                    </select>
+                                                    <div id="openStatusPCError" th:if="${#fields.hasErrors('openStatusPC')}" th:errors="*{openStatusPC}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <div id="settlementNotePC" class="edit">
+                                                <dt>説明（HTML可）</dt>
+                                                <dd>
+                                                    <textarea limit="2000" th:field="*{settlementNotePC}" th:errorclass="error" class="c-form-control w100p" rows="6" placeholder="入力してください"></textarea>
+                                                    <div id="settlementNotePCError" th:if="${#fields.hasErrors('settlementNotePC')}" th:errors="*{settlementNotePC}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side">
+                            <!-- クレジット決済詳細 -->
+                            <th:block th:if="*{isSettlementMethodTypeCredit}">
+                                <article class="l-article">
+                                    <div class="l-article_title">
+                                        <h2 class="c-pagetitle_h3">クレジット決済詳細</h2>
+                                        <div class="c-open-btn"><i></i></div>
+                                    </div>
+                                    <div class="l-article_inner">
+                                        <div class="l-inner_wrap">
+                                            <ul class="c-list-10">
+                                                <li>
+                                                    <label class="c-form-control"><input type="checkbox" th:field="*{enable3dSecure}" th:checked="*{enable3dSecure}"><i></i>3Dセキュアを有効にする</label>
+                                                </li>
+                                                <li>
+                                                    <label class="c-form-control"><input type="checkbox" th:field="*{enableInstallment}" th:checked="*{enableInstallment}"><i></i>分割払いを有効にする</label>
+                                                </li>
+                                                <li>
+                                                    <label class="c-form-control"><input type="checkbox" th:field="*{enableRevolving}" th:checked="*{enableRevolving}"><i></i>リボ払いを有効にする</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </th:block>
+
+                            <!-- 手数料設定 -->
+                            <th:block th:if="*{isCommissionTypeSelect}">
+                                <th:block th:if="*{isFlat}">
+                                    <th:block th:if="*{isFlatYen}">
+                                        <article class="l-article">
+                                            <div class="l-article_title">
+                                                <h2 class="c-pagetitle_h3">手数料設定</h2>
+                                                <div class="c-open-btn"><i></i></div>
+                                            </div>
+                                            <div class="l-article_inner">
+                                                <div class="l-inner_wrap settlement_info c-edit">
+                                                    <dl class="c-dl-base commission_edit dt_w150px">
+                                                        <div class="all">
+                                                            <dt>一律手数料<span class="ico_required">必須</span></dt>
+                                                            <dd>
+                                                                <div class="c-input-label">
+                                                                    <input th:field="*{equalsCommissionYen}" th:errorclass="error" maxlength="8" type="text" class="c-form-control w120px price" placeholder="100">
+                                                                    <label>円 （税抜）</label>
+                                                                </div>
+                                                                <div id="equalsCommissionYenError" th:if="${#fields.hasErrors('equalsCommissionYen')}" th:errors="*{equalsCommissionYen}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </div>
+                                                        <div class="all high-value">
+                                                            <dt>高額取引</dt>
+                                                            <dd>
+                                                                <input th:field="*{largeAmountDiscountPriceYen}" maxlength="8" type="text" class="c-form-control w120px mr10 price" th:errorclass="error" placeholder="100">円 （税抜）以上購入すると<br>手数料
+                                                                <input th:field="*{largeAmountDiscountCommissionYen}" type="text" class="c-form-control w120px mr10 ml10 price" maxlength="8" th:errorclass="error" placeholder="100">円 （税抜）
+                                                                <div id="largeAmountDiscountPriceYenError" th:if="${#fields.hasErrors('largeAmountDiscountPriceYen')}" th:errors="*{largeAmountDiscountPriceYen}" class="c-error-txt mt5"></div>
+                                                                <div id="largeAmountDiscountCommissionYenError" th:if="${#fields.hasErrors('largeAmountDiscountCommissionYen')}" th:errors="*{largeAmountDiscountCommissionYen}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </div>
+                                                        <div th:unless="*{isSettlementMethodTypeLinkPayment}" class="all">
+                                                            <dt>利用可能最大金額<span class="ico_required">必須</span></dt>
+                                                            <dd>
+                                                                <div class="c-input-label">
+                                                                       <input th:field="*{maxPurchasedPriceYen}" maxlength="8" type="text" class="c-form-control w120px price" th:errorclass="error" placeholder="100">
+                                                                    <label>円 （税込）</label>
+                                                                </div>
+                                                            </dd>
+                                                            <div id="maxPurchasedPriceYenError" th:if="${#fields.hasErrors('maxPurchasedPriceYen')}" th:errors="*{maxPurchasedPriceYen}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </th:block>
+                                </th:block>
+                                <!-- 手数料設定 -->
+                                <th:block th:if="*{!isFlat}">
+                                    <th:block th:if="*{isEachAmountYen}">
+                                        <article class="l-article">
+                                            <div class="l-article_title">
+                                                <h2 class="c-pagetitle_h3">手数料設定</h2>
+                                                <div class="c-open-btn"><i></i></div>
+                                            </div>
+                                            <div class="l-article_inner">
+                                                <div class="l-inner_wrap settlement_info c-edit">
+                                                    <dl class="c-dl-base commission_edit dt_w150px">
+                                                        <div class="all">
+                                                            <dt>金額別手数料<span class="ico_required">必須</span></dt>
+                                                            <dt><span class="w174px">合計金額（税込）</span><span>手数料（税抜）</span></dt>
+                                                            <th:block th:each="itemPrice,stat : *{priceCommissionYen}">
+                                                                <dd class="c-input-label mt15">
+                                                                    <input type="text" class="c-form-control w110px price" th:id="'maxPrice' +  ${stat.index}" th:name="'priceCommissionYen' + '[' + ${stat.index} +']' + '.' +'maxPrice'" th:value="${itemPrice.maxPrice}" maxlength="8" th:errorclass="error" placeholder="100">
+                                                                    <label>円以下</label>
+                                                                    <input type="text" class="c-form-control w100px ml15 price" th:id="'commission' +  ${stat.index}" th:name="'priceCommissionYen' + '[' + ${stat.index} +']' + '.' +'commission'" th:value="${itemPrice.commission}" maxlength="8" th:errorclass="error" placeholder="100">
+                                                                    <label>円</label>
+                                                                </dd>
+                                                                <dd>
+                                                                    <div th:id="${'maxPrice' + stat.index +'Error'}" th:if="${#fields.hasErrors('priceCommissionYen[__${stat.index}__].maxPrice')}" th:errors="*{priceCommissionYen[__${stat.index}__].maxPrice}" class="c-error-txt mt5"></div>
+                                                                    <div th:id="${'commission' + stat.index +'Error'}" th:if="${#fields.hasErrors('priceCommissionYen[__${stat.index}__].commission')}" th:errors="*{priceCommissionYen[__${stat.index}__].commission}" class="c-error-txt mt5"></div>
+                                                                </dd>
+                                                            </th:block>
+                                                        </div>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/settlement/}"><i class="material-icons navigate_before"></i>キャンセル</a>
+                            </div>
+                            <div class="col_left">
+                                <input type="hidden" id="isConfirmBtnClicked" value="false"/>
+                                <button class="c-btn btn_regular" type="submit" id="doConfirm" name="doConfirm">確認</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}" ></div>
+    </main>
+</div>
+</body>
+</html>

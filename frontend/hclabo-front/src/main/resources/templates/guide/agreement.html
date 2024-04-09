@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-guide">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"/>
+
+	<main class="l-page">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('agreement')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>サイトについて</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="/guide/environment#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">推奨環境について</a>
+          <a href="#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">ご利用規約</a>
+          <a href="/guide/law#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">特定商取引法に基づく表記</a>
+          <a href="/guide/privacy#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">プライバシーポリシー</a>
+          <a href="/inquiry/" class="js-anchor p-guide__localmenu-notlocal">お問い合わせ</a>
+
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-shop01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">ご利用規約</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <!--/* ご利用規約 */-->
+            <hm:freearea key="guide_agreement"/>
+          </div>
+        </div>
+      </div>
+
+	</main>
+	<div th:replace="~{include/footer}"/>
+</div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+</body>
+</html>

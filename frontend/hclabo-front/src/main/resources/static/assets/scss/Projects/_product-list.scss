@@ -1,0 +1,59 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.p-product-list {
+
+  // カテゴリー画像,フリーエリア
+ .category-setting {
+  
+    &__image {
+      margin-bottom: 50px;
+
+      + .category-setting__free {
+        margin-top: -20px;
+      }
+    }
+
+    &__free {
+      @include font-style(16, 32);
+      margin-bottom: 50px;
+    }
+
+    @include media(sm){
+  
+      &__image {
+        margin-bottom: vwset(40);
+
+        + .category-setting__free {
+          margin-top: vwset(-10);
+        }
+      }
+      
+      &__free {
+        @include font-sp-style(15, 30);
+        margin: 0 vwset(20) vwset(40);
+      }
+    
+    }
+
+ }
+
+ // リスト表示 検査項目
+ .p-product-list-exam {
+    margin-top: 26px;
+
+    @include media(sm) {
+
+      margin-top: vwset(18);
+    }
+
+  }
+
+
+
+
+
+}

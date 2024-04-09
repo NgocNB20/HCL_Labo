@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+       xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>フリーエリア登録更新確認 ｜店舗管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="shop">
+<div id="freeRegistShop" class="l-mainwrap">
+    <!-- side -->
+   <div th:include="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:include="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form id="confirmForm" th:action="@{/freearea/registupdate/confirm}"
+                      th:object="${freeareaRegistUpdateModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">フリーエリア登録更新：確認</h1>
+                    </div>
+                    <!--エラーメッセージ-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- フリーエリア内容登録 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">基本設定</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>キー</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'freeAreaKey'})}">
+                                                <span th:text="*{freeAreaKey}" title="キー" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>公開開始日時</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'openStartTime'})}">
+                                                <span th:text="*{openStartDate}" title="公開開始日" th:remove="tag"></span>
+                                                <span th:text="*{openStartTime}" title="公開開始時間" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>タイトル</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'freeAreaTitle'})}">
+                                                <span th:text="*{freeAreaTitle}" title="タイトル" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>本文（HTML可）</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'freeAreaBodyPc'})}">
+                                                <span th:utext="*{#pre.convert(freeAreaBodyPc)}" title="本文" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>特集ページ用URL</dt>
+                                            <dd>
+                                                <table cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr><td><span th:text="*{specialPageUrlPc}" th:remove="tag"></span></td><td></td></tr>
+                                                    <tr><td><span th:text="*{contentsPageUrlPc}" th:remove="tag"></span></td><td>※サイドメニューなし</td></tr>
+                                                    <tr><td><span th:text="*{topicPageUrlPc}" th:remove="tag"></span></td><td>※ヘッダー、フッター、サイドメニューなし</td></tr>
+                                                </table>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <th:block th:if="${dataNotExist}">
+                                    <button  disabled name="doCancel" type="submit" class="c-btn btn_back icon_left" >
+                                        <i class="material-icons navigate_before"></i>戻る</button>
+                                </th:block>
+                                <th:block th:unless="${dataNotExist}">
+                                    <button  name="doCancel" type="submit" class="c-btn btn_back icon_left" >
+                                        <i class="material-icons navigate_before"></i>戻る</button>
+                                </th:block>
+                            </div>
+                            <div class="col_left">
+                                <button class="c-btn btn_regular" name="doOnceFreeAreaRegist" type="submit">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:include="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+    <div class="l-mainwrap">
+        <div th:replace="~{include/header}"></div>
+        <main class="l-page">
+
+            <div class="l-breadcrumbs">
+                <div class="l-breadcrumbs__inner">
+                    <div class="l-breadcrumbs__list">
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">退会手続き</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="l-section">
+                <div class="l-section__inner">
+                    <h2 class="c-title-page"><strong>退会手続き</strong></h2>
+                    <div class="l-complete">
+                        <div class="l-complete__inner">
+                            <p class="l-complete__title">退会手続きを完了しました。</p>
+                        </div>
+                    </div>
+                    <div class="c-button-wrap">
+                        <a th:href="@{/}" class="c-button c-button--primary c-button--width-l">トップページへ</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body></html>

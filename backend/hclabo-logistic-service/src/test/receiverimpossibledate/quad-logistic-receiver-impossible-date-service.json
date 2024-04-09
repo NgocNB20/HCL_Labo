@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "c0d3bc4b-d692-49f6-abe7-347b4a23a4c5",
+		"name": "hclabo-logistic-receiver-impossible-date-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "お届け不可日登録 (regist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\" : \"2022-11-02\",\r\n    \"year\" : \"2022\",\r\n    \"reason\" : \"Thanh p\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日登録 (regist)- BAD REQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist BAD REQUEST\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\" : \"20222-11-02\",\r\n    \"year\" : \"20222\",\r\n    \"reason\" : \"Thanh p\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日一覧取得 (get) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year ",
+							"value": "2021",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日一覧取得 (get) - NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get- NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year ",
+							"value": "2019",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日削除(delete) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deleteDate\":\"2022-11-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日削除(delete) - NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"deleteDate\":\"2022-11-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1/receiver-impossible-dates",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1",
+						"receiver-impossible-dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日アップロード(uploadCSV)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"upLoadFilePath\" : \"D:\\\\ITEC\\\\phase2\\\\02_phase2\\\\FD\\\\F1.csv\",\r\n    \"year\": 2022,\r\n    \"csvUploadValidLimit\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates/csv",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "お届け不可日CSVDL - OK",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8580/shippings/methods/1003/receiver-impossible-dates/csv?year=2022",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"methods",
+						"1003",
+						"receiver-impossible-dates",
+						"csv"
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "2022"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

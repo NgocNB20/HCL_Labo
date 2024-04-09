@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+  <th:block th:with="canonical='true', addRobots='noindex'" >
+    <meta th:replace="~{include/head}"/>
+  </th:block>
+  <script type="text/javascript">
+    var _popup = true;
+    var _redirectPath = "cart/";
+    var _buttonSize = "medium";
+    var _type = "PwA";
+    var _color = "Gold";
+
+    function setCartGoodsIndex(index){
+      // Ajax処理等でhiddenがすでに作られていた場合に対する考慮
+      // 行インデックスhiddenがすでに存在する場合は要素削除
+      if ($("#cartGoodsIndex")[0]) {
+        $("#cartGoodsIndex").remove();
+      }
+      // 行インデックスhiddenを生成しformに追加
+      $("<input>", {
+        type: 'hidden',
+        id: 'cartGoodsIndex',
+        name: 'cartGoodsIndex',
+        value: index
+      }).appendTo('#cartGoodsItems');
+    }
+  </script>
+  <script type="text/javascript" th:src="@{/assets/js/lib/swiper.min.js}"></script>
+  <script type="text/javascript" th:src="@{/assets/js/goodsIcon.js}"></script>
+</head>
+
+<body id="gotop" class="p-product-detail p-cart">
+<!--/* product-detailクラスが存在するとbundle.jsがスワイプ処理を登録しに行くが、登録対象が無いとエラーが発生するため、ダミーの空divを配置 */-->
+<div class="product-detail__base--thumb" style="display:none;"></div>
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+    <main class="l-page">
+      <div class="l-breadcrumbs">
+        <div class="l-breadcrumbs__inner">
+          <div class="l-breadcrumbs__list">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">ショッピングカート</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>ショッピングカート</strong></h2>
+          <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+            <ul th:each="message : ${allMessages}">
+              <li th:utext="${message}"></li>
+            </ul>
+          </div>
+          <form id="indexForm" th:action="@{/cart/}" th:object="${cartModel}" method="POST">
+          <th:block th:if="${allMessages == null}">
+            <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+              入力内容をご確認ください。
+            </div>
+          </th:block>
+          <div class="p-cart__list">
+            <input type="submit" id="doWishlistAdd" name="doWishlistAdd" style="display:none;" />
+            <th:block th:if="*{!isCartIn()}">
+              <div class="c-nodata">
+                <h2>ショッピングカートの中に商品はありません。</h2>
+                <div class="c-button-wrap c-margin--s">
+                  <a th:href="@{/}" class="c-button c-button--primary-line c-button--width-m">
+                    <p>お買い物を続ける</p>
+                  </a>
+                </div>
+              </div>
+            </th:block>
+            <th:block th:if="*{isCartIn()}">
+              <div class="c-margin--m">
+                <p class="c-text--note-l">ご注意ください。こちらの商品はまだ確保されておりません。</p>
+                <p class="c-text--m c-margin--xxs">ショッピングカートの中の商品は、ご注文手続きが完了した時点で商品の確保をいたします。<br>数に限りのある商品の場合は、ショッピングカートへ登録していただいている場合でもご注文時に売り切れとなる場合がございます。<br>あらかじめご了承の上、お早めにご注文手続きを済ませることをお勧めします。</p>
+              </div>
+              <div class="c-product c-product--orderlist c-margin--m" id="cartGoodsItems">
+                <th:block th:each="item, stat : *{cartGoodsItems}">
+                  <div class="c-product__item"><div class="c-product__item-inner">
+                    <div class="c-product__item-image">
+                      <th:block th:if="${item.isGoodsOpen()}">
+                        <a th:href="@{/goods/detail(gcd=${item.gcd})}">
+                          <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="180" width="180" decoding="async" loading="lazy">
+                        </a>
+                      </th:block>
+                      <th:block th:if="${!item.isGoodsOpen()}">
+                        <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="180" width="180" decoding="async" loading="lazy">
+                      </th:block>
+                    </div>
+                    <div class="c-product__item-overview">
+                      <div class="c-product__item-group">
+                        <div class="c-product__item-description">
+                          <th:block th:if="${item.isGoodsOpen()}">
+                            <div class="c-product__item-title">
+                              <a th:href="@{/goods/detail(gcd=${item.gcd})}">
+                                <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                              </a>
+                            </div>
+                          </th:block>
+                          <th:block th:if="${!item.isGoodsOpen()}">
+                            <span th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                          </th:block>
+                          <th:block th:if="${item.isUnit1() || item.isUnit2()}">
+                            <div class="c-product__item-text">
+                              <th:block th:if="${item.isUnit1()}">
+                                <span th:text="${item.unitTitle1 + ':'  + item.unitValue1}" th:remove="tag"> </span>
+                              </th:block>
+                              <th:block th:if="${item.isUnit1() && item.isUnit2()}"><br></th:block>
+                              <th:block th:if="${item.isUnit2()}">
+                                <span th:text="${item.unitTitle2 + ':'  + item.unitValue2}" th:remove="tag"></span>
+                              </th:block>
+                            </div>
+                          </th:block>
+                          <div class="c-product__item-price">
+                            <span>単価：</span>
+                            <div class="c-product__item-price-unit">
+                              <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                              <span>円 (税込)</span>
+                            </div>
+                          </div>
+                          <th:block th:if="${item.isViewDeliveryType()}">
+                            <div class="c-product__item-text">
+                            お届け予定日：
+                            <span th:text="${item.deliveryType}" th:remove="tag"></span>
+                            </div>
+                          </th:block>
+                          <div class="c-product__item-text">
+                            <span th:utext="${item.goodsInfomation}" th:remove="tag"></span>
+                          </div>
+                          <input type="hidden" th:field="*{cartGoodsItems[__${stat.index}__].goodsSeq}"/>
+                          <input type="hidden" th:field="*{cartGoodsItems[__${stat.index}__].cartSeq}"/>
+                          <input type="hidden" th:field="*{cartGoodsItems[__${stat.index}__].gcd}"/>
+                          <input type="checkbox" th:field="*{cartGoodsItems[__${stat.index}__].wishlistView}" style="display:none;"/>
+                          <div class="p-cart__control">
+                            <div class="p-cart__control-quantity">
+                              <input type="text" class="c-input" th:field="*{cartGoodsItems[__${stat.index}__].gcnt}" maxlength="4" th:errorclass="field-error">
+                              <button type="submit" class="c-button c-button--primary c-button--width-s" name="doCalculate"><p>変 更</p></button>
+                              <div th:if="${#fields.hasErrors('cartGoodsItems[' + stat.index + '].gcnt')}" th:errors="*{cartGoodsItems[__${stat.index}__].gcnt}" class="c-field-error"></div>
+                            </div>
+                            <button name="doDeleteGoods" th:onclick="'setCartGoodsIndex(' +${stat.index} + ');'" alt="削除" type="submit" class="c-textlink c-textlink--delete2">
+                              <p>削除</p>
+                            </button>
+                            <button th:id="'wishlist_btn-'+${stat.index}" name="" type="button" class="c-button--add-fav js-btn-favorite" th:disabled="${!item.wishlistView}" th:onclick="'setCartGoodsIndex(' +${stat.index} + '); wishlistRegist(this); return false;'">
+                              <svg viewBox="0 0 19 17" class="favorite">
+                                <use xlink:href="/assets/images/icon/heart-fill.svg#heart-fill"></use>
+                              </svg>
+                              <p th:text="${item.wishlistView ? 'お気に入り追加' : 'お気に入り追加済'}"></p>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="c-product__item-state">
+                          <div class="c-product__item-price">
+                            <span>小計：</span>
+                            <div class="c-product__item-price-unit">
+                              <span th:text="${#number.convert(item.goodsTotalPriceInTax)}" th:remove="tag"></span>
+                              <span>
+                                円 (税込)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div></div>
+                </th:block>
+                <table class="p-cart__list-total">
+                  <tbody>
+                    <tr>
+                      <th>商品数量</th>
+                      <td>
+                        <span th:text="*{#number.convert(goodsCountTotal)}" th:remove="tag"></span>
+                        <span class="c-text--m"> 個</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>商品合計（税込）</th>
+                      <td>
+                        <span th:text="*{#number.convert(priceTotalInTax)}" th:remove="tag"></span>
+                        <span class="c-text--m">円 (税込)</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <aside>※全国送料無料<br>※ご注文された商品がすべて入荷してからお届けいたします。</aside>
+              </div>
+            </th:block>
+          </div>
+          <div th:if="*{isCartIn()}" class="p-cart__navigation c-button-wrap c-margin--s">
+            <div>
+              <a th:href="@{/}" class="c-button c-button--primary-line c-button--width-m">
+                <p>お買い物を続ける</p>
+              </a>
+            </div>
+            <div class="p-cart__navigation-next">
+              <a onClick="onClickDoSelectConfirm()" class="c-button c-button--primary c-button--width-m"><p>ご注文手続きに進む</p></a>
+              <input hidden="hidden" type="submit" id="doConfirm" name="doConfirm" alt="ご購入手続きに進む">
+            </div>
+          </div>
+          </form>
+        </div>
+      </div>
+
+      <span th:object="${cartModel}" th:remove="tag">
+        <th:block th:unless="*{#lists.isEmpty(relatedGoodsItems)}">
+          <div class="l-section p-product-detail__related">
+            <div class="l-section__inner p-product-detail__related-inner">
+              <h3 class="c-title-contents">関連商品</h3>
+              <div class="c-product c-product--slider">
+                <div class="c-product-swiper js-product-swiper">
+                  <div class="swiper-wrapper">
+                    <th:block th:each="item, stat : *{relatedGoodsItems}" th:unless="*{#lists.isEmpty(relatedGoodsItems)} or ${stat.index > 5}">
+                      <div class="swiper-slide c-product__item">
+                        <th:block th:if="${item.isGoodsOpen()}">
+                          <a th:href="@{/goods/detail(ggcd=${item.ggcd})}">
+                            <div class="c-product__item-image">
+                              <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                                th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                                th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210" decoding="async"
+                                loading="lazy">
+                            </div>
+                            <div class="c-product__item-icon">
+                              <th:block th:if="${item.isNewDate()}">
+                                <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                              </th:block>
+                              <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                                <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                              </th:block>
+                            </div>
+                            <div class="c-product__item-title" th:text="${item.goodsGroupName}"></div>
+                            <div class="c-product__item-price">
+                              <div class="c-product__item-price-unit">
+                                <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                <span>円 (税込)</span>
+                              </div>
+                            </div>
+                            <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                              <div class="c-product__item-stock">取り扱っておりません</div>
+                            </th:block>
+                            <!--/* 公開期間終了 */-->
+                            <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                              <div class="c-product__item-stock">取扱終了しました</div>
+                            </th:block>
+                            <!--/* 公開前 */-->
+                            <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                              <div class="c-product__item-stock">取扱開始前</div>
+                            </th:block>
+                            <!--/* 非販売 */-->
+                            <th:block th:if="${item.isNoSaleIconDisp()}" >
+                              <div class="c-product__item-stock">販売しておりません</div>
+                            </th:block>
+                            <!--/* 販売期間終了 */-->
+                            <th:block th:if="${item.isSellOutIconDisp()}" >
+                              <div class="c-product__item-stock">販売終了しました</div>
+                            </th:block>
+                            <!--/* 販売前 */-->
+                            <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                              <div class="c-product__item-stock">販売開始前</div>
+                            </th:block>
+                            <!--/* 在庫切れ */-->
+                            <th:block th:if="${item.isNoStockIconDisp()}" >
+                              <div class="c-product__item-stock">完売しました</div>
+                            </th:block>
+                            <!--/* 残りわずか */-->
+                            <th:block th:if="${item.isStockFewIconDisp()}" >
+                              <div class="c-product__item-stock">残りわずか</div>
+                            </th:block>
+                          </a>
+                        </th:block>
+                        <th:block th:if="${!item.isGoodsOpen()}">
+                          <span>
+                            <div class="c-product__item-image">
+                              <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                                th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                                th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210" decoding="async"
+                                loading="lazy">
+                            </div>
+                            <div class="c-product__item-icon">
+                              <th:block th:if="${item.isNewDate()}">
+                                <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                              </th:block>
+                              <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                                <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                              </th:block>
+                            </div>
+                            <div class="c-product__item-title" th:text="${item.goodsGroupName}"></div>
+                            <div class="c-product__item-price">
+                              <div class="c-product__item-price-unit">
+                                <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                <span>円 (税込)</span>
+                              </div>
+                            </div>
+                            <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                              <div class="c-product__item-stock">取り扱っておりません</div>
+                            </th:block>
+                            <!--/* 公開期間終了 */-->
+                            <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                              <div class="c-product__item-stock">取扱終了しました</div>
+                            </th:block>
+                            <!--/* 公開前 */-->
+                            <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                              <div class="c-product__item-stock">取扱開始前</div>
+                            </th:block>
+                            <!--/* 非販売 */-->
+                            <th:block th:if="${item.isNoSaleIconDisp()}" >
+                              <div class="c-product__item-stock">販売しておりません</div>
+                            </th:block>
+                            <!--/* 販売期間終了 */-->
+                            <th:block th:if="${item.isSellOutIconDisp()}" >
+                              <div class="c-product__item-stock">販売終了しました</div>
+                            </th:block>
+                            <!--/* 販売前 */-->
+                            <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                              <div class="c-product__item-stock">販売開始前</div>
+                            </th:block>
+                            <!--/* 在庫切れ */-->
+                            <th:block th:if="${item.isNoStockIconDisp()}" >
+                              <div class="c-product__item-stock">完売しました</div>
+                            </th:block>
+                            <!--/* 残りわずか */-->
+                            <th:block th:if="${item.isStockFewIconDisp()}" >
+                              <div class="c-product__item-stock">残りわずか</div>
+                            </th:block>
+                          </span>
+                        </th:block>
+                      </div>
+                    </th:block>
+                  </div>
+                  <div class="swiper-button-prev"></div>
+                  <div class="swiper-button-next"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </span>
+
+      <span th:object="${cartModel}" th:remove="tag">
+        <th:block th:if="*{isViewWishlistGoods()}">
+          <div class="l-section p-product-detail__favorite">
+            <div class="l-section__inner p-product-detail__favorite-inner">
+              <h3 class="c-title-contents">お気に入り商品</h3>
+              <div class="p-product-detail__favorite-more">
+                <a class="c-button c-button--primary-line c-button--width-s" th:href="@{/member/wishlist/}">
+                  <svg viewBox="0 0 19 17" class="favorite">
+                    <use xlink:href="/assets/images/icon/heart.svg#heart"></use>
+                  </svg>
+                  <p>お気に入り商品一覧</p>
+                </a>
+              </div>
+              <div class="c-product c-product--slider">
+                <div class="swiper c-product-swiper js-product-swiper">
+                  <div class="swiper-wrapper">
+                    <th:block th:each="item, stat : *{wishlistGoodsItems}" th:unless="*{#lists.isEmpty(wishlistGoodsItems)}">
+                      <th:block th:if="${stat.index} < 5">
+                        <div class="swiper-slide c-product__item">
+                          <th:block th:if="${item.isGoodsOpen()}">
+                            <a th:href="@{/goods/detail(gcd=${item.gcd})}">
+                              <div class="c-product__item-image">
+                                <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                                    th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                                    th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210"
+                                    decoding="async" loading="lazy">
+                              </div>
+                              <div class="c-product__item-icon">
+                                <th:block th:if="${item.isNewDate()}">
+                                  <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                                </th:block>
+                                <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                                  <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                                </th:block>
+                              </div>
+                              <div class="c-product__item-title">
+                                <span class="c-product-list__item--title" th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                              </div>
+                              <div class="c-product__item-price">
+                                <div class="c-product__item-price-unit">
+                                  <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                  <span>円 (税込)</span>
+                                </div>
+                              </div>
+                              <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                                <div class="c-product__item-stock">取り扱っておりません</div>
+                              </th:block>
+                              <!--/* 公開期間終了 */-->
+                              <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                                <div class="c-product__item-stock">取扱終了しました</div>
+                              </th:block>
+                              <!--/* 公開前 */-->
+                              <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                                <div class="c-product__item-stock">取扱開始前</div>
+                              </th:block>
+                              <!--/* 非販売 */-->
+                              <th:block th:if="${item.isNoSaleIconDisp()}" >
+                                <div class="c-product__item-stock">販売しておりません</div>
+                              </th:block>
+                              <!--/* 販売期間終了 */-->
+                              <th:block th:if="${item.isSellOutIconDisp()}" >
+                                <div class="c-product__item-stock">販売終了しました</div>
+                              </th:block>
+                              <!--/* 販売前 */-->
+                              <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                                <div class="c-product__item-stock">販売開始前</div>
+                              </th:block>
+                              <!--/* 在庫切れ */-->
+                              <th:block th:if="${item.isNoStockIconDisp()}" >
+                                <div class="c-product__item-stock">完売しました</div>
+                              </th:block>
+                              <!--/* 残りわずか */-->
+                              <th:block th:if="${item.isStockFewIconDisp()}" >
+                                <div class="c-product__item-stock">残りわずか</div>
+                              </th:block>
+                            </a>
+                          </th:block>
+                          <th:block th:if="${!item.isGoodsOpen()}">
+                            <span>
+                              <div class="c-product__item-image">
+                                <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                                    th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                                    th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210"
+                                    decoding="async" loading="lazy">
+                              </div>
+                              <div class="c-product__item-icon">
+                                <th:block th:if="${item.isNewDate()}">
+                                  <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                                </th:block>
+                                <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                                  <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                                </th:block>
+                              </div>
+                              <div class="c-product__item-title">
+                                <span class="c-product-list__item--title" th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                              </div>
+                              <div class="c-product__item-price">
+                                <div class="c-product__item-price-unit">
+                                  <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                                  <span>円 (税込)</span>
+                                </div>
+                              </div>
+                              <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                                <div class="c-product__item-stock">取り扱っておりません</div>
+                              </th:block>
+                              <!--/* 公開期間終了 */-->
+                              <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                                <div class="c-product__item-stock">取扱終了しました</div>
+                              </th:block>
+                              <!--/* 公開前 */-->
+                              <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                                <div class="c-product__item-stock">取扱開始前</div>
+                              </th:block>
+                              <!--/* 非販売 */-->
+                              <th:block th:if="${item.isNoSaleIconDisp()}" >
+                                <div class="c-product__item-stock">販売しておりません</div>
+                              </th:block>
+                              <!--/* 販売期間終了 */-->
+                              <th:block th:if="${item.isSellOutIconDisp()}" >
+                                <div class="c-product__item-stock">販売終了しました</div>
+                              </th:block>
+                              <!--/* 販売前 */-->
+                              <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                                <div class="c-product__item-stock">販売開始前</div>
+                              </th:block>
+                              <!--/* 在庫切れ */-->
+                              <th:block th:if="${item.isNoStockIconDisp()}" >
+                                <div class="c-product__item-stock">完売しました</div>
+                              </th:block>
+                              <!--/* 残りわずか */-->
+                              <th:block th:if="${item.isStockFewIconDisp()}" >
+                                <div class="c-product__item-stock">残りわずか</div>
+                              </th:block>
+                            </span>
+                          </th:block>
+                        </div>
+                      </th:block>
+                    </th:block>
+                  </div>
+                  <div class="swiper-button-prev"></div>
+                  <div class="swiper-button-next"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </span>
+
+      <span th:object="${cartModel}" th:remove="tag">
+        <div class="l-section p-product-detail__viewed" th:if="*{!#lists.isEmpty(browsingHistoryGoodsItems)}" id="browsinghistoryGoods">
+          <div class="l-section__inner p-product-detail__viewed-inner">
+            <h3 class="c-title-contents">閲覧した商品</h3>
+            <div class="p-product-detail__viewed-delete">
+              <a class="c-button" href="javascript:void(0)" onClick="onClickDoClearAccessGoods()">
+                <p>閲覧履歴の削除</p>
+                <span><svg viewBox="0 0 16.6 16.6" style="width: 12px;"><use xlink:href="/assets/images/icon/close.svg#close"></use></svg></span>
+              </a>
+            </div>
+            <div class="c-product c-product--slider">
+              <div class="c-product-swiper js-product-swiper">
+                <div class="swiper-wrapper">
+                  <th:block th:each="item, stat : *{browsingHistoryGoodsItems}" th:unless="*{#lists.isEmpty(browsingHistoryGoodsItems)} or ${stat.index > 5}">
+                    <div class="swiper-slide c-product__item">
+                    <th:block th:if="${item.isGoodsOpen()}">
+                      <a th:href="@{/goods/detail(ggcd=${item.ggcd})}">
+                        <div class="c-product__item-image">
+                          <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                              th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                              th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210" decoding="async"
+                              loading="lazy">
+                        </div>
+                        <div class="c-product__item-icon">
+                          <th:block th:if="${item.isNewDate()}">
+                            <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                          </th:block>
+                          <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                            <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                          </th:block>
+                        </div>
+                        <div class="c-product__item-title">
+                          <span class="c-product-list__item--title" th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                        </div>
+                        <th:block th:if="${item.isUnit1()}">
+                          <div class="c-text--xs">
+                            <span th:text="${item.unitTitle1}" ></span>：<span th:text="${item.unitValue1}" ></span><br />
+                          </div>
+                        </th:block>
+                        <th:block th:if="${item.isUnit2()}">
+                          <div class="c-text--xs">
+                            <span th:text="${item.unitTitle2}" ></span>：<span th:text="${item.unitValue2}" ></span><br />
+                          </div>
+                        </th:block>
+                        <div class="c-product__item-price">
+                          <div class="c-product__item-price-unit">
+                            <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                            <span>円 (税込)</span>
+                          </div>
+                        </div>
+                        <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                          <div class="c-product__item-stock">取り扱っておりません</div>
+                        </th:block>
+                        <!--/* 公開期間終了 */-->
+                        <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                          <div class="c-product__item-stock">取扱終了しました</div>
+                        </th:block>
+                        <!--/* 公開前 */-->
+                        <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                          <div class="c-product__item-stock">取扱開始前</div>
+                        </th:block>
+                        <!--/* 非販売 */-->
+                        <th:block th:if="${item.isNoSaleIconDisp()}" >
+                          <div class="c-product__item-stock">販売しておりません</div>
+                        </th:block>
+                        <!--/* 販売期間終了 */-->
+                        <th:block th:if="${item.isSellOutIconDisp()}" >
+                          <div class="c-product__item-stock">販売終了しました</div>
+                        </th:block>
+                        <!--/* 販売前 */-->
+                        <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                          <div class="c-product__item-stock">販売開始前</div>
+                        </th:block>
+                        <!--/* 在庫切れ */-->
+                        <th:block th:if="${item.isNoStockIconDisp()}" >
+                          <div class="c-product__item-stock">完売しました</div>
+                        </th:block>
+                        <!--/* 残りわずか */-->
+                        <th:block th:if="${item.isStockFewIconDisp()}" >
+                          <div class="c-product__item-stock">残りわずか</div>
+                        </th:block>
+                      </a>
+                    </th:block>
+                    <th:block th:if="${!item.isGoodsOpen()}">
+                      <span>
+                        <div class="c-product__item-image">
+                          <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}"
+                              th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'"
+                              th:alt="${item.getGoodsGroupImageThumbnailAlt()}" height="210" width="210" decoding="async"
+                              loading="lazy">
+                        </div>
+                        <div class="c-product__item-icon">
+                          <th:block th:if="${item.isNewDate()}">
+                            <span style="background: #F5AF24; color: #ffffff;">NEW</span>
+                          </th:block>
+                          <th:block th:each="iconItem : ${item.goodsIconItems}" th:unless="${#lists.isEmpty(item.goodsIconItems)}">
+                            <span name="iconDisp" th:style="|background-color: ${iconItem.iconColorCode}|" th:text="${iconItem.iconName}"></span>
+                          </th:block>
+                        </div>
+                        <div class="c-product__item-title">
+                          <span class="c-product-list__item--title" th:text="${item.goodsGroupName}" th:remove="tag"></span>
+                        </div>
+                        <th:block th:if="${item.isUnit1()}">
+                          <div class="c-text--xs">
+                            <span th:text="${item.unitTitle1}" ></span>：<span th:text="${item.unitValue1}" ></span><br />
+                          </div>
+                        </th:block>
+                        <th:block th:if="${item.isUnit2()}">
+                          <div class="c-text--xs">
+                            <span th:text="${item.unitTitle2}" ></span>：<span th:text="${item.unitValue2}" ></span><br />
+                          </div>
+                        </th:block>
+                        <div class="c-product__item-price">
+                          <div class="c-product__item-price-unit">
+                            <span th:text="${#number.convert(item.goodsPriceInTax)}" th:remove="tag"></span>
+                            <span>円 (税込)</span>
+                          </div>
+                        </div>
+                        <th:block th:if="${item.isStockNoOpenIconDisp()}" >
+                          <div class="c-product__item-stock">取り扱っておりません</div>
+                        </th:block>
+                        <!--/* 公開期間終了 */-->
+                        <th:block th:if="${item.isStockOpenEndIconDisp()}" >
+                          <div class="c-product__item-stock">取扱終了しました</div>
+                        </th:block>
+                        <!--/* 公開前 */-->
+                        <th:block th:if="${item.isStockBeforeOpenIconDisp()}" >
+                          <div class="c-product__item-stock">取扱開始前</div>
+                        </th:block>
+                        <!--/* 非販売 */-->
+                        <th:block th:if="${item.isNoSaleIconDisp()}" >
+                          <div class="c-product__item-stock">販売しておりません</div>
+                        </th:block>
+                        <!--/* 販売期間終了 */-->
+                        <th:block th:if="${item.isSellOutIconDisp()}" >
+                          <div class="c-product__item-stock">販売終了しました</div>
+                        </th:block>
+                        <!--/* 販売前 */-->
+                        <th:block th:if="${item.isBeforeSaleIconDisp()}" >
+                          <div class="c-product__item-stock">販売開始前</div>
+                        </th:block>
+                        <!--/* 在庫切れ */-->
+                        <th:block th:if="${item.isNoStockIconDisp()}" >
+                          <div class="c-product__item-stock">完売しました</div>
+                        </th:block>
+                        <!--/* 残りわずか */-->
+                        <th:block th:if="${item.isStockFewIconDisp()}" >
+                          <div class="c-product__item-stock">残りわずか</div>
+                        </th:block>
+                      </span>
+                    </th:block>
+                    </div>
+                  </th:block>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </th:block>
+    </span>
+
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+  </div>
+  <script type="text/javascript">
+    function wishlistRegist(obj) {
+      var gcd = $(obj).parent().parent().find('[name$=".gcd"]').val();
+      registerWishlist(obj,gcd);
+    }
+    function handleWishlistRegistOperationFail() {
+      $("#indexForm").attr('action', '?doWishlistAdd');
+      $("#indexForm").submit();
+    }
+    function handleWishlistRegistOperationSuccess(gcd) {
+      let btnFavorists = $('[value='+gcd+']').parent().find('button[id^="wishlist_btn"]');
+      for (let i = 0; i< btnFavorists.length; i++ ){
+        $(btnFavorists[i]).attr("disabled","disabled");
+        if ($(btnFavorists[i]).find('p').length !== 0) {
+          $(btnFavorists[i]).find('p').text("お気に入り追加済");
+
+          // お気に入り表示フラグをOFFにする　※お気に入り追加⇒submit操作⇒バリデーションエラー後にお気に入りボタン表示が元に戻ってしまうことへの対処
+          var $wishlistView = $(btnFavorists[i]).parent().find('input[name$=".wishlistView"]');
+          $wishlistView.val(false);
+          $wishlistView.removeAttr("checked");
+        }else {
+          $(btnFavorists[i]).text("お気に入り追加済");
+
+          // お気に入り表示フラグをOFFにする　※お気に入り追加⇒submit操作⇒バリデーションエラー後にお気に入りボタン表示が元に戻ってしまうことへの対処
+          var $wishlistView = $(btnFavorists[i]).parent().parent().find('input[name$=".wishlistView"]');
+          $wishlistView.val(false);
+          $wishlistView.removeAttr("checked");
+        }
+      }
+    }
+    function onClickDoSelectConfirm() {
+      document.getElementById("doConfirm").click();
+    }
+    function onClickDoClearAccessGoods() {
+      $.ajax({
+        type     : "GET"
+        ,url      : pkg_common.getAppComplementUrl() + "/cart/doClearAccessGoods"
+        ,timeout  : 30000
+      })
+        .done($("#browsinghistoryGoods").remove())
+      ;
+    }
+    $(".cart__list--products-sm input[type='text']").on("change paste", function () {
+      updateInput($(this).attr("id"), $(this).val())
+    })
+    $(".cart__list--products input[type='text']").on("change paste", function () {
+      updateInput($(this).attr("id"), $(this).val())
+    })
+    function updateInput(id,value){
+        var list = $("[id='"+id+"']")
+        for (var i = 0; i < list.length; i++)
+        {
+            $(list[i]).val(value);
+        }
+    }
+
+    $('.c-input').on('keydown',function(event) {
+     if ( event.which == 13 ) {
+       onClickDoSelectConfirm();
+     }
+ });
+  </script>
+</body>
+</html>

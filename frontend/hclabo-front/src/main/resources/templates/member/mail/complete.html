@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+    <div class="l-mainwrap">
+        <div th:replace="~{include/header}"></div>
+
+        <main class="l-page">
+            <div th:replace="~{include/header_mypage::headermypage('mail')}"></div>
+
+            <div class="l-container">
+                <div class="l-container__inner">
+                    <div th:replace="~{include/sidemenumember :: sidemenumember('mail')}"></div>
+
+                    <div class="l-main">
+                        <h2 class="c-title-page p-mypage__title-page"><strong>メールアドレスの変更</strong></h2>
+                        <div class="l-complete">
+                            <div class="l-complete__inner">
+                                <p class="l-complete__title">ご登録メールアドレスをご確認ください。</p>
+                                <div class="l-complete__text-unit l-complete--margin-m">
+                                    <p class="l-complete__text">新しい登録メールアドレスに会員登録URLを送信します。<br>メールに記載されたURLを押し、「変更する」ボタンを押すと、ご登録メールアドレスの変更が完了します。<br>メールに記載されているURLは24時間有効です。24時間以内に押してください。<br>場合により、メールが届くまでに少々お時間がかかる場合がございますので、ご了承ください。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c-button-wrap p-mypage__button-wrap">
+                            <a th:href="@{/}" class="c-button c-button--primary c-button--width-m">トップページへ</a>
+                            <a th:href="@{/member/}" class="c-button c-button--primary c-button--width-m">マイページトップへ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body></html>

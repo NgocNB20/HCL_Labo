@@ -1,0 +1,55 @@
+<!--/*
+ ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+ 【pager1フラグメント】ページングリンク表示部分
+ -------------------------------------------
+ - フラグメント引数（必須パラメータ）
+     特に無し
+ -------------------------------------------
+ - 外部定義変数（任意パラメータ）
+     特に無し
+     ⇒追加が必要な場合はフロントのpager.htmlを参考に、th:withで追加ください
+
+   ※表示イメージ
+   ====================================================================
+   ←最初のページ ←前ページ [1] [2] [3] [4] [5] 次ページ→ 最後のページ→
+   ====================================================================
+ ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+*/-->
+<div  th:if="*{pageInfo}" class="l-pager mt30" th:fragment="pager1">
+	<ul>
+		<li class="prev_all"><a th:if="*{pageInfo.displayPrev}" th:id="goP1" href="#" th:onclick="'return pageLinkActionExe(&quot;1&quot;,&quot;doDisplayChange&quot;);'"><i></i></a></li>
+		<li class="prev"><a th:if="*{pageInfo.displayPrev}" th:id="goP__(*{pageInfo.pnum}-1)__" href="#" th:onclick="'return pageLinkActionExe(&quot;' + __(*{pageInfo.pnum}-1)__     + '&quot;,&quot;doDisplayChange&quot;);'"><i></i></a></li>
+		<li th:each="i : *{#numbers.sequence(pageInfo.startPageNo, pageInfo.endPageNo)}" th:class="${i} == *{pageInfo.pnum} ? 'active' : ''">
+			<a href="#numberLink" th:onclick="'return pageLinkActionExe(&quot;' + __(${i})__ + '&quot;,&quot;doDisplayChange&quot;);'"><span th:text="${i}"></span></a>
+		</li>
+		<li class="next"><a th:if="*{pageInfo.displayNext}" th:id="goP__(*{pageInfo.pnum}+1)__" href="#" th:onclick="'return pageLinkActionExe(&quot;' + __(*{pageInfo.pnum}+1)__     + '&quot;,&quot;doDisplayChange&quot;);'"><i></i></a></li>
+		<li class="next_all"><a th:if="*{pageInfo.displayNext}" th:id="goP__(*{pageInfo.totalPages})__" href="#" th:onclick="'return pageLinkActionExe(&quot;' + __(*{pageInfo.totalPages})__ + '&quot;,&quot;doDisplayChange&quot;);'"><i></i></a></li>
+	</ul>
+</div>
+<!--/*
+ ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+ 【pager2フラグメント】表示件数切り替えプルダウン
+ ----------------------------------------------------------
+ - フラグメント引数（必須パラメータ）
+     [totalCountDisplayFlag] 全件数表示フラグ true...表示する
+     [duplicateSelectFlag] selectタグ重複有無フラグ true...重複アリ
+ ----------------------------------------------------------
+ - 外部定義変数（任意パラメータ）
+     特に無し
+     ⇒追加が必要な場合はフロントのpager.htmlを参考に、th:withで追加ください
+
+   ※表示イメージ
+   ================================================================
+   表示件数: [100件  ▼]｜全件数:64件
+   ================================================================
+ ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+*/-->
+<th:block th:fragment="pager2(totalCountDisplayFlag)">
+	<th:block th:if="*{pageInfo} != null and ${totalCountDisplayFlag} == true">
+		<div class="col wrap_flex">
+			<h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+			<span class="as_end" th:text="*{'全' + pageInfo.total + '件が該当しました'}"></span>
+		</div>
+	</th:block>
+</th:block>
+

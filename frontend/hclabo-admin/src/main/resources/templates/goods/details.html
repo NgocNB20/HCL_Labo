@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+	  xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<title>商品詳細｜商品管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/thickbox.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/previewGoods.js}"></script>
+	<link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/thickbox.css}" />
+
+	<script language="JavaScript">
+		function setSelectGoodsSeq(goodsSeq) {
+			// Ajax
+			$.ajax({
+				type: "GET"
+				, url: pkg_common.getAppComplementUrl() + "/goods/stock/details/ajax?goodsSeq=" + goodsSeq
+				, dataType: "json"
+				, data: null
+				, timeout: 30000
+			})
+					.done(function (data) {
+						setStockDetail(data);
+					})
+					.fail(function (data) {
+						if (data && data.status && data.status === 403) {
+							location.href = pkg_common.getAppComplementUrl() + '/login/'
+						}
+					})
+			;
+			$("#receiving_history_dialog").dialog({
+				modal: true,
+				width: 820,
+				title: "入庫履歴",
+				position: {my: "top", at: "top+150", of: window}
+			});
+		}
+
+		function setStockDetail(data) {
+			$("#goods-code").text(data.goodsCode ? data.goodsCode : '')
+			$("#goods-group-code").text(data.goodsGroupCode ? data.goodsGroupCode : '')
+			if (data.unitTitleFlg1) {
+				$("#unit-title-1").text('規格1 (' + data.unitTitle1 ? data.unitTitle1 : '' + ")")
+			}
+			if (data.unitTitleFlg2) {
+				$("#unit-title-2").text('規格2 (' + data.unitTitle2 ? data.unitTitle2 : '' + ")")
+			}
+			$("#unit-value-1").text(data.unitValue1 ? data.unitValue1 : '')
+			$("#unit-value-2").text(data.unitValue2 ? data.unitValue2 : '')
+			$("#data-stock-detail").html("")
+			if (data.stockResultHistoryExist) {
+				$('#span-stock').hide();
+				$('#table-stock').show();
+				data.stockResultItems.forEach(e => {
+					let resultSupplementTime = e.resultSupplementTimeStr ? e.resultSupplementTimeStr : ''
+					let resultSupplementCount = e.resultSupplementTime ? e.resultSupplementCount : ''
+					let resultRealStock = e.resultRealStock ? e.resultRealStock : ''
+					let resultPersonSeq = e.resultPersonSeq ? e.resultPersonSeq : ''
+					let trdata = '<tr>' +
+							'<td class="lphabetic">' + resultSupplementTime + '</td>' +
+							'<td class="txt_right">' + new Intl.NumberFormat('ja-JP').format(resultSupplementCount) + '</td>' +
+							'<td class="txt_right">' + new Intl.NumberFormat('ja-JP').format(resultRealStock) + '</td>' +
+							'<td>' + resultPersonSeq + '</td>' +
+							'</tr>'
+					$("#data-stock-detail").append(trdata)
+				})
+			} else {
+				$('#span-stock').show();
+				$('#table-stock').hide();
+			}
+		}
+
+		// --------------------------------------------------
+		// 暫定対応：「さらに表示」の制御を追加
+		// --------------------------------------------------
+		$(function(){
+			// 商品詳細：商品説明
+			$('.product_description_details .more .c-btn_add').on('click', function() {
+				if (!$(this).hasClass('close')) {
+					$(this).children()[1].innerHTML = '閉じる';
+					$(this).addClass('close');
+					$(this).parents('.more').fadeIn();
+				} else {
+					$(this).removeClass('close');
+					$('.product_description_details dl > div:nth-child(n + ' + (3 + 1) + ')').addClass('is-hidden').hide();
+					$(this).children()[1].innerHTML = 'さらに表示';
+					$(this).parents('.more').fadeIn();
+				}
+			});
+			// 商品詳細：受注連携設定
+			$('.order_coordination_details .more .c-btn_add').on('click', function() {
+				if (!$(this).hasClass('close')) {
+					$(this).children()[1].innerHTML = '閉じる';
+					$(this).addClass('close');
+					$(this).parents('.more').fadeIn();
+				} else {
+					$(this).removeClass('close');
+					$('.order_coordination_details dl > div:nth-child(n + ' + (2 + 1) + ')').addClass('is-hidden').hide();
+					$(this).children()[1].innerHTML = 'さらに表示';
+					$(this).parents('.more').fadeIn();
+				}
+			});
+		});
+	</script>
+	<script language="JavaScript">
+		$(function () {
+			// -------------------------------------------------------------------
+			// 商品画像が1枚もない場合、インフォメーションを出力
+			// -------------------------------------------------------------------
+			var goodsImageElements = document.getElementsByClassName("imagePreviewer");
+			if (!goodsImageElements.length) {
+				document.getElementById("goodsImageNotExist").innerHTML = '商品画像が登録されていません。';
+				document.getElementsByClassName("c-image-list")[0].classList.add("mt25");
+			}
+
+			// -------------------------------------------------------------------
+			// アイコンが設定されない場合、インフォメーションを出力
+			// -------------------------------------------------------------------
+			var goodsIconElements = document.getElementsByClassName("c-item-status");
+			if (!goodsIconElements.length) {
+				document.getElementById("goodsIconNotExist").innerHTML = 'アイコンが設定されていません。';
+				document.getElementsByClassName("front-icon-list")[0].remove();
+			}
+
+		});
+	</script>
+	<script language="JavaScript">
+		$(function () {
+			// -------------------------------------------------------------------
+			// 商品画像プレビュー表示の初期化
+			// -------------------------------------------------------------------
+			initImagePreviewer();
+			prepareThickBox();
+		});
+	</script>
+</head>
+
+<body id="goods">
+<div id="searchGoods" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/goods/details/}" th:object="${goodsDetailsModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">商品詳細</h1>
+						<h2 class="c-pagetitle_h2" th:text="${goodsDetailsModel.goodsGroupName}"></h2>
+						<ul>
+							<th:block  th:if="*{frontDisplay != null}">
+							<li class="c-pagetitle_h3 w260px">
+								フロント表示
+								<span th:if="${goodsDetailsModel.frontDisplay} == '0'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',goodsDetailsModel.frontDisplay)}" class="c-status02 ico_gray"></span>
+								<span th:if="${goodsDetailsModel.frontDisplay} == '1'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',goodsDetailsModel.frontDisplay)}" class="c-status02 ico_blue"></span>
+							</li>
+							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+							<li>
+								<a class="c-btn btn_regular" th:href="@{/goods/registupdate/(goodGroupCode=*{goodsGroupCode},md=list,recycle=1)}">コピーする</a>
+							</li>
+							<li th:if="*{isDeleteGoods}"><button class="c-btn btn_del" name="doOnceDelete" onclick="return simpleDeleteConfirm();" type="submit">削除する</button></li>
+							</th:block>
+						</ul>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div class="l-section_column" id="mainContainer">
+						<div class="l-section_inner">
+							<!-- 基本情報 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">基本情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<dl class="c-dl-base dt_w160px">
+											<div>
+												<dt>商品管理番号</dt>
+												<dd th:text="*{goodsGroupCode}"></dd>
+											</div>
+											<div>
+												<dt>商品名</dt>
+												<dd th:text="*{goodsGroupName}"></dd>
+											</div>
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- 商品説明 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">商品説明</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap product_description_details">
+										<dl class="c-dl-base dt_w160px">
+											<div>
+												<dt>納期</dt>
+												<dd th:text="*{deliveryType eq null ? '―' : deliveryType}"></dd>
+											</div>
+											<div>
+												<dt>説明01</dt>
+												<dd th:utext="*{goodsNote1 eq null ? '―' : #pre.convert(goodsNote1)}"></dd>
+											</div>
+											<div>
+												<dt>説明02</dt>
+												<dd th:utext="*{goodsNote2 eq null ? '―' : #pre.convert(goodsNote2)}"></dd>
+											</div>
+											<div>
+												<dt>説明03</dt>
+												<dd th:utext="*{goodsNote3 eq null ? '―' : #pre.convert(goodsNote3)}"></dd>
+											</div>
+											<div>
+												<dt>説明04</dt>
+												<dd th:utext="*{goodsNote4 eq null ? '―' : #pre.convert(goodsNote4)}"></dd>
+											</div>
+											<div>
+												<dt>説明05</dt>
+												<dd th:utext="*{goodsNote5 eq null ? '―' : #pre.convert(goodsNote5)}"></dd>
+											</div>
+											<div>
+												<dt>説明06</dt>
+												<dd th:utext="*{goodsNote6 eq null ? '―' : #pre.convert(goodsNote6)}"></dd>
+											</div>
+											<div>
+												<dt>説明07</dt>
+												<dd th:utext="*{goodsNote7 eq null ? '―' : #pre.convert(goodsNote7)}"></dd>
+											</div>
+											<div>
+												<dt>説明08</dt>
+												<dd th:utext="*{goodsNote8 eq null ? '―' : #pre.convert(goodsNote8)}"></dd>
+											</div>
+											<div>
+												<dt>説明09</dt>
+												<dd th:utext="*{goodsNote9 eq null ? '―' : #pre.convert(goodsNote9)}"></dd>
+											</div>
+											<div>
+												<dt>説明10</dt>
+												<dd th:utext="*{goodsNote10 eq null ? '―' : #pre.convert(goodsNote10)}"></dd>
+											</div>
+										</dl>
+										<div class="mt20 txt_right more">
+											<button class="c-btn_add" type="button"><i></i><span>さらに表示</span></button>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<!-- 商品画像 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">商品画像</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap item_images">
+										<span id="goodsImageNotExist"></span>
+										<ul class="c-image-list">
+											<li th:each="item, stat: *{detailsPageDetailsImageItems}" th:unless="*{#lists.isEmpty(detailsPageDetailsImageItems)}" th:if="${item.isExistImage}">
+												<div class="img imagePreviewer"><img th:src="${item.imagePath}" alt=""></div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</article>
+
+							<!-- 規格情報 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">規格情報</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<div class="check_item">
+											<label class="c-form-control disabled-checkbox"><input type="checkbox" disabled name="" value="" th:checked="*{unitManagementFlag eq '1'}"><i></i>この商品には異なるサイズや色など複数の規格があります</label>
+										</div>
+										<dl class="c-dl-nobase regulations_display">
+											<div>
+												<dt>規格1表示名</dt>
+												<dd th:text="*{unitTitle1 eq null ? '―' : unitTitle1}"></dd>
+											</div>
+											<div class="tax_rate">
+												<dt>規格2表示名</dt>
+												<dd th:text="*{unitTitle2 eq null ? '―' : unitTitle2}"></dd>
+											</div>
+										</dl>
+										<table class="c-tbl large mt35">
+											<thead>
+											<tr>
+												<th class="number">#</th>
+												<th class="w135px">商品番号</th>
+												<th class="">規格1</th>
+												<th class="">規格2</th>
+												<th class="w70px">注文上限</th>
+												<th class="w70px">販売状態</th>
+												<th class="w135px">JANコード</th>
+												<th class="w205px">販売期間</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr th:each="item, stat: *{unitItems}">
+												<td class="number" th:text="${item.unitDspNo}"></td>
+												<td class="alphabetic" th:text="${item.goodsCode}"></td>
+												<td th:text="${item.unitValue1}"></td>
+												<td th:text="${item.unitValue2}"></td>
+												<td class="txt_right" th:text="${#number.convert(item.purchasedMax)}"></td>
+												<td th:text="${#enumtype.getLabel('HTypeGoodsSaleStatus',item.goodsSaleStatusPC)}"></td>
+												<td class="alphabetic" th:text="${item.janCode}"></td>
+												<td class="times">
+													<th:block th:if="${item.isSaleDateTimePCExist}">
+														<span th:text="${#date.convert(item.saleStartDateTimePC, 'yyyy/MM/dd HH:mm:ss')}" th:remove="tag"></span>
+														～ <span th:text="${#date.convert(item.saleEndDateTimePC, 'yyyy/MM/dd HH:mm:ss')}" th:remove="tag"></span>
+													</th:block>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</article>
+
+							<!-- 価格設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">価格設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap pricing">
+										<dl class="c-dl-base dt_w160px">
+											<div>
+												<dt>価格（税抜）</dt>
+												<dd th:text="*{#number.convert(goodsPrice) + ' 円'}"></dd>
+											</div>
+											<div class="tax_rate">
+												<dt>税率</dt>
+												<dd th:text="*{taxRate + '%'}"> </dd>
+											</div>
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- 配送設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">配送設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<ul class="c-list-10">
+											<li>
+												<label class="c-form-control disabled-checkbox"><input type="checkbox" disabled name="" value="" th:checked="*{individualDeliveryType eq '1'}"><i></i>この商品は他の商品と同時に購入できません</label>
+											</li>
+											<li>
+												<label class="c-form-control disabled-checkbox"><input type="checkbox" disabled name="" value="" th:checked="*{freeDeliveryFlag eq '1'}"><i></i>商品価格に送料を含める</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</article>
+
+							<!-- 在庫設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">在庫設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<div class="check_item">
+											<label class="c-form-control disabled-checkbox"><input type="checkbox" disabled name="" value="" th:checked="*{stockManagementFlag eq '1'}"><i></i>在庫管理が必要な商品です</label>
+										</div>
+										<th:block th:if="*{stockManagementFlag} == '1'">
+										<table class="c-tbl large tbl_relation_item mt20">
+											<thead>
+											<tr>
+												<th class="number">#</th>
+												<th class="w135px">商品番号</th>
+												<th>規格1</th>
+												<th>規格2</th>
+												<th class="stock">販売可能</th>
+												<th class="symbol"></th>
+												<th class="stock">実在庫</th>
+												<th class="symbol"></th>
+												<th class="stock">受注確保</th>
+												<th class="symbol"></th>
+												<th class="stock">安 全</th>
+												<th class="w70px">残少表示</th>
+												<th class="w60px">発注点</th>
+												<th class="viewmore">入庫履歴</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr th:each="item, stat: *{stockItems}">
+												<td class="number" th:text="${item.stockDspNo}"></td>
+												<td class="alphabetic" th:text="${item.goodsCode}"></td>
+												<td th:text="${item.unitValue1}"></td>
+												<td th:text="${item.unitValue2}"></td>
+												<td class="stock" th:text="${#number.convert(item.salesPossibleStock)}"></td>
+												<td class="no_rightline symbol">=</td>
+												<td class="no_rightline stock" th:text="${#number.convert(item.realStock)}"></td>
+												<td class="no_rightline symbol">-</td>
+												<td class="no_rightline stock" th:text="${#number.convert(item.orderReserveStock)}"></td>
+												<td class="no_rightline symbol">-</td>
+												<td class="no_rightline stock" th:text="${#number.convert(item.safetyStock)}"></td>
+												<td class="alphabetic txt_right" th:text="${#number.convert(item.remainderFewStock)}"></td>
+												<td class="alphabetic txt_right" th:text="${#number.convert(item.orderPointStock)}"></td>
+												<td class="viewmore">
+													<th:block th:if="*{stockManagementFlag} == '1'">
+														<button th:onClick="|setSelectGoodsSeq('${item.goodsSeq}');|" class="c-btn-icon size22" type="button"><i class="viewmore"></i></button>
+													</th:block>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+										</th:block>
+									</div>
+								</div>
+							</article>
+							<div id="receiving_history_dialog" style="display:none;">
+								<div class="l-article-un_nosp mb30">
+									<div class="c-detail-warp wrap">
+										<dl class="c-dl-nobase receiving_history">
+											<div>
+												<dt>商品管理番号</dt>
+												<dd id="goods-group-code"></dd>
+											</div>
+											<div>
+												<dt>商品番号</dt>
+												<dd id="goods-code"></dd>
+											</div>
+											<div>
+												<dt id="unit-title-1">規格1</dt>
+												<dd id="unit-value-1"></dd>
+											</div>
+											<div>
+												<dt id="unit-title-2">規格2</dt>
+												<dd id="unit-value-2"></dd>
+											</div>
+										</dl>
+									</div>
+								</div>
+								<div class="c-sticky-tbl-wrap">
+									<span id="span-stock">入庫履歴がありません</span>
+									<table id="table-stock" class="c-tbl large">
+										<thead>
+										<tr>
+											<th class="w175px">入庫時間</th>
+											<th class="w70px">入庫数</th>
+											<th class="w70px">実在庫数</th>
+											<th class="w150px">担当者</th>
+										</tr>
+										</thead>
+										<tbody id="data-stock-detail">
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 受注連携設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">受注連携設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap order_coordination_details">
+										<dl class="c-dl-base dt_w160px">
+											<div>
+												<dt>受注連携設定01</dt>
+												<dd th:utext="*{orderSetting1 eq null ? '―' : #pre.convert(orderSetting1)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定02</dt>
+												<dd th:utext="*{orderSetting2 eq null ? '―' : #pre.convert(orderSetting2)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定03</dt>
+												<dd th:utext="*{orderSetting3 eq null ? '―' : #pre.convert(orderSetting3)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定04</dt>
+												<dd th:utext="*{orderSetting4 eq null ? '―' : #pre.convert(orderSetting4)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定05</dt>
+												<dd th:utext="*{orderSetting5 eq null ? '―' : #pre.convert(orderSetting5)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定06</dt>
+												<dd th:utext="*{orderSetting6 eq null ? '―' : #pre.convert(orderSetting6)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定07</dt>
+												<dd th:utext="*{orderSetting7 eq null ? '―' : #pre.convert(orderSetting7)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定08</dt>
+												<dd th:utext="*{orderSetting8 eq null ? '―' : #pre.convert(orderSetting8)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定09</dt>
+												<dd th:utext="*{orderSetting9 eq null ? '―' : #pre.convert(orderSetting9)}"></dd>
+											</div>
+											<div>
+												<dt>受注連携設定10</dt>
+												<dd th:utext="*{orderSetting10 eq null ? '―' : #pre.convert(orderSetting10)}"></dd>
+											</div>
+										</dl>
+										<div class="mt20 txt_right more">
+											<button class="c-btn_add" type="button"><i></i><span>さらに表示</span></button>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<!-- 独自メタ設定（SEO） -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">独自メタ設定（SEO）</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<dl class="c-dl-base dt_w160px">
+											<div>
+												<dt>検索キーワード</dt>
+												<dd th:utext="*{searchKeyword eq null ? '―' : #pre.convert(searchKeyword)}"></dd>
+											</div>
+											<div>
+												<dt>メタ説明文</dt>
+												<dd th:utext="*{metaDescription eq null ? '―' : #pre.convert(metaDescription)}">
+												</dd>
+											</div>
+											<div>
+												<dt>メタキーワード</dt>
+												<dd th:utext="*{metaKeyword eq null ? '―' : #pre.convert(metaKeyword)}">
+												</dd>
+											</div>
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- 関連商品設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">関連商品設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<th:block th:if="*{#lists.isEmpty(relationItems)}">
+											<span>関連商品が設定されていません。</span>
+										</th:block>
+										<th:block th:unless="*{#lists.isEmpty(relationItems)}">
+											<table class="c-tbl large tbl_relation_item">
+												<thead>
+												<tr>
+													<th class="number">#</th>
+													<th class="w150px">商品管理番号</th>
+													<th>商品名</th>
+												</tr>
+												</thead>
+												<tbody>
+													<tr th:each="item, stat: *{relationItems}">
+														<td class="number" th:text="${item.relationZenkakuNo}"></td>
+														<td class="alphabetic" th:text="${item.relationGoodsGroupCode}"></td>
+														<td th:text="${item.relationGoodsGroupName}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</th:block>
+									</div>
+								</div>
+							</article>
+						</div>
+
+						<div class="l-section_side w360px">
+							<!-- 商品のステータス -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">商品のステータス</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<dl class="c-dl-base dt_w120px">
+											<div>
+												<dt>公開状態</dt>
+												<dd th:text="*{#enumtype.getLabel('HTypeOpenDeleteStatus',goodsOpenStatusPC)}"></dd>
+											</div>
+											<div>
+												<dt>公開期間</dt>
+												<dd>
+													<dl class="c-dl-nobase_sub">
+														<div>
+															<dt class="mb5">公開開始日時</dt>
+															<dd>
+																<th:block th:if="*{openStartDatePC eq null}">
+																	―
+																</th:block>
+																<th:block th:unless="*{openStartDatePC eq null}">
+																	<span th:text="*{#date.convert(openStartDatePC)}" th:remove="tag"></span>
+																	<span th:text="*{#date.convert(openStartTimePC, 'HH:mm:ss')}" th:remove="tag"></span>&nbsp;
+																</th:block>
+															</dd>
+														</div>
+														<div>
+															<dt class="mb5">公開終了日時</dt>
+															<dd>
+																<th:block th:if="*{openEndDatePC eq null}">
+																	―
+																</th:block>
+																<th:block th:unless="*{openEndDatePC eq null}">
+																	<span th:text="*{#date.convert(openEndDatePC)}" th:remove="tag"></span>
+																	<span th:text="*{#date.convert(openEndTimePC, 'HH:mm:ss')}" th:remove="tag"></span>&nbsp;
+																</th:block>
+															</dd>
+														</div>
+													</dl>
+												</dd>
+											</div>
+											<div>
+												<dt>新着日付</dt>
+												<dd th:text="*{whatsnewDate eq null ? '―' : whatsnewDate}"></dd>
+											</div>
+											<div>
+												<dt>登録日付</dt>
+												<dd th:text="*{#date.convert(registTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+											</div>
+											<div>
+												<dt>最終更新日</dt>
+												<dd th:text="*{#date.convert(updateTime, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+											</div>
+											<div>
+												<dt>在庫状態</dt>
+												<dd>
+													<dl class="c-dl-nobase_sub">
+														<div th:text="'一覧 ： ' + *{batchUpdateStockStatusPc eq null ? '―' : #enumtype.getLabel('HTypeGoodsGroupStockStatus',batchUpdateStockStatusPc)}"></div>
+														<div th:text="'詳細 ： ' + *{realTimeStockStatusPc eq null ? '―' : #enumtype.getLabel('HTypeGoodsGroupStockStatus',realTimeStockStatusPc)}"></div>
+													</dl>
+												</dd>
+											</div>
+
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- カテゴリー -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">カテゴリー設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<th:block th:if="*{registCategoryEntityList == null }">
+											<span th:text="カテゴリーが設定されていません。"></span>
+										</th:block>
+										<dl class="c-dl-nobase">
+											<div id="category_label_list" class="category-label-wrap mt-20">
+												<th:block th:each="item, stat : *{registCategoryEntityList}">
+													<th:block th:if="${item.categoryType.value} == '0'">
+														<div class="category-label-item">
+															<span th:text="${item.categoryName}"></span>
+														</div>
+													</th:block>
+													<th:block th:if="${item.categoryType.value} == '1'">
+														<div class="category-label-item-batch">
+															<span th:text="${item.categoryName}"></span>
+														</div>
+													</th:block>
+												</th:block>
+											</div>
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- 商品タグ -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">商品タグ設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<th:block th:if="*{goodsTagList == null }">
+											<span th:text="商品タグが設定されていません。"></span>
+										</th:block>
+										<dl class="c-dl-nobase">
+											<div class="category-label-wrap mt-20">
+												 <div th:each="item : *{goodsTagList}" class="category-label-item">
+													  <span th:text="${item}"></span>
+												</div>
+											</div>
+										</dl>
+									</div>
+								</div>
+							</article>
+
+							<!-- アイコン -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">アイコン</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<span id="goodsIconNotExist"></span>
+										<div class="l-article-un_nosp front-icon-list">
+											<div class="c-icon-list">
+												<span class="c-item-status js-icon-textcolor" th:each="item: *{goodsInformationIconItems}" th:if="${item.checkBoxPc} == true"
+													  th:text="${item.iconName}" th:style="'background-color: ' + ${item.colorCode eq null ? '#2F6BCC' : item.colorCode}"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</article>
+
+							<!-- その他設定 -->
+							<article class="l-article">
+								<div class="l-article_title">
+									<h2 class="c-pagetitle_h3">その他設定</h2>
+									<div class="c-open-btn"><i></i></div>
+								</div>
+								<div class="l-article_inner">
+									<div class="l-inner_wrap">
+										<ul class="c-list-10">
+                                            <li>
+                                                <label class="c-form-control disabled-checkbox"><input type="checkbox" name="" disabled value="" th:checked="*{noveltyGoodsType eq '1'}"><i></i>ノベルティ商品です</label>
+                                            </li>
+											<li>
+												<label class="c-form-control disabled-checkbox"><input type="checkbox" name="" disabled value="" th:checked="*{alcoholFlag eq '1'}"><i></i>酒類商品です</label>
+											</li>
+											<li>
+												<label class="c-form-control disabled-checkbox"><input type="checkbox" name="" disabled value="" th:checked="*{snsLinkFlag eq '1'}"><i></i>この商品をSNS連携します</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</article>
+						</div>
+					</div>
+
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button name="doBack" type="submit" class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る</button>
+							</div>
+							<div class="col_left wrap_flex_center">
+								<div>
+									<p id="previewDateErr" style="display: none;" class="c-error-txt mt4"></p>
+									<p id="previewTimeErr" style="display: none;" class="c-error-txt mt4"></p>
+								</div>
+								<label class="c-datepicker w150px">
+									<input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+								</label>
+								<input type="text" th:field="*{previewTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+								<button type="button" title="プレビュー" id="details_preview_btn" class="c-btn btn_back min_w45px ml10 h38px mauto"><i class="material-icons search"></i></button>
+								<input type="hidden" id="websiteUrl" th:value="${@environment.getProperty('web.site.url')}"/>
+							<th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+								<a class="c-btn btn_regular" th:href="@{/goods/registupdate/(goodGroupCode=*{goodsGroupCode},md=list)}">修正</a>
+							</th:block>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

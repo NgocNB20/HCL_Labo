@@ -1,0 +1,69 @@
+<th:block th:with="shopInfo=${session.commonInfo.commonInfoShop}, canonical=${canonical} ?: '', query=${query} ?: '', addTitle=${#escape.escapeQuote(addTitle)} ?: '', addDescription=${addDescription} ?: '', addKeywords=${addKeywords} ?: '', addImage=${addImage} ?: '', addType=${addType} ?: '', addRobots=${addRobots} ?: '', addPnum=${addPnum} ?: '', addLastPnum=${addLastPnum} ?: ''" >
+<th:block th:with="shopName=${#escape.escapeQuote(shopInfo.shopNamePC)}" >
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="robots" th:content="${addRobots} != '' ? ${addRobots} : 'index,follow'" />
+<meta name="description" th:content="${addDescription} != '' ? '__${addDescription}__' : '__${shopInfo.shopMetaDescription}__'" />
+<meta name="keywords" th:content="${addKeywords} != '' ? '__${addKeywords}__' : '__${shopInfo.shopMetaKeyword}__'" />
+<meta property="og:url" th:content="|__${#httpServletRequest.requestURL}__${query != '' ? '?__${query}__' : ''}|" />
+<meta property="og:title" th:content="${addTitle} != '' ? '__${addTitle}__ - __${shopName}__' : '__${shopName}__'" />
+<meta property="og:description" th:content="${addDescription} != '' ? '__${addDescription}__' : '__${shopInfo.shopMetaDescription}__'" />
+<meta property="og:image" th:content="${addImage} != '' ? '__${addImage}__' : '__${@environment.getProperty('ogp.image.content')}__'" />
+<meta property="og:site_name" th:content="${shopName}" />
+<meta property="og:type" th:content="${addType} != '' ? '__${addType}__' : 'article'" />
+<meta property="og:locale" content="ja_JP">
+<meta property="fb:app_id" th:content="${@environment.getProperty('facebook.app.id')}" />
+<!--/* <title th:text="|${addPnum != '' && addPnum > 1 ? '(__${addPnum}__/__${addLastPnum}__ページ) - ' : ''}${addTitle!=''?'__${addTitle}__ - ' : ''}__${shopName}__|"></title> */-->
+<th:block th:if="${addTitle} != ''">
+    <title th:utext="|${addTitle}__' - '__${shopName}| + ' | 兵庫県臨床検査研究所'"></title>
+</th:block>
+<th:block th:unless="${addTitle} != ''">
+    <title th:utext="|__${shopName}__| + ' | 兵庫県臨床検査研究所'"></title>
+</th:block>
+<script type="text/javascript" th:src="@{/assets/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.easing.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/zipsearch.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/hitmall.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/hm4.js}"></script>
+<!-- <script type="text/javascript" th:src="@{/assets/js/newrelic.js}"></script> -->
+<script type="text/javascript" th:src="@{/assets/js/lib/jquery-3.6.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/lib/sweet-scroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/lib/hogan-3.0.2.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/lib/ua-parser.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/lib/simplebar.min.js}"></script>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}">
+<link rel="shortcut" type="image/png" sizes="180x180" th:href="@{/assets/images/apple-touch-icon.png}" />
+<link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/images/apple-touch-icon.png}" />
+<link rel="preload" as="style" th:href="@{/assets/css/style.css}">
+<link rel="preload" as="script" th:href="@{/assets/js/bundle.js}">
+<link rel="preload" as="script" th:href="@{/assets/js/main_custum.js}">
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<link rel="stylesheet" th:href="@{/assets/css/hm4.css}">
+<link rel="stylesheet" th:href="@{/assets/css/lib/simplebar.min.css}">
+<th:block th:if="${canonical}!=''">
+<link rel="canonical" th:href="|__${#httpServletRequest.requestURL}__${query!=''?'?__${query}__':''}|" id="canonical" />
+</th:block>
+
+<!--/* Google Tag Manager START */-->
+<script>
+var gtmId = "[[${@environment.getProperty('google.tagmanager.id')}]]";
+
+//<![CDATA[
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer',gtmId);
+//]]>
+</script>
+<!--/* Google Tag Manager end */-->
+
+</th:block>
+</th:block>

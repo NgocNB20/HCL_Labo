@@ -1,0 +1,24 @@
+########### サーバー設定 ###########
+server:
+  servlet:
+    session:
+      # ローカル環境にて、SpringDevToolsがTomcat再起動時にセッション維持するよう設定してしまうため、無効化
+      # サーバ環境でも、デプロイ・起動の仕方を変えるとDevToolsが有効になってしまうケースもありえるため、全環境標準で無効化
+      persistent: false
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  profiles:
+    active: '@active.profile@'
+  application:
+    # SleuthによるTrace-ID出力する際のアプリケーション名
+    name: admin
+  web:
+    resources:
+      static-locations: # デフォルㇳ設定に監視用ディレクトリ/healthを追加
+        - /META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        - classpath:/health/
+########### Spring設定 ###########

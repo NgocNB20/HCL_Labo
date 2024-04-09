@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>決済方法設定 登録更新確認 ｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchSettlementMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/settlement/registupdate/confirm}" th:object="${settlementRegistUpdateModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">決済方法設定</h1>
+                        <h2 class="c-pagetitle_h2">登録更新：確認</h2>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <div class="l-section_column">
+                        <div class="l-section_inner">
+                            <!-- 基本設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">基本設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px wrap_flex_wrap">
+                                            <th:block th:if="*{!isRegist}">
+                                                <div class="w100p">
+                                                    <dt>決済ID</dt>
+                                                    <dd th:text="*{settlementMethodId}"></dd>
+                                                </div>
+                                            </th:block>
+                                            <div class="w100p">
+                                                <dt>決済名称</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'settlementMethodName'})}" th:text="*{settlementMethodName}"></dd>
+                                            </div>
+                                            <div class="w50p">
+                                                <dt>決済種別</dt>
+                                                <dd th:text="*{#enumtype.getLabel('HTypeSettlementMethodType', settlementMethodType)}"></dd>
+                                            </div>
+                                            <div class="w50p">
+                                                <dt>請求種別</dt>
+                                                <dd th:text="*{#enumtype.getLabel('HTypeBillType', billType)}"></dd>
+                                            </div>
+                                            <div class="w50p">
+                                                <dt>手数料種別</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'settlementMethodCommissionType'})}" th:text="*{#enumtype.getLabel('HTypeSettlementMethodCommissionType', settlementMethodCommissionType)}"></dd>
+                                            </div>
+                                            <div th:if="*{settlementMethodType} != '5'" class="w50p">
+                                                <dt>利用可能金額</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'minPurchasedPrice', 'maxPurchasedPrice'})}" class="c-input-label">
+                                                    <span th:remove="tag" th:text="*{#number.convert(minPurchasedPrice)}"></span>
+                                                    <label>円</label>
+                                                       　～　<span th:remove="tag" th:text="*{#number.convert(maxPurchasedPrice)}"></span>
+                                                    <label>円 （税込）</label>
+                                                </dd>
+                                            </div>
+                                            <div class="w50p">
+                                                <dt>督促/期限切れメール</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'settlementMailRequired'})}" th:text="*{#enumtype.getLabel('HTypeMailRequired', settlementMailRequired)}"></dd>
+                                            </div>
+                                            
+                                            <div class="w50p">
+                                                <dt>対象配送方法</dt>
+                                                <dd th:text="*{deliveryMethodName == null ? '―' : deliveryMethodName}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 表示設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">表示設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px">
+                                            <div>
+                                                <dt>公開状態</dt>
+                                                <dd th:classappend="*{#style.diff(modifiedList, {'openStatusPC'})}" th:text="*{#enumtype.getLabel('HTypeOpenDeleteStatus', openStatusPC)}"></dd>
+                                                <input type="hidden" id="openStatus" th:value="*{openStatusPC}" />
+                                            </div>
+                                            <div>
+                                                <dt>説明（HTML可）</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'settlementNotePC'})}" th:utext="*{settlementNotePC == null ? '―' : #pre.convert(settlementNotePC)}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side">
+                            <!-- クレジット決済詳細 -->
+                            <th:block th:if="*{isSettlementMethodTypeCredit}">
+                                <article class="l-article">
+                                    <div class="l-article_title">
+                                        <h2 class="c-pagetitle_h3">クレジット決済詳細</h2>
+                                        <div class="c-open-btn"><i></i></div>
+                                    </div>
+                                    <div class="l-article_inner">
+                                        <div class="l-inner_wrap">
+                                            <ul class="c-list-10">
+                                                <li th:class="*{#style.diff(modifiedList, {'enable3dSecure'})}">
+                                                    <label class="c-form-control disabled-checkbox"><input type="checkbox" disabled th:field="*{enable3dSecure}" th:checked="*{enable3dSecure}"><i></i>3Dセキュアを有効にする</label>
+                                                </li>
+                                                <li th:class="*{#style.diff(modifiedList, {'enableInstallment'})}">
+                                                    <label class="c-form-control disabled-checkbox"><input type="checkbox" disabled th:field="*{enableInstallment}" th:checked="*{enableInstallment}"><i></i>分割払いを有効にする</label>
+                                                </li>
+                                                <li th:class="*{#style.diff(modifiedList, {'enableRevolving'})}">
+                                                    <label class="c-form-control disabled-checkbox"><input type="checkbox" disabled th:field="*{enableRevolving}" th:checked="*{enableRevolving}"><i></i>リボ払いを有効にする</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </th:block>
+
+                            <!-- 手数料設定 -->
+                            <th:block th:if="*{isCommissionTypeSelect}">
+                                <th:block th:if="*{isFlat}">
+                                    <article class="l-article">
+                                        <div class="l-article_title">
+                                            <h2 class="c-pagetitle_h3">手数料設定</h2>
+                                            <div class="c-open-btn"><i></i></div>
+                                        </div>
+                                        <div class="l-article_inner">
+                                            <div class="l-inner_wrap settlement_info c-edit">
+                                                <dl class="c-dl-base commission_edit dt_w150px">
+                                                    <div class="all">
+                                                        <dt>一律手数料</dt>
+                                                        <dd class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'equalsCommission'})}">
+                                                            <span th:text="*{#number.convert(equalsCommission)}" th:remove="tag"></span>
+                                                            <th:block th:if="*{isFlatYen}">
+                                                                <label>円 （税抜）</label>
+                                                            </th:block>
+                                                        </dd>
+                                                    </div>
+                                                    <div class="all" th:if="*{largeAmountDiscountPrice} AND *{largeAmountDiscountCommission}">
+                                                        <dt>高額割引</dt>
+                                                        <dd class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'largeAmountDiscountCommission','largeAmountDiscountPrice'})}">
+                                                            <span th:text="*{#number.convert(largeAmountDiscountPrice)} + ' 円（税抜）以上購入すると手数料'" th:remove="tag"></span>
+                                                            <span th:text="*{#number.convert(largeAmountDiscountCommission)} + ' 円（税抜）'" th:remove="tag"></span>
+                                                           </dd>
+                                                    </div>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </th:block>
+                            
+                                <!-- 手数料設定 -->
+                                <th:block th:if="*{!isFlat}">
+                                    <article class="l-article">
+                                        <div class="l-article_title">
+                                            <h2 class="c-pagetitle_h3">手数料設定</h2>
+                                            <div class="c-open-btn"><i></i></div>
+                                        </div>
+                                        <div class="l-article_inner">
+                                            <div class="l-inner_wrap settlement_info c-edit">
+                                                <dl class="c-dl-base commission_edit dt_w150px">
+                                                    <div class="all">
+                                                        <dt>金額別手数料</dt>
+                                                        <dt><span class="w174px">合計金額（税込）</span><span>手数料（税抜）</span></dt>
+                                                    </div>
+                                                    <th:block th:each="itemPrice,stat : *{priceCommissionYen}" th:with="list=*{modifiedPriceCommissionYenList}, i=${stat.index}">
+                                                        <div class="all">
+                                                            <dt class="fw-normal">
+                                                                <div class="w174px">
+                                                                    <span th:text="${itemPrice.maxPrice == null ? itemPrice.maxPrice : #number.convert(itemPrice.maxPrice) + ' 円以下'}" th:classappend="${#lists.isEmpty(list)} ? '' : (${#lists.size(list)} <= ${i} ? '' : ${#style.diff(list.get(__${i}__), {'maxPrice'})})"></span>
+                                                                </div>
+                                                                <span th:text="${itemPrice.commission == null ? itemPrice.commission : #number.convert(itemPrice.commission) + ' 円'}" th:classappend="${#lists.isEmpty(list)} ? '' : (${#lists.size(list)} <= ${i} ? '' : ${#style.diff(list.get(__${i}__), {'commission'})})"></span>
+                                                            </dt>
+                                                        </div>
+                                                    </th:block>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" name="doCancel" type="submit"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <th:block th:if="*{isRegist}">
+                                <div class="col_left">
+                                    <button class="c-btn btn_regular" type="submit" name="doOnceRegist" onClick="return deleteConfirmByStatus('openStatus', '9', '\r\n※ 当該の決済方法を利用した受注は\r\n「受注・売上集計、入金・返金集計」に反映されなくなります。', 'behind');">登録</button>
+                                </div>
+                            </th:block>
+                            <th:block th:if="*{!isRegist}">
+                                <div class="col_left">
+                                    <button class="c-btn btn_regular" type="submit" name="doOnceUpdate" onClick="return deleteConfirmByStatus('openStatus', '9', '\r\n※ 当該の決済方法を利用した受注は\r\n「受注・売上集計、入金・返金集計」に反映されなくなります。', 'behind');">登録</button>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}" ></div>
+    </main>
+</div>
+</body>
+</html>

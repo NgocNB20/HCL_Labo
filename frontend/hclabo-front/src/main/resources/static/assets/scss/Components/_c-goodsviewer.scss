@@ -1,0 +1,413 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+// templete
+.p-product-detail.is-active {
+  overflow: hidden;
+}
+
+// c-goodsviewer
+.c-goodsviewer {
+  position: relative;
+  display: grid;
+  width: 500px;
+  gap: 30px;
+
+  .swiper-slide img {
+    width: 100%;
+    // cursor: pointer;
+  }
+  
+  // メイン画像
+  &__main {
+    width: 500px;
+    margin-inline: auto;
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      width: 40px;
+      height: 40px;
+      background: $color-70;
+      border-radius: 50%;
+      top: 260px;
+
+      &:after {
+        content: none;
+      }
+    }
+
+    .swiper-button-prev {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 13"><path fill="%23ffffff" d="M2.1,6.4L6.7,2C7,1.6,7,1.1,6.7,0.8c-0.3-0.3-0.9-0.3-1.2,0L0.3,5.8C0,6.1,0,6.6,0.3,7l5.2,5.2c0.3,0.3,0.9,0.3,1.2,0c0.3-0.4,0.3-0.9,0-1.3L2.1,6.4z"></path></svg>');
+      background-repeat: no-repeat;
+      background-size: 9px 15.7px;
+      background-position: center center;
+      left: 20px;
+    }
+
+    .swiper-button-next {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 13"><path fill="%23ffffff" d="M4.9,6.5L0.3,11c-0.3,0.3-0.3,0.9,0,1.2c0.3,0.3,0.9,0.3,1.2,0l5.2-5.1C7,6.8,7,6.3,6.7,5.9L1.5,0.7c-0.3-0.3-0.9-0.3-1.2,0C0,1.1,0,1.6,0.3,2L4.9,6.5z"></path></svg>');
+      background-repeat: no-repeat;
+      background-size: 9px 15.7px;
+      background-position: center center;
+      right: 20px;
+    }
+
+    .swiper-pagination {
+      @include media(lg) {
+        display: none;
+      }
+    }
+  }
+
+  // メイン画像 サムネイル
+  &__thumbnail {
+    width: 500px;
+    position: relative;
+    margin-inline: auto;
+
+    .swiper-wrapper {
+      @media (min-width: 600px) {
+        flex-wrap: wrap;
+        height: auto;
+      }
+    }
+
+    .swiper-slide {
+
+      img {
+        cursor: pointer;
+      }
+
+      @media (min-width: 600px) {
+        width: 110px !important;
+        margin-bottom: 20px;
+
+        &:not(:nth-child(4n)) {
+          margin-right: 20px;
+        }
+      }
+
+      &.swiper-slide-thumb-active:after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: solid 4px rgba($color: $color-bbb, $alpha: .7);
+      }
+
+    }
+
+  }
+
+  @include media(sm) {
+
+    width: 100%;
+    gap: vwset(23);
+  
+    // メイン画像
+    &__main {
+      width: 100vw;
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: vwset(30);
+        height: vwset(30);
+        top: 50vw;
+      }
+
+      .swiper-button-prev {
+        background-size: 5px 8.7px;
+        left: vwset(15);
+      }
+  
+      .swiper-button-next {
+        background-size: 5px 8.7px;
+        right: vwset(15);
+      }
+  
+      .swiper-pagination {
+        bottom: vwset(-32);
+      }
+
+      .swiper-pagination {
+        width: 90%;
+        margin: 0 5%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+  
+        .swiper-pagination-bullet {
+          width: vwset(24);
+          height: vwset(2);
+          background-color: $color-e6;
+          border-radius: 0;
+          margin: 0 vwset(4) !important;
+          opacity: 1;
+        }
+  
+        .swiper-pagination-bullet-active {
+          background-color: $color-primary !important;
+        }
+      }
+    }
+  
+    // メイン画像 サムネイル
+    &__thumbnail {
+      width: 100vw;
+      height: auto;
+
+      .swiper-slide {
+        width: 82px !important; // ページネーションの位置の関係で固定値
+        margin-inline: 7px;
+
+        &:first-child {
+          margin-left: 16px;
+        }
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        display: none;
+      }
+    }
+  }
+}
+
+// モーダル
+.c-goodsviewerModal-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;      // スクロール対応
+  overflow-y: scroll; // スクロール対応
+  opacity: 0;
+  transition: opacity 0.35s;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  pointer-events: none;
+  z-index: 9999;
+
+  &.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &__background {
+    background: rgba($color: $color-000, $alpha: .8);
+    width: 100%;
+    left: 0;
+    top: 0;
+    position: absolute; // スクロール対応
+    min-height: 100vw;  // スクロール対応
+    height: inherit;    // スクロール対応
+  }
+
+  &__content {
+    width: 87vw;
+    height: 61vw;
+    padding: 1.5vw;
+    background: $color-fff;
+    margin-inline: auto;
+    text-align: center;
+    z-index: 10;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-52%);
+
+    @media screen and (min-width: 1400px) {
+      max-width: 1300px;
+      height: auto;
+    }
+
+    @include media(lg) {
+      .c-modal-close {
+        top: 0;
+        right: -65px;
+      }
+    }
+
+  }
+
+  .c-goodsviewerModal {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .swiper-slide img {
+      width: 100%;
+      cursor: pointer;
+    }
+    
+    // モーダル メイン画像
+    &__main {
+      position: relative;
+      width: 75%;
+
+      &-container {
+        margin-inline: auto;
+        width: 90%;
+        height: auto;
+        object-fit: contain;
+        aspect-ratio: 1/1;
+
+        @media screen and (min-width: 1400px) {
+          width: 800px;
+          margin-inline: 50px;
+        }
+      }
+  
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: 20px;
+        height: 32px;
+  
+        &:after {
+          content: none;
+        }
+      }
+  
+      .swiper-button-prev {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 25"><path fill="%23666666" d="M0.612,12.515c0,0.135,0.056,0.265,0.156,0.357l12.072,11.21c0.445,0.402,1.001,0.603,1.557,0.603c0.554,0,1.107-0.2,1.548-0.598c0.054-0.048,0.104-0.098,0.151-0.151c0.358-0.399,0.541-0.915,0.513-1.453c-0.029-0.537-0.265-1.032-0.665-1.392l-9.235-8.576l9.241-8.586c0.047-0.041,0.096-0.091,0.144-0.144c0.743-0.827,0.676-2.103-0.15-2.845c-0.424-0.386-0.979-0.625-1.552-0.594c-0.568,0.018-1.127,0.209-1.55,0.598L0.767,12.159C0.667,12.25,0.611,12.38,0.612,12.515z"></path></svg>');
+        background-repeat: no-repeat;
+        left: 0;
+      }
+  
+      .swiper-button-next {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 25"><path fill="%23666666" d="M16.457,12.159L4.382,0.944C3.959,0.555,3.4,0.364,2.832,0.346C2.259,0.315,1.704,0.554,1.28,0.94c-0.826,0.742-0.893,2.018-0.15,2.845c0.048,0.053,0.097,0.103,0.144,0.144l9.241,8.586L1.28,21.091c-0.4,0.36-0.636,0.855-0.665,1.392c-0.028,0.538,0.155,1.054,0.513,1.453c0.047,0.053,0.097,0.103,0.151,0.151c0.441,0.398,0.994,0.598,1.548,0.598c0.556,0,1.112-0.201,1.557-0.603l12.072-11.21c0.1-0.092,0.156-0.222,0.156-0.357C16.613,12.38,16.557,12.25,16.457,12.159z"></path></svg>');
+        background-repeat: no-repeat;
+        right: 0;
+      }
+  
+    }
+  
+    // モーダル サムネイル画像
+    &__thumbnail {
+      margin-left: 5%;
+      width: 17%;
+      height: 100%;
+      width: fit-content;
+      position: relative;
+
+      .swiper-wrapper {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: right;
+      }
+  
+      .swiper-slide {
+        width: 43%;
+        height: 43% !important;
+        margin: 0 0 7% 7%;
+
+        @media screen and (min-width: 1400px) {
+          width: 100px;
+          height: 100px !important;
+          }
+
+        &.swiper-slide-thumb-active:after {
+          content: "";
+          display: block;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: solid 2px #ccc;
+        }
+      }
+  
+    }
+  }
+
+  
+
+  @include media(sm) {
+
+    &__content {
+      width: 100%;
+      height: auto;
+      padding: vwset(30) vwset(10);
+      transform: translate(-50%);
+      top: vwset(80);
+
+      .c-modal-close {
+        right: vwset(10);
+      }
+    }
+
+    .c-goodsviewerModal {
+      width: 94.6vw;
+      height: inherit;
+      display: grid;
+      gap: vwset(30);
+      grid-template-columns: 1fr;
+    
+      // モーダル メイン画像
+      &__main {
+        width: inherit;
+        height: inherit;
+
+        &-container {
+          width: 82.6vw;
+        }
+
+        .swiper-button-prev,
+        .swiper-button-next {
+          width: vwset(13);
+          height: vwset(20);
+        }
+
+      }
+
+      // モーダル サムネイル画像
+      &__thumbnail {
+        width: 95vw;
+        height: inherit;
+        margin-inline: auto;
+
+        .swiper-wrapper {
+          justify-content: left;
+          margin-inline: vwset(10);
+        }
+
+        .swiper-slide {
+          width: 15.8vw !important;
+          height: 15.8vw !important;
+          margin: 0 vwset(10) vwset(10) 0;
+
+          &:nth-child(5n) {
+            margin-right: 0;
+          }
+    
+          &.swiper-slide-thumb-active:after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: solid 2px #ccc;
+          }
+        }
+
+
+      }
+    
+    }
+  }
+  
+}
+

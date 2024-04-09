@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<th:block th:with="canonical='true', query='fkey=' + ${specialModel.fkey}">
+<meta th:replace="~{include/head}" >
+</th:block>
+</head>
+
+<body id="gotop" class="p-special" th:classappend="${param.header != null && param.header[0].equals('no') ? 'p-special--noheader' : ''}" th:object="${specialModel}">
+	<div class="l-mainwrap">
+		<!--/* ヘッダー出力 */-->
+		<th:block th:unless="${param.header != null && param.header[0].equals('no')}">
+			<div th:replace="~{include/header}"></div>
+		</th:block>
+
+		<main class="l-page">
+			<th:block th:unless="${param.header != null && param.header[0].equals('no')}">
+				<div class="l-breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+					<div class="l-breadcrumbs__inner">
+						<div class="l-breadcrumbs__list">
+                            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+							<div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem"><span property="name" class="l-breadcrumbs__current" th:text="*{freeAreaTitle}"></span></div>
+						</div>
+					</div>
+				</div>
+			</th:block>
+			<div th:class="${param.menu != null && param.menu[0].equals('no') ? 'full' : 'l-container'}">
+			  <div th:class="${param.menu != null && param.menu[0].equals('no') ? 'full' : 'l-container__inner'}">
+				<!--/* サイドメニュー出力 */-->
+				<th:block th:unless="${param.menu != null && param.menu[0].equals('no')}">
+					<div class="l-side l-lg">
+						<div th:replace="~{include/sidemenu::category('3')}"></div>
+					</div>
+				</th:block>
+				<!--/* MAIN */-->
+				<div th:class="${param.menu != null && param.menu[0].equals('no') ? 'full' : 'l-main'}">
+
+				  <div th:class="${param.header == null && param.menu != null && param.menu[0].equals('no')  ? 'l-section' : ''}">
+                    <div th:class="${param.header == null && param.menu != null && param.menu[0].equals('no')  ? 'l-section__inner' : ''}">
+                        <div class="p-special__contents c-text--m">
+                            <span id="freeAreaBodyPc" th:utext="*{freeAreaBodyPc}" title="特集" /></span>
+                        </div>
+                    </div>
+                  </div>
+				</div>
+			  </div>
+			</div>
+		</main>
+		<!--/* フッター出力 */-->
+		<th:block th:unless="${param.footer != null && param.footer[0].equals('no')}">
+			<div th:replace="~{include/footer}" ></div>
+		</th:block>
+	</div>
+	<script src="/assets/js/bundle.js" defer="defer"></script>
+</body>
+</html>

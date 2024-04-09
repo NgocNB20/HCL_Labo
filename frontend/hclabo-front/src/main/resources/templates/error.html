@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ja">
+<head>
+    <th:block th:with="addRobots='noindex,follow'" >
+        <meta th:replace="~{include/head}"/>
+    </th:block>
+</head>
+<body id="gotop">
+<div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page">
+        <div class="l-section">
+            <div class="l-section__inner">
+                <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                    <ul th:each="message : ${allMessages}">
+                        <li th:utext="${message}"></li>
+                    </ul>
+                </div>
+                <div class="l-complete">
+                    <div class="l-complete__inner">
+                        <p class="l-complete__title">指定されたURLが見つからないか、<br class="l-lg">サーバが混み合っております。</p>
+                        <div class="l-complete__text-unit l-complete--margin-m">
+                            <p class="l-complete__text">恐れいりますが、再度URLをご確認いただくか、しばらく経ってから再度アクセスをお願いいたします。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="c-button-wrap">
+                    <a th:href="@{/}" name="" type="submit" class="c-button c-button--primary c-button--width-l">トップページへ</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+</div>
+
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body>
+</html>

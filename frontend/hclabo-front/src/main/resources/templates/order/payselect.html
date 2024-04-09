@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-order order-payment">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header-small}"></div>
+	<!--/* main */-->
+	<main class="l-page">
+		<div class="l-section">
+			<div class="l-section__inner">
+				<h2 class="c-title-page"><strong>お支払い方法の選択</strong></h2>
+				<div id="jsError"></div>
+				<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'c-reception c-reception--margin-m':'c-global-error c-global-error--margin-m'}">
+					<ul th:each="message : ${allMessages}">
+						<li th:utext="${message}"></li>
+					</ul>
+				</div>
+				<form class="receiver-form" autocomplete="off" th:action="@{/order/payselect}" th:object="${paySelectModel}" method="post">
+					<div class="l-form__area">
+						<th:block th:if="${paySelectModel.isExistSettlementMethod()}">
+							<th:block th:if="*{isCanUseCoupon()}">
+								<dl class="l-form__list">
+									<dt>クーポンのご利用</dt>
+									<dd class="l-form__coupon c-text--m">
+										<div class="l-form__coupon-code">
+											<p>クーポンコード</p>
+											<div class="l-form__coupon-code-input">
+												<input th:field="*{couponCode}" th:errorclass="field-error" type="text" name="couponCode" placeholder="11111111" maxlength="20" class="c-input">
+											</div>
+											<a onClick="onClickDoApplyCoupon()" class="c-button c-button--primary c-button--width-s" style="cursor: pointer">適 用</a>
+											<input hidden="hidden" type="submit" id="doApplyCoupon" name="doApplyCoupon"/>
+										</div>
+										<div th:if="${#fields.hasErrors('couponCode')}" th:errors="*{couponCode}" class="c-field-error"></div>
+									</dd>
+								</dl>
+							</th:block>
+						</th:block>
+						<th:block th:if="${paySelectModel.isCouponName()}">
+							<th:block th:if="*{isDisplayCouponDiscount()}">
+								<dl class="l-form__list">
+									<dt>クーポンのご利用</dt>
+									<dd class="l-form__coupon c-text--m">
+										<div class="l-form__coupon-selected">
+											<p th:text="*{couponName}"></p>
+											<a onClick="onClickDoCancelCoupon()" class="c-button c-button--bbb c-button--width-s" style="cursor: pointer">取 消</a>
+											<div th:if="${#fields.hasErrors('couponCode')}" th:errors="*{couponCode}" class="c-field-error"></div>
+											<input hidden="hidden" type="submit" id="doCancelCoupon" name="doCancelCoupon"/>
+										</div>
+									</dd>
+								</dl>
+							</th:block>
+						</th:block>
+						<th:block th:if="${paySelectModel.isExistSettlementMethod()}">
+							<dl class="l-form__list">
+								<dt class="l-form__title-start">お支払い方法<span class="c-require">必須</span></dt>
+								<dd class="l-form__complex">
+									<th:block th:each="item, stat : *{paySelectModelItems}">
+										<div class="l-form__complex-block" data-relation-inputs="el">
+											<div class="c-radio-group" th:classappend="${#fields.hasErrors('settlementMethod')} ? 'c-radio-group--error'">
+												<input th:value="${item.settlementMethodValue}" th:checked="${item.settlementMethodValue} == *{settlementMethod}" th:id="'settlementMethod' +  ${stat.index}" name="settlementMethod" type="radio" class="c-radio" data-relation-inputs="parent">
+												<label th:text="${item.settlementMethodLabel}" th:for="'settlementMethod' +  ${stat.index}">
+													<span th:id="'settlementMethodLabel-'+${stat.index}" th:text="${item.settlementMethodLabel}"></span>
+												</label>
+												<span style="display:none;" th:id="'settlementMethodTypeName-'+${stat.index}" th:text="${item.settlementMethodTypeName}"></span>
+												<div th:if="${#fields.hasErrors('settlementMethod')}" th:errors="*{settlementMethod}" class="c-field-error"></div>
+											</div>
+											<div class="l-form__complex-inner" data-relation-inputs="child">
+												<p th:utext="${#pre.convert(item.settlementNotePC, false)}" class="c-text--s"></p>
+												<th:block th:if="${item.isCreditType()}">
+													<div id="isUseRegistedCard" th:if="*{isUseRegistedCard()}">
+														<button class="c-margin--xs c-button c-button--primary c-button--width-s" type="submit" id="doChangeOtherCard" name="doChangeOtherCard" value="別のカードを使う">別のカードを使う</button>
+													</div>
+													<div id="isNotUseRegistedCard" th:if="*{!isUseRegistedCard()}">
+														<div id="isViewCardChangeBtn" th:if="*{isViewCardChangeBtn()}">
+															<button class="c-margin--xs c-button c-button--primary c-button--width-s" type="submit" id="doChangeRegistedCard" name="doChangeRegistedCard" value="前回利用したカードを使う">前回利用したカードを使う</button>
+														</div>
+													</div>
+													<div class="l-form__registeredcard c-margin--xs" th:if="*{isUseRegistedCard()}">
+														<p class="c-text--s">
+															<span>カード番号 ：</span>
+															<span th:text="${item.cardNumber}" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].cardNumber')} ? 'field-error'"></span>
+														</p>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].cardNumber')}" th:errors="*{paySelectModelItems[__${stat.index}__].cardNumber}" class="c-field-error"></div>
+														<p class="c-text--s">
+															<span>有効期限 ：</span>
+															<span th:text="${item.expirationDateMonth}" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateMonth')} ? 'field-error'"></span>
+															<span>月 /</span>
+															<span class="c-text--xs" th:text="${item.expirationDateYear}" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateYear')} ? 'field-error'"></span>
+															<span>年</span>
+														</p>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateMonth')}" th:errors="*{paySelectModelItems[__${stat.index}__].expirationDateMonth}" class="c-field-error"></div>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateYear')}" th:errors="*{paySelectModelItems[__${stat.index}__].expirationDateYear}" class="c-field-error"></div>
+														<input type="hidden" id="expirationDateMonth" th:field="*{paySelectModelItems[__${stat.index}__].expirationDateMonth}"/>
+														<input type="hidden" id="expirationDateYear" th:field="*{paySelectModelItems[__${stat.index}__].expirationDateYear}"/>
+														<p class="c-text--s c-margin--xxs">
+															<span>セキュリティコード ：</span>
+															<input type="text" inputmode="numeric" th:field="*{paySelectModelItems[__${stat.index}__].securityCode}" maxlength="4" title="セキュリティコード" th:errorclass="field-error" class="c-input">
+														</p>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].securityCode')}" th:errors="*{paySelectModelItems[__${stat.index}__].securityCode}" class="c-field-error"></div>
+													</div>
+													<div class="l-form__card c-margin--xs" th:if="*{!isUseRegistedCard()}">
+														<div class="l-form__card-number">
+															<p class="c-text--s">クレジットカード番号</p>
+															<input id="cardNewNumber" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].cardNumber')} ? 'field-error'" class="c-input c-margin--xxs" type="text" inputmode="numeric" maxlength="16">
+															<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].cardNumber')}" th:errors="*{paySelectModelItems[__${stat.index}__].cardNumber}" class="c-field-error"></div>
+															<input type="hidden" id="cardNumber" th:field="*{paySelectModelItems[__${stat.index}__].cardNumber}"/>
+															<p class="c-margin--xxs c-text--xs">半角数字　ハイフンなし</p>
+														</div>
+														<div class="l-form__card-date">
+															<p class="c-text--s">有効期限</p>
+															<div class="l-form__card-date-contents c-margin--xxs">
+																<div>
+																	<div class="c-select">
+																		<select class="c-select__inner" name="pref" id="expirationNewDateMonth" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateMonth')} ? 'field-error'">
+																			<option value="" selected="selected">月</option>
+																			<option th:each="eDMitem : *{expirationDateMonthItems}" th:value="${eDMitem.key}" th:text="${eDMitem.value}" th:selected="${eDMitem.key} == *{paySelectModelItems[__${stat.index}__].expirationDateMonth}"></option>
+																		</select>
+																	</div>
+																</div>
+																<span class="l-form__list-settext l-form__list-settext--margin">/</span>
+																<div>
+																	<div class="c-select">
+																		<select class="c-select__inner" name="pref" id="expirationNewDateYear" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateYear')} ? 'field-error'">
+																			<option value="" selected="selected"> 年</option>
+																			<option th:each="eDYitem : *{expirationDateYearItems}" th:value="${eDYitem.key}" th:text="${eDYitem.value}" th:selected="${eDYitem.key} == *{paySelectModelItems[__${stat.index}__].expirationDateYear}"></option>
+																		</select>
+																		<input type="hidden" id="expirationDateMonth" th:field="*{paySelectModelItems[__${stat.index}__].expirationDateMonth}"/>
+																		<input type="hidden" id="expirationDateYear" th:field="*{paySelectModelItems[__${stat.index}__].expirationDateYear}"/>
+																	</div>
+																	<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].expirationDateYear')}" th:errors="*{paySelectModelItems[__${stat.index}__].expirationDateYear}" class="c-field-error"></div>
+																</div>
+															</div>
+														</div>
+														<div class="l-form__card-code">
+															<p class="c-text--s">セキュリティコード</p>
+															<input inputmode="numeric" th:field="*{paySelectModelItems[__${stat.index}__].securityCode}" maxlength="4" title="セキュリティコード" th:errorclass="field-error" class="c-input c-margin--xxs">
+															<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].securityCode')}" th:errors="*{paySelectModelItems[__${stat.index}__].securityCode}" class="c-field-error"></div>
+														</div>
+													</div>
+													<div class="l-form__paymentttime c-margin--s">
+														<p class="c-text--m">お支払い回数</p>
+														<ul class="l-form__paymentttime-list c-radio-group" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].paymentType')} ? 'field-error'">
+															<li>
+																<input th:id="'payment-credit_1_' + ${stat.index}" th:field="*{paySelectModelItems[__${stat.index}__].paymentType}" name="payment-credit" type="radio" value="1" class="c-radio" th:errorclass="field-error">
+																<label th:for="'payment-credit_1_' + ${stat.index}">一括払い</label>
+															</li>
+															<th:block th:if="${item.isPossibleInstallment()}">
+																<li>
+																	<input th:id="'payment-credit_2_' + ${stat.index}" name="payment-credit" th:field="*{paySelectModelItems[__${stat.index}__].paymentType}" type="radio" value="2" class="c-radio" th:errorclass="field-error">
+																	<label class="u-mr10" th:for="'payment-credit_2_' + ${stat.index}">分割払い</label>
+																	<div class="c-select">
+																		<select class="c-select__inner" th:field="*{paySelectModelItems[__${stat.index}__].dividedNumber}" th:classappend="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].dividedNumber')} ? 'field-error'">
+																			<option value="" selected="selected">選択</option>
+																			<option th:each="dNitem : *{dividedNumberItems}" th:value="${dNitem.key}" th:text="${dNitem.value}" th:selected="${dNitem.key} == *{paySelectModelItems[__${stat.index}__].dividedNumber}"></option>
+																		</select>
+																	</div>
+																	<span class="l-form__list-settext l-form__list-settext--margin-left">回</span>
+																</li>
+															</th:block>
+															<th:block th:if="${item.isPossibleRevolving()}">
+																<li class="c-text--m lh1">
+																	<input th:id="'payment-credit_3_' + ${stat.index}" th:field="*{paySelectModelItems[__${stat.index}__].paymentType}" type="radio" value="5" class="c-radio" th:errorclass="field-error">
+																	<label th:for="'payment-credit_3_' + ${stat.index}">リボ払い</label>
+																</li>
+															</th:block>
+														</ul>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].dividedNumber')}" th:errors="*{paySelectModelItems[__${stat.index}__].dividedNumber}" class="c-field-error"></div>
+														<div th:if="${#fields.hasErrors('paySelectModelItems[' + stat.index + '].paymentType')}" th:errors="*{paySelectModelItems[__${stat.index}__].paymentType}" class="c-field-error"></div>
+													</div>
+													<div class="l-form__cardregister c-margin--s">
+														<th:block id="isNotUseRegistedCard-2" th:if="*{!isUseRegistedCard()}">
+															<th:block th:if="*{isViewCardSaveCheckBox()}">
+																<p class="c-text--m">カード情報の登録</p>
+																<label class="c-checkbox">
+																	<span class="c-checkbox__box">
+																		<input th:id="'payment-next_' + ${stat.index}" checked="checked" name="saveFlg" th:field="*{paySelectModelItems[__${stat.index}__].saveFlg}" type="checkbox" value="">
+																		<span></span>
+																	</span>
+																	<p>今回のカード情報を次回注文時の初期表示として利用する</p>
+																</label>
+															</th:block>
+														</th:block>
+													</div>
+												</th:block>
+											</div>
+										</div>
+									</th:block>
+								</dd>
+							</dl>
+						</th:block>
+					</div>
+
+					<th:block th:if="${paySelectModel.isExistSettlementMethod()}">
+						<nav class="l-form__sender__navigation">
+							<div class="c-button-wrap">
+                                <div>
+                                    <button id="doConfirmPayment" name="doConfirmPayment" type="submit" class="c-button c-button--primary c-button--width-l">このお支払方法を使用する</button>
+                                    <div class="c-button-wrap__memo c-margin--s">
+                                        <a th:href="@{/order/confirm}" id="goConfirm" class="c-textlink c-textlink--left c-text--size-s"><p>ご注文内容の確認へ戻る</p></a>
+                                    </div>
+                                </div>
+                            </div>
+						</nav>
+						<input type="hidden" id="token" name="token" title="トークン"/>
+						<input type="hidden" id="displayCredit" th:value="*{displayCredit}"/>
+						<input type="hidden" id="gmoApiKey" th:value="*{gmoApiKey}"/>
+					</th:block>
+				</form>
+
+				<th:block th:if="${!paySelectModel.isExistSettlementMethod()}">
+					<nav class="l-form__sender__navigation">
+						<div class="c-button-wrap__memo c-margin--s">
+							<a th:href="@{/order/confirm}" class="c-textlink c-textlink--left c-text--size-s"><p>ご注文内容の確認へ戻る</p></a>
+						</div>
+					</nav>
+				</th:block>
+			</div>
+		</div>
+	</main>
+</div>
+<div th:replace="~{include/footer-small}"></div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+<script th:src="@{/assets/js/hm4.js}" defer="defer"></script>
+
+<script th:src="${@environment.getProperty('gmo.token.js.src')}"></script>
+<script>
+	<!--
+	var jQSelectorH = {
+		isCredit1: "input[name='settlementMethod']:checked",
+		isCredit2: "label",
+		isCredit3: "span[id^='settlementMethodTypeName']",
+		isCredit4: "dt",
+		isRegisterdCard: "#displayCredit",
+		MulPay: "#gmoApiKey",
+		cardno: "input[id^='cardNewNumber']",
+		origcardno: "input[id^='cardNumber']",
+		expire1: "[id^='expirationNewDateYear']",
+		expire2: "[id^='expirationNewDateMonth']",
+		origexpire1: "input[id^='expirationDateYear']",
+		origexpire2: "input[id^='expirationDateMonth']",
+		securitycode: "input[id$='.securityCode']",
+		token: "input[id^='token']",
+		doNext: "button[id^='doConfirmPayment']",
+		jsErrorDiv: "#jsError",
+		templateError: "#templateError"
+	};
+	//-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script type="text/javascript" th:src="@{/common/js/gmotoken.js}"></script>
+<script>
+	<!--
+
+	function onClickDoApplyCoupon() {
+		document.getElementById("doApplyCoupon").click();
+	}
+
+	function onClickDoCancelCoupon() {
+		document.getElementById("doCancelCoupon").click();
+	}
+
+	$(function () {
+		initiate();
+	});
+
+	/**
+	 * 選択された決済方法へのアクセスを返す
+	 */
+	function getSelected() {
+		return $(jQSelectorH.isCredit1).parent().parent();
+	}
+
+	/**
+	 * 後続処理が必要か
+	 * @return true:後続処理実施必要/false：後続処理実施不要
+	 */
+	function needProcess() {
+		var isCredit = $(jQSelectorH.isCredit1).next(jQSelectorH.isCredit2).next(jQSelectorH.isCredit3).text().indexOf(CREDIT) != -1;
+		if(!isCredit) {
+			return false;
+		}
+		var isRegisterdCard = $(jQSelectorH.isRegisterdCard).val() == "true";
+		if(isRegisterdCard) {
+			return false;
+		}
+		if(isGotToken) {
+			return false;
+		}
+		return true;
+	}
+
+	function changeUsePointUseType() {
+		$("#pointUseType-1").attr("checked", true);
+	}
+	//-->
+
+	$('.c-input:not(#couponCode)').on('keydown',function(event) {
+		if ( event.which == 13 ) {
+			document.getElementById("doConfirmPayment").click();
+		}
+	});
+
+	$('#couponCode').on('keydown',function(event) {
+		if ( event.which == 13 ) {
+			onClickDoApplyCoupon()
+		}
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<!--/* テンプレートはページ独自 */-->
+<script type="text/template" id="templateError">
+	<div class="c-global-error c-global-error--margin-m">
+		<ul id="allMessages">
+			<li>${error}</li>
+		</ul>
+	</div>
+</script>
+</body>
+</html>

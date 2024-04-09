@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="https://www.thymeleaf.org"
+		xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+		xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+	<title>受注詳細 メールテンプレート選択｜受注管理</title>
+	<meta th:replace="~{include/head}" />
+	<script>
+    function setMailTemplateValue(type, seq){
+    //document.getElementById("doEditPage").disabled="";
+    document.getElementById("mailTemplateType").value=type;
+    document.getElementById("mailTemplateSeq").value=seq;
+    }
+    
+    /*
+    編集ページより戻って来た場合にラジオボタンの選択状態を復元する
+    
+    選択されていたメールテンプレートSeqが一覧に存在しない場合は
+    "mailTemplateType"、"mailTemplateSeq"を保持しないように
+    空文字を設定する
+    */
+    function restoreRadioStatus(){
+    var templateSeq = document.getElementById("mailTemplateSeq").value;
+    var elements = document.getElementsByName("templateRadio");
+        if(templateSeq != ""){
+            var disagreementFlg = true;
+            for(i=0;i<elements.length;i++){
+                // var eventAttribute = elements[i].getAttribute('onclick');
+                var eventAttribute = elements[i].getAttribute('mailTemplateSeq');
+                if (eventAttribute.toString().indexOf(templateSeq) != -1){
+                    elements[i].checked = true;
+                    disagreementFlg = false;
+                }
+            }
+            // 一覧に一致するテンプレートが存在しない場合、空文字を設定
+            if (disagreementFlg) {
+                document.getElementById("mailTemplateType").value="";
+                document.getElementById("mailTemplateSeq").value="";
+            }
+        }
+    }
+</script>
+</head>
+
+<body id="order" onload="restoreRadioStatus()">
+<div id="searchOrder">
+<div id="page" class="l-mainwrap">
+	<!-- side -->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form id="selectForm" th:action="@{/mailtemplate/send/select}" th:object="${mailtemplateSendModel}" method="post">
+					<input type="hidden" th:field="*{mailTemplateSeq}" id="mailTemplateSeq" title="テンプレート" value="" />
+					<input type="hidden" th:field="*{mailTemplateType}" id="mailTemplateType" value="" />
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">受注詳細</h1>
+						<h1 class="c-pagetitle_h1">メールテンプレート選択</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+						<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div th:if="${#fields.hasErrors('mailTemplateSeq')}" th:class="global-error-message">
+						<ul>
+							<li th:errors="*{mailTemplateSeq}"></li>
+						</ul>
+					</div>
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<table class="c-tbl large">
+										<thead>
+											<tr>
+												<th class="radio"></th>
+												<th class="w200px">テンプレートタイプ</th>
+												<th>テンプレート名</th>
+											</tr>
+										</thead>
+										<tbody id="indexItems">
+											<tr th:each="item,stat : *{indexItems}">
+												<td>
+													<th:block th:if="${!item.emptyTemplate}">
+														<label class="c-form-control"><input type="radio" th:id="'templateRadio-'+${stat.index}" name="templateRadio" th:value="${item.mailTemplateSeq}"
+	                                                       th:mailTemplateType="${item.mailTemplateType}" th:mailTemplateSeq="${item.mailTemplateSeq}"
+	                                                       th:onclick="setMailTemplateValue(this.getAttribute('mailTemplateType'), this.getAttribute('mailTemplateSeq'));"/><i></i>
+														</label>
+													</th:block>
+												</td>
+												<th:block th:if="${item.newTemplateType}">
+													<td th:id="'mailTemplateTypeRow-'+${stat.index}">
+														<span th:id="'mailTemplateTypeName-'+${stat.index}" th:text="${item.mailTemplateTypeName}">メールテンプレート種別名称</span>
+													</td>
+												</th:block>
+												<td>
+													<th:block th:if="${!item.emptyTemplate}">
+														<span th:id="'mailTemplateName-'+${stat.index}" th:text="${item.mailTemplateName}">テンプレート名</span>
+													</th:block>
+													<th:block th:if="${item.emptyTemplate}">
+														<span>テンプレートが登録されていません</span>
+													</th:block>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button class="c-btn btn_back icon_left" id="doPreviousPage" name="doPreviousPage"><i class="material-icons navigate_before"></i>キャンセル</button>
+							</div>
+							<div class="col_left">
+								<button class="c-btn btn_regular" id="doEditPage" name="doEditPage">次へ</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer -->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</div>
+</body>
+</html>

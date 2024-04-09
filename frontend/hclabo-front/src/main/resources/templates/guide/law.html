@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-guide">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+
+	<main class="l-page">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('law')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>サイトについて</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="/guide/environment#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">推奨環境について</a>
+          <a href="/guide/agreement#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">ご利用規約</a>
+          <a href="#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">特定商取引法に基づく表記</a>
+          <a href="/guide/privacy#anchor-guide-shop01" class="js-anchor p-guide__localmenu-notlocal">プライバシーポリシー</a>
+          <a href="/inquiry/" class="js-anchor p-guide__localmenu-notlocal">お問い合わせ</a>
+
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-shop01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">特定商取引に基づく表記</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <h4 class="p-guide__title-unit">運営委託先</h4>
+              <div class="p-guide__unit-nest">
+                <div class="l-form">
+                  <dl class="l-form__list">
+                    <dt>会社名</dt>
+                    <dd>
+                      <p class="c-text--m">株式会社兵庫県臨床検査研究所</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>代表取締役</dt>
+                    <dd>
+                      <p class="c-text--m">岩本　泰秀</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>所在地</dt>
+                    <dd>
+                      <p class="c-text--m">〒671-2224 兵庫県姫路市青山西5丁目6番2号</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>電話番号</dt>
+                    <dd>
+                      <p class="c-text--m">079-267-1251　<br class="l-sm">受付時間（月～土）：9:30～17:00　※日祝日、及び当社休業日を除く</p>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">販売者商号</h4>
+              <div class="p-guide__unit-nest">
+                <div class="l-form">
+                  <dl class="l-form__list">
+                    <dt>商号</dt>
+                    <dd>
+                      <p class="c-text--m">みんなの郵送検査室</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>販売責任者</dt>
+                    <dd>
+                      <p class="c-text--m">湯浅　久良</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>所在地</dt>
+                    <dd>
+                      <p class="c-text--m">〒671-2224 兵庫県姫路市青山西5丁目6番2号</p>
+                    </dd>
+                  </dl>
+                  <dl class="l-form__list">
+                    <dt>電話番号</dt>
+                    <dd>
+                      <p class="c-text--m">0120-256-525　<br class="l-sm">受付時間（月～土）：9:30～17:00　※日祝日、及び当社休業日を除く</p>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">お支払金額</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">商品表示金額（税込）には送料が含まれます。<br>※送料はこちらをご確認ください。</p>
+                <div class="p-guide__title-inner c-margin--xs">消費税について</div>
+                <p class="p-guide__text">当店の記載価格は、すべて消費税（10％）込みの価格です。</p>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">お支払方法</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">みんなの郵送検査室は、お支払い方法として「クレジットカード決済」「PayPay決済」「コンビニ決済」がご利用いただけます。</p>
+                <p class="p-guide__text">→ お支払い方法については<a href="/guide/payment#anchor-guide-payment02" class="c-textlink c-inlinelink">こちら</a>をご確認ください。</p>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">配送について</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">宅配事業者：日本郵便株式会社</p>
+                <p class="p-guide__text">→ 詳細については<a href="/guide/payment#anchor-guide-payment03" class="c-textlink c-inlinelink">こちら</a>をご確認ください。</p>
+                <div class="p-guide__title-inner c-margin--xs">お届けについて</div>
+                <p class="p-guide__text">商品のお届けは各商品詳細ページへ記載しております。発送は、弊社営業日15時までのお申込み入金確認分は当日発送手配となります。</p>
+                <p class="p-guide__text">→ 配送については<a href="/guide/payment#anchor-guide-payment03" class="c-textlink c-inlinelink">こちら</a>をご確認ください。</p>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">返品について</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">お届けした商品がご注文内容と異なっている場合や、不良品の場合についてのみ検査キットの交換・返品を承ります。<br>
+                  検査キット交換・返品をご希望の場合は、必ず商品到着後7日以内に、みんなの郵送検査室まで、お電話にてご連絡ください。<br>
+                  事前のご連絡がない返送商品のご対応はお受けできませんのでご注意ください。<br>
+                  当社責任による検査キットの交換・ご返品の際の配送料金は当社負担とさせていただきます。</p>
+                  <div class="p-guide__title-inner c-margin--xs">【次の場合、返品はお受けできませんので、ご注意ください。】</div>
+                  <ol class="p-guide__ordered-list01">
+                    <li>返品受付期間（商品到着後7日以内のご連絡）が経過した商品</li>
+                    <li>お客様都合による返品（イメージと異なる、注文違い等）</li>
+                    <li>一度ご使用になった商品</li>
+                    <li>お客様のもとで、検査キットの付属品を紛失・破損してしまった商品</li>
+                    <li>事前のご連絡がなく返送されてきた商品</li>
+                    <li>返品受付後、10日以上経過して返品先住所に届いた商品</li>
+                  </ol>
+                </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">セキュリティ・個人情報のお取り扱い</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">当サイトは、セキュリティについても非常に留意しています。 請求先住所、商品配送先住所の入力時には、これらの情報が傍受・妨害されることを防ぐ目的でSSL（Secure Sockets Layer）技術を使用しております。</p>
+                <ul class="p-guide__bullet-point c-margin--xs">
+                  <li>個人情報については、最大限の注意を払って管理しております。お客様に無断で個人情報を集めたり、第三者に譲渡または公開することはありません。</li>
+                  <li>お買い物、お問い合わせ等で送信していただいたお客様の個人情報は、お客様が同意された目的以外には一切使用しません。</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-guide__unit c-margin--m">
+              <h4 class="p-guide__title-unit">その他の注意点</h4>
+              <div class="p-guide__unit-nest">
+                <p class="p-guide__text">商品の色はブラウザなどにより多少現品と異なる場合がありますので、予めご了承ください。<br>
+                  万一商品が売り切れの場合は、ご容赦ください。その場合はE-Mailでお知らせします。<br>
+                  未成年者のお客様が商品をご注文する場合は、保護者の同意の上でご注文いただき、ご注文いただいた商品については、保護者の同意を得ているものとみなします。</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+	</main>
+	<div th:replace="~{include/footer}"></div>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body>
+</html>

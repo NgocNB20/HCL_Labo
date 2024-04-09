@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	  xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html>
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>画像登録結果 | 商品管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="goods">
+<div id="imageUploadGoods" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!--/* contents */-->
+			<div class="l-main">
+				<form th:action="@{/goods/bundledupload/imageUploadComplete/}" th:object="${goodsBundledUploadModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">画像登録結果</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_title">
+								<h2 class="c-pagetitle_h3">アップロード結果</h2>
+								<div class="c-open-btn"><i></i></div>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<div class="fwb">画像一括アップロード処理を完了しました。</div>
+									<div class="wrap_flex_equivalent mt30">
+										<div class="col max_w50p pr10">
+											<table class="c-tbl-base th_fntnormal">
+												<tbody>
+												<tr>
+													<th class="w190px">アップロードファイル数</th>
+													<td th:text="*{#number.convert(uploadFileCount) + 'ファイル'}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/goods/bundledupload/image/}"><i class="material-icons navigate_before"></i>戻る</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

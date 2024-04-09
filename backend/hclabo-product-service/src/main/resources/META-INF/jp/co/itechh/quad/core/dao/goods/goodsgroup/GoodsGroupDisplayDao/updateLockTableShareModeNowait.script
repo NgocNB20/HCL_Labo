@@ -1,0 +1,1 @@
+LOCK TABLE goodsgroupdisplay IN EXCLUSIVE MODE NOWAIT

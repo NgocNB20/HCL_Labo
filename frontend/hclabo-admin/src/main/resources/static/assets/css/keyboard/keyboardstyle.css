@@ -1,0 +1,27 @@
+/****************************************************************
+(C) 2008 Kishore Nallan for DesignShack
+http://www.kishorelive.com
+kishore.nc@gmail.com
+*****************************************************************/
+
+#keyboard { 
+	position: absolute; 
+	display: none; 
+	border: 1px solid #ccc; 
+	width: 200px; 
+	padding: 5px; 
+	cursor: move; 
+	z-index: 100; 
+}
+
+#row0, #row0_shift {
+	padding-left: 0px; 
+}
+
+#row1, #row1_shift { 
+	padding-left: 0px; 
+}
+
+#row2, #row2_shift { 
+	padding-left: 0px; 
+}

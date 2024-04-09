@@ -1,0 +1,21 @@
+<div class="l-breadcrumbs" typeof="BreadcrumbList" th:fragment="breadcrumbguide(current)">
+  <div class="l-breadcrumbs__inner">
+    <div class="l-breadcrumbs__list">
+      <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+      <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a th:href="@{/guide/}" class="c-textlink c-textlink--hover">ご利用ガイド</a></span></div>
+      <div class="l-breadcrumbs__item" th:switch="${current}" property="itemListElement" typeof="ListItem">
+        <div class="l-breadcrumbs__item">
+          <span property="name" th:case="'agreement'" class="l-breadcrumbs__current">サイトについて</span>
+          <span property="name" th:case="'environment'" class="l-breadcrumbs__current">サイトについて</span>
+          <span property="name" th:case="'faq'" class="l-breadcrumbs__current">よくある質問</span>
+          <span property="name" th:case="'law'" class="l-breadcrumbs__current">サイトについて</span>
+          <span property="name" th:case="'member'" class="l-breadcrumbs__current">会員について</span>
+          <span property="name" th:case="'order'" class="l-breadcrumbs__current">ご注文について</span>
+          <span property="name" th:case="'payment'" class="l-breadcrumbs__current">お支払い・配送について</span>
+          <span property="name" th:case="'privacy'" class="l-breadcrumbs__current">サイトについて</span>
+          <span property="name" th:case="'shop'" class="l-breadcrumbs__current">初めての方へ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

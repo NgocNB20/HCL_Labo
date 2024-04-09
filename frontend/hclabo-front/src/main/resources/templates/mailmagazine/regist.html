@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<th:block th:with="canonical='true'" >
+<meta th:replace="~{include/head}" />
+</th:block>
+</head>
+
+<body id="gotop" class="p-mailmagazine">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/breadcrumb_mail_magazine}"></div>
+        <div class="l-section">
+            <div class="l-section__inner">
+                <h2 class="c-title-page"><strong>メールマガジン</strong></h2>
+                <form id="registForm" th:action="@{/mailmagazine/regist}" th:object="${mailmagazineModel}" method="post">
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+                      入力内容をご確認ください。
+                    </div>
+                    <div class="l-form">
+                        <div class="l-form__area">
+                          <h3 class="c-title-line">メールマガジン登録</h3>
+                          <p class="c-text--m">みんなの郵送検査室より商品の最新情報やおすすめの商品・お得な情報等を不定期でメール配信いたします。<br>メールマガジン配信をご希望の方は、メールアドレスを入力していただき、「登録する」ボタンを押してください。</p>
+                          <dl class="l-form__list c-margin--s">
+                              <dt>
+                                <span>メールアドレス <br class="l-lg"><span class="l-form__list-memo">（半角英数字）</span></span><span class="c-require">必須</span>
+                              </dt>
+                              <dd>
+                                <input type="email" th:field="*{mailAddress}" maxLength="160" name="email" autocomplete="email" placeholder="ここに入力してください" value="" class="c-input c-input--width-l" th:errorclass="field-error">
+                                <div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" class="c-field-error"></div>
+                              </dd>
+                          </dl>
+                      </div>
+                    </div>
+                    <div class="c-button-wrap"><button name="doOnceRegist" type="submit" class="c-button c-button--primary c-button--width-l">登録する</button></div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

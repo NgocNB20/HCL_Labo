@@ -1,0 +1,30 @@
+<th:block th:fragment="sidemenu(categoryTreeDtoList,node)">
+    <ol class="dd-list" id="menu-list">
+        <th:block th:each="item, stat: ${categoryTreeDtoList}">
+            <li class="dd-item" th:id="${item.categoryId} + '-' + ${node + stat.count} + '-li'" th:data-category-id="${item.categoryId}" th:data-category-name="${item.categoryName}" th:data-display-name="${item.displayName}">
+                <div class="dd-handle-side-menu dd3-handle"><i class="material-icons menu"></i></div>
+                <div class="dd3-content-side-menu">
+                    <div class="category-draggable-items">
+                        <div class="l-section">
+                            <label class="c-form-control">
+                                <input type="checkbox" th:id="${item.categoryId} + '-' + ${node + stat.count}" onclick="inputCheck(this)"><i></i>
+                                <span th:id="${item.categoryId} + '-' + ${node + stat.count} + '-id'" th:text="${item.categoryId}  + ' (' + ${item.categoryName} + ')' "></span>
+                            </label>
+                        </div>
+                        <div class="l-section">
+                            <div class="l-section category-input-name">
+                                <dt>表示名</dt>
+                                <dd>
+                                    <input class="c-form-control" th:value="${item.displayName}" onKeyUp="textChange(this)" th:classappend="${item.error != null} ? 'error' : ''">
+                                </dd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:if="${item.categoryTreeDtoList != null}">
+                    <section th:replace="~{include/sidemenustructure::sidemenu(${item.categoryTreeDtoList},${10*(stat.count + node)})}"></section>
+                </th:block>
+            </li>
+        </th:block>
+    </ol>
+</th:block>

@@ -1,0 +1,51 @@
+<div class="l-side l-lg" th:fragment="sidemenuguide(current)">
+            <div class="l-side-mypage">
+              <ul>
+                <li th:class="${current} == 'shop' ? 'is-current' : ''"><a th:href="@{/guide/shop}"><span><svg viewBox="0 0 16 14" style="fill:#a0a0a0;" class="guide01">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/store.svg#store}"></use>
+                      </svg></span>
+                    <p>ショップについて</p>
+                  </a></li>
+                <li th:class="${current} == 'order' ? 'is-current' : ''"><a th:href="@{/guide/order}"><span><svg viewBox="0 0 23.5 19.7" style="fill:#a0a0a0;" class="guide02">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/cart.svg#cart}"></use>
+                      </svg></span>
+                    <p>ご注文について</p>
+                  </a></li>
+                <li th:class="${current} == 'commodity' ? 'is-current' : ''"><a th:href="@{/guide/commodity}"><span><svg viewBox="0 0 16.034 15.013" style="fill:#a0a0a0;" class="guide03">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/gift.svg#gift}"></use>
+                      </svg></span>
+                    <p>商品について</p>
+                  </a></li>
+                <li th:class="${current} == 'payment' ? 'is-current' : ''"><a th:href="@{/guide/payment}"><span><svg viewBox="0 0 17 14.091" style="fill:#a0a0a0;" class="guide04">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/truck.svg#truck}"></use>
+                      </svg></span>
+                    <p>お支払い・配送に<br>ついて</p>
+                  </a></li>
+                <li th:class="${current} == 'member' ? 'is-current' : ''"><a th:href="@{/guide/member}"><span><svg viewBox="0 0 20.5 20.5" style="fill:#a0a0a0;" class="guide05">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/person.svg#person}"></use>
+                      </svg></span>
+                    <p>会員について</p>
+                  </a></li>
+                <li th:class="${current} == 'law' ? 'is-current' : ''"><a th:href="@{/guide/law}"><span><svg viewBox="0 0 16.07 16.07" style="fill:#a0a0a0;" class="guide06">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/info.svg#info}"></use>
+                      </svg></span>
+                    <p>特定商取引法に<br>基づく表記</p>
+                  </a></li>
+                <li th:class="${current} == 'privacy' ? 'is-current' : ''"><a th:href="@{/guide/privacy}"><span><svg viewBox="0 0 15.539 17.602" style="fill:#a0a0a0;" class="guide07">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/privacy.svg#privacy}"></use>
+                      </svg></span>
+                    <p>プライバシーポリシー</p>
+                  </a></li>
+                <li th:class="${current} == 'agreement' ? 'is-current' : ''"><a th:href="@{/guide/agreement}"><span><svg viewBox="0 0 13.711 18" style="fill:#a0a0a0;" class="guide08">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/todolist.svg#todolist}"></use>
+                      </svg></span>
+                    <p>ご利用規約</p>
+                  </a></li>
+                <li th:class="${current} == 'inquiry' ? 'is-current' : ''"><a th:href="@{/inquiry/}"><span><svg viewBox="0 0 16.708 13.567" style="fill:#a0a0a0;" class="guide09">
+                        <use th:attr="'xlink:href'=@{/assets/images/icon/mail.svg#mail}"></use>
+                      </svg></span>
+                    <p>お問い合わせ</p>
+                  </a></li>
+              </ul>
+            </div>
+          </div>

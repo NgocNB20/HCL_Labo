@@ -1,0 +1,109 @@
+@charset "UTF-8";
+
+
+/* Reset
+---------------------------------------------------- */
+html {
+	overflow-y: scroll;
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+	margin: 0;
+	padding: 0;
+}
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style: normal;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+caption,th {
+	text-align: left;
+}
+q:before,q:after {
+	content: '';
+}
+object,embed {
+	vertical-align: top;
+}
+hr,legend {
+	display: none;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+}
+img,abbr,acronym,fieldset {
+	border: 0;
+}
+img {
+	vertical-align: top;
+	border: none;
+}
+ul,ol {
+	list-style-type: none;
+}
+input,textarea,select,option {
+	vertical-align: middle;
+}
+button {
+	border: none;
+	background: none;
+}
+label {
+	margin-right: 10px;
+}
+input[type="radio"],
+input[type="checkbox"] {
+	margin-right: 3px;
+	vertical-align: text-bottom;
+	*vertical-align: middle;
+}
+
+#preview-demo-login{
+	display:none;
+}
+/* Structures
+---------------------------------------------------- */
+body {
+	background:  url(@app.complement.url@/images/common/backimg.gif);
+	color: #434343;
+	font-size: 84%;
+	font-family:'Lucida Grande', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'Meiryo', 'メイリオ', 'sans-serif';
+	text-align: center;
+}
+* html body {
+	font-family:'Lucida Grande', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'Meiryo', 'メイリオ', 'sans-serif';
+}
+
+/* Texts
+---------------------------------------------------- */
+a:link,
+a:visited {
+	color: #434343;
+	line-height: 150%;
+	text-decoration: none;
+}
+a:active,
+a:hover,
+a:focus {
+	color: #000000;
+	text-decoration: underline;
+}
+
+/* CLEAR
+--------------------------------------- */
+.clearfix {
+	overflow: hidden;
+	zoom: 1;
+}
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0px;
+	clear: both;
+	line-height: 0;
+	visibility: hidden;
+}
+.clear {
+	clear: both;
+}

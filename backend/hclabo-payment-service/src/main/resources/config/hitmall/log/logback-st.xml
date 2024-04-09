@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    
+    <appender name="APPLICATIONLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <File>/app/log/services/payment/PaymentServiceApplication.log</File>
+        <encoder>
+            <pattern>%d [${springAppName:-},%X{traceId:-},%X{spanId:-}] %-7c %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/app/log/services/payment/PaymentServiceApplication.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <File>/app/log/services/payment/PaymentService.log</File>
+        <encoder>
+            <pattern>%d [${springAppName:-},%X{traceId:-},%X{spanId:-}] [%t] %-5p %c - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/app/log/services/payment/PaymentService.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="FILE_FLUENTD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/app/log/services/payment/Batch.log</file>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>false</includeContext>
+            <includeCallerData>true</includeCallerData>
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <message>message</message>
+                <thread>[ignore]</thread>
+                <logger>[ignore]</logger>
+                <version>[ignore]</version>
+                <levelValue>[ignore]</levelValue>
+                <caller>trace</caller>
+                <stackTrace>exception</stackTrace>
+                <mdc>context</mdc>
+            </fieldNames>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/app/log/services/payment/Batch.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <logger name="BATCH" additivity="false" level="INFO">
+        <appender-ref ref="FILE_FLUENTD"/>
+    </logger>
+    <logger name="LOGICAL" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="ACTION" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="ACCESS" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="SESSION" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="FREE" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="API" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="EXCEPT" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="SQLEXCP" additivity="false" level="INFO">
+        <appender-ref ref="APPLICATIONLOG"/>
+    </logger>
+    <logger name="jp.co.itechh.quad.core" additivity="false" level="INFO">
+        <appender-ref ref="APP"/>
+    </logger>
+    <logger name="org.seasar.doma.jdbc" additivity="false" level="WARN">
+        <appender-ref ref="APP"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="APP"/>
+    </root>
+</configuration>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>フリーエリア登録更新｜店舗管理</title>
+    <!-- Summernote (Thymeleaf Rich Text Editor - WYSIWYG) -->
+    <link th:rel="stylesheet" th:href="@{/assets/summernote/summernote-lite.css}"/>
+<!--    <script th:src="@{/assets/summernote/summernote-lite.js}"></script>-->
+<!--    <script>-->
+<!--        $(document).ready(function() {-->
+<!--            initSummernote('freeAreaBodyPc');-->
+<!--        });-->
+<!--    </script>-->
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+    <script language="JavaScript">
+        $(function () {
+            new CharCount(document.getElementById('freeAreaBodyPc'), 'limit');
+        })
+    </script>
+</head>
+
+<body id="shop">
+<div id="freeRegistShop" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/freearea/registupdate/}" th:object="${freeareaRegistUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">フリーエリア登録更新</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- フリーエリア内容登録 -->
+                    <div class="l-section" id="mainContainer" >
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">基本設定</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <input type="hidden" id="md" />
+                                <input type="hidden" id="scFreeAreaSeq" />
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div class="edit">
+                                            <dt>キー<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <input type="text" th:field="*{freeAreaKey}" maxlength="50" class="c-form-control w300px" placeholder="入力してください" th:classappend="${#fields.hasErrors('freeAreaKey')}?'error':''" />
+                                                <div th:id="freeAreaKeyError" th:if="${#fields.hasErrors('freeAreaKey')}" th:errors="*{freeAreaKey}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>公開開始日時<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <label class="c-datepicker w150px"><input type="text" th:field="*{openStartDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('openStartDate')}?'error':''" /></label>
+                                                <input type="text" th:field="*{openStartTime}" class="c-form-control w100px ml10" placeholder="00:00:00" maxlength="8" th:classappend="${#fields.hasErrors('openStartTime')}?'error':''" />
+                                                <div class="mt5">
+                                                     <div th:id="openStartDateError" th:if="${#fields.hasErrors('openStartDate')}" th:errors="*{openStartDate}" class="c-error-txt"></div>
+                                                     <div th:id="openStartTimeError" th:if="${#fields.hasErrors('openStartTime')}" th:errors="*{openStartTime}" class="c-error-txt"></div>
+                                                </div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>タイトル</dt>
+                                            <dd><input type="text" th:field="*{freeAreaTitle}" maxlength="100" class="c-form-control w100p" placeholder="入力してください" th:classappend="${#fields.hasErrors('freeAreaTitle')}?'error':''" />
+                                                 <div th:id="freeAreaTitleError" th:if="${#fields.hasErrors('freeAreaTitle')}" th:errors="*{freeAreaTitle}" class="c-error-txt mt5"></div>
+                                            </dd>
+
+                                        </div>
+
+                                        <div id="freeAreaBodyPc" class="edit">
+                                            <dt>本文（HTML可）</dt>
+                                            <dd>
+                                                <textarea limit="100000" class="c-form-control w100p" rows="5" th:field="*{freeAreaBodyPc}" placeholder="入力してください" th:classappend="${#fields.hasErrors('freeAreaBodyPc')}?'error':''"></textarea>
+                                                <div th:id="freeAreaBodyPcError" th:if="${#fields.hasErrors('freeAreaBodyPc')}" th:errors="*{freeAreaBodyPc}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit" th:if="*{isUpdatePage}">
+                                            <dt>特集ページ用URL</dt>
+                                            <dd>
+                                                <table cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr><td><span th:text="*{specialPageUrlPc}"></span></td><td></td></tr>
+                                                    <tr><td><span th:text="*{contentsPageUrlPc}"></span></td><td>※サイドメニューなし</td></tr>
+                                                    <tr><td><span th:text="*{topicPageUrlPc}"></span></td><td>※ヘッダー、フッター、サイドメニューなし</td></tr>
+                                                </table>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                            <th:block th:if="*{freeAreaSeq != null}"><a class="c-btn btn_back icon_left" th:href="@{/freearea/(md=list)}"><i class="material-icons navigate_before"></i>戻る</a></th:block>
+                            <th:block th:if="*{freeAreaSeq == null}"><a class="c-btn btn_back icon_left" th:href="@{/freearea/}"><i class="material-icons navigate_before"></i>戻る</a></th:block>
+                            </div>
+                            <div class="col_left" >
+                                <input type="hidden" id="isConfirmBtnClicked" value="false"/>
+                                <th:block th:unless="${dataNotExist}">
+                                    <button class="c-btn btn_regular" type="submit" id="doConfirm" name="doConfirm">確認</button>
+                                </th:block>
+                                <th:block th:if="${dataNotExist}">
+                                    <button disabled  class="c-btn btn_regular" type="submit" id="doConfirm" name="doConfirm">確認</button>
+                                </th:block>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

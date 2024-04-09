@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	  xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html>
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>商品CSV登録結果 | 商品管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="goods">
+<div id="uploadGoods" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!--/* contents */-->
+			<div class="l-main">
+				<form th:action="@{/goods/bundledupload/csvUploadComplete/}" th:object="${goodsBundledUploadModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">商品CSV登録結果</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_title">
+								<h2 class="c-pagetitle_h3">アップロード結果</h2>
+								<div class="c-open-btn"><i></i></div>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<th:block th:if="*{isNormalEndMsg}"><div class="fwb">商品一括処理を完了しました。</div></th:block>
+									<th:block th:if="*{isValidationEndMsg}"><div class="fwb">商品一括処理を中止しました。（データの登録・更新は行っておりません。）</div></th:block>
+									<th:block th:if="*{isErrorEndMeg}"><div class="fwb">商品一括処理に失敗しました。</div></th:block>
+									<th:block th:if="*{!isErrorEndTbl()}">
+										<div class="wrap_flex_equivalent mt30">
+											<div class="col max_w50p pr10">
+												<table class="c-tbl-base th_fntnormal">
+													<tbody>
+													<tr>
+														<th:block th:if="*{isRegist()}">
+															<th class="w190px">アップロードファイル数</th>
+														</th:block>
+														<th:block th:if="*{!isRegist()}">
+															<th class="w190px">アップロードファイル数</th>
+														</th:block>
+														<td th:text="*{#number.convert(uploadItemCount) + '件'}"></td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</th:block>
+									<th:block th:if="*{isErrorEndTbl()}">
+										<div class="fwb">以下のエラーが発生しました。</div>
+										<div class="mt30">
+											<table class="c-tbl c-tbl-upload-error">
+												<tbody>
+												<tr>
+													<th>エラー内容</th>
+												</tr>
+												<tr th:each="item: *{errorResultItems}">
+													<td class="left">
+														<th:block th:if="${item.isUploadData}">
+															CSV:<span th:text="${item.rowNo}" ></span>行目&nbsp;
+														</th:block>
+														<th:block th:if="${!item.isUploadData}"> 商品管理番号:
+															（登録済規格<th:block th:if="${!item.isExistGoodsData}">
+																		<span th:text="${item.goodsGroupCode}" ></span> 商品番号:
+																		<span th:text="${item.goodsCode}" ></span>&nbsp;
+																	</th:block>)
+														</th:block>
+														<span th:if="${item.isColumn}">項目名:<span th:text="${item.columnName}">名称</span>&nbsp;</span>
+														<span th:utext="${item.failReason}" >不正です</span>&nbsp;
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<th:block th:if="*{isValidLimitFlg()}">
+											<div class="fwb mt15">※エラーが規定数を超えたので処理を打ち切りました</div>
+										</th:block>
+									</th:block>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/goods/bundledupload/csv/}"><i class="material-icons navigate_before"></i>戻る</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

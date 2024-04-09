@@ -1,0 +1,223 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  l-category
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+.l-category {
+  $this: &;
+
+  &__button {
+
+    &-accordion,
+    &-anchor {
+      display: grid;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+
+  &__block {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height $comMS $comES, opacity $comMS $comES, visibility $comMS $comES;
+    visibility: hidden;
+    border-top: solid 1px $color-e6;
+
+
+    &.is-opened {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .c-textlink {
+    display: inherit;
+  }
+
+  .is-current {
+    color: $color-ccc
+  }
+
+    // 第1階層
+    &__level1 {
+      @include font-style(14,20,bold);
+      margin-bottom: 50px;
+
+      > #{$this}__button {
+        padding-bottom: 10px;
+     }
+
+     > #{$this}__block {
+      height: inherit !important;
+      opacity: 1 !important;
+      visibility: inherit !important;
+     }
+    }
+
+    // 第2階層
+    &__level2 {
+      border-bottom: solid 1px $color-e6;
+      @include font-style(16, 22, 500);
+  
+      > #{$this}__button #{$this}__button-accordion {
+        padding: 20px 30px 20px 0;
+        position: relative;
+
+        &:hover::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 7px auto;
+          @include icon('arrow-down', '333333');
+        }
+      }
+
+      > #{$this}__button.is-opened #{$this}__button-accordion {
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          @include icon('arrow-up', '333333');
+          background-size: 7px auto;
+        }
+      }
+
+      > #{$this}__button #{$this}__button-anchor {
+        padding: 20px 20px 20px 0;
+        position: relative;
+
+        &:hover::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 4px auto;
+          @include icon('arrow-right', '333333');
+        }
+
+      }
+
+
+    }
+
+    // 第3階層
+    &__level3wrap {
+
+      > li {
+        background: $color-orange-lightGray;
+      }
+    }
+
+    &__level3 {
+      border-bottom: solid 1px $color-e6;
+      @include font-style(16, 22, 500);
+  
+      #{$this}__button-accordion {
+        padding: 20px;
+        position: relative;
+
+        &:hover::after {
+          content: "";
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 7px auto;
+          @include icon('arrow-down', '333333');
+        }
+      }
+
+      > #{$this}__button.is-opened #{$this}__button-accordion {
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          @include icon('arrow-up', '333333');
+          background-size: 7px auto;
+        }
+      }
+
+      #{$this}__button-anchor {
+        padding: 20px;
+      }
+    }
+
+    // 第4階層
+    &__level4wrap {
+
+      padding: 12px 25px;
+      background: $color-orange-lightGray;
+    }
+
+    &__level4 {
+      @include font-style(15, 22, normal);
+
+      .c-textlink {
+        display: inline-flex;
+      }
+  
+      #{$this}__button-anchor {
+        padding: 10px 0;
+
+        p::before {
+          content: "・";
+          display: inline-block;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    &--footer {
+      margin-top: vwset(75);
+    }
+
+    
+
+  }
+

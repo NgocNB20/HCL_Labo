@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+/* CSS Reset Style
+---------------------------------------------------- */
+* {
+	padding: 0;
+	margin: 0;
+}
+body,td,th {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, label, fieldset, legend, input, textarea, button, p, blockquote, pre, address, table, th, td {
+ color: #333333;
+}
+/* HyperText Style
+---------------------------------------------------- */
+a:link,a:visited {
+	color: #0E7FC7;
+	text-decoration: none;
+}
+a:hover,a:focus {
+	color: #0E7FC7;
+	text-decoration: underline;
+}
+
+/* Head Line
+---------------------------------------------------- */
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+}
+h2 {
+	padding: 0 0 5px 18px;
+	margin: 3px 0 10px 0; 
+	border-bottom: 4px solid #DDDDDD;
+	font-size: 18px;
+	color: #FF3A00;
+	line-height: normal;
+	background: url(@app.complement.url@/images/icon/arrow_1.gif) 0 2px no-repeat;
+}
+h4 {
+	padding: 2px 0 1px 6px;
+	margin: 15px 0 7px 0;
+	border-left: 4px solid #768E9D;
+	font-weight: normal;
+}
+
+/* Texts
+---------------------------------------------------- */
+p {
+	margin: 20px 0;
+	line-height: 1.8;
+}
+
+/* Form
+---------------------------------------------------- */
+input,
+select,
+textarea {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	vertical-align: middle;
+}
+
+/* List Style
+---------------------------------------------------- */
+ul, ol {
+	margin: 1em 0;
+}
+ul li,
+ol li {
+	margin: 0.1em 0 0.1em 2em;
+}
+
+/* Image Style
+---------------------------------------------------- */
+img {
+	border: none;
+	vertical-align: bottom;
+}
+img.over {
+}
+
+/* Alignment
+---------------------------------------------------- */
+.left {
+	text-align: left !important;
+}
+.center {
+	text-align: center !important;
+}
+.right {
+	text-align: right !important;
+}
+
+/* Float Clear style
+---------------------------------------------------- */
+.clear {
+	clear: both !important;
+}
+.clearfix:after {
+	clear: both;
+	height: 0;
+	visibility: hidden;
+	display: block;
+	content: '[.]';
+}
+.clearfix {
+	display: inline-block;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+/* End hide from IE-mac */

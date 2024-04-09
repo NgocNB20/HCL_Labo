@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>配送方法設定 登録更新｜システム設定</title>
+    <script>
+        H.Event.addEvent('deliveryMethodType', 'doDisplayChange', H.Event.CHANGE);
+    </script>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+    <script language="JavaScript">
+        $(function () {
+            new CharCount(document.getElementById('deliveryNotePC'), 'limit');
+        })
+    </script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/registupdate/}" th:object="${deliveryRegistUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">登録更新</h2>
+                    </div>
+    
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+    
+                    <input type="hidden" id="scDeliveryMethodSeq" th:value="*{scDeliveryMethodSeq}"/>
+
+                    <div class="l-section_column" id="mainContainer">
+                        <div class="l-section_inner">
+                            <!-- 詳細情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">詳細情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px">
+                                            <th:block th:if="*{!isRegistMode}">
+                                                <div>
+                                                    <dt>配送ID</dt>
+                                                    <dd th:text="*{deliveryMethodId}"></dd>
+                                                </div>
+                                            </th:block>
+                                            <div class="edit">
+                                                <dt>配送名称<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <input type="text" class="c-form-control w400px" placeholder="入力してください" th:field="*{deliveryMethodName}" th:errorclass="error">
+                                                    <div id="deliveryMethodNameError" th:if="${#fields.hasErrors('deliveryMethodName')}" th:errors="*{deliveryMethodName}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                            <th:block th:if="*{isRegistMode}">
+                                                <div class="edit">
+                                                    <dt>配送種別<span class="ico_required ml5">必須</span></dt>
+                                                    <dd>
+                                                        <select id="deliveryMethodType" class="c-form-control" th:field="*{deliveryMethodType}" th:errorclass="error">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{deliveryMethodTypeItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                    th:selected="${item.key} == *{deliveryMethodType}">
+                                                            </option>
+                                                        </select>
+                                                        <div id="deliveryMethodTypeError" th:if="${#fields.hasErrors('deliveryMethodType')}" th:errors="*{deliveryMethodType}" class="c-error-txt mt5"></div>
+                                                    </dd>
+                                                    <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none;" />
+                                                </div>
+                                            </th:block>
+                                            <th:block th:if="*{!isRegistMode}">
+                                                <div>
+                                                    <dt>配送種別</dt>
+                                                    <dd th:text="*{deliveryMethodTypeName}"></dd>
+                                                </div>
+                                            </th:block>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 配送追跡設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">配送追跡設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_fn13 dt_w160px">
+                                            <div class="edit">
+                                                <dt>URL</dt>
+                                                <dd>
+                                                    <input type="text" class="c-form-control w560px" placeholder="入力してください" th:field="*{deliveryChaseURL}" maxlength="200" th:errorclass="error">
+                                                    <div class="c-annotation mt5">※｛0｝が伝票番号に置き換わります。</div>
+                                                    <div id="deliveryChaseURLError" th:if="${#fields.hasErrors('deliveryChaseURL')}" th:errors="*{deliveryChaseURL}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+
+                                            <div class="edit">
+                                                <dt>表示期間</dt>
+                                                <dd>
+                                                    <div class="c-input-label">
+                                                        出荷日から
+                                                        <input type="text" class="c-form-control w100px count ml10" placeholder="10" th:field="*{deliveryChaseURLDisplayPeriod}" maxlength="3" th:errorclass="error">
+                                                        <label>日間表示</label>
+                                                    </div>
+                                                    <div class="c-annotation mt5">※0は無制限。</div>
+                                                    <div id="deliveryChaseURLDisplayPeriodError" th:if="${#fields.hasErrors('deliveryChaseURLDisplayPeriod')}" th:errors="*{deliveryChaseURLDisplayPeriod}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 表示設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">表示設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_fn13 dt_w160px">
+                                            <div class="edit">
+                                                <dt>公開状態<span class="ico_required">必須</span></dt>
+                                                <dd>
+                                                    <select class="c-form-control" th:field="*{openStatusPC}" th:errorclass="error">
+                                                        <option th:each="item : *{openStatusPCItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{openStatusPC}">
+                                                        </option>
+                                                    </select>
+                                                    <div id="openStatusPCError" th:if="${#fields.hasErrors('openStatusPC')}" th:errors="*{openStatusPC}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+
+                                            <div id="deliveryNotePC" class="edit">
+                                                <dt>説明（HTML可）</dt>
+                                                <dd>
+                                                    <textarea limit="2000" class="c-form-control w100p" th:field="*{deliveryNotePC}" rows="5" placeholder="入力してください" th:errorclass="error"></textarea>
+                                                    <div id="deliveryNotePCError" th:if="${#fields.hasErrors('deliveryNotePC')}" th:errors="*{deliveryNotePC}" class="c-error-txt mt5"></div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 送料設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">送料設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <th:block th:if="*{!isSelectedType}">
+                                    <div class="l-article_inner">
+                                        <div class="l-inner_wrap">
+                                            <h4 class="c-pagetitle_h5">配送種別を選択して下さい。</h4>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <th:block th:if="*{isSelectedType}">
+                                    <div class="l-article_inner">
+                                        <div class="l-inner_wrap">
+                                            <!--一律送料の場合-->
+                                            <th:block th:if="*{isFlatType}">
+                                                <dl class="c-dl-base dt_fn13 dt_w160px">
+                                                    <div class="edit">
+                                                        <dt>一律送料<span class="ico_required">必須</span></dt>
+                                                        <dd>
+                                                            <div class="c-input-label">
+                                                                <input type="text" class="c-form-control w100px price" placeholder="100" value="1000"
+                                                                       th:field="*{equalsCarriage}" maxlength="8" size="10" th:errorclass="error">
+                                                                <label>円 （税抜）</label>
+                                                            </div>
+                                                            <div>
+                                                                <div id="equalsCarriageError" th:if="${#fields.hasErrors('equalsCarriage')}" th:errors="*{equalsCarriage}" class="c-error-txt mt5"></div>
+                                                            </div>
+                                                        </dd>
+                                                    </div>
+                                                    <div class="edit">
+                                                        <dt>高額割引</dt>
+                                                        <dd>
+                                                            <div class="wrap_flex_center">
+                                                                <div class="c-input-label mr20">
+                                                                    <input type="text" class="c-form-control w100px price" placeholder="100" value="1000"
+                                                                           th:field="*{largeAmountDiscountPrice}" maxlength="8" size="10" th:errorclass="error">
+                                                                    <label>円（税抜）以上購入すると</label>
+                                                                </div>
+                                                                <div class="c-input-label">
+                                                                    <span class="mr10">送料</span>
+                                                                    <input type="text" class="c-form-control w100px price" placeholder="100" value="1000"
+                                                                           th:field="*{largeAmountDiscountCarriage}" maxlength="8" size="10" th:errorclass="error">
+                                                                    <label>円（税抜）</label>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div id="largeAmountDiscountPriceError" th:if="${#fields.hasErrors('largeAmountDiscountPrice')}" th:errors="*{largeAmountDiscountPrice}" class="c-error-txt mt5"></div>
+                                                                <div id="largeAmountDiscountCarriageError" th:if="${#fields.hasErrors('largeAmountDiscountCarriage')}" th:errors="*{largeAmountDiscountCarriage}" class="c-error-txt mt5"></div>
+                                                            </div>
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </th:block>
+                                            <!--都道府県別送料の場合-->
+                                            <th:block th:if="*{isPrefectureType}">
+                                                <div class="l-conttitle_wrap">
+                                                    <div class="c-pagetitle_h4 as_end">都道県別送料</div>
+                                                    <ul class="col_left c-list-righ">
+                                                        <li><button class="c-btn btn_back" type="button" onClick="return allCheckDelivery();">全て選択</button></li>
+                                                        <li><button class="c-btn btn_del" type="button" onClick="return allUnCheckDelivery();">全て選択解除</button></li>
+                                                    </ul>
+                                                </div>
+                                                <ul class="shipping_fee edit">
+                                                    <th:block th:each="item, stat: *{deliveryPrefectureCarriageItems}">
+                                                        <th:block th:if="${stat.count != stat.size && stat.count != stat.size - 1}">
+                                                            <li>
+                                                                <div class="select">
+                                                                    <label class="c-form-control">
+                                                                        <input type="checkbox" th:checked="${item.activeFlag}" th:field="*{deliveryPrefectureCarriageItems[__${stat.index}__].activeFlag}">
+                                                                        <i></i><th:block th:text="${item.prefectureName}"></th:block>
+                                                                    </label>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="c-input-label">
+                                                                        <input type="text" class="c-form-control w80px price" placeholder="1000"
+                                                                               th:id="'prefectureCarriage-' + ${stat.index}" th:value="${item.prefectureCarriage}"
+                                                                               th:name="'deliveryPrefectureCarriageItems' + '[' + ${stat.index} +']' + '.' +'prefectureCarriage'"
+                                                                               size="10" maxlength="8" th:errorclass="error">
+                                                                        <label>円</label>
+                                                                    </div>
+                                                                    <div th:id="${'prefectureCarriage-' + stat.index +'Error'}" th:if="${#fields.hasErrors('deliveryPrefectureCarriageItems[__${stat.index}__].prefectureCarriage')}" th:errors="*{deliveryPrefectureCarriageItems[__${stat.index}__].prefectureCarriage}" class="c-error-txt mt5"></div>
+                                                                </div>
+                                                            </li>
+                                                        </th:block>
+                                                    </th:block>
+                                                </ul>
+                                                <ul class="shipping_fee edit">
+                                                    <th:block th:each="item, stat: *{deliveryPrefectureCarriageItems}">
+                                                        <th:block th:if="${stat.count == stat.size || stat.count == stat.size - 1}">
+                                                            <li>
+                                                                <div class="select">
+                                                                    <label class="c-form-control">
+                                                                        <input type="checkbox" th:checked="${item.activeFlag}" th:field="*{deliveryPrefectureCarriageItems[__${stat.index}__].activeFlag}">
+                                                                        <i></i><th:block th:text="${item.prefectureName}"></th:block>
+                                                                    </label>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="c-input-label">
+                                                                        <input type="text" class="c-form-control w80px price" placeholder="1000"
+                                                                               th:id="'prefectureCarriage-' + ${stat.index}" th:value="${item.prefectureCarriage}"
+                                                                               th:name="'deliveryPrefectureCarriageItems' + '[' + ${stat.index} +']' + '.' +'prefectureCarriage'"
+                                                                               size="10" maxlength="8" th:errorclass="error">
+                                                                        <label>円</label>
+                                                                    </div>
+                                                                    <div th:id="${'prefectureCarriage-' + stat.index +'Error'}" th:if="${#fields.hasErrors('deliveryPrefectureCarriageItems[__${stat.index}__].prefectureCarriage')}" th:errors="*{deliveryPrefectureCarriageItems[__${stat.index}__].prefectureCarriage}" class="c-error-txt mt5"></div>
+                                                                </div>
+                                                            </li>
+                                                        </th:block>
+                                                    </th:block>
+                                                </ul>
+                                                <dl class="c-dl-base mt40">
+                                                    <div class="edit">
+                                                        <dt class="w160px">高額割引</dt>
+                                                        <dd>
+                                                            <div class="c-input-label wrap_flex_center">
+                                                                <input type="text" class="c-form-control w100px price" placeholder="100"
+                                                                       th:field="*{largeAmountDiscountPrice}" maxlength="8" size="10" th:errorclass="error">
+                                                                <label class="mr20">円（税抜）以上購入すると</label>
+                                                                <span class="mr10">送料</span>
+                                                                <input type="text" class="c-form-control w80px price" placeholder="100"
+                                                                       th:field="*{largeAmountDiscountCarriage}" maxlength="8" size="10" th:errorclass="error">
+                                                                <label>円（税抜）</label>
+                                                            </div>
+                                                            <div>
+                                                                <div id="largeAmountDiscountPriceError" th:if="${#fields.hasErrors('largeAmountDiscountPrice')}" th:errors="*{largeAmountDiscountPrice}" class="c-error-txt mt5"></div>
+                                                                <div id="largeAmountDiscountCarriageError" th:if="${#fields.hasErrors('largeAmountDiscountCarriage')}" th:errors="*{largeAmountDiscountCarriage}" class="c-error-txt mt5"></div>
+                                                            </div>
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side">
+
+                            <!-- エリア -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">エリア</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w120px">
+                                            <div>
+                                                <dt>特別料金エリア</dt>
+                                                <dd th:text="*{#number.convert(deliverySpecialChargeAreaCount)} + '件'"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>配送不可能エリア</dt>
+                                                <dd th:text="*{#number.convert(deliveryImpossibleAreaCount)} + '件'"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- お届け日時設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">お届け日時設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-nobase">
+                                            <div class="edit">
+                                                <dt>お届け希望日設定</dt>
+                                                <dd>
+                                                    <div class="c-input-label">
+                                                        <span class="w110px">選択可能日数</span>
+                                                        <input type="text" class="c-form-control w80px count ml10" th:field="*{possibleSelectDays}" placeholder="10" maxlength="3" th:errorclass="error">
+                                                        <label>日</label>
+                                                    </div>
+                                                    <div id="possibleSelectDaysError" th:if="${#fields.hasErrors('possibleSelectDays')}" th:errors="*{possibleSelectDays}" class="c-error-txt mt5"></div>
+                                                    <div class="c-input-label mt10">
+                                                        <span class="w110px">リードタイム</span>
+                                                        <input type="text" class="c-form-control w80px count ml10" th:field="*{deliveryLeadTime}" placeholder="10" maxlength="3" th:errorclass="error">
+                                                        <label>日</label>
+                                                    </div>
+                                                    <div id="deliveryLeadTimeError" th:if="${#fields.hasErrors('deliveryLeadTime')}" th:errors="*{deliveryLeadTime}" class="c-error-txt mt5"></div>
+                                                    <div class="c-annotation mt5">※0日の場合、プルダウンは表示されません。</div>
+                                                </dd>
+                                            </div>
+                                            <div class="edit">
+                                                <dt>お届け時間帯設定</dt>
+                                                <dd class="notification_time">
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">1.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone1}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone1Error" th:if="${#fields.hasErrors('receiverTimeZone1')}" th:errors="*{receiverTimeZone1}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">2.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone2}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone2Error" th:if="${#fields.hasErrors('receiverTimeZone2')}" th:errors="*{receiverTimeZone2}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">3.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone3}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone3Error" th:if="${#fields.hasErrors('receiverTimeZone3')}" th:errors="*{receiverTimeZone3}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">4.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone4}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone4Error" th:if="${#fields.hasErrors('receiverTimeZone4')}" th:errors="*{receiverTimeZone4}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">5.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone5}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone5Error" th:if="${#fields.hasErrors('receiverTimeZone5')}" th:errors="*{receiverTimeZone5}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">6.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone6}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone6Error" th:if="${#fields.hasErrors('receiverTimeZone6')}" th:errors="*{receiverTimeZone6}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">7.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone7}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone7Error" th:if="${#fields.hasErrors('receiverTimeZone7')}" th:errors="*{receiverTimeZone7}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">8.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone8}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone8Error" th:if="${#fields.hasErrors('receiverTimeZone8')}" th:errors="*{receiverTimeZone8}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">9.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone9}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone9Error" th:if="${#fields.hasErrors('receiverTimeZone9')}" th:errors="*{receiverTimeZone9}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">10.</div>
+                                                        <div class="col">
+                                                            <input type="text" class="c-form-control w100p" th:field="*{receiverTimeZone10}" placeholder="入力してください" th:errorclass="error">
+                                                            <div id="receiverTimeZone10Error" th:if="${#fields.hasErrors('receiverTimeZone10')}" th:errors="*{receiverTimeZone10}" class="c-error-txt mt5"></div>
+                                                        </div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/delivery/}"><i class="material-icons navigate_before"></i>キャンセル</a>
+                            </div>
+                            <div class="col_left">
+                                <input type="hidden" id="isConfirmBtnClicked" value="false"/>
+                                <button class="c-btn btn_regular" type="submit" name="doConfirm">確認</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

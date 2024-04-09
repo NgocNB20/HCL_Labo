@@ -1,0 +1,99 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-history-info {
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+
+    &:first-of-type {
+      border-top: 1px solid rgba($color: $color-ccc, $alpha: .8);
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    background: rgba($color: $color-orange-lightGray, $alpha: .8);
+    padding: 17px 27px;
+    @include font-style(15,30,500);
+    width: 340px;
+  }
+
+  &__detail {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    padding: 17px 27px;
+    word-break: break-all;
+    width: 830px;
+    min-height: 60px;
+  }
+
+  &--wrap {
+
+    .c-history-info__title,
+    dd {
+      border-bottom: 1px solid rgba($color: $color-ccc, $alpha: .8);
+    }
+  }
+
+  @include media(lg) {
+
+    &--2col {
+      .c-history-info__title {
+        width: 22%;
+      }
+      .c-history-info__detail {
+        width: 27.5%;
+      }
+    }
+
+    &--3col {
+      .c-history-info__title {
+        width: 110px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .c-history-info__detail {
+        width: 200px;
+      }
+    }
+
+  }
+  
+  @include media(sm) {
+
+    &__title {
+      width: 42%;
+      min-width: auto;
+      padding: vwset(17) vwset(12);
+      @include font-sp-style(14,28);
+
+      .full & {
+        min-width: 100%;
+      }
+    }
+
+    &__detail {
+      display: block;
+      width: 58%;
+      min-height: 70px;
+      padding: vwset(17) vwset(12);
+      @include font-sp-style(14,28);
+    }
+    
+    &__title:not(:last-of-type),
+    &__detail:not(:last-of-type) {
+      border-bottom: 1px solid rgba($color: $color-ccc, $alpha: .8);
+    }
+  }
+}
+
+
+
+

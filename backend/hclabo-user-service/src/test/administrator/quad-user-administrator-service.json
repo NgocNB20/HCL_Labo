@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "3181a2ab-e55a-4d68-8dd7-3f85b7c7f83a",
+		"name": "hclabo-user-administrator-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "運営者取得(getByAdministratorSeq)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByAdministratorSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/administrators/1002",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"1002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者存在チェック(checkExist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"checkExist-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/administrators/demoadmin/exist-check",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"demoadmin",
+						"exist-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": " 運営者登録(regist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.administratorSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"administratorId\": \"adminvti\",\r\n  \"administratorPassword\": \"password\",\r\n  \"administratorMail\": \"minh.vuongdang@vti.com.vn\",\r\n  \"administratorLastName\":  \"ｍｉｎｈ\",\r\n  \"administratorFirstName\": \"ｖｕｏｎｇ\",\r\n  \"administratorLastKana\":  \"チャン\",\r\n  \"administratorFirstKana\": \"フォン\",\r\n  \"administratorStatus\":  \"0\",\r\n  \"administratorGroupSeq\": 1001,\r\n  \"useStartDate\":  null,\r\n  \"useEndDate\": null,\r\n  \"passwordNeedChangeFlag\": \"1\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/administrators",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者削除(delete)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/administrators/1010",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"1010"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者削除(delete)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/administrators/9999",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者一覧取得(getAdministrators)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getAdministrators-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/administrators?orderField=administratorId&orderAsc=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators"
+					],
+					"query": [
+						{
+							"key": "orderField",
+							"value": "administratorId"
+						},
+						{
+							"key": "orderAsc",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者同一チェック(checkDuplicate)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"checkDuplicate-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"administratorSeq\": 1002,\r\n  \"userId\": \"demoadmin0416\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/administrators/same-check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"same-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者更新(updateAdministrator)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.administratorSeq).eql(1004);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"administratorStatus\": \"1\",\r\n  \"administratorId\": \"tuantest1\",\r\n  \"administratorPassword\": \"tuantest1\",\r\n  \"mail\": \"tuantest1\",\r\n  \"administratorLastName\": \"tuantest1\",\r\n  \"administratorFirstName\": \"tuantest1\",\r\n  \"administratorLastKana\": \"tuantest1\",\r\n  \"administratorFirstKana\": \"tuantest1\",\r\n  \"useStartDate\": \"2021-11-15\",\r\n  \"useEndDate\": \"2021-11-15\",\r\n  \"adminAuthGroupSeq\": 1001,\r\n  \"passwordChangeTime\": \"2021-11-15\",\r\n  \"passwordExpiryDate\": \"2021-11-15\",\r\n  \"loginFailureCount\": 0,\r\n  \"accountLockTime\": \"2021-11-15\",\r\n  \"passwordNeedChangeFlag\": \"1\",\r\n  \"passwordSHA256EncryptedFlag\": \"1\",\r\n  \"adminAuthGroup\": {\r\n    \"adminAuthGroupSeq\": 123456,\r\n    \"authGroupDisplayName\": \"tuantest1\",\r\n    \"adminAuthGroupDetailList\": [\r\n      {\r\n        \"adminAuthGroupSeq\": 12345678,\r\n        \"authTypeCode\": \"tuantest1\",\r\n        \"authLevel\": 1\r\n      }\r\n    ],\r\n    \"unmodifiableGroup\": true\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/administrators/1002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"1002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "運営者更新(updateAdministrator)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.administratorSeq).eql(1004);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"administratorStatus\": \"1\",\r\n  \"administratorId\": \"tuantest1\",\r\n  \"administratorPassword\": \"tuantest1\",\r\n  \"mail\": \"tuantest1\",\r\n  \"administratorLastName\": \"tuantest1\",\r\n  \"administratorFirstName\": \"tuantest1\",\r\n  \"administratorLastKana\": \"tuantest1\",\r\n  \"administratorFirstKana\": \"tuantest1\",\r\n  \"useStartDate\": \"2021-11-15\",\r\n  \"useEndDate\": \"2021-11-15\",\r\n  \"adminAuthGroupSeq\": 1001,\r\n  \"passwordChangeTime\": \"2021-11-15\",\r\n  \"passwordExpiryDate\": \"2021-11-15\",\r\n  \"loginFailureCount\": 0,\r\n  \"accountLockTime\": \"2021-11-15\",\r\n  \"passwordNeedChangeFlag\": \"1\",\r\n  \"passwordSHA256EncryptedFlag\": \"1\",\r\n  \"adminAuthGroup\": {\r\n    \"adminAuthGroupSeq\": 123456,\r\n    \"authGroupDisplayName\": \"tuantest1\",\r\n    \"adminAuthGroupDetailList\": [\r\n      {\r\n        \"adminAuthGroupSeq\": 12345678,\r\n        \"authTypeCode\": \"tuantest1\",\r\n        \"authLevel\": 1\r\n      }\r\n    ],\r\n    \"unmodifiableGroup\": true\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/administrators/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"administrators",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

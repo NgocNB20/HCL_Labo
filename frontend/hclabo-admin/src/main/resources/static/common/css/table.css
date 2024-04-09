@@ -1,0 +1,649 @@
+@charset "UTF-8";
+
+/*-----------------------------------------------------------
+index:
+	Commmon
+	Actions
+	Massaction
+	Data List Table 1
+	Data List Table 2
+	Data List Table 3
+	Data List Table 4
+	Page Nation
+	Search Condition Table
+	Store Status Table
+	Sub Table 1
+	Sub Table 2
+-----------------------------------------------------------*/
+
+/* Common
+---------------------------------------------------- */
+.fullwidth {
+	width: 100%;
+}
+.price {
+	text-align: right !important;
+}
+tr.stripe td {
+	background: #EEF4F9 !important;
+}
+tr.over td {
+	background: #FCF5DD !important;
+}
+.unPaid {
+	background: #FF9999;
+}
+.paying {
+	background: #9999FF;
+}
+.paid {
+	background: #99FF99;
+}
+.unShipment {
+	background: #FFFF99;
+}
+.shiped {
+	background: #99FFFF;
+}
+.err {
+	background: #FFAAAA;
+}
+.diff {
+	background: #FFCC88 !important;
+}
+.clear-margin {
+	margin:0 0 0 0 !important;
+}
+.clear-padding {
+	padding:0 0 0 0 !important;
+}
+.td-nowrap {
+	width:1%;
+	white-space: nowrap;
+}
+/* Actions
+---------------------------------------------------- */
+table.actions {
+	width: 100%;
+	margin-bottom: 7px;
+}
+
+/* Massaction
+---------------------------------------------------- */
+table.massaction {
+	width: 100% !important;
+/*	border: 1px solid #999999 !important;*/
+	background: #768E9D !important;
+}
+table.massaction td {
+	padding: 8px !important;
+	border: none !important;
+	line-height: 24px !important;
+	background: none !important;
+}
+table.massaction td,
+table.massaction td a {
+	font-size: 12px !important;
+	/*font-size: 10px !important;*/
+	font-weight: bold !important;
+	color: #FFFFFF !important;
+}
+
+/* Data List Table 1 and 2 and 4
+---------------------------------------------------- */
+table.dataListTable1,
+table.dataListTable4 {
+/*	border-right: 1px solid #999999; */
+/*	border-left: 1px solid #999999; */
+	border: 1px solid #999999;
+}
+table.dataListTable2 {
+	border: 1px solid #999999;
+}
+table.dataListTable1 th,
+table.dataListTable2 th,
+table.dataListTable4 th {
+	padding: 7px 5px;
+	border-right: 1px solid #C9D9E3;
+	border-bottom: 1px solid #556E7F;
+	font-size: 12px;
+	/*font-size: 10px;*/
+	font-weight: normal;
+	background: #B1C9D7;
+}
+table.dataListTable1 td,
+table.dataListTable2 td,
+table.dataListTable4 td {
+	padding: 5px;
+	border-right: 1px solid #CAD0D5;
+	border-bottom: 1px solid #CAD0D5;
+	background-color: #FFF;
+	line-height: 1.3;
+	text-align: center;
+}
+table.dataListTable1 td a:link,
+table.dataListTable2 td a:link,
+table.dataListTable4 td a:link,
+table.dataListTable1 td a:hover,
+table.dataListTable2 td a:hover,
+table.dataListTable4 td a:hover,
+table.dataListTable1 td a:visited,
+table.dataListTable2 td a:visited,
+table.dataListTable4 td a:visited,
+table.dataListTable1 th a:link,
+table.dataListTable2 th a:link,
+table.dataListTable4 th a:link,
+table.dataListTable1 th a:hover,
+table.dataListTable2 th a:hover,
+table.dataListTable4 th a:hover,
+table.dataListTable1 th a:visited,
+table.dataListTable2 th a:visited,
+table.dataListTable4 th a:visited,
+table.dataListTable3 th a:link,
+table.dataListTable3 th a:hover,
+table.dataListTable3 th a:visited {
+	color: #000000;
+	text-decoration: underline;
+}
+table.dataListTable1 td.check,
+table.dataListTable2 td.check,
+table.dataListTable4 td.check {
+	width: 18px;
+}
+table.dataListTable2 td.break-word,
+table.dataListTable4 td.break-word {
+    word-break:break-word;
+}
+table.dataListTable1 tr.diff td,
+table.dataListTable2 tr.diff td,
+table.dataListTable4 tr.diff td,
+table.dataListTable1 td.diff,
+table.dataListTable2 td.diff,
+table.dataListTable4 td.diff {
+	background: #FFCC88 !important;
+}
+table.dataListTable1 tr.total td,
+table.dataListTable2 tr.total td,
+table.dataListTable4 tr.total td {
+	background: #FFFFF1;
+}
+table.dataListTable1 tr.totalErr td,
+table.dataListTable2 tr.totalErr td,
+table.dataListTable4 tr.totalErr td {
+	background: #FFAAAA;
+}
+table.dataListTable1 tr.totalDiff td,
+table.dataListTable2 tr.totalDiff td,
+table.dataListTable4 tr.totalDiff td {
+	background: #FFCC88;
+}
+table.dataListTable1 tr.totalPrice th,
+table.dataListTable1 tr.totalPrice td,
+table.dataListTable2 tr.totalPrice th,
+table.dataListTable2 tr.totalPrice td,
+table.dataListTable4 tr.totalPrice th,
+table.dataListTable4 tr.totalPrice td {
+	font-size: 14px;
+	font-weight: bold;
+	background: #FFF1F1;
+}
+table.dataListTable1 tr.totalPriceErr th,
+table.dataListTable1 tr.totalPriceErr td,
+table.dataListTable2 tr.totalPriceErr th,
+table.dataListTable2 tr.totalPriceErr td,
+table.dataListTable4 tr.totalPriceErr th,
+table.dataListTable4 tr.totalPriceErr td {
+	font-size: 14px;
+	font-weight: bold;
+	background: #FFAAAA;
+}
+table.dataListTable1 tr.totalPriceDiff th,
+table.dataListTable1 tr.totalPriceDiff td,
+table.dataListTable2 tr.totalPriceDiff th,
+table.dataListTable2 tr.totalPriceDiff td,
+table.dataListTable4 tr.totalPriceDiff th,
+table.dataListTable4 tr.totalPriceDiff td {
+	font-size: 14px;
+	font-weight: bold;
+	background: #FFCC88;
+}
+table.dataListTable1 tr.total td.detail,
+table.dataListTable1 tr.totalPrice td.detail,
+table.dataListTable2 tr.total td.detail,
+table.dataListTable2 tr.totalPrice td.detail,
+table.dataListTable4 tr.total td.detail,
+table.dataListTable4 tr.totalPrice td.detail,
+table.dataListTable1 tr.totalErr td.detail,
+table.dataListTable1 tr.totalPriceErr td.detail,
+table.dataListTable2 tr.totalErr td.detail,
+table.dataListTable2 tr.totalPriceErr td.detail,
+table.dataListTable4 tr.totalErr td.detail,
+table.dataListTable4 tr.totalPriceErr td.detail,
+table.dataListTable1 tr.totalDiff td.detail,
+table.dataListTable1 tr.totalPriceDiff td.detail,
+table.dataListTable2 tr.totalDiff td.detail,
+table.dataListTable2 tr.totalPriceDiff td.detail,
+table.dataListTable4 tr.totalDiff td.detail,
+table.dataListTable4 tr.totalPriceDiff td.detail {
+	text-align: right;
+}
+table.optionRegist td {
+	text-align: left;
+}
+table.dataListTable1 td.option1,
+table.dataListTable2 td.option1,
+table.dataListTable4 td.option1 {
+	text-align: left;
+}
+
+table.dataListTable1 td.option1.break-word,
+table.dataListTable2 td.option1.break-word,
+table.dataListTable4 td.option1.break-word {
+    word-break: break-word;
+}
+
+table.dataListTable1 td.option2,
+table.dataListTable2 td.option2,
+table.dataListTable4 td.option2 {
+	text-align: left;
+	background: #D8EBF9;
+}
+
+table.dataListTable2 td.subtitle {
+	background-color: #d8ebf9";
+}
+
+/* Data List Table 3
+---------------------------------------------------- */
+table.dataListTable3 {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+table.dataListTable3 th {
+	padding: 7px 6px 5px 6px;
+	border-right: #C9D9E3 solid 1px;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 11px;
+	font-weight: normal;
+	color: #000000;
+	background: #B1C9D7;
+}
+table.dataListTable3 td {
+	padding: 6px 5px 5px 5px;
+	border-right: 1px solid #CAD0D5;
+	border-bottom: 1px solid #CAD0D5;
+	line-height: 1.3;
+	text-align: right;
+	background: #FFFFFF;
+}
+table.dataListTable3 td.total {
+	background: #FFFFF1;
+}
+table.dataListTable3 tr.total td.total {
+	background: #FFF6D1;
+}
+table.dataListTable3 td.name {
+	text-align: left;
+	background: #D8EBF9;
+}
+table.dataListTable3 td.detail {
+	background: #D8EBF9;
+}
+table.dataListTable3 td.totalAll {
+	background: #FEE3D7;
+}
+
+/* Page Nation
+---------------------------------------------------- */
+table.pageNation {
+	width: 100%;
+	margin-top: 10px;
+}
+table.pageNation td {
+	line-height: normal;
+	text-align: right;
+}
+table.pageNation span,
+table.pageNation a.num {
+	padding: 2px 4px;
+	border: 1px solid #999999;
+	zoom: 100%;
+}
+table.pageNation span {
+	color: #FFFFFF;
+	background: #768E9D;
+}
+table.pageNation a.num {
+	color: #0E7FC7;
+	text-decoration: none;
+}
+table.pageNation a.num:hover {
+	background: #EEF4F9;
+}
+
+/* Search Condition Table
+---------------------------------------------------- */
+table.searchConditionTable {
+	border: 1px solid #999999;
+}
+table.searchConditionTable tfoot td {
+	padding: 6px;
+}
+table.searchConditionTable thead {
+	background: #C1D4DF url(@app.complement.url@/images/table/th_13.gif) left bottom repeat-x;
+}
+table.searchConditionTable thead th {
+	padding: 7px 8px;
+	border-right: 1px solid #FFFFFF;
+	color: #FFFFFF;
+}
+table.searchConditionTable tbody {
+	background: #EEF4F9 url(@app.complement.url@/images/table/td_3.gif) top repeat-x;
+}
+table.searchConditionTable tbody td {
+	padding: 7px 6px;
+	border-right: 1px solid #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+	vertical-align: top;
+}
+table.searchConditionTable tbody td table td {
+	padding: 0;
+	border: none;
+	background: none;
+}
+
+/* Search Condition Table 2
+---------------------------------------------------- */
+table.searchConditionTable2 {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+table.searchConditionTable2 select {
+	width: 110px;
+	font-size: 1em;
+}
+table.searchConditionTable2 th {
+	padding: 8px 0.8em 6px 0.8em;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 12px;
+	color: #27343C;
+	text-align: left;
+	background: #B1C9D7;
+}
+table.searchConditionTable2 td {
+	padding: 8px 0.8em 6px 0.8em;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 12px;
+	color: #000000;
+	background: #EEF4F9 url(@app.complement.url@/images/table/td_3.gif) top repeat-x;
+}
+table.searchConditionTable2 td.break-word{
+	word-break:break-word;
+}
+table.searchConditionTable2 td.option {
+	padding: 6px;
+	border: none;
+	background: #D8E4EB;
+	text-align: center;
+}
+table.searchConditionTable2 td.button {
+	text-align: center;
+}
+
+/* Search Condition Table 3
+---------------------------------------------------- */
+table.searchConditionTable3 {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+table.searchConditionTable3 select {
+	width: 110px;
+	font-size: 1em;
+}
+table.searchConditionTable3 th {
+	padding: 8px 0.8em 6px 0.8em;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 12px;
+	color: #27343C;
+	text-align: left;
+	background: #B1C9D7;
+	word-break: keep-all;
+}
+table.searchConditionTable3 td {
+	padding: 8px 0.8em 6px 0.8em;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 12px;
+	color: #000000;
+	background: #EEF4F9 url(@app.complement.url@/images/table/td_3.gif) top repeat-x;
+}
+table.searchConditionTable3 td.option {
+	padding: 6px;
+	border: none;
+	background: #D8E4EB;
+	text-align: center;
+}
+table.searchConditionTable3 td.button {
+	text-align: center;
+}
+
+/* Behavior Table
+---------------------------------------------------- */
+#behaviorTable {
+	padding: 8px 10px;
+	margin: 5px 0 0 0;
+	border: 1px solid #999999;
+	background: #B1C9D7;
+}
+#behaviorTable table {
+	border: 1px solid #566E7F;
+	background: #D8E4EB;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+#behaviorTable td {
+	padding: 4px 9px 4px 5px;
+}
+
+/* Setting Table 1
+---------------------------------------------------- */
+table.settingTable {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+table.settingTable td {
+	padding: 6px 5px 5px 5px;
+	border-right: 1px solid #CAD0D5;
+	border-bottom: 1px solid #CAD0D5;
+	text-align: left;
+	background: #FFFFFF;
+}
+table.settingTable td.name {
+	background: #D8EBF9;
+}
+table.settingTable th {
+	padding: 5px;
+	border-bottom: #C9D9E3 solid 1px;
+	font-size: 12px;
+	color: #27343C;
+	text-align: left;
+	background: #B1C9D7;
+}
+table.settingTable tr.headline th {
+	padding: 8px 10px;
+	color: #FFFFFF;
+	text-align: left;
+	background: #768E9D;
+}
+table.settingTable td.inbox {
+	padding: 16px;
+}
+
+
+/* Setting Table 2
+---------------------------------------------------- */
+table.settingTable2 {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+table.settingTable2 td {
+	padding: 6px 5px 5px 5px;
+	border-right: 1px solid #CAD0D5;
+	border-bottom: 1px solid #CAD0D5;
+	text-align: left;
+	background: #FFFFFF;
+}
+table.settingTable2 td.name {
+	background: #D8EBF9;
+}
+table.settingTable2 tr.headline th {
+	padding: 8px 10px;
+	color: #FFFFFF;
+	text-align: left;
+	background: #768E9D;
+	border-right: 1px solid #CAD0D5;
+}
+table.settingTable2 td.inbox {
+	padding: 16px;
+}
+
+/* Store Status Table
+---------------------------------------------------- */
+table.storeStatusTable {
+	border-right: 1px solid #B1B6D2;
+	border-left: 1px solid #B1B6D2;
+	margin-bottom: 10px;
+}
+table.storeStatusTable th,
+table.storeStatusTable td {
+	padding: 10px 8px;
+}
+table.storeStatusTable thead th {
+	padding: 10px 8px;
+	font-size: 12px;
+	/*font-size: 10px;*/
+	vertical-align: top;
+	background: #B1C9D7 url(@app.complement.url@/images/table/th_9.gif) left bottom repeat-x;
+}
+table.storeStatusTable thead tr.subline th {
+	padding: 6px 8px;
+	font-weight: normal;
+	background: #C1D4DF url(@app.complement.url@/images/table/th_10.gif) left bottom repeat-x;
+}
+table.storeStatusTable tbody th,
+table.storeStatusTable tbody td {
+	border-bottom: 1px solid #CAD0D5;
+}
+table.storeStatusTable tbody th {
+	font-weight: normal;
+	text-align: left;
+	background: #D8EBF9;
+}
+table.storeStatusTable tbody td {
+	text-align: center;
+}
+
+/* Sub Table 1
+---------------------------------------------------- */
+table.subTable1 {
+	border: 1px solid #999999;
+}
+table.subTable1 th {
+	font-weight: normal;
+	color: #FFFFFF;
+	background: #768E9D;
+}
+table.subTable1 th,
+table.subTable1 td {
+	padding: 5px 14px;
+	line-height: 1.5;
+}
+table.subTable1 td {
+	background-color: #FFF;
+}
+table.subTable1 td.diff {
+	background: #FFCC88;
+}
+
+/* Sub Table 2
+---------------------------------------------------- */
+table.subTable2 {
+	border: 1px solid #999999;
+	background: #B1C9D7;
+}
+table.subTable2 td {
+	padding: 6px 11px;
+}
+
+/* Sub Table 3
+---------------------------------------------------- */
+table.subTable3 {
+	border: none;
+	background: transparent;
+}
+table.subTable3 td {
+	padding: 1px;
+	border: none;
+	background: transparent;
+}
+
+/* Upload Table
+---------------------------------------------------- */
+table.uploadTable td {
+	padding: 2px 5px 2px 2px;
+	margin: 0;
+	border: none;
+}
+.break-word{
+	word-break: break-word;
+}
+
+/* Tax Table
+---------------------------------------------------- */
+table.dataListTable2 td.tax-table-td
+, table.dataListTable4 td.tax-table-td
+, table.searchConditionTable2 td.tax-table-td {
+	border: 0;
+	padding-right: 0;
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+
+td table.tax-table {
+	border-spacing: 0;
+	width: 100%;
+}
+
+.tax-table hr {
+	border: 0;
+	height: 0;
+	border-bottom: 1px solid #CAD0D5;
+}
+
+table.dataListTable2 th.totalPriceStyle
+, table.dataListTable2 td.totalPriceStyle
+, table.dataListTable4 th.totalPriceStyle
+, table.dataListTable4 td.totalPriceStyle
+, table.searchConditionTable2 th.totalPriceStyle
+, table.searchConditionTable2 td.totalPriceStyle {
+	font-size: 14px;
+	font-weight: bold;
+	background: #FFF1F1;
+	border-right: 1px solid #C9D9E3;
+}
+
+table.dataListTable2 th.totalPriceStyle
+, table.dataListTable4 th.totalPriceStyle
+, table.searchConditionTable2 th.totalPriceStyle {
+	text-align: center;
+}
+
+/* 新規受注の背景色に合わせるためのcss */
+table.searchConditionTable2 td.transparent {
+	background: none;
+	background-color: transparent;
+
+}
+
+.color-black {
+	color: #000000;
+}

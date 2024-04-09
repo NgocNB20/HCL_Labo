@@ -1,0 +1,102 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-terms {
+
+  @include font-style(16,32);
+
+  dt {
+    font-weight: 500;
+  }
+
+  p + dl,
+  dl + dl {
+    margin-top: 35px;
+  }
+
+  dd p {
+    text-indent: 1.6rem;
+  }
+
+  ol > li {
+    list-style-type: decimal;
+    margin-left: 3.2rem;
+  }
+
+  ul > li {
+    margin-left: 3.2rem;
+  }
+
+  &__article {
+    margin-inline: 1.6rem;
+    padding: 25px 30px;
+    border-radius: 10px;
+    border: solid 4px $color-orange-lightGray;
+}
+
+  &__nest-ordered {
+
+    li {
+      list-style: none !important;
+      margin-left: 1.3rem !important;
+      text-indent: -25px;
+      padding-left: 25px;
+      counter-increment: cnt;
+
+      &::before {
+        content: '（' counter(cnt) '）';
+        display: inline-block;
+        width: 20px;
+        margin-right: 5px;
+        text-align: right;
+      }
+    }
+
+  }
+
+  &__update {
+    margin-top: 50px;
+    text-align: right
+  }
+
+
+  @include media(sm) {
+
+    @include font-sp-style(14,24);
+
+    p + dl,
+    dl + dl {
+      margin-top: vwset(17);
+    }
+
+    ol > li {
+      margin-left: 2.5rem;
+    }
+
+    ul > li {
+      margin-left: 0.8rem;
+    }
+
+    &__article {
+      margin-inline: 0;
+      padding: vwset(20);
+    }
+
+    &__nest-ordered {
+
+      li {
+        margin-left: 0 !important;
+      }  
+    }
+
+    &__update {
+      margin-top: vwset(20) vwset(25);
+    }
+
+
+  }
+
+}

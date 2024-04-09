@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" th:src="@{/assets/js/csvOptionDownload.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/searchCategoryManagement.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/previewGoods.js}"></script>
+    <title>商品検索｜商品管理</title>
+    <script >
+
+        var token = $('#_csrf').attr('content');
+        var header = $('#_csrf_header').attr('content');
+        const GET_TEMPLATE_URL = "/goods/getCsvTemplateListAjax";
+        const UPDATE_TEMPLATE_URL = "/goods/doUpdateTemplateAjax";
+        const GET_DEFAULT_TEMPLATE_URL = "/goods/getDefaultOptionDownloadAjax"
+
+        jQuery(function($){
+
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+            CsvOptionDownload(GET_TEMPLATE_URL, UPDATE_TEMPLATE_URL, GET_DEFAULT_TEMPLATE_URL);
+        });
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var linkedCategoryList  = /*[[${goodsModel.categoryList}]]*/ '[]';
+        /*]]>*/
+    </script>
+    <!-- プレビュー用ダイアログのdatepickerが後ろに隠れるためスタイル適用 -->
+    <style type="text/css">
+        .ui-datepicker {
+            z-index: 1003 !important;
+        }
+    </style>
+</head>
+
+<body id="goods">
+<div id="searchGoods" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/goods/}" th:object="${goodsModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">商品検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                            <ul>
+                                <li>
+                                    <input type="submit" class="c-btn btn_move w130px" name="doBundledImageUpload" value="商品画像登録" alt="商品画像登録" />
+                                </li>
+                                <li>
+                                    <input type="submit" class="c-btn btn_move w130px" name="doBundledUpload" value="商品CSV登録" alt="商品CSV登録" />
+                                </li>
+
+                                <li>
+                                    <input type="submit" class="c-btn btn_move w130px" name="doRegist" value="商品登録" alt="商品登録" />
+                                </li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <!--エラーメッセージ-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+
+                    <div class="l-section" id="allItemsSearch">
+                        <!-- 検索 -->
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl class="w190px">
+                                            <dt>商品管理番号</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{searchGoodsGroupCode}" size="14" maxlength="20" th:classappend="${#fields.hasErrors('searchGoodsGroupCode')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('searchGoodsGroupCode')}" th:errors="*{searchGoodsGroupCode}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                        <dl class="w190px">
+                                            <dt>商品番号</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{searchGoodsCode}" size="14" maxlength="20" th:classappend="${#fields.hasErrors('searchGoodsCode')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('searchGoodsCode')}" th:errors="*{searchGoodsCode}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                        <dl class="w240px">
+                                            <dt>JANコード</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{searchJanCode}" size="14" maxlength="20" th:classappend="${#fields.hasErrors('searchJanCode')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('searchJanCode')}" th:errors="*{searchJanCode}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                        <dl class="w400px">
+                                            <dt>商品名</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{searchGoodsGroupName}" maxlength="120" th:classappend="${#fields.hasErrors('searchGoodsGroupName')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('searchGoodsGroupName')}" th:errors="*{searchGoodsGroupName}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                        <dl class="w240px">
+                                            <dt>商品タグ</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{searchGoodsTag}" th:classappend="${#fields.hasErrors('searchGoodsTag')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('searchGoodsTag')}" th:errors="*{searchGoodsTag}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                    </div>
+                                    <div class="c-detail-warp search_data_smp wrap mt30">
+                                        <dl class="w400px">
+                                            <dt>商品設定キーワード</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{settingKeywords}" maxlength="200" th:classappend="${#fields.hasErrors('settingKeywords')}?'error':''"
+                                                       class="c-form-control" placeholder="ここに入力してください" th:errorclass="error" >
+                                            </dd>
+                                            <div th:if="${#fields.hasErrors('settingKeywords')}" th:errors="*{settingKeywords}" class="c-error-txt mt5"></div>
+                                        </dl>
+                                    </div>
+
+                                    <!-- 詳細検索 -->
+                                    <div class="c-detail-warp search mt20">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="wrap_flex">
+                                                    <div>
+                                                        <div class="c-detail-warp search_data_smp wrap">
+                                                            <dl>
+                                                                <dt>登録／更新日</dt>
+                                                                <dd>
+                                                                    <ul class="c-list-left list_sp20 mr40 mt15">
+                                                                        <li>
+                                                                            <label class="c-form-control"><input type="radio" th:field="*{selectRegistOrUpdate}" value="0" checked=""><i th:classappend="${#fields.hasErrors('selectRegistOrUpdate')} ? 'error'"></i>登録日</label>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label class="c-form-control"><input type="radio"  th:field="*{selectRegistOrUpdate}" value="1"><i th:classappend="${#fields.hasErrors('selectRegistOrUpdate')} ? 'error'"></i>更新日</label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </dd>
+                                                                <div th:if="${#fields.hasErrors('selectRegistOrUpdate')}" th:errors="*{selectRegistOrUpdate}" class="c-error-txt mt5"></div>
+                                                            </dl>
+                                                            <div class="wrap_flex_wrap">
+                                                                <dl class="search_open_long">
+                                                                    <dt>検索開始日</dt>
+                                                                    <dd class="wrap_flex_center">
+                                                                        <label class="c-datepicker">
+                                                                            <input type="text" th:field="*{searchRegOrUpTimeFrom}" autocomplete="off" maxlength="10" th:classappend="${#fields.hasErrors('searchRegOrUpTimeFrom')}?'error':''"
+                                                                                   class="c-form-control" placeholder="年/月/日" th:errorclass="error" >
+                                                                        </label>
+                                                                        <span class="ml10">〜</span>
+                                                                        <ul class="c-list-left list_sp5 mt10 w100p">
+                                                                            <li><button class="c-btn-small" id="targetDate_today_searchRegOrUpTime" value="今日" type="button">今日</button></li>
+                                                                            <li><button class="c-btn-small" id="targetDate_yesterday_searchRegOrUpTime" value="昨日" type="button">昨日</button></li>
+                                                                            <li><button class="c-btn-small" id="targetDate_crrentMonth_searchRegOrUpTime" value="今月" type="button">今月</button></li>
+                                                                            <li><button class="c-btn-small" id="targetDate_prevMonth_searchRegOrUpTime" value="先月" type="button">先月</button></li>
+                                                                            <li><button class="c-btn-txt" id="targetDate_clear_searchRegOrUpTime" value="クリア" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                                        </ul>
+                                                                        <ul class="c-list-left list_sp5 mt10 w100p">
+                                                                            <div th:if="${#fields.hasErrors('searchRegOrUpTimeFrom')}" th:errors="*{searchRegOrUpTimeFrom}" class="c-error-txt mt5"></div>
+                                                                            <div th:if="${#fields.hasErrors('searchRegOrUpTimeTo')}" th:errors="*{searchRegOrUpTimeTo}" class="c-error-txt mt5"></div>
+                                                                        </ul>
+                                                                    </dd>
+                                                                </dl>
+                                                                <dl class="search_close_long mglm75">
+                                                                    <dt>検索終了日</dt>
+                                                                    <dd class="wrap_flex_center">
+                                                                        <label class="c-datepicker">
+                                                                            <input type="text" th:field="*{searchRegOrUpTimeTo}" autocomplete="off" maxlength="10" th:classappend="${#fields.hasErrors('searchRegOrUpTimeTo')}?'error':''"
+                                                                                   class="c-form-control" placeholder="年/月/日" th:errorclass="error" >
+                                                                        </label>
+                                                                    </dd>
+                                                                </dl>
+                                                            </div>
+                                                        </div>
+                                                        <div class="c-detail-warp search_data_smp wrap mt20">
+                                                            <dl class="w240px mr40 c-dl-nobase">
+                                                                <dt>カテゴリー</dt>
+                                                                <dd>
+                                                                    <input onblur="hideDropDownCaty(this)" onfocus="showDropDownCaty()" id="categoryInputSearch" onkeyup="onFilterDropDownCaty(this)" class="c-form-control w240px" autocomplete="off" placeholder="ここに入力してください">
+                                                                    <ul id="myDropdown" tabIndex="-1" onblur="hideDropDownCaty(this)" class="dropdown-content"></ul>
+                                                                </dd>
+                                                                <dl>
+                                                                    <dt class="display_none">カテゴリー</dt>
+                                                                    <dd id="category_label_list" class="category-label-wrap mt10"></dd>
+                                                                </dl>
+                                                            </dl>
+                                                            <dl class="mr40">
+                                                                <dt>公開状態</dt>
+                                                                <dd class="pt10">
+                                                                    <ul class="c-list-left list_sp20">
+                                                                        <li th:each="item : *{goodsOpenStatusItems}">
+                                                                            <label class="c-form-control">
+                                                                                <input type="checkbox" th:field="*{goodsOpenStatusArray}" th:value="${item.key}" th:checked="${item.key} == *{goodsOpenStatusArray}">
+                                                                                <i th:classappend="${#fields.hasErrors('goodsOpenStatusArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                            </label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </dd>
+                                                                <dd>
+                                                                    <div th:if="${#fields.hasErrors('goodsOpenStatusArray')}" th:errors="*{goodsOpenStatusArray}" class="c-error-txt mt5"></div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="mr40">
+                                                                <dt>販売状態</dt>
+                                                                <dd class="pt10">
+                                                                    <ul class="c-list-left list_sp20">
+                                                                        <li th:each="item : *{goodsSaleStatusItems}">
+                                                                            <label class="c-form-control">
+                                                                                <input type="checkbox" th:field="*{goodsSaleStatusArray}" th:value="${item.key}" th:checked="${item.key} == *{goodsSaleStatusArray}">
+                                                                                <i th:classappend="${#fields.hasErrors('goodsSaleStatusArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                            </label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </dd>
+                                                                <dd>
+                                                                    <div th:if="${#fields.hasErrors('goodsSaleStatusArray')}" th:errors="*{goodsSaleStatusArray}" class="c-error-txt mt5"></div>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                        <div class="c-detail-warp search_data_smp wrap mt20">
+                                                            <dl class="w240px mr40">
+                                                                <dt>販売可能在庫数</dt>
+                                                                <dd class="wrap_flex_center">
+                                                                    <input type="text" th:field="*{searchMinSalesPossibleStockCount}" th:classappend="${#fields.hasErrors('searchMinSalesPossibleStockCount')}?'error':''"
+                                                                           class="c-form-control count w80px" maxlength="6" title="" th:errorclass="error">
+                                                                    <label class="sp_label">～</label>
+                                                                    <input type="text" th:field="*{searchMaxSalesPossibleStockCount}" th:classappend="${#fields.hasErrors('searchMaxSalesPossibleStockCount')}?'error':''"
+                                                                           class="c-form-control count w80px" maxlength="6" title="" th:errorclass="error">
+                                                                </dd>
+                                                                <div th:if="${#fields.hasErrors('searchMinSalesPossibleStockCount')}" th:errors="*{searchMinSalesPossibleStockCount}" class="c-error-txt mt5"></div>
+                                                                <div th:if="${#fields.hasErrors('searchMaxSalesPossibleStockCount')}" th:errors="*{searchMaxSalesPossibleStockCount}" class="c-error-txt mt5"></div>
+                                                            </dl>
+                                                            <dl>
+                                                                <dt class="pt10">ノベルティ</dt>
+                                                                <dd>
+                                                                    <label class="c-form-control">
+                                                                        <input type="checkbox" th:field="*{searchNoveltyGoodsType}" th:checked="${searchNoveltyGoodsType} == '1'">
+                                                                        <i th:classappend="${#fields.hasErrors('searchNoveltyGoodsType')}?'error':''"></i><span>ノベルティ商品のみ</span>
+                                                                    </label>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                        <div class="c-detail-warp search_data_smp wrap mt20">
+                                                            <dl>
+                                                                <dt>フロント表示</dt>
+                                                                <dd>
+                                                                    <ul class="c-list-left list_sp20 mr40 mt15">
+                                                                        <li th:each="item : *{frontDisplayItems}">
+                                                                            <label class="c-form-control">
+                                                                                <input type="checkbox" th:field="*{frontDisplayArray}" th:value="${item.key}" th:checked="${item.key} == *{frontDisplayArray}">
+                                                                                <i th:classappend="${#fields.hasErrors('frontDisplayArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                            </label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                        <div class="c-detail-warp search_data_smp wrap mt10">
+                                                            <dl>
+                                                                <ul class="c-list-left list_sp20 mr40">
+                                                                    <dt class="pt10">プレビュー日時</dt>
+                                                                    <a href="#" class="txt_black mb-5" tooltip-position='right'
+                                                                       data-c-tooltip="検索結果「プレビュー」の表示基準日時になります。
+                                                                                        また、検索結果「フロント表示」の判定基準日時にもなります。">
+                                                                        <i class="ml10 w100p material-icons help_outline"></i>
+                                                                    </a>
+                                                                </ul>
+                                                                <dd>
+                                                                    <div class="wrap_flex_center">
+                                                                        <label class="c-datepicker w150px">
+                                                                            <input type="text" th:field="*{previewDate}" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+                                                                        </label>
+                                                                        <input type="text" th:field="*{previewTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:errorclass="error">
+                                                                    </div>
+                                                                    <div id="previewDateError" th:if="${#fields.hasErrors('previewDate')}" th:errors="*{previewDate}" class="c-error-txt mt5"></div>
+                                                                    <div id="previewTimeError" th:if="${#fields.hasErrors('previewTime')}" th:errors="*{previewTime}" class="c-error-txt mt5"></div>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                    <div class="c-detail-warp search_data_smp wrap mt20">
+                                                        <dl>
+                                                            <dt>複数番号検索</dt>
+                                                            <dd class="mb15">
+                                                                <ul class="c-list-left list_sp20 mr40 mt15">
+                                                                    <li>
+                                                                        <label class="c-form-control"><input type="radio" th:field="*{multiCodeRadio}" value="0" checked=""><i th:classappend="${#fields.hasErrors('multiCodeRadio')} ? 'error'"></i>商品管理番号</label>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label class="c-form-control"><input type="radio" th:field="*{multiCodeRadio}" value="1"><i th:classappend="${#fields.hasErrors('multiCodeRadio')} ? 'error'"></i>商品番号</label>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label class="c-form-control"><input type="radio" th:field="*{multiCodeRadio}" value="2"><i th:classappend="${#fields.hasErrors('multiCodeRadio')} ? 'error'"></i>JANコード</label>
+                                                                    </li>
+                                                                </ul>
+                                                            </dd>
+                                                            <div th:if="${#fields.hasErrors('multiCodeRadio')}" th:errors="*{multiCodeRadio}" class="c-error-txt mt5 mb15"></div>
+                                                            <dd>
+                                                            <textarea id="conditionOrderCodeList" th:field="*{multiCodeList}"  class="c-form-control w400px" rows="5" name=""
+                                                                      placeholder="ここに入力してください"></textarea>
+                                                                <div class="c-annotation mt5">
+                                                                    <p>※ ひとつずつ改行して入力してください。</p>
+                                                                    <p>※ 各行で完全一致。入力番号と一致した番号のみ、検索結果に表示されます。</p>
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('multiCodeList')}" th:errors="*{multiCodeList}" class="c-error-txt mt5"></div>
+                                                            </dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top ai_flex-start">
+                                            <button class="c-btn btn_regular" type="submit"  name="doGoodsSearch">検索する</button>
+                                            <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                <div class="col_left wrap_flex_center ai_flex-start" >
+                                                    <div th:replace="~{include/downloadoption}"></div>
+                                                    <span class="pt10">全件</span>
+                                                    <div class="col_left " >
+                                                        <select id="downloadOptionType" name="goodsOutDataAll" class="c-form-control ml10"  th:classappend="${#fields.hasErrors('goodsOutDataAll')} ? 'error'">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{goodsOutDataAllItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                    th:selected="${item.key} == *{goodsOutDataAll}">
+                                                            </option>
+                                                        </select>
+                                                        <div th:if="${#fields.hasErrors('goodsOutDataAll')}" th:errors="*{goodsOutDataAll}" class="c-error-txt ml10 mt5" ></div>
+                                                    </div>
+                                                    <div class="ml10">
+                                                        <select id="option_template_index" disabled name="optionTemplateIndex" class="c-form-control">
+                                                            <option value="">選択してください</option>
+                                                            <option th:each="item : *{csvDownloadOptionDtoList}" th:value="${item.optionId}"
+                                                                    th:text="${item.optionName}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="button" disabled title="ダウンロードオプション" class="c-btn btn_back btn_disabled_gray min_w45px ml10 h38px" id="doOptionDownload"><i class="material-icons settings"></i></button>
+                                                    <button class="c-btn btn_back icon ml10" name="doCsvDownloadAll" type="submit"><i class="material-icons save_alt"></i>ダウンロード</button>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+
+                            <input type="hidden" id="pageNumber" name="pageNumber"/>
+                            <input type="hidden" id="orderField" th:field="*{orderField}"/>
+                            <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                            <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+
+                            <div class="l-article_inner">
+                                    <div class="l-inner_wrap" th:if="*{resultItems.size() == 0}" >
+                                        <div class="col wrap_flex">
+                                            <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                            <span class="as_end">全0件が該当しました</span>
+                                        </div>
+                                    </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true)}"></div>
+                                        <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                            <div class="col_left wrap_flex_center count_menu ai_flex-start">
+                                                <span class="resultcount pt10"></span>
+                                                <div class="col_left">
+                                                    <select id="downloadOptionTypeResult" name="goodsOutDataSelectTop" class="c-form-control ml10" title="出力形式" th:classappend="${#fields.hasErrors('goodsOutDataSelectTop')} ? 'error'" >
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="item : *{goodsOutDataAllItems}" th:value="${item.key}" th:text="${item.value}"
+                                                                th:selected="${item.key} == *{goodsOutDataSelectTop}">
+                                                        </option>
+                                                    </select>
+                                                    <div th:if="${#fields.hasErrors('goodsOutDataSelectTop')}" th:errors="*{goodsOutDataSelectTop}" class="c-error-txt ml10 mt5"></div>
+                                                </div>
+                                                <div class="ml10">
+                                                    <select id="option_template_index_result" disabled name="optionTemplateIndexResult" class="c-form-control">
+                                                        <option value="">選択してください</option>
+                                                        <option th:each="item : *{csvDownloadOptionDtoList}" th:value="${item.optionId}"
+                                                                th:text="${item.optionName}">
+                                                        </option>
+                                                    </select>
+                                                    <div th:if="${#fields.hasErrors('csvDownloadOptionDtoList')}" th:errors="*{csvDownloadOptionDtoList}" class="c-error-txt ml10 mt5"></div>
+                                                </div>
+                                                <button class="c-btn btn_back icon ml10" type="submit" name="doCsvDownloadSelectTop" ><i class="material-icons save_alt"></i>ダウンロード</button>
+                                                </div>
+                                        </th:block>
+                                    </div>
+
+                                    <table id="search_result" class="c-tbl tbl_search_item">
+                                        <thead>
+                                        <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                            <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+                                                <th class="check">
+                                                    <label class="c-form-control"><input id="selectAll" type="checkbox" name="" value=""><i></i></label>
+                                                </th>
+                                            </th:block>
+                                            <th class="number">#</th>
+                                            <th class="item_number"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerGoodsGroupCode">
+                                                商品管理番号<th:block th:if="*{orderField == 'goodsGroupCode'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="item_number"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerGoodsCode">
+                                                商品番号<th:block th:if="*{orderField == 'goodsCode'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class=""><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerGoodsGroupName">
+                                                商品名<th:block th:if="*{orderField == 'goodsGroupName'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="w80px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerUnitValue1">
+                                                規格1<th:block th:if="*{orderField == 'unitValue1'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="w80px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerUnitValue2">
+                                                規格2<th:block th:if="*{orderField == 'unitValue2'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="status w90px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerGoodsOpenStatusPC">
+                                                公開状態<th:block th:if="*{orderField == 'goodsOpenStatusPC'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="status w90px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerSaleStatusPC">
+                                                販売状態<th:block th:if="*{orderField == 'saleStatusPC'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="item_amount w120px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerGoodsPrice">
+                                                価格（税抜）<th:block th:if="*{orderField == 'goodsPrice'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="stock_possible w120px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerSalesPossibleStock">
+                                                販売可能在庫数<th:block th:if="*{orderField == 'salesPossibleStock'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="stock w90px"><a href="#" onClick="return sortActionExe(this, 'doDisplayChange'); " id="headerRealStock">
+                                                実在庫数<th:block th:if="*{orderField == 'realStock'}"><span th:text="${sortStr}" th:remove="tag"></span></th:block>
+                                            </a></th>
+                                            <th class="status w90px">
+                                                フロント表示
+                                            </th>
+                                            <th class="time" th:classappend="*{previewDate != null} ? 'w200px' : 'w80px'">
+                                                プレビュー
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="item, stat: *{resultItems}">
+
+                                            <!-- 通常商品の結果 -->
+                                            <th:block sec:authorize="hasAnyAuthority('GOODS:8')">
+
+                                            </th:block>
+                                            <td class="check">
+                                                <label class="c-form-control">
+                                                    <input type="checkbox" th:field="*{resultItems[__${stat.index}__].resultGoodsCheck}">
+                                                    <i></i>
+                                                </label>
+                                            </td>
+                                            <td class="number">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${item.resultNo}" th:remove="tag"></span>
+                                                </a></td>
+                                            <td class="item_number">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <div class="previewTargetKey">
+                                                        <span th:text="${item.goodsGroupCode}" th:remove="tag"></span>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="item_number">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${item.resultGoodsCode}" th:remove="tag"></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${item.resultGoodsGroupName}" th:remove="tag"></span>
+                                                </a>
+                                            </td>
+                                            <td class="">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${item.resultUnitValue1}" th:remove="tag"></span>
+                                                </a>
+                                            </td>
+                                            <td class="">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${item.resultUnitValue2}" th:remove="tag"></span>
+                                                </a>
+                                            </td>
+                                            <td class="status">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${#enumtype.getLabel('HTypeOpenDeleteStatus',item.resultGoodsOpenStatusPC)}" th:remove="tag"></span>
+                                                </a></td>
+                                            <td class="status">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${#enumtype.getLabel('HTypeGoodsSaleStatus',item.resultSaleStatusPC)}" th:remove="tag"></span>
+                                                </a></td>
+                                            <td class="item_amount">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:text="${#number.convert(item.resultGoodsPrice)}" th:remove="tag"></span>&nbsp;円
+                                                </a>
+                                            </td>
+                                            <td class="stock_possible">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <th:block th:if="${item.isStockManagement}">
+                                                    	<span th:text="${#number.convert(item.resultSalesPossibleStock)}" th:remove="tag"></span>
+                                                    </th:block>
+                                                    <th:block th:if="${!item.isStockManagement}">
+                                                    	<span th:remove="tag">―</span>
+                                                    </th:block>
+                                                </a>
+                                            </td>
+                                            <td class="stock">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <th:block th:if="${item.isStockManagement}">
+                                                    	<span th:text="${#number.convert(item.resultRealStock)}" th:remove="tag"></span>
+                                                    </th:block>
+                                                    <th:block th:if="${!item.isStockManagement}">
+                                                    	<span th:remove="tag">―</span>
+                                                    </th:block>
+                                                </a>
+                                            </td>
+                                            <td class="status">
+                                                <a th:href="@{/goods/details/(goodsGroupCode=${item.goodsGroupCode})}">
+                                                    <span th:if="${item.resultFrontDisplay} == '0'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.resultFrontDisplay)}" class="c-status01 ico_gray"></span>
+                                                    <span th:if="${item.resultFrontDisplay} == '1'" th:text="${#enumtype.getLabel('HTypeFrontDisplayStatus',item.resultFrontDisplay)}" class="c-status01 ico_blue"></span>
+                                                </a></td>
+                                            <td class="time" th:style="*{previewDate != null} ? '' : 'text-align:center;'">
+                                                <div th:classappend="*{previewDate != null} ? 'wrap_flex_center' : ''" >
+                                                    <button type="button" title="プレビュー" class="c-btn-icon" th:data-ggcd="${item.goodsGroupCode}" th:id="'preview_btn-'+${stat.index}"><i class="material-icons search"></i></button>
+                                                    <th:block th:if="${item.resultFrontDisplayReferenceDate != null}">
+                                                        <span id="resultFrontDisplayReferenceDate" th:text="${#date.convert(item.resultFrontDisplayReferenceDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                                                    </th:block>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--ページネーション-->
+                                    <div th:replace="~{include/pager}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div id="preview_dialog" style="display:none;">
+                        <div class="c-detail-warp">
+                            <dl>
+                                <dd>
+                                    <div class="wrap_flex_center">
+                                        <label class="c-datepicker w150px">
+                                            <input type="text" id="dialogPreviewDate" name="dialogPreviewDate" maxlength="10" autocomplete="off" class="c-form-control" placeholder="年/月/日">
+                                        </label>
+                                        <input type="text" id="dialogPreviewTime" name="dialogPreviewTime" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00">
+                                    </div>
+                                    <div id="dialogPreviewDateErr" style="display: none;" class="c-error-txt mt5"></div>
+                                    <div id="dialogPreviewTimeErr" style="display: none;" class="c-error-txt mt5"></div>
+                                    <!--プレビュー遷移用URLプロパティ値-->
+                                    <input type="hidden" id="websiteUrl" th:value="${@environment.getProperty('web.site.url')}"/>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

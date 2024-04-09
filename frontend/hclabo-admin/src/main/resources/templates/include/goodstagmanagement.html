@@ -1,0 +1,56 @@
+<div id="goods_tag_management_dialog" style="display: none;" >
+    <div class="option-download-wrap wrap mb35">
+        <dl>
+            <dd>
+                <input type="text" id="search_goods_tag_popup" onkeyup="onFilterGoodsTagPopupSearch(this)" maxlength="100" class="c-form-control w100p w400px" placeholder="商品タグを検索または作成する" autocomplete="off"/>
+                <ul id="recommend_add_tag_btn_popup" class="dropdown-content-popup"></ul>
+            </dd>
+        </dl>
+        <dl>
+            <dd>
+                <select onchange="onChangeSortingPopupSearch(this)" id="search_goods_tag_sorting" name="tagSorting" class="c-form-control">
+                    <option value="tag">名前順</option>
+                    <option value="count">よく使われる順</option>
+                </select>
+            </dd>
+        </dl>
+    </div>
+    <hr class="tag-management-divider"/>
+  <div class="mb20" style="display: none;" id="newtags_added_wrap">
+      <h4>新しく追加されました</h4>
+      <div class="c-sticky-tbl-wrap option-download-table">
+          <table class="c-tbl">
+              <thead>
+              <th></th>
+              </thead>
+              <tbody id="newAddedTagList">
+              </tbody>
+          </table>
+      </div>
+  </div>
+    <h4>選択済み</h4>
+    <div id="registListTagWrap" class="c-sticky-tbl-wrap h190px option-download-table">
+        <table class="c-tbl">
+            <thead>
+            <th></th>
+            </thead>
+            <tbody id="registListTag">
+
+            </tbody>
+        </table>
+        <div class="spinner-wrap"></div>
+        <div class="no-result-tags-wrap"></div>
+    </div>
+    <h4 class="mt30">利用可能</h4>
+    <div id="allListTagWrap" class="c-sticky-tbl-wrap h190px option-download-table">
+        <table class="c-tbl">
+            <thead>
+            <th></th>
+            </thead>
+            <tbody id="allListTag">
+            </tbody>
+        </table>
+        <div class="spinner-wrap"></div>
+        <div class="no-result-tags-wrap"></div>
+    </div>
+</div>

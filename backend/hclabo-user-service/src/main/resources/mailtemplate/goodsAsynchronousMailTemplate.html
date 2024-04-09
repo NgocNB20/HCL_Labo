@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>結果レポート</title>
+</head>
+<body>
+<div>
+    <span th:text="${admin.get('SYSTEM')} + 'の' + ${admin.get('BATCH_NAME')} + 'が終了しました。'"></span>
+    <br>
+    <br>
+    <span>----------------------------------------</span>
+    <br>
+    <span th:text="'■総処理行数:' + ${admin.get('CNT_GOODSGROUP_SUM')} + ' 件'"></span>
+    <br>
+    <span th:text="'■成功件数：' + ${admin.get('CNT_SUCCESS_SUM')} + ' 件'"></span>
+    <br>
+    <span th:text="'■失敗件数：' + ${admin.get('CNT_ERROR_SUM')} + ' 件'"></span>
+    <br>
+    <th:block th:if="${admin.get('LIST')} != ''">
+        <span>----------------------------------------</span>
+        <br>
+        <span>【内訳】</span>
+        <br>
+        <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(admin.get('LIST')),'\n','&lt;br /&gt;'))}"></span>
+    </th:block>
+    <br>
+    <br>
+    <span>以上</span>
+</div>
+</body>
+</html>

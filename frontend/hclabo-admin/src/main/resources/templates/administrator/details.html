@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+ <meta th:replace="~{include/head}" />
+<title>運営者詳細｜システム設定</title>
+</head>
+
+<body id="system">
+<div id="registAdministrator" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/administrator/details/}" th:object="${administratorModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">運営者詳細</h1>
+                        <h2 class="c-pagetitle_h2" th:text="*{administratorName}"></h2>
+                        <th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+	                        <ul>
+                                <li><a class="c-btn btn_del" th:href="@{/administrator/deleteConfirm/(administratorSeq=*{administratorEntity.administratorSeq})}">削除</a></li>
+	                        </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- 運営者情報 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">運営者情報</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>ユーザID</dt>
+                                            <dd th:text="*{administratorId}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>氏名</dt>
+                                            <dd th:text="*{administratorName}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>フリガナ</dt>
+                                            <dd th:text="*{administratorKana}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>メールアドレス</dt>
+                                            <dd th:text="*{administratorMail}"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>状態</dt>
+                                            <dd th:text="*{administratorStatus.label}"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>利用開始日</dt>
+                                            <dd th:text="*{useStartDate == null ? '―' :#date.convert(useStartDate, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>利用終了日</dt>
+                                            <dd th:text="*{useEndDate == null ? '―' :#date.convert(useEndDate, 'yyyy/MM/dd HH:mm:ss')}"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>権限グループ</dt>
+                                            <dd th:text="*{administratorGroupName}"></dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" type="submit" name="doAdministratorBack"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <th:block sec:authorize="hasAnyAuthority('ADMIN:8')">
+	                            <div class="col_left">
+                                    <a class="c-btn btn_regular" th:href="@{/administrator/update/(administratorSeq=*{administratorEntity.administratorSeq})}">修正</a>
+                                </div>
+							</th:block>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

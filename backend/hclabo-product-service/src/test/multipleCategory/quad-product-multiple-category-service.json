@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "32b74830-405e-4ee9-b0cd-d17b169b834d",
+		"name": "hclabo-product-multiple-category-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "マルチカテゴリ取得(get)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.multipleCategoryMap.top).to.have.lengthOf(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8280/promotions/multiple-categories?categoryId=top&seq=price&priceFrom=1000&priceTo=50000&page=1&limit=1&orderBy=1&sort=True",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"promotions",
+						"multiple-categories"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "top"
+						},
+						{
+							"key": "seq",
+							"value": "price"
+						},
+						{
+							"key": "priceFrom",
+							"value": "1000"
+						},
+						{
+							"key": "priceTo",
+							"value": "50000"
+						},
+						{
+							"key": "stock",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "viewType",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "orderBy",
+							"value": "1"
+						},
+						{
+							"key": "sort",
+							"value": "True"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

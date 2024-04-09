@@ -1,0 +1,138 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+// DEMOバージョン
+.complete {
+  text-align: center;
+  margin: 80px;
+
+  &--address {
+    text-align: center;
+    display: inline-block;
+    background-color: #F8F8F8;
+    border: solid 1px #E4E4E4;
+    padding: 18px 30px;
+    margin-top: 30px;
+    word-break: break-all;
+  }
+
+  @include media(sm) {
+    text-align: left;
+    margin: vwset(30) 0 vwset(60);
+    padding: 0 vwset(10);
+
+    &--address {
+      width: 100%;
+      padding: vwset(15);
+      margin-top: vwset(30);
+    }
+  }
+}
+
+
+// PDRバージョン こっち採用
+.l-complete {
+  $this: &;
+  text-align: center;
+
+  &__inner {
+    // margin-block: 75px 100px; 変更前
+    margin-block: 100px; 
+    @include width(1200px, 0px, vwset(20));
+  }
+
+  &__title {
+    @include font-style(22,36);
+  }
+
+  &__text {
+    @include font-style(16,32);
+  }
+
+  &__result {
+    width: fit-content;
+    margin-inline: auto;
+    padding: 35px 120px;
+    background: $color-orange-lightGray;
+  }
+
+  #{$this}__result--white {
+    background: $color-fff;
+  }
+
+  &__result-title {
+    margin-bottom: 10px;
+    @include font-style(18,32,bold);
+  }
+
+  &__result-item {
+
+    strong {
+      @include font-style(22,30,500);
+      color: $color-primary;
+    }
+  }
+
+  &--gray {
+    background: $color-orange-lightGray;
+
+    #{$this}__inner {
+      margin-block: 0;
+      padding-block: 80px 100px;
+    }
+  }
+
+  @include media(sm) {
+
+    &__inner {
+      // margin-block: vwset(35) vwset(50); 変更前
+      margin-block: vwset(50);
+    }
+  
+    &__title {
+      @include font-sp-style(20,35);
+    }
+  
+    &__text-unit {
+      text-align: left;
+    }
+  
+    &__text {
+      @include font-sp-style(15,30);
+    }
+  
+    &__result {
+      width: 100%;
+      padding: vwset(15);
+    }
+  
+    &__result-title {
+      display: block;
+      margin-bottom: 0;
+      @include font-sp-style(16,30);
+    }
+  
+    &__result-item {
+      @include font-sp-style(16,30);
+    }
+  
+    &--gray {  
+      #{$this}__inner {
+        margin-block: 0;
+        padding: vwset(45) 0;
+      }
+    }
+  }
+
+  &--margin-m {
+    margin-top: 35px;
+
+    @include media(sm) {
+      margin-top: vwset(33);
+    }
+  }
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>結果レポート</title>
+</head>
+<body>
+<div>
+    <span th:text="${admin.get('SYSTEM')} + 'の' + ${admin.get('BATCH_NAME')} + 'が終了しました。'"></span>
+    <br>
+    <br>
+    <span>与信枠を確保したままとなっている可能性のある受注を検出しました。 </span>
+    <br>
+    <br>
+    <span>-----</span>
+    <br>
+    <br>
+    <span th:text="'対象受注は' + ${admin.get('SIZE')} + '件です。'"></span>
+    <br>
+    <br>
+    <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(admin.get('RESULT')),'\n','&lt;br /&gt;'))}"></span>
+    <br>
+    <br>
+    <br>
+    <span>下記に記載の受注IDを持つ受注は与信枠の取り消しに失敗しました。</span>
+    <br>
+    <span>与信枠を確保したままとなっている可能性があります。</span>
+    <br>
+    <span>GMO管理コンソールより、該当する受注の取り消しを行ってください。</span>
+    <br>
+    <br>
+    <span>-----</span>
+    <br>
+    <br>
+    <span th:text="'対象受注は' + ${admin.get('SIZE2')} + '件です。'"></span>
+    <br>
+    <br>
+    <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(admin.get('RESULT2')),'\n','&lt;br /&gt;'))}"></span>
+    <br>
+    <br>
+    <span>以上</span>
+</div>
+</body>
+</html>

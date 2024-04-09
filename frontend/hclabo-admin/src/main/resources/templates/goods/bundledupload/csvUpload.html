@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+	  xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title> 商品CSV登録 | 商品管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+	<script language="JavaScript">
+		function submitUpload() {
+			try{
+				if ($("input[name='uploadType']:checked").val() == 1) {
+					actionExe('doOncePartialUpload');
+				} else {
+					actionExe('doOnceUpload');
+				}
+			}catch(e){
+			}
+		}
+	</script>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="goods">
+<div id="uploadGoods" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!--/* contents */-->
+			<div class="l-main">
+				<form enctype="multipart/form-data" th:action="@{/goods/bundledupload/csv/}" th:object="${goodsBundledUploadModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">商品CSV登録</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div class="l-section" id="mainContainer">
+						<article class="l-article">
+							<div class="l-article_title">
+								<h2 class="c-pagetitle_h3">アップロードする商品CSV</h2>
+								<div class="c-open-btn"><i></i></div>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<div class="c-detail-warp search_data_smp wrap">
+										<dl class="mr0">
+											<dt>商品データ</dt>
+											<dd>
+												<div class="wrap_flex_center fileinputs">
+													<input type="file" accept=".csv" class="file c-form-control w625px mr10"
+														   id="uploadCsvFile" name="uploadCsvFile" th:value="*{uploadCsvFile}" onchange="uploadfileViewPath(this.id, this.value);">&nbsp;&nbsp;&nbsp;
+													<div class="fakefile">
+														<input th:classappend="${#fields.hasErrors('uploadCsvFile')} ? 'error'" type="text" name="uploadCsvFile_path" class="c-input-file"/>&nbsp;&nbsp;<button class="c-btn-small_over mr40" type="button">参照</button>
+													</div>
+													<div class="c-detail-warp wrap mt-25">
+														<dl>
+															<dt>アップロードモード</dt>
+															<dd>
+																<ul class="c-list-center list_sp20 mr40" >
+																	<li>
+																		<label class="c-form-control"><input type="radio" th:field="*{uploadType}" value="0"><i th:classappend="${#fields.hasErrors('uploadType')} ? 'error'"></i>追加モード</label>
+																	</li>
+																	<li>
+																		<label class="c-form-control mr10"><input type="radio" th:field="*{uploadType}" value="1"><i th:classappend="${#fields.hasErrors('uploadType')} ? 'error'"></i>更新モード</label>
+																	</li>
+																</ul>
+																<div th:if="${#fields.hasErrors('uploadType')}" th:errors="*{uploadType}" class="c-error-txt mt5"></div>
+															</dd>
+														</dl>
+													</div>
+												</div>
+												<div id="uploadCsvFileError" th:if="${#fields.hasErrors('uploadCsvFile')}" th:errors="*{uploadCsvFile}" class="c-error-txt mt5"></div>
+
+												<div class="c-annotation mt5">
+													※一行目には、項目名を必ず入れてください
+												</div>
+												<input type="hidden" id="isOnceUploadBtnClicked" value="false"/>
+												<input type="submit" id="doOnceUpload" name="doOnceUpload" style="display:none" />
+												<input type="submit" id="doOncePartialUpload" name="doOncePartialUpload" style="display:none" />
+												<button class="c-btn btn_back icon mt30" type="button" onClick="submitUpload();"><i class="c-btn-icon upload"></i>一括アップロード</button>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</article>
+					</div>
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button type="submit" class="c-btn btn_back icon_left" name="doReturn" ><i class="material-icons navigate_before"></i>戻る</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

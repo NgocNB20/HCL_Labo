@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<script>
+function setAddressBookIndex(addressBookIndex){
+	// Ajax処理等でhiddenがすでに作られていた場合に対する考慮
+	// 行インデックスhiddenがすでに存在する場合は要素削除
+	if ($("#addressBookIndex")[0]) {
+		$("#addressBookIndex").remove();
+	}
+	// 行インデックスhiddenを生成しformに追加
+	$("<input>", {
+			type: 'hidden',
+			id: 'addressBookIndex',
+			name: 'addressBookIndex',
+			value: addressBookIndex
+		}).appendTo('#addressBookItems');
+}
+</script>
+</head>
+
+<body id="gotop" class="mypage">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+	<!-- main -->
+	<main class="l-page l-head__pattern1">
+		<div th:replace="~{include/header_mypage::headermypage('abook')}"></div>
+
+		<div class="l-container">
+			<div class="l-container__inner">
+				<div th:replace="~{include/sidemenumember::sidemenumember('abook')}"></div>
+
+				<div class="l-main">
+					<h2 class="c-title-page p-mypage__title-page"><strong>アドレス帳</strong></h2>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<th:block th:if="${memberAbookModel.isAddressBookEmpty()}">
+						<div class="p-mypage__abook-list c-margin--s">
+                            <form name="form1" id="form1" method="post" action="">
+                                <div class="l-complete">
+                                    <div class="l-complete__inner">
+                                        <p class="l-complete__title">現在、アドレス帳には登録されていません。</p>
+                                            <div class="p-mypage__abook-search c-margin--inline-m c-margin--s c-text--center">
+                                            <a th:href="@{/member/abook/detail}" id="go-Address-Regist" class="c-button c-button--primary-line"><svg viewBox="0 0 18 18" width="14"><use xlink:href="/assets/images/icon/plus.svg#plus"></use></svg><p>新しい住所を登録する</p></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+					</th:block>
+					<th:block id="isAddressBookFull" th:if="*{memberAbookModel.isAddressBookFull()}">
+						<p class="c-global-error c-global-error--margin-m">※アドレス帳が最大件数に達している為、登録できません。</p>
+					</th:block>
+					<th:block th:if="${!memberAbookModel.isAddressBookEmpty()}">
+					    <div class="p-mypage__abook-search c-margin--inline-m">
+						    <th:block id="isNotAddressBookFull" th:if="*{!memberAbookModel.isAddressBookFull()}">
+							    <a th:href="@{/member/abook/detail}" id="go-Address-Regist" class="c-button c-button--primary-line"><svg viewBox="0 0 18 18" width="14"><use xlink:href="/assets/images/icon/plus.svg#plus"></use></svg><p>新しい住所を登録する</p></a>
+						    </th:block>
+					    </div>
+					</th:block>
+
+					<div class="p-mypage__abook-list c-margin--s" th:if="${!memberAbookModel.isAddressBookEmpty()}">
+						<form id="indexForm" method="post" th:action="@{/member/abook/}" th:object="${memberAbookModel}">
+							<ul id="addressBookItems">
+								<li th:each="addressBookItem, stat : *{addressBookItems}">
+									<dl>
+										<dt class="c-text--l" th:text="${addressBookItem.addressBookName}"></dt>
+										<dd class="c-text--m c-margin--xxs" >
+											<span th:remove="tag" th:text="${addressBookItem.addressBookLastName} + ' ' + ${addressBookItem.addressBookFirstName}"></span><br>
+											<span th:remove="tag" th:text="'〒'+${addressBookItem.addressBookZipCode1} + '-' + ${addressBookItem.addressBookZipCode2}"></span><br>
+											<span th:remove="tag" th:text="${addressBookItem.addressBookPrefecture} + ' ' + ${addressBookItem.addressBookAddress1} + ' ' + ${addressBookItem.addressBookAddress2}"></span><span th:remove="tag" th:if="${addressBookItem.addressBookAddress3}"><span th:remove="tag" th:text="' ' + ${addressBookItem.addressBookAddress3}"></span></span><br>
+											<span th:remove="tag" th:text="${addressBookItem.addressBookTel}"></span><br>
+										</dd>
+									</dl>
+									<nav>
+										<button type="submit" class="c-textlink--delete2" th:id="'doOnceDelete-'+${stat.index}" name="doOnceDelete" th:onclick="'setAddressBookIndex(' + ${stat.index} + ');'"><p>削除</p></button>
+									</nav>
+								</li>
+							</ul>
+						</form>
+						<div class="p-search__count">全 <span class="p-search__count-sum" th:text="${memberAbookModel.totalCount}"></span> 件</div>
+					</div>
+
+					<th:block th:if="${!memberAbookModel.isAddressBookEmpty()}">
+						<span class="c-pagination--page is-current" th:replace="~{include/pager::pager1(url='/member/abook/')}"></span>
+					</th:block>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="~{include/footer}" ></div>
+</div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+
+
+</body></html>

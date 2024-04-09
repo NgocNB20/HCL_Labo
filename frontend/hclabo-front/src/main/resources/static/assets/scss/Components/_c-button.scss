@@ -1,0 +1,295 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  c-button
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+.c-button {
+  display: inline-grid;
+  grid-auto-flow: column;
+  place-content: center;
+  place-items: center;
+  transition: opacity $comMS $comES;
+  cursor: pointer;
+
+  &:hover {
+    @include media(lg) {
+      opacity: .5;
+    }
+  }
+
+  // ピンク 角なし
+  &--primary {
+    border-radius: 9999px;
+    background-color: $color-primary;
+    color: $color-fff;
+  }
+
+  // ピンク 枠 角なし
+  &--primary-line {
+    border-radius: 9999px;
+    background-color: $color-fff;
+    color: $color-primary;
+    border: solid 1px $color-primary;
+  }
+
+  // ブルー 角なし
+  &--secondary {
+    border-radius: 9999px;
+    background-color: $color-secondary;
+    color: $color-fff;
+  }
+
+  // ブルー 枠 角なし
+  &--secondary-line {
+    border-radius: 9999px;
+    background-color: $color-fff;
+    color: $color-secondary;
+    border: solid 1px $color-secondary;
+  }
+
+  // グレー 角なし
+  &--bbb {
+    border-radius: 9999px;
+    background-color: $color-bbb;
+    color: $color-fff;
+  }
+
+  // グレー 枠 角なし
+  &--bbb-line {
+    border-radius: 9999px;
+    background-color: $color-fff;
+    color: $color-70;
+    border: solid 1px $color-bbb;
+  }
+
+  // グレー 枠 角なし
+  &--70-line {
+    border-radius: 9999px;
+    background-color: $color-fff;
+    color: $color-333;
+    border: solid 1px $color-70;
+  }
+
+  // 大
+  &--width-l {
+    height: 80px;
+    padding: 0 50px 2px; // 【メモ】bottomの2pxは微調整
+    @include font-style(22, 28, bold);
+
+    @include media(sm) {
+      min-width: vwset(275);
+      height: vwset(60);
+      padding: 0 vwset(40); 
+      @include font-sp-style(18,26,500);
+    }
+  }
+
+  // 中
+  &--width-m {
+    height: 60px;
+    min-width: 140px;
+    padding: 0 40px 2px;  // 【メモ】bottomの2pxは微調整
+    @include font-style(20, 25, bold);
+
+    @include media(sm) {
+      min-width: vwset(125);
+      height: vwset(50);
+      padding: 0 vwset(40);
+      @include font-sp-style(16,21,500);
+    }
+  }
+
+  // 小
+  &--width-s {
+    height: 35px;
+    padding: 0 17px 2px;  // 【メモ】bottomの2pxは微調整
+    @include font-style(15, 19, bold);
+
+    @include media(sm) {
+      height: vwset(35);
+      padding: 0 vwset(17);
+      @include font-sp-style(13,24);
+    }
+  }
+  
+  // もっと見る 一覧や詳細への導線 
+  &--nextmore {
+    height: 70px;
+    min-width: 400px;
+    padding: 0 40px 2px;  // 【メモ】bottomの2pxは微調整
+    @include font-style(20,29,500);
+
+    @include media(sm) {
+      min-width: vwset(250);
+      height: vwset(50);
+      padding: 0 vwset(40);
+      @include font-sp-style(16);
+    }
+  }
+
+  // もっと見る
+  &--readmore {
+    padding: 17px 30px;
+    border: solid 1px #bbb;
+    border-radius: 4px;
+
+    p {
+      @include icon('arrow-down', 'a1a1a1');
+      background-position: right center;
+      background-size: 11px auto;
+      padding-right: 30px; 
+      @include font-style(16,25);
+      color: $color-000;
+    }
+
+    @include media(sm) {
+      padding: vwset(17) vwset(30);
+      background-position: right vwset(20) center;
+      background-size: vwset(6) auto;
+      padding-right: vwset(30); 
+      @include font-sp-style(15);
+    }
+  }
+
+  // 閉じる
+  &--close {
+    padding: 16px 35px;
+    border: solid 1px $color-bbb;
+    border-radius: 999px;
+
+    p {
+      @include icon('close', 'bbbbbb');
+      background-position: left calc(50% + 1px);
+      background-size: 18px auto;
+      padding-left: 28px;
+      @include font-style(20,20,bold);
+      color: $color-bbb;
+    }
+
+    @include media(sm) {
+      padding: vwset(16) vwset(35);
+
+      p {
+        background-position: left calc(50% + 2px);
+        background-size: vwset(14) auto;
+        padding-left: vwset(24);
+        @include font-sp-style(18,18,normal);
+      }
+    }
+  }
+
+  // お気に入り（丸）
+  &--favorite {
+    align-items: center;
+    background-color: $color-orange-lightGray;
+    border: solid 1px $color-orange-lightGray;
+    border-radius: 50%;
+    display: inline-flex;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+
+    svg {
+      // fill: transparent;
+      // stroke: #a0a0a0;
+      // stroke-width: 1;
+      fill: $color-ccc;
+      transform-origin: center;
+      //transition: fill $comMS $comES, stroke $comMS $comES, transform $comMS $comES;
+      transition: fill $comMS $comES, transform $comMS $comES;
+    }
+
+    &:hover {
+
+      svg {
+        transform: scale(1.2);
+      }
+    }
+
+    &:active,
+    &.is-active {
+
+      svg {
+        fill: $color-primary;
+        // stroke: #ed6161;
+      }
+    }
+
+    p {
+      width: 19px;
+      height: 16.5px;
+    }
+
+    @include media(sm) {
+    }
+  }
+
+  // お気に入り（横長）
+  &--add-fav {
+    align-items: center;
+    justify-content: center;
+    border: solid 1px $color-ccc;
+    border-radius: 9999px;
+    color: $color-70;
+    display: inline-flex;
+    height: 35px;
+    padding-inline: 20px;
+
+    svg {
+      // fill: transparent;
+      // stroke: #a09fa0;
+      // stroke-width: 1;
+      // transition: fill $comMS $comES, stroke $comMS $comES;
+      fill: $color-ccc;
+      transition: fill $comMS $comES, transform $comMS $comES;
+      width: 13px;
+      margin-top: 1px;
+    }
+
+    p {
+      @include font-style(13, 17, 400);
+      margin-left: 6px;
+    }
+
+    &:active,
+    &.is-active {
+
+      svg {
+        fill: $color-primary;
+        // stroke: #ed6161;
+      }
+    }
+
+    &:disabled {
+      background: rgba($color: $color-orange-lightGray, $alpha: .8);
+
+      svg {
+        fill: $color-primary;
+      }
+    }
+
+    @include media(sm) {
+      height: inherit;
+      width: fit-content;
+      padding: vwset(6) vwset(15);
+
+      svg {
+        width: vwset(13)
+      }
+
+      p {
+        margin-left: vwset(6)
+      }
+
+    }
+  }
+
+}
+
+

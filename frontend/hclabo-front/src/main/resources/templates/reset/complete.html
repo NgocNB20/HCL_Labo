@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-reset">
+    <div class="l-mainwrap">
+        <div th:replace="~{include/header}"></div>
+        <main class="l-page">
+            <div th:replace="~{include/header_reset}"></div>
+            <div class="l-section">
+                <div class="l-section__inner">
+                    <h2 class="c-title-page"><strong>パスワードをお忘れの方</strong></h2>
+                    <h3 class="c-title-line c-title-line--margin-m-inline">送信完了</h3>
+                    <div class="l-complete">
+                        <div class="l-complete__inner">
+                            <p class="l-complete__title">ご登録メールアドレスをご確認ください。</p>
+                            <div class="l-complete__result l-complete--margin-m">
+                                <!-- <div class="l-complete__result-title">ご登録メールアドレス</div> -->
+                                <div class="l-complete__result-item">
+                                    <strong><p th:text="${resetModel.memberInfoMail}"></p></strong>
+                                </div>
+                            </div>
+                            <div class="l-complete__text-unit l-complete--margin-m">
+                                <p class="l-complete__text">登録メールアドレスにパスワード再設定用URLを送信いたします。<br>メールに記載されたURLから、新しいパスワードを設定してください。<br>場合により、メールが届くまでに少々お時間がかかる場合がございますので、ご了承ください。</p>
+                            </div>
+                            <div class="c-button-wrap">
+                                <a th:href="@{/}" class="c-button c-button--primary c-button--width-l">トップページへ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

@@ -1,0 +1,62 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  l-base
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.l-page {
+  position: relative;
+}
+
+// column layout
+.l-container {
+
+  &__inner {
+    display: grid;
+    gap: 5.8%;  // 約70px
+    grid-template-columns: 200px minmax(auto, 930px);
+    @include width(1200px, 20px, 0px);
+    justify-content: space-between;
+    @include media(sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .l-main {
+    min-width: 0; //内部のコンテンツはみ出し対策
+  }
+}
+
+// full width layout
+.l-section {
+
+  &--gray {
+    overflow: hidden;
+    background: $color-orange-lightGray;
+  }
+
+  &__inner {
+    @include width(1200px, 20px, 0px);
+  }
+}
+
+// PC only
+.l-lg {
+  @include media(sm) {
+    display: none !important;
+  }
+}
+
+// SP only
+.l-sm {
+  @include media(lg) {
+    display: none !important;
+  }
+}
+
+
+

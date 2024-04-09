@@ -1,0 +1,23 @@
+
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+// 注文ページ共通
+
+.p-order {
+
+  // 共通ヘッダー
+  .l-header {
+    margin-bottom: 60px;  //( FYI: l-breadcrumbs)
+
+    @include media(sm) {
+
+      margin-bottom: vwset(30);
+    }
+  }
+
+}
+

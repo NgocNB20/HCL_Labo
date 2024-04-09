@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}"/>
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<title>商品販売個数集計｜レポート</title>
+	<script type="text/javascript">
+        jQuery(function($){
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+
+
+
+
+
+
+
+
+	</script>
+	<script th:src="@{/assets/js/selectOptionsApi.js}" type="text/javascript"></script>
+	<script th:inline="javascript">
+        /*<![CDATA[*/
+        var linkedCategoryList  = /*[[${goodsSalesModel.categoryList}]]*/ '[]';
+        /*]]>*/
+
+
+
+
+
+
+
+
+	</script>
+	<script type="text/javascript">
+        jQuery(function($){
+            let options = {
+                initValue: [],
+                url: pkg_common.getAppComplementUrl() + "/goodssales/category/ajax",
+                urlUpdate: pkg_common.getAppComplementUrl() + "/goodssales/category/update/ajax"
+            }
+            if (linkedCategoryList != null) {
+                for (let i = 0; i < linkedCategoryList.length; i++) {
+                    options.initValue.push({
+                        value: linkedCategoryList[i].categoryId,
+                        label: linkedCategoryList[i].categoryName
+                    })
+                }
+            }
+            new SelectOptionsApi('categorySearch', 'categoryIdList', 'categoryNameList', options);
+        })
+
+        /**
+         * 非同期受注CSVバッチの結果ダウンロード
+         */
+        jQuery(function($){
+            var url = location.href;
+            var params = location.search.substring(1);
+            var param = params.split("=");
+
+            if (param[0] == 'file') {
+                $("#indexForm").attr('action', pkg_common.getAppComplementUrl() + '/goodssales/?' + params);
+                document.getElementById("doDownload").click();
+                $("#indexForm").attr('action', pkg_common.getAppComplementUrl() + '/goodssales/');
+            }
+        });
+
+
+
+
+
+
+
+
+	</script>
+</head>
+
+<body id="totaling">
+<div id="goodssales" class="l-mainwrap">
+	<!-- side -->
+	<div th:replace="~{include/sidemenu}"></div>
+
+	<main class="l-page report-page">
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form id="indexForm" th:action="@{/goodssales/}" th:object="${goodsSalesModel}" method="post">
+					<input hidden="hidden" type="submit" id="doDownload" name="doDownload">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">商品販売個数集計</h1>
+					</div>
+
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<th:block th:if="*{isSelectGoodsSalesCSV()}">
+						<script>alert('商品販売個数集計CSV出力の非同期処理を開始しました。\n結果はメールをご確認ください。');</script>
+					</th:block>
+					<input type="hidden" name="limit" value="100"/>
+					<!--/* 検索 */-->
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<div class="c-detail-warp search_data_smp wrap">
+										<div class="wrap_flex_wrap">
+											<dl class="search_open_long">
+												<dt>集計期間 <span class="c-req">※</span></dt>
+												<dd class="wrap_flex_center">
+													<label class="c-datepicker">
+														<input type="text" th:field="*{aggregateTimeFrom}" autocomplete="off" maxlength="10" th:classappend="${#fields.hasErrors('aggregateTimeFrom')}?'error':''" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+													</label> <span class="ml10">〜</span>
+													<ul class="c-list-left list_sp5 mt10 w100p">
+														<li>
+															<button class="c-btn-small" id="targetDate_today_aggregateTime" value="今日" type="button">今日</button>
+														</li>
+														<li>
+															<button class="c-btn-small" id="targetDate_yesterday_aggregateTime" value="昨日" type="button">昨日</button>
+														</li>
+														<li>
+															<button class="c-btn-small" id="targetDate_crrentMonth_aggregateTime" value="今月" type="button">今月</button>
+														</li>
+														<li>
+															<button class="c-btn-small" id="targetDate_prevMonth_aggregateTime" value="先月" type="button">先月</button>
+														</li>
+														<li>
+															<button class="c-btn-txt" id="targetDate_clear_aggregateTime" value="クリア" type="button">
+																<i class="material-icons close"></i>クリア
+															</button>
+														</li>
+													</ul>
+													<dl class="search_close">
+														<dd>
+															<div th:if="${#fields.hasErrors('aggregateTimeFrom')}" th:errors="*{aggregateTimeFrom}" class="c-error-txt mt5"></div>
+															<div th:if="${#fields.hasErrors('aggregateTimeTo')}" th:errors="*{aggregateTimeTo}" class="c-error-txt mt5"></div>
+														</dd>
+													</dl>
+												</dd>
+											</dl>
+											<dl class="search_close_long mglm75" style="width: 190px !important;">
+												<dt>&nbsp;</dt>
+												<dd class="wrap_flex_center">
+													<label class="c-datepicker">
+														<input type="text" th:field="*{aggregateTimeTo}" autocomplete="off" maxlength="10" th:classappend="${#fields.hasErrors('aggregateTimeTo')}?'error':''" class="c-form-control" placeholder="年/月/日" th:errorclass="error">
+													</label>
+												</dd>
+											</dl>
+										</div>
+
+										<dl>
+											<dt>集計単位</dt>
+											<dd>
+												<ul class="c-list-left list_sp20 mr40 mt15">
+													<li>
+														<label class="c-form-control"><input type="radio" th:field="*{aggregateUnit}" value="0" checked=""><i th:classappend="${#fields.hasErrors('aggregateUnit')} ? 'error'"></i>月別</label>
+													</li>
+													<li>
+														<label class="c-form-control"><input type="radio" th:field="*{aggregateUnit}" value="1"><i th:classappend="${#fields.hasErrors('aggregateUnit')} ? 'error'"></i>日別</label>
+													</li>
+												</ul>
+											</dd>
+										</dl>
+
+										<dl class="mr40">
+											<dt>受注デバイス</dt>
+											<dd class="pt10">
+												<ul class="c-list-left list_sp20">
+													<li th:each="item : *{deviceItems}">
+														<label class="c-form-control">
+															<input type="checkbox" th:field="*{deviceArray}" th:value="${item.key}" th:checked="${item.key} == *{deviceArray}">
+															<i th:classappend="${#fields.hasErrors('deviceArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+														</label>
+													</li>
+												</ul>
+											</dd>
+										</dl>
+
+										<dl>
+											<dt>対象データ</dt>
+											<dd>
+												<ul class="c-list-left list_sp20 mr40 mt15">
+													<li>
+														<label class="c-form-control"><input type="radio" th:field="*{orderStatus}" value="0" checked=""><i th:classappend="${#fields.hasErrors('orderStatus')} ? 'error'"></i>受注</label>
+													</li>
+													<li>
+														<label class="c-form-control"><input type="radio" th:field="*{orderStatus}" value="1"><i th:classappend="${#fields.hasErrors('orderStatus')} ? 'error'"></i>売上</label>
+													</li>
+												</ul>
+											</dd>
+										</dl>
+									</div>
+
+									<div class="c-detail-warp search_data_smp wrap mt40">
+										<dl class="w240px">
+											<dt>商品名</dt>
+											<dd>
+												<input type="text" th:field="*{searchGoodsName}" size="14" maxlength="20" th:classappend="${#fields.hasErrors('searchGoodsName')}?'error':''" class="c-form-control" placeholder="ここに入力してください" th:errorclass="error">
+											</dd>
+										</dl>
+										<dl class="w240px">
+											<dt>商品番号</dt>
+											<dd>
+												<input type="text" th:field="*{searchGoodsCode}" size="14" maxlength="20" th:classappend="${#fields.hasErrors('searchGoodsCode')}?'error':''" class="c-form-control" placeholder="ここに入力してください" th:errorclass="error">
+											</dd>
+										</dl>
+
+										<dl class="w300px mr40">
+											<dt>カテゴリー</dt>
+											<!--/* category search */-->
+											<dd>
+												<input maxlength="100" class="c-form-control mb10" id="categorySearch" placeholder="ここに入力してください" autocomplete="off"/>
+												<input type="hidden" th:field="*{categoryIdList}"/>
+												<input type="hidden" th:field="*{categoryNameList}"/>
+											</dd>
+										</dl>
+									</div>
+
+									<!--/* 詳細検索 */-->
+									<div class="c-detail-warp search mt20">
+										<div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+											<p class="as_end" id="allItemsSearchKeywords"></p>
+										</div>
+										<div class="c-contbtn_wrap_top">
+											<button name="doSearch" class="c-btn btn_regular" type="submit">検索する</button>
+											<th:block sec:authorize="hasAnyAuthority('REPORT:8')">
+												<div class="col_left wrap_flex_center">
+													<button class="c-btn btn_back icon ml10" type="submit" name="doCsvOutput">
+														<i class="material-icons save_alt"></i>ダウンロード
+													</button>
+												</div>
+											</th:block>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<article class="l-article">
+							<input type="hidden" id="orderField" th:field="*{orderField}"/>
+							<input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+							<input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替"/>
+
+							<div class="l-article_inner" th:if="*{isResult}">
+								<div class="l-inner_wrap" th:if="*{resultItems.size() == 0}">
+									<div class="l-conttitle_wrap">
+										<h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+										<span class="as_end">全0件が該当しました</span>
+									</div>
+								</div>
+								<div class="l-inner_wrap" th:if="*{resultItems.size() != 0}">
+									<div class="l-conttitle_wrap">
+										<div class="col wrap_flex">
+											<h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+										</div>
+									</div>
+									<div style="width: 100%; overflow-x: auto">
+										<table id="search_result" class="c-tbl tbl_search_results">
+											<thead>
+											<tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+												<th:block>
+													<th class="min_w60px text-center" rowspan="2">
+														#
+													</th>
+													<th class="min_w150px" rowspan="2">
+														<a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerGoodsGroupCode"> 商品管理番号
+															<th:block th:if="*{orderField == 'goodsGroupCode'}"><span th:text="${sortStr}"></span>
+															</th:block>
+														</a>
+													</th>
+													<th class="min_w100px" rowspan="2">
+														<a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerGoodsCode"> 商品番号
+															<th:block th:if="*{orderField == 'goodsCode'}"><span th:text="${sortStr}"></span>
+															</th:block>
+														</a>
+													</th>
+													<th class="min_w100px" rowspan="2">
+														<a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerGoodsName"> 商品名
+															<th:block th:if="*{orderField == 'goodsName'}"><span th:text="${sortStr}"></span>
+															</th:block>
+														</a>
+													</th>
+													<th class="min_w100px" rowspan="2">
+														規格1
+													</th>
+													<th class="min_w100px" rowspan="2">
+														規格2
+													</th>
+													<th class="min_w100px" rowspan="2">
+														JANコード
+													</th>
+													<th class="min_w100px" rowspan="2">
+														単価
+													</th>
+													<th class="min_w100px" rowspan="2">
+														販売個数
+													</th>
+													<th class="min_w100px" rowspan="2">
+														キャンセル数
+													</th>
+													<th th:each="dateStr,stat: *{rangeDateStr}" class="min_w100px text-center" colspan="2">
+														<span th:text="${dateStr}"></span>
+													</th>
+												</th:block>
+											</tr>
+											<tr>
+												<th:block th:each="dateStr,stat: *{rangeDateStr}">
+													<th class="min_w100px text-center">販売個数</th>
+													<th class="min_w100px text-center">キャンセル数</th>
+												</th:block>
+											</tr>
+											</thead>
+											<tbody id="resultItems">
+											<tr th:each="item,stat: *{resultItems}">
+												<td class="min_w60px text-center">
+													<span id="resultNo" th:text="${stat.index+1}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.goodsGroupCode}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.goodsCode}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.goodsName}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.unitValue1}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.unitValue2}"></span>
+												</td>
+												<td>
+													<span th:text="${item.goodsItem.janCode}"></span>
+												</td>
+												<td class="txt_right">
+													<span th:text="${item.goodsItem.unitPrice == null ? '―' : #number.convert(item.goodsItem.unitPrice)}"></span>
+												</td>
+												<td class="txt_right">
+													<span th:text="${#number.convert(item.totalSales)}"></span>
+												</td>
+												<td class="txt_right">
+													<span th:text="${#number.convert(item.totalCancel)}"></span>
+												</td>
+												<th:block th:each="info,stat: ${item.goodsSalesAggregateItemList}">
+													<td class="txt_right">
+														<span th:text="${#number.convert(info.salesCount)}"></span>
+													</td>
+													<td class="txt_right">
+														<span th:text="${#number.convert(info.cancelCount)}"></span>
+													</td>
+												</th:block>
+											</tr>
+											<tr class="fwb">
+												<td class="min_w60px text-center row-total">
+													<span>合計</span>
+												</td>
+												<td class="min_w60px row-total" colspan="7"></td>
+												<td class="txt_right min_w60px row-total">
+													<span th:text="*{#number.convert(resultSummary.totalSales)}"></span>
+												</td>
+												<td class="txt_right min_w60px row-total">
+													<span th:text="*{#number.convert(resultSummary.totalCancel)}"></span>
+												</td>
+												<th:block th:each="info,stat: *{resultSummary.aggregateItems}">
+													<td class="txt_right row-total">
+														<span th:text="${#number.convert(info.salesCount)}"></span>
+													</td>
+													<td class="txt_right row-total">
+														<span th:text="${#number.convert(info.cancelCount)}"></span>
+													</td>
+												</th:block>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</article>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

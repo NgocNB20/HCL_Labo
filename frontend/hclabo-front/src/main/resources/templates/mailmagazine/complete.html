@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mailmagazine">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+    <main class="l-page">
+      <div th:replace="~{include/breadcrumb_mail_magazine}"></div>
+      <div class="l-section">
+        <div class="l-section__inner">
+            <form action="">
+              <h2 class="c-title-page"><strong>メールマガジン</strong></h2>
+              <h3 class="c-title-line c-title-line--margin-m-inline">メールマガジン登録完了</h3>
+              <div class="l-complete">
+                <div class="l-complete__inner">
+                  <p class="l-complete__title">メールマガジンに登録しました。</p>
+                </div>
+              </div>
+              <div class="c-button-wrap">
+                <a th:href="@{/}" class="c-button c-button--primary c-button--width-l">トップページへ</a>
+              </div>
+            </form>
+        </div>
+      </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

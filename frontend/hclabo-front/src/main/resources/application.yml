@@ -1,0 +1,52 @@
+########### サーバー設定 ###########
+server:
+  servlet:
+    session:
+      # ローカル環境にて、SpringDevToolsがTomcat再起動時にセッション維持するよう設定してしまうため、無効化
+      # サーバ環境でも、デプロイ・起動の仕方を変えるとDevToolsが有効になってしまうケースもありえるため、全環境標準で無効化
+      persistent: false
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  main:
+    # ダブルサブミットチェック用のRequestDataValueProcessorのBean定義を上書くために必要
+    allow-bean-definition-overriding: true
+  profiles:
+    active: '@active.profile@'
+  application:
+    # SleuthによるTrace-ID出力する際のアプリケーション名
+    name: front
+  web:
+    resources:
+      static-locations: # デフォルㇳ設定に監視用ディレクトリ/healthを追加
+        - /META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        - classpath:/health/
+########### Spring設定 ###########
+########### HIT-MALL独自設定 ###########
+quad:
+  # ダブルサブミットトークンチェック
+  double-submit:
+    check:
+      enabled: true
+      path-patterns:
+        - /**
+      # チェックを行わないパスを、Spring標準のInterceptorのPathPatterns形式で記載
+      # RestController(Ajaxなど)はシステム標準で対象外としているため、ここに記載は不要
+      exclude-path-patterns:
+        - /assets/**
+        - /common/**
+        - /images/**
+        - /xover
+      # ()で囲われた部分を、トークンのネームスペースに利用
+      name-space-pattern: jp\.co\.itechh\.quad\.front\.pc\.web\.front(.*)\.[^.]+Controller
+#
+# Log出力対象外User-Agent
+#
+  logging:
+    not-output:
+      user-agents:
+        - healthCheck
+########### HIT-MALL独自設定 ###########

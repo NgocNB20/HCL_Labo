@@ -1,0 +1,174 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+
+// stickyfill.js
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+}
+
+// swiper.js
+.swiper {
+
+  &-button-next,
+  &-button-prev {
+    letter-spacing: 0;
+  }
+
+  &-container {
+    height: 100%;
+    opacity: 0;
+    transition: opacity $comMS $comES, visibility $comMS $comES;
+    visibility: hidden;
+
+    &.swiper-container-initialized {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &.is-single {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+
+      .swiper-wrapper {
+        display: flex;
+      }
+    }
+  }
+}
+
+// swup fade theme
+.swup-transition-main {
+  transition: opacity 500ms ease;
+}
+
+// lum-lightbox
+.lum-lightbox {
+  z-index: 600;
+
+  .lum-close-button {
+    left: calc(50% + (79vh / 2) );
+    right: 0;
+    top: 2.5%;
+    width: 25px;
+    height: 25px;
+    opacity: 1;
+    cursor: pointer;
+  
+    &::before,
+    &::after {
+      left: 45%;
+      height: 25px;
+      width: 2px;
+    }
+  }
+  
+  .lum-lightbox-inner {
+    top: 7%;
+    bottom: 5%;
+    right: 0;
+    left: 0;
+    max-width: calc(87vh + 150px);
+    margin: auto;
+  
+    .lum-lightbox-caption {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  .lum-gallery-button {
+    width: 45px;
+    height: 45px;
+    background: rgba($color: #ffffff, $alpha: 0.6);
+  
+    &.lum-next-button {
+      right: 0;
+      background-image: url(/assets/images/icon/arrow-lum-right.svg);
+      background-repeat: no-repeat;
+      background-size: 12px auto;
+      background-position: center;
+    
+      &::after {
+        display: none;
+      }
+    }
+  
+    &.lum-previous-button {
+      left: 0;
+      background-image: url(/assets/images/icon/arrow-lum-left.svg);
+      background-repeat: no-repeat;
+      background-size: 12px auto;
+      background-position: center;
+    
+      &::after {
+        display: none;
+      }
+    }
+  }
+  
+  .lum-lightbox-image-wrapper {
+    padding-bottom: 20px;
+  }
+
+  @include media(sm) {
+
+    .lum-close-button {
+      left: auto;
+      right: 10px;
+      top: calc(50vh - 62vw);
+    }
+  
+    .lum-lightbox-inner {
+      top: 0;
+      bottom: 0;
+      max-width: 100vw;
+
+      img {
+        max-width: 95%;
+        max-height: 95%;
+      }
+
+      .lum-lightbox-caption {
+        bottom: auto;
+        top:  calc(50vh + 52vw);
+      }
+
+    }
+
+    .lum-gallery-button {
+      top: 50vh;
+    }
+
+    .lum-lightbox-image-wrapper {
+      max-height: 100vh !important;
+      height: 100vh !important;
+    }
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

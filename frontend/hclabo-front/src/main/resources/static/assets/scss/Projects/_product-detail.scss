@@ -1,0 +1,1122 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+.p-product-detail {
+  
+  // 基本情報
+  &__base {
+    $this: &;
+    display: grid;
+    grid-template-columns: 500px auto;
+    gap: 80px;
+    position: relative;
+    margin-bottom: 70px;
+
+    &-detail {
+      order: 2;
+    }
+
+    &-image {
+      order: 1;
+    }
+
+    &-unit {
+
+      + #{$this}-unit {
+        margin-top: 28px;
+        padding-top: 28px;
+        border-top: solid 1px $color-e6;
+      }
+    }
+
+    // 幅を固定。リスト表示と同じ
+    &-icon {
+
+      .c-product__item-icon {
+        justify-content: left;
+        margin-bottom: 35px;
+      }
+
+      .c-product__item-icon span {
+        width: auto;
+        //min-width: 100px;
+        //margin: 0 10px 10px 0;
+      }
+    }
+
+    &-name {
+      @include font-style(24,35,500);
+      margin-bottom: 25px;
+    }
+
+    &-sale-comment {
+      margin-bottom: 10px;
+      @include font-style(18,26,500);
+      color: $color-f00;
+    }
+
+    &-price {
+      margin-bottom: 20px;
+      @include font-style(24,24,bold);
+
+      span {
+        @include font-style(18,24,normal);
+      }
+
+      #{$this}-price-sale {
+        color: $color-f00;
+      }
+    }
+
+    &-text {
+      @include font-style(16,32);
+    }
+
+    &-formblock {
+      display: flex;
+      align-items: center;
+
+      p {
+        @include font-style(16,32,500);
+        margin-right: 20px;
+        word-break: keep-all;
+        max-width: 40%;
+      }
+      
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+
+      .c-select {
+        width: 100%;
+      }
+
+      .c-select__inner {
+        width: 100%;
+      }
+    }
+
+    &-quantity {
+
+      align-items: end;
+      margin-top: 12px;
+
+      input {
+        width: 8vw;
+        max-width: 120px;
+        min-width: 80px;
+        text-align: center;
+        @include font-style(24,24,500);
+      }
+
+      span {
+        margin-left: 18px;
+        @include font-style(22,38);
+      }
+    }
+
+    &-buy {
+      padding-top: 20px !important;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: start;
+
+      .p-product-detail__base-button:only-child {
+        width: 100%;
+      }
+    }
+
+    &-cart button {
+      padding-inline: 20px;
+      width: 26vw;
+      min-width: 270px;
+      max-width: 300px;
+    }
+
+    &-notcart {
+      text-align: center;
+
+      .c-button {
+        width: 20vw;
+        min-width: 270px;
+        max-width: 400px;
+        cursor: default;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &-contact {
+      
+      color: $color-primary;
+      @include font-style(15,24);
+
+      svg {
+        fill: $color-primary;
+        width: 22px;
+        margin: 8px 10px 2px 0;
+      }
+
+    }
+
+    &-sub-button {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      padding-inline: 5px;
+
+      button {
+        margin-left: auto;
+      }
+
+      .p-product-detail__base-contact:only-child {
+        text-align: center;
+        margin-inline: auto;
+      }
+    }
+
+
+    @include media(sm) {
+
+      grid-template-columns: 1fr;
+      gap: vwset(72);
+      margin-bottom: vwset(50);
+
+      // ページャーを表示させない時
+      &.is-notPagenation {
+        gap: vwset(30);
+      }
+
+      // noimageの時
+      &.is-noimage {
+        gap: vwset(7);
+      }
+
+
+      &-detail {
+        margin-inline: vwset(20);
+      }
+  
+      &-unit {
+  
+        + #{$this}-unit {
+          margin-top: vwset(20);
+          padding-top: vwset(20);
+        }
+      }
+  
+      &-icon {
+  
+        .c-product__item-icon {
+          margin-bottom: vwset(20);
+        }
+  
+        .c-product__item-icon span {
+          // min-width: vwset(78);
+          // margin: 0 vwset(5) vwset(5) 0;
+        }  
+      }
+  
+      &-name {
+        @include font-sp-style(18,24);
+        margin-bottom: vwset(15);
+      }
+
+      &-sale-comment {
+        margin-bottom: vwset(5);
+        @include font-sp-style(16,30);
+      }
+
+      &-price {
+        margin-bottom: vwset(20);
+        @include font-sp-style(20,26);
+  
+        span {
+          @include font-sp-style(15,26);
+        }
+      }
+
+      &-text {
+        @include font-sp-style(15,28);
+      }
+
+      &-formblock {
+
+        flex-direction: column;
+        align-items: start;
+
+        p {
+          @include font-sp-style(15,30,500);
+          margin-right: 0;
+          margin-bottom: vwset(5);
+          max-width: inherit;
+        }
+
+        select,
+        input {
+          margin-bottom: vwset(5); // 区切り線との余白調整のため
+        }
+        
+        &:not(:first-child) {
+          margin-top: vwset(15);
+        }
+      }
+  
+      &-quantity {
+        flex-direction: row;
+        margin-top: 0;
+        align-items: end;
+  
+        input {
+          width: vwset(80);
+          min-width: vwset(80);
+          margin-bottom: 0;
+          @include font-sp-style(18,24,500);
+        }
+  
+        span {
+          margin-left: vwset(10);
+          @include font-sp-style(16,26);
+        }
+      }
+  
+      &-buy {
+        padding-top: vwset(10) !important;
+        flex-direction: column;
+      }
+  
+      &-button {
+        margin-inline: auto;
+      }
+
+      &-cart button {
+        min-width: 300px;
+        width: vwset(320);
+        margin-top: vwset(25);
+      }
+
+      &-notcart {
+        min-width: 300px;
+        width: vwset(320);
+      }
+
+  
+      &-contact {
+
+        @include font-sp-style(15,24);
+  
+        svg {
+          width: vwset(20);
+          margin: vwset(8) vwset(10) vwset(2) 0;
+        }
+      }
+  
+      &-sub-button {
+        margin-top: vwset(15);
+      }
+
+    }
+  }
+
+  &-exam {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: -28px; //  メモ：必ず最後に検索項目がはいるなら入れる
+
+    @include media(sm) {
+      margin-top: vwset(20);
+      margin-bottom: vwset(-20); //  メモ：必ず最後に検索項目がはいるなら入れる
+    }
+  }
+
+  &-sns {
+    margin-block: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ul {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    li {
+      list-style: none;
+
+      img {
+        padding: 0 10px;
+        width: auto;
+        height: 34px;
+      }
+    }
+
+    a {
+      &:hover {
+        @include media(lg) {
+          img {
+            opacity: .5;
+          }
+        }
+      }
+    }
+
+    img {
+      transition: opacity $comMS $comES;
+    }
+
+    @include media(sm) {
+      margin-block: vwset(40);
+
+      ul {
+        margin-left: vwset(10);
+
+        li {
+
+          img {
+            height: vwset(30);
+          }
+
+        }
+      }
+    }
+
+  }
+
+  // 在庫
+  &__stock {
+
+    div {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      min-width: 100%;
+      margin-bottom: 1px; // iOS tableの下線が表示されないバグ対策
+
+      th,
+      td {
+        border: solid 1px #e4e4e4;
+        padding: 10px;
+        text-align: center;
+        white-space: nowrap;
+
+        &.none,
+        &.few {
+          color: $color-f00;
+        }
+      }
+
+      thead {
+
+        th,
+        td {
+          @include font-style(14, 19, bold);
+        }
+      }
+
+      tbody {
+
+        th,
+        td {
+          @include font-style(12, 18, 400);
+        }
+      }
+    }
+
+    @include media(sm) {
+
+      div {
+        margin-top: vwset(20);
+      }
+
+      table {
+
+        th,
+        td {
+          padding: vwset(15);
+        }
+      }
+    }
+  }
+  
+  // templete 
+  .l-footer {
+    margin-top: 80px;
+
+    @include media(sm) {
+      margin-top: vwset(20);
+    }
+  }
+
+  // page-back
+  &__page-back {
+    @include width(100%, 40px, vwset(10));
+    margin-block: -40px 20px;
+    text-align: right;
+  
+    @media screen and (max-width: 1300px) {
+      margin-right: 20px;
+    }
+
+    a {
+      @include font-style(14,16);
+      position: relative;
+
+      &::before {
+        content: "";
+        display: block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin: 2px 10px 0 0;
+        @include icon('arrow-left', '333333');
+        background-color: $color-orange-lightGray;
+        background-size: 4px 7px;
+        background-position: center center;
+      }
+    }
+
+    @include media(sm) {
+      margin-block: vwset(-11) vwset(18);
+
+      a {
+        @include font-sp-style(12,16);
+      }
+    }
+
+  }
+
+
+  // overview
+  &__overview {
+
+    margin-bottom: 70px;
+
+    // detailFree1 aboutTest
+    .detailFree1-aboutTest {
+
+      &__contents + .detailFree1-aboutTest__contents {
+        margin-top: 60px;
+      }
+
+      &__title {
+        margin-bottom: 28px;
+        padding-block: 28px;
+        border-top: solid 1px $color-e6;
+        border-bottom: solid 1px $color-e6;
+        @include font-style(16, 32, bold);
+      }
+
+      &__subtitle {
+        margin-bottom: 18px;
+        @include font-style(18, 26, 500);
+      }
+
+      &__lead {
+        @include font-style(16, 32);
+      }
+
+      &__unit {
+        padding: 38px 40px;
+        border: solid 1px $color-ccc;
+        background: $color-fff;
+        border-radius: 4px;
+        @include font-style(15, 30, normal);
+
+        &-inner {
+          &:not(:first-child) {
+            margin-top: 38px;
+          }
+        }
+
+        &-title {
+          margin-bottom: 10px;
+          @include font-style(16, 32, bold);
+
+          &--margin-l {
+            margin-bottom: 15px;
+          }
+        }
+
+        &-memo {
+          @include font-style(14, 24);
+        }
+
+        p + p,
+        dl + p {
+          margin-top: 25px;
+        }
+
+        li {
+          text-indent: -1.3rem;
+          padding-left: 1.6rem;
+      
+          &::before {
+            content: "・";
+            margin-right: 5px;
+          }
+        }
+      }
+
+
+    }
+
+    // detailFree1 formList
+    .detailFree1-formList {
+      display: flex;
+      border-top: solid 1px $color-ccc;
+
+      &:last-of-type {
+        border-bottom: 1px solid $color-ccc;
+      }
+
+      dt {
+        display: flex;
+        min-width: 200px;
+        background-color: $color-orange-lightGray;
+      }
+
+      dt,dd  {
+        padding: 16px;
+        @include font-style(15, 30, normal);
+
+        span {
+          color: $color-ccc;
+        }
+      }
+    }
+
+    // detailFree1-attention
+    .detailFree1-attention {
+
+      @include font-style(15, 30);
+
+      &__unit-inner {
+        &:not(:first-child) {
+          margin-top: 38px;
+        }
+      }
+
+      &__title {
+        padding: 22px 40px;
+        background: $color-bbb;
+        @include font-style(18, 25, bold);
+        color: $color-fff;
+      }
+
+      &__subtitle {
+        margin-bottom: 15px;
+        @include font-style(18, 24, 500);
+      }
+
+      &__contents {
+        padding: 30px 40px;
+        background: $color-orange-lightGray;
+      }
+
+      p + .detailFree1-aboutTest__unit {
+        margin-top: 25px;
+      }
+
+    }
+
+    @include media(sm) {
+
+      margin: vwset(-30) vwset(20) vwset(50);
+
+      // detailFree1 aboutTest
+      .detailFree1-aboutTest {
+
+        &__contents + .detailFree1-aboutTest__contents {
+          margin-top: vwset(30);
+        }
+
+        &__title {
+          margin-bottom: vwset(20);
+          padding-block: vwset(20);
+          @include font-sp-style(15, 30);
+        }
+
+        &__subtitle {
+          margin-bottom: vwset(18);
+          @include font-style(16, 24);
+        }
+
+        &__lead {
+          @include font-sp-style(15, 30);
+        }
+
+        &__unit {
+          padding: vwset(25) vwset(20);
+          @include font-sp-style(14, 28);
+
+          &-inner {
+            &:not(:first-child) {
+              margin-top: vwset(25);
+            }
+          }
+
+          &-title {
+            margin-bottom: vwset(10);
+            @include font-sp-style(15, 30);
+
+            &--margin-l {
+              margin-bottom: vwset(15);
+            }
+          }
+
+          &-memo {
+            @include font-sp-style(13, 24);
+          }
+
+          p + p,
+          dl + p {
+            margin-top: vwset(15);
+          }
+        }
+
+
+      }
+
+      // detailFree1 formList
+      .detailFree1-formList {
+        display: block;
+
+        dt {
+          min-width: 100%;
+          width: 100%;
+        }
+
+        dt,dd  {
+          padding: vwset(13) vwset(10);
+          @include font-sp-style(14, 26, normal);
+        }
+      }
+
+      // detailFree1-attention
+      .detailFree1-attention {
+
+        @include font-sp-style(14, 26);
+
+        &__unit-inner {
+          &:not(:first-child) {
+            margin-top: vwset(25);
+          }
+        }
+
+        &__title {
+          padding: vwset(13) vwset(15);
+          @include font-sp-style(16, 24);
+        }
+
+        &__subtitle {
+          margin-bottom: vwset(10);
+          @include font-style(15, 30);
+        }
+
+        &__contents {
+          padding: vwset(28) vwset(15);
+        }
+
+        p + .detailFree1-aboutTest__unit {
+          margin-top: vwset(20);
+        }
+
+      }
+
+
+      // margin-bottom: vwset(50);
+
+
+  
+      // &-contents {
+      //   + #{$this}-contents {
+      //     margin-top: vwset(20);
+      //   }
+      // }
+  
+      // &-main {
+      //   border-bottom: none;
+  
+      //   dl {
+      //     display: block;
+      //     border-top: none;
+      //   }
+  
+      //   dt {
+      //     padding: vwset(15);
+      //     @include font-sp-style(16,20,bold);
+      //   }
+  
+      //   dd {
+      //     padding: vwset(15) vwset(15) vwset(25);
+      //     @include font-sp-style(15,27);
+      //   }
+  
+      //   p + #{$this}-icon,
+      //   p + p {
+      //     margin-top: vwset(15);
+      //   }
+      // }
+  
+      // &-icon {
+
+      //   &--detail,
+      //   &--brand {
+        
+      //     ul {
+      //       gap: vwset(10);
+      //     }
+  
+      //     img {
+      //       height: vwset(40);
+      //     }
+      //   }
+
+      //   &--wash {
+        
+      //     ul {
+      //       gap: vwset(15);
+      //     }
+  
+      //     img {
+      //       height: vwset(34);
+      //     }
+      //   }
+      // }
+
+      // &-banner {
+      //   margin-inline: vwset(30);
+      // }
+    }
+
+  }
+
+
+  // viewed
+  // &__viewed {
+  //   padding-bottom: 85px;
+  //   overflow: hidden;
+  //   background-color: $color-orange-lightGray;
+
+  //   &-inner {
+  //     position: relative;
+  //   }
+
+  //   .c-product-swiper {
+  //     @include media(lg) {
+  //       margin-inline: 60px;
+  //     }
+  //   }
+
+  //   .swiper-slide {
+  //     background: $color-fff;
+
+  //     @include media(lg) {
+  //       width: 240px;
+  //       margin-right: 8px;
+  //       padding: 20px 20px 25px;
+
+  //       &:last-child {
+  //         margin-right: 0;
+  //       }
+  //     }
+  //   }
+
+  //   .swiper-wrapper {
+  //     display: grid;          // 余白の高さを揃える
+  //     grid-auto-flow: column; // 余白の高さを揃える
+  //   }
+
+  //   .swiper-button-prev,
+  //   .swiper-button-next {
+  //     top: 50%;
+  //   }
+
+  //   &-delete {
+  //     @include media(lg) {
+  //       position: absolute;
+  //       top: 0;
+  //       right: 0;
+  //     }
+
+  //     a {
+  //       width: 130px;
+  //     }
+  //   }
+
+  //   @include media(sm) {
+  //     padding-bottom: vwset(50);
+
+  //     .c-product-swiper {
+  //       margin: 0 0 0 3.86vw;
+  //     }
+
+  //     .swiper-slide {
+  //       width: 49vw;
+  //       margin-inline: 0 3.86vw;
+  //       padding: vwset(20) vwset(15) vwset(25);
+  //     }
+
+  //     &-delete {
+  //       margin-top: vwset(30);
+  //       text-align: center;
+
+  //       a {
+  //         width: vwset(123);
+  //       }
+  //     }
+
+  //   }
+
+  // }
+
+  // related  ※viewed とほぼ同じ
+  &__related,
+  &__viewed,
+  &__favorite {
+    padding-bottom: 70px;
+    overflow: hidden;
+    border-top: solid 1px $color-e6;
+
+    &-inner {
+      position: relative;
+    }
+
+    .c-product-swiper {
+      margin-inline: 0;
+    }
+    
+    .swiper-slide {
+      background: $color-fff;
+
+      @include media(lg) {
+        width: 210px;
+        margin-right: 37px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .swiper-wrapper {
+      display: grid;          // 余白の高さを揃える
+      grid-auto-flow: column; // 余白の高さを揃える
+      justify-content: flex-start;
+    }
+
+    @media screen and (min-width: 1200px) {
+      .swiper-button-prev,
+      .swiper-button-next {
+        display: none;
+      }
+    }
+
+    &-delete {
+
+      @include media(lg) {
+        position: absolute;
+        top: 10px;
+        right: 0;
+      }
+
+      a {
+        @include font-style(15,24);
+        color: $color-bbb;
+      }
+
+      span {
+        display: inline-grid;
+        place-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: solid 2px $color-ccc;
+        margin-left: 10px;
+      }
+
+      svg {
+        width: 12px;
+        height: 12px;
+        fill: $color-ccc;
+        stroke-width: 1px;
+        stroke: $color-ccc;
+      }
+    }
+
+    &-more {
+      @include media(lg) {
+        position: absolute;
+        top: 10px;
+        right: 0;
+      }
+
+      svg {
+        width: 18px;
+        fill: $color-70;
+        margin-top: 1px;
+        margin-right: 9px;
+      }
+
+      a {
+        border-color: $color-bbb;
+        color: $color-333;
+        font-weight: normal;
+        padding: 0 30px;
+        line-height: 16px;
+      }
+    }
+
+
+    @include media(sm) {
+      padding-bottom: vwset(60);
+  
+      .c-product-swiper {
+        margin: 0 0 0 3.86vw;
+        margin: 0 0 0 5.33vw;
+      }
+
+      .swiper-slide {
+        width: 56vw;
+        margin-inline: 0 5.33vw;
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        display: none;
+      }
+
+      &-delete {
+        margin: vwset(-20) vwset(20) vwset(20) auto;
+        text-align: right;
+      }
+
+      &-more {
+        margin: vwset(-20) vwset(20) vwset(20) auto;
+        text-align: right;
+
+        svg {
+          width: vwset(17);
+          margin-top: vwset(2);
+          margin-right: vwset(8);
+        }
+
+        a {
+          padding: 0 vwset(17);
+          @include font-sp-style(14,18);
+        }
+      }
+
+
+    }
+
+
+  }
+
+  // favorite & sellswell
+  // &__favorite,
+  // &__sellswell {
+  //   padding-bottom: 85px;
+
+  //   &-inner {
+  //     position: relative;
+  //   }
+
+  //   .c-product-swiper {
+  //     margin-inline: 0;
+  //   }
+    
+  //   .swiper-slide {
+  //     margin-right: 5%;
+
+  //     &:last-child {
+  //       @include media(lg) {
+  //         margin-right: 0;
+  //       }
+  //     }
+  //   }
+
+  //   @media screen and (min-width: 1600px) {
+  //     .swiper-button-prev,
+  //     .swiper-button-next {
+  //       display: none;
+  //     }
+  //   }
+
+  //   &-more {
+  //     @include media(lg) {
+  //       position: absolute;
+  //       top: 0;
+  //       right: 0;
+  //     }
+
+  //     svg {
+  //       width: 19px;
+  //       fill: $color-bbb;
+  //       margin-top: 1px;
+  //       margin-right: 9px;
+  //     }
+
+  //     a {
+  //       border-color: $color-bbb;
+  //       color: $color-333;
+  //       font-weight: normal;
+  //       padding: 0 30px;
+  //       line-height: 16px;
+  //     }
+  //   }
+
+
+  //   @include media(sm) {
+  //     padding-bottom: vwset(50);
+  
+  //     .c-product-swiper {
+  //       margin: 0 0 0 6.4vw;
+  //     }
+
+  //     .swiper-slide {
+  //       width: 45.3vw;
+  //       margin-inline: 0 7.73vw;
+  //     }
+
+  //     .swiper-button-prev,
+  //     .swiper-button-next {
+  //       display: none;
+  //     }
+
+  //     &-more {
+  //       margin-top: vwset(30);
+  //       text-align: center;
+
+  //       svg {
+  //         width: vwset(17);
+  //         margin-top: vwset(2);
+  //         margin-right: vwset(8);
+  //       }
+
+
+  //       a {
+  //         padding: 0 vwset(17);
+  //         @include font-sp-style(14,18,bold);
+  //       }
+  //     }
+
+  //   }
+
+  // }
+
+
+
+}
+

@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  l-hamburger
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+@include media(sm) {
+
+  .l-hamburger {
+    $this: &;
+
+    &__close {
+      background: $color-fff;
+      display: grid;
+      place-items: center;
+      width: vwset(40);
+      height: vwset(40);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(#999, .2);
+      border: solid 1px $color-orange-lightGray;
+      position: absolute;
+      right: vwset(18);
+      top: vwset(15);
+      z-index: 950;
+
+      span {
+        width: vwset(22);
+        height: vwset(2);
+        border-radius: 999px;
+        background-color: $color-000;
+        position: absolute;
+        transform-origin: center;
+
+        &:nth-of-type(1) {
+          top: calc(50% - #{vwset(2)} / 2);
+          transform: rotate(-315deg);
+        }
+
+        &:nth-of-type(2) {
+          bottom: calc(50% - #{vwset(2)} / 2);
+          transform: rotate(315deg);
+        }
+      }
+    }
+
+    &__closebutton {
+      margin: vwset(40) auto vwset(50);
+      text-align: center;
+    }
+
+    &__back {
+      background-color: $color-fff;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: $comMS $comES;
+      will-change: opacity;
+      z-index: 800;
+
+      .is-nav-active & {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    &__container {
+      background-color: $color-fff;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      overflow-y: auto;
+      position: fixed;
+      transition: $comMS $comES;
+      z-index: 900;
+
+      .is-nav-active & {
+        opacity: 1;
+        visibility: visible;
+      }
+
+    }
+
+    &__button {
+      margin: vwset(65) vwset(20) vwset(20);
+    }
+
+    &__unit-gray {
+      padding: vwset(30) vwset(20);
+      background-color: $color-orange-lightGray;
+    }
+
+    &__unit {
+      // padding: vwset(30) 0 vwset(40);
+      // border-bottom: solid 5px $color-orange-lightGray;
+    }
+
+
+
+  }
+
+}

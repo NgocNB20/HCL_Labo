@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>処理履歴一覧｜受注管理</title>
+	<script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="order">
+<div id="searchOrder" class="l-mainwrap">
+	<!-- side -->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:object="${orderProcessHistoryModel}">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">処理履歴一覧</h1>
+						<h1 class="c-pagetitle_h1" th:text="*{'受注番号「' + orderCode + '」'}"></h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div class="l-section">
+						<div class="l-article">
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<h2 class="c-pagetitle_h3">処理履歴</h2>
+									<table id="search_result" class="c-tbl mt20">
+										<thead>
+										<tr>
+											<th class="times w200px">処理日時</th>
+											<th class="w100px">処理種別</th>
+											<th>担当者</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="item: *{processHistoryModelItems}">
+											<td class="times">
+												<a th:href="@{/order/details/historydetails/(orderCode=*{orderCode},orderVersionNo=${item.orderVersionNo})}" th:text="${#date.convert(item.processTime, 'yyyy/MM/dd HH:mm:ss')}"></a>
+											</td>
+											<td>
+												<a th:href="@{/order/details/historydetails/(orderCode=*{orderCode},orderVersionNo=${item.orderVersionNo})}" th:text="${item.processType.label}"></a>
+											</td>
+											<td>
+												<a th:href="@{/order/details/historydetails/(orderCode=*{orderCode},orderVersionNo=${item.orderVersionNo})}" th:text="${item.processPersonName}"></a>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/order/details/(orderCode=*{orderCode},md=list)}"><i class="material-icons navigate_before"></i>戻る</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer -->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

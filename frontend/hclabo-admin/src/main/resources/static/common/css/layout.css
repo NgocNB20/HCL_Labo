@@ -1,0 +1,622 @@
+@charset "UTF-8";
+
+/*-----------------------------------------------------------
+index:
+	Box Model
+	Header
+	Footer
+	Global Nav
+	Topic Path
+	System Error
+	Only Admin Top
+	2Columns Frame
+	Login Frame
+-----------------------------------------------------------*/
+
+/* Box Model
+---------------------------------------------------- */
+body {
+	padding-bottom: 20px;
+}
+
+#layout,
+#globalNav {
+	/* width: expression(document.body.clientWidth < 1056? "1050px" : "auto"); */
+	min-width : 1281px;
+}
+
+#container {
+	position: relative;
+	z-index: 1;
+	padding: 30px 10px 40px 10px;
+	background: url(@app.complement.url@/images/bg_main.gif) top left repeat-x;
+}
+#contents {
+}
+#header {
+	height: 63px;
+	border-bottom: 1px solid #3D5563;
+	background: url(@app.complement.url@/images/bg_header.gif) top left repeat-x;
+	overflow: hidden;
+}
+#footer {
+	padding-top: 28px;
+	border-top: 1px solid #B1C9D7;
+	background: url(@app.complement.url@/images/bg_footer.gif) top left repeat-x;
+}
+#globalNav {
+	height: 34px;
+	background: #0C1216;
+}
+#topicPath {
+}
+
+/* Header
+---------------------------------------------------- */
+#header h1 {
+	float: left;
+	height: 63px;
+	width: 298px;
+}
+#header #headerTool {
+	float: right;
+	width: 267px;
+}
+#header #nowDate {
+	height: 23px;
+	width: 267px;
+	background: url(@app.complement.url@/images/bg_powerdby.gif) top left no-repeat;
+}
+#header #nowDate p {
+	padding: 6px 0 0 45px;
+	margin: 0;
+	font-size: 10px;
+	color: #C2D4DD;
+	line-height: 11px;
+}
+#header #toolNav {
+	height: 21px;
+	margin: 8px 0 0 178px;
+}
+#header #toolNav ul {
+	margin: 0;
+}
+#header #toolNav li {
+	float: left;
+	margin: 0;
+	font-size: 10px;
+	line-height: 15px;
+	list-style: none;
+}
+#header #toolNav li a {
+	color: #FFFFFF;
+}
+#header #toolNav li.admin {
+	height: 16px;
+	padding: 3px 15px 0 20px;
+	background: url(@app.complement.url@/images/icon/admin.gif) left center no-repeat;
+}
+#header #toolNav li.help {
+	height: 16px;
+	padding: 3px 15px 0 20px;
+	background: url(@app.complement.url@/images/icon/help.gif) left center no-repeat;
+}
+#header #toolNav li.logout {
+	height: 21px;
+	width: 77px;
+}
+
+#header #passwordWarning {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 33px;
+    float: right;
+    color: white;
+}
+
+#header #changePassword {
+    margin-top: 18px;
+    margin-left: 70px;
+}
+#header #goIndex-h {
+    color: white;
+}
+
+
+
+/* Footer
+---------------------------------------------------- */
+#footer p {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 1;
+	text-align: center;
+}
+#footer p#logo-hitmall {
+	margin-top: 15px;
+}
+
+/* Global Nav
+---------------------------------------------------- */
+#globalNav ul,
+#globalNav li {
+	margin: 0;
+	list-style: none;
+}
+#globalNav ul {
+	padding-left: 20px;
+}
+#globalNav ul li {
+	position: relative;
+	float: left;
+}
+#globalNav ul li a {
+	padding: 4px 27px 0 25px;
+	color: #C2D4DD;
+	line-height: 30px;
+	text-decoration: none;
+	display: block;
+	background: url(@app.complement.url@/images/bg_globalnav.gif) top right no-repeat;
+}
+#globalNav ul li.over a {
+	color: #37454E;
+	background: url(@app.complement.url@/images/bg_globalnav_ov.gif) 0 0 repeat-x;
+}
+#globalNav ul li.active a {
+	color: #37454E;
+	background: url(@app.complement.url@/images/bg_globalnav_o.gif) 0 0 repeat-x;
+}
+#globalNav ul li.separate a {
+	border-bottom: #000000 solid 2px;
+}
+#globalNav ul li ul {
+	position: absolute;
+	left: 0;
+	padding: 0 0 2px 0;
+	visibility: hidden;
+	z-index: 100;
+	background: url(@app.complement.url@/images/bg_accordion_bt.gif) left bottom repeat-x;
+}
+#globalNav ul li ul li {
+	float: none;
+	display: list-item;
+}
+#globalNav ul li ul li a {
+	width: 162px;
+	padding: 0 0 0 20px;
+	color: #2C5267;
+	line-height: 28px;
+	display: block;
+	background: url(@app.complement.url@/images/bg_accordion.gif) 0 0 no-repeat !important;
+}
+#globalNav ul li ul li a:hover {
+	color: #000000;
+	background: url(@app.complement.url@/images/bg_accordion_o.gif) 0 0 no-repeat !important;
+}
+
+/* Local Nav
+---------------------------------------------------- */
+#localNav {
+	width: 172px;
+	padding-bottom: 188px;
+	background: url(@app.complement.url@/images/localnav_bt.gif) left bottom no-repeat;
+}
+#localNav ul,
+#localNav li {
+	margin: 0;
+	list-style: none;
+}
+#localNav li {
+	display: inline;
+}
+#localNav li a {
+	padding: 15px 5px 14px 22px;
+	line-height: 1.1;
+	display: block;
+	background: url(@app.complement.url@/images/bg_localnav.gif) 0 0 no-repeat;
+}
+#localNav li a:hover,
+#localNav li.active a {
+	background: url(@app.complement.url@/images/bg_localnav_o.gif) 0 0 no-repeat;
+}
+
+/* Local Sub Nav
+---------------------------------------------------- */
+#localSubNav {
+	padding: 6px 5px 0 20px;
+	margin-bottom: 0px;
+	background: url(@app.complement.url@/images/bg_localsubnav.gif) 0 0 repeat-x;
+}
+#localSubNav ul,
+#localSubNav li {
+	margin: 0;
+}
+#localSubNav li {
+	float: left;
+	padding: 0 8px;
+	margin-right: 10px;
+	border: 1px solid #999999;
+	line-height: 27px;
+	background: #B1C9D7;
+	list-style: none;
+}
+#localSubNav li a {
+	color: #FFFFFF;
+}
+#localSubNav li.on {
+	border-bottom: 1px solid #FFFFFF;
+	background: #FFFFFF;
+}
+#localSubNav li.on a {
+	color: #0E7FC7;
+}
+
+/* System Message
+---------------------------------------------------- */
+#mainContents ul.processMes {
+	margin: 10px 0 6px 0;
+	padding: 10px 6px 6px 6px ;
+	background-color: #E8F2FE;
+}
+
+
+/* System Error
+---------------------------------------------------- */
+
+/* Only Admin Top
+---------------------------------------------------- */
+#admin-top {
+	width: 100%;
+}
+#admin-top #mainContents,
+#admin-top #sideBar {
+	vertical-align: top;
+}
+#admin-top #mainContents form {
+	text-align: right;
+}
+#admin-top #oftenUsed {
+	width: 328px;
+	padding: 14px 11px;
+	background: url(@app.complement.url@/images/bg_oftenused.gif) 0 0 no-repeat;
+}
+#admin-top #oftenUsed h4 {
+	margin: 0;
+	border: none;
+}
+#admin-top #oftenUsed ul,
+#admin-top #oftenUsed li {
+	margin: 0;
+	list-style: none;
+}
+#admin-top #oftenUsed ul {
+	margin: 0 9px;
+}
+#admin-top #oftenUsed li {
+	float: left;
+	width: 140px;
+	padding-left: 13px;
+	margin: 14px 0 0 0;
+	background: url(@app.complement.url@/images/icon/arrow_3.gif) 0 3px no-repeat;
+}
+#admin-top #sideBar {
+	width: 250px;
+	padding: 20px 0 0 24px;
+}
+#admin-top #rightMenu {
+	background: #E2EAF0;
+}
+#admin-top #rightMenu h2 {
+	padding: 5px 0 12px 0;
+	margin: 0 15px;
+	border: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #587788;
+	line-height: normal;
+	background: none;
+}
+#admin-top #rightMenu h3 {
+	padding: 0 9px;
+	margin: 0 15px;
+	border: none;
+	color: #FFFFFF;
+	line-height: 26px;
+	background: url(@app.complement.url@/images/rightmenu_h3.gif) 0 0 no-repeat;
+}
+#admin-top #rightMenu h4 {
+	border-bottom: 1px solid #829BAC;
+	line-height: 19px;
+}
+#admin-top #rightMenu ul,
+#admin-top #rightMenu li {
+	margin: 0;
+	list-style: none;
+}
+#admin-top #rightMenu #tp {
+	height: 13px;
+	background: url(@app.complement.url@/images/rightmenu_tp.gif) 0 0 no-repeat;
+}
+#admin-top #rightMenu #bt {
+	height: 13px;
+	background: url(@app.complement.url@/images/rightmenu_bt.gif) 0 0 no-repeat;
+}
+#admin-top #rightMenu #shortCut {
+	padding: 6px 0 0 0;
+	margin-bottom: 25px;
+	background: url(@app.complement.url@/images/rightmenu_sc.gif) 0 0 repeat-x;
+}
+#admin-top #rightMenu #shortCut ul {
+	padding: 0 0 6px 0;
+	background: url(@app.complement.url@/images/rightmenu_sc.gif) left bottom repeat-x;
+}
+#admin-top #rightMenu #shortCut li {
+	margin: 0 20px;
+	line-height: 1.5;
+}
+#admin-top #rightMenu div.shopInfo {
+	padding: 10px 20px 10px 12px;
+	margin: 0 15px;
+	background: url(@app.complement.url@/images/rightmenu_si_bg.gif) 0 0 repeat-x;
+}
+#admin-top #rightMenu div.shopInfo ul {
+	margin: 0;
+}
+#admin-top #rightMenu div.shopInfo ol {
+	margin: 10px 0 15px 0;
+}
+#admin-top #rightMenu div.shopInfo ul li {
+	padding-left: 13px;
+	margin: 5px 0;
+	line-height: 1.5;
+	background: url(@app.complement.url@/images/icon/arrow_2.gif) 0 5px no-repeat;
+}
+#admin-top #rightMenu div.shopInfo ol li {
+	padding-left: 18px;
+	margin: 5px 0;
+	line-height: 1.5;
+}
+#admin-top #rightMenu div.shopInfo ol li.no1 {
+	background: url(@app.complement.url@/images/icon/no_1.gif) 0 3px no-repeat;
+}
+#admin-top #rightMenu div.shopInfo ol li.no2 {
+	background: url(@app.complement.url@/images/icon/no_2.gif) 0 3px no-repeat;
+}
+#admin-top #rightMenu div.shopInfo ol li.no3 {
+	background: url(@app.complement.url@/images/icon/no_3.gif) 0 3px no-repeat;
+}
+#admin-top #rightMenu div.shopInfo ol li.no4 {
+	background: url(@app.complement.url@/images/icon/no_4.gif) 0 3px no-repeat;
+}
+#admin-top #rightMenu div.shopInfo ol li.no5 {
+	background: url(@app.complement.url@/images/icon/no_5.gif) 0 3px no-repeat;
+}
+
+
+/* 2Columns Frame
+---------------------------------------------------- */
+#col2Frame {
+	width: 100%;
+}
+#col2Frame #mainContents,
+#col2Frame #sideBar {
+	vertical-align: top;
+}
+#col2Frame #sideBar {
+	width: 172px;
+	padding-right: 15px;
+	min-width: 172px;
+	white-space: nowrap;
+}
+#col2Frame #sideBar h3 {
+	padding: 8px 10px 15px 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+	line-height: normal;
+	background: url(@app.complement.url@/images/localnav_tp.gif) 0 0 no-repeat;
+}
+
+/* Login Frame
+---------------------------------------------------- */
+#login #layout {
+	width: auto;
+	padding: 60px 0 90px 0;
+	min-width: 0;
+	border-top: 18px solid #222D34;
+	text-align: center;
+}
+#login #container {
+	width: 280px;
+	padding: 0;
+	margin: 0 auto;
+	text-align: left;
+	background: none;
+}
+#login #container p#logo {
+	margin: 0;
+}
+#login #container #loginBox #top,
+#login #container #loginBox #btm {
+	height: 5px;
+	font-size: 0;
+}
+#login #container #loginBox #top {
+	background: url(@app.complement.url@/images/login/bg_top.gif) 0 0 no-repeat;
+}
+#login #container #loginBox #btm {
+	background: url(@app.complement.url@/images/login/bg_btm.gif) 0 0 no-repeat;
+}
+#login #container #loginBox #wrap {
+	width: 240px;
+	padding: 20px 20px 40px 20px;
+	background: #EEF5F8;
+}
+#login #container dl {
+	margin-top: 30px;
+}
+#login #container dt {
+	font-weight: bold;
+	line-height: 1.5;
+}
+#login #container dd {
+	margin-bottom: 15px;
+}
+#login #container dd input {
+	width: 224px;
+	padding: 9px 7px;
+	border: 1px solid #999999;
+	font-size: 14px;
+}
+#login #container #inputError {
+	margin: 30px 0;
+}
+#login #container #inputError ul,
+#login #container #inputError li {
+	margin: 0;
+	list-style: none;
+}
+#login #container #inputError li {
+	font-weight: bold;
+	color: #CC0000;
+	line-height: 1.5;
+}
+#login #container #inputWarn {
+	margin: 30px 0;
+}
+#login #container #inputWarn ul,
+#login #container #inputWarn li {
+	margin: 0;
+	list-style: none;
+}
+#login #container #inputWarn li {
+	font-weight: bold;
+	line-height: 1.5;
+}
+#login #container #inputInfo {
+	margin: 30px 0;
+}
+#login #container #inputInfo ul,
+#login #container #inputInfo li {
+	margin: 0;
+	list-style: none;
+}
+#login #container #inputInfo li {
+	font-weight: bold;
+	line-height: 1.5;
+}
+#login #container p#btn {
+	margin: 0;
+	text-align: right;
+}
+#login #container p#back {
+	padding-left: 13px;
+	margin: 14px 0 0 0;
+	line-height: normal;
+	background: url(@app.complement.url@/images/icon/arrow_3.gif) 0 3px no-repeat;
+}
+
+/* Edit Detail Area
+---------------------------------------------------- */
+#container .editInner,
+#container .editInner2,
+#container .editInner3 {
+	background-color: #F1F5F8;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+	padding: 2px 20px 30px 20px;
+}
+
+#container .editInner2,
+#container .editInner3 {
+	border-top: 1px solid #999;
+}
+
+#container .editInner3 {
+	border-bottom: 1px solid #999;
+}
+
+#container .detailInner {
+	border: 1px solid #CCC;
+	padding: 10px 20px 30px 20px;
+}
+
+/* Option
+---------------------------------------------------- */
+#container .addButton {
+	margin-top: 8px;
+}
+
+/* Error フロントのコピー
+---------------------------------------------------- */
+.inputError {
+	padding: 15px 15px 13px 38px;
+	margin: 8px 0 10px 0;
+	background: #FFF0F0 url(@app.complement.url@/images/error.gif) 15px 15px no-repeat;
+}
+.inputError ul,
+.inputError li {
+	margin: 0;
+	list-style: none;
+}
+.inputError li {
+	font-weight: bold;
+	color: #FF0000;
+	line-height: 1.5;
+}
+
+.errorPart {
+	background: #fff991 !important;
+}
+
+/* Warn フロントのコピー
+---------------------------------------------------- */
+.inputWarn {
+	padding: 15px 15px 13px 38px;
+	margin: 8px 0 10px 0;
+	background: #FFFF99;
+}
+.inputWarn ul,
+.inputWarn li {
+	margin: 0;
+	list-style: none;
+}
+.inputWarn li {
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+/* Info フロントのコピー
+---------------------------------------------------- */
+.inputInfo {
+	padding: 15px 15px 13px 38px;
+	margin: 8px 0 10px 0;
+	background: #E8F2FE;
+}
+.inputInfo ul,
+.inputInfo li {
+	margin: 0;
+	list-style: none;
+}
+.inputInfo li {
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+.attention {
+	font-size: 17px;
+	font-weight: bold;
+	color: #FF4400;
+}
+
+.error_mg {
+	font-size: 12px;
+	text-align: left;
+	color: #FF4400;
+}
+
+.upload_btn_message {
+	position:absolute;
+	margin-top : 10px;
+	margin-left : 10px;
+}

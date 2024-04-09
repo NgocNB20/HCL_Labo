@@ -1,0 +1,366 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+  # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  ### Spring Web/MVC用プロパティファイル
+  # --------------------
+  # サーバポート
+  # --------------------
+  port: ${SERVER_PORT:8081}
+  servlet:
+    # --------------------
+    # サーバコンテキストパス
+    # --------------------
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/admin}
+    # --------------------
+    # サーブレットセッションタイムアウト
+    # --------------------
+    session:
+      timeout: 15m
+  # Thymeleaf用コンテキストパス
+  # HTML上のリンク式記述（"@{/images}"）が絶対パス始まりだった場合に、
+  # 以下文字列を自動的に先頭に付与してくれる
+  contextPath: ${CONTEXT_PATH:/admin}
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  # ファイル（CSV・ZIP等）アップロード時の制御
+  servlet:
+    multipart:
+      max-request-size: 201MB
+      max-file-size: 201MB
+  mvc:
+    async:
+      request-timeout: '-1'
+  ### Thymeleaf用プロパティファイル
+  # テンプレートキャッシュは行わない（html修正が即画面反映される）
+  thymeleaf:
+    cache: 'false'
+    render-hidden-markers-before-checkboxes: 'true'
+  sleuth:
+    # ログにユニークIDのコンフィグレーション
+    enabled: 'true'
+    sampler:
+      rate: 10
+      probability: 1.0
+    async:
+      # ログにユニークIDのコンフィグレーション
+      enabled: 'false'
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  # spring.mvc.async.request-timeout=3m
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: false
+    sender:
+      type: web
+    base-url:
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+## 補完するURL
+# アプリケーション
+app:
+  complement:
+    url: /admin
+########### Spring設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 分析サービス
+base-path-analytics-service: ${BASE_PATH_ANALYTICS_SERVICE}
+# 物流サービス
+base-path-logistic-service: ${BASE_PATH_LOGISTIC_SERVICE}
+# 受注サービス
+base-path-order-service: ${BASE_PATH_ORDER_SERVICE}
+# 決済サービス
+base-path-payment-service: ${BASE_PATH_PAYMENT_SERVICE}
+# 販売企画サービス
+base-path-price-planning-service: ${BASE_PATH_PRICE_PLANNING_SERVICE}
+# 商品サービス
+base-path-product-service: ${BASE_PATH_PRODUCT_SERVICE}
+# プロモーションサービス
+base-path-promotion-service: ${BASE_PATH_PROMOTION_SERVICE}
+# ショップ管理サービス
+base-path-shop-management-service: ${BASE_PATH_SHOP_MANAGEMENT_SERVICE}
+# ユーザーサービス
+base-path-user-service: ${BASE_PATH_USER_SERVICE}
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: ${BASE_PATH_CUSTOMIZE_SERVICE}
+# Log用プロパティファイル
+logging:
+  config: classpath:config/hitmall/log/logback-pr.xml
+# 運営者　ログイン用
+# アカウントロックされるまでのログイン失敗回数
+# ここの設定回数失敗するとロックする
+# 設定値は99以下の数字であること
+# 　⇒ 会員テーブルのログイン失敗回数の桁数が2桁のため
+#
+# 0に設定すると、アカウントロック機能は無効になる
+admin:
+  account:
+    lock:
+      count: '6'
+## 集計用リンク決済ID
+aggregation:
+  pay:
+    id:
+      linkpayment: '9999'
+async:
+  ## 非同期処理設定
+  # 【参考】スレッド設定の流れ ====================================
+  #    [corePoolSize]までThreadを作る
+  #    [corePoolSize]が一杯になると[queueCapacity]までキューイングする
+  #    [queueCapacity]を越えると[maxPoolSize]までThreadを増やす
+  #    [maxPoolSize]を越えるとrejectされる
+  # ========================================================
+  executor:
+    max:
+      pool:
+        size: '25'
+    thread:
+      name:
+        prefix: AsyncTask-
+    core:
+      pool:
+        size: '25'
+    queue:
+      capacity: '25'
+# 無料お支払い決済方法SEQ
+# 初期登録データの決済方法SEQと同じ値を設定
+free:
+  settlement:
+    method:
+      seq: '5000'
+#サイト判定用
+# HTypeSiteType#ADMIN_SITE_PATH
+hTypeSiteType:
+  site:
+    path: admin
+# 静的なresourcesはSecurityチェック対象外とする
+quad:
+  static:
+    resource: /assets/**,/common/**,/images/**
+# 参照ファイル
+static:
+  complement:
+    url: /admin
+## テンプ相対パス(HTMLで表示する場合に利用)
+tmp:
+  path: /tmp
+##サイトURL
+web:
+  site:
+    url: https://minken.hc-labo.co.jp/
+# オーソリ保持期間（日）
+authory:
+  hold:
+    period: '60'
+## トップカテゴリID
+category:
+  id:
+    top: top
+# 特集ページURL (ヘッダー、フッターあり、サイドメニューなし)
+contents:
+  url:
+    pc: https://minken.hc-labo.co.jp/special?fkey={0}&menu=no
+## クーポンコード
+coupon:
+  code:
+    cant:
+      recycle:
+        ## クーポンコードが再利用不可能期間（日）
+        ## クーポン終了後、そのクーポンが利用できない期間を設定する。
+        ## 期間を短くした場合、集計誤差が発生する可能性がある。
+        term: '0'
+    usable:
+      character: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_
+  # 全額クーポン決済方法SEQ
+  # 初期登録データの決済方法SEQと同じ値を設定
+  settlement:
+    method:
+      seq: '3000'
+# 関連商品
+goods:
+  search:
+    multi:
+      code:
+        ## 複数番号（複数番号検索用）選択肢区切り文字
+        divchar: "\r\n|\r|\n"
+        ## 商品検索条件
+        ## 商品複数番号検索用最大件数
+        maxcount: '1000'
+  # 関連商品最大設定数
+  relation:
+    amount: '10'
+#会員でない顧客の名称
+guest:
+  firstname: !!binary |-
+    w6PCgsK/w6PCg8Ktw6PCgsKm
+  lastname: !!binary |-
+    w6PCgsKyw6PCgsK5w6PCg8KI
+## ニュースURL
+#　URL入力制限（絶対パス・相対パス入力有効）
+# 絶対パス指定時、http://,https://のみの入力は不可
+# 相対パス指定時、パスの始まりに/ショップ識別子/必須
+news:
+  url:
+    validatePattern: (https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+|/@shopId@/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]*)
+## 受注
+order:
+  search:
+    order:
+      code:
+        list:
+          ## 受注番号（複数番号検索用）検索できる番号の最大数
+          length: 100
+          ## 受注検索条件
+          ## 受注番号（複数番号検索用）選択肢区切り文字
+          divchar: "\r\n|\r|\n"
+## ショップSEQ
+shopseq: '1001'
+## サイドメニュー登録種別
+###「0」：重複登録 ･･･ メニュー上、同一カテゴリーを複数登録できる
+###「1」：一意登録 ･･･ メニュー上、カテゴリーは１つだけ登録できる
+side-menu:
+  regist:
+    type: '0'
+# 特集ページURL (ヘッダー、フッター、サイドメニューあり)
+special:
+  url:
+    pc: https://minken.hc-labo.co.jp/special?fkey={0}
+# 特集ページURL (ヘッダー、フッター、サイドメニューなし)
+topic:
+  url:
+    pc: https://minken.hc-labo.co.jp/special?fkey={0}&menu=no&header=no&footer=no
+goodsimage:
+  # デザイン画像アップロード先絶対パス
+  d_images:
+    directory: /app/public_html/d_images
+  # 商品画像
+  # 商品グループ詳細画像最大枚数
+  max:
+    count: '10'
+  # 商品画像アップロード先絶対パス
+  input:
+    directory: /app/common/g_images_input
+  # 商品画像ファイル名区切り文字
+  name:
+    separator: _
+images:
+  path:
+    ## 商品画像相対パス(HTML・JSONで表示する場合に利用)
+    goods: /admin
+    goods.resize:
+      # パターン②の高解像度：商品詳細の大画像（2倍）
+      p2x2: /resize/p2x2
+      # パターン①の高解像度：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像（2倍）
+      p1x2: /resize/p1x2
+      # パターン①：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像
+      p1: /resize/p1
+      # パターン②：商品詳細の大画像
+      p2: resize/p2
+    ## カテゴリ画像相対パス(HTMLで表示する場合に利用)
+    category: /d_images/category
+real:
+  images:
+    path:
+      # 商品画像アップロード先絶対パス
+      goods: /app/public_html/g_images
+      ## カテゴリ画像絶対パス(画像を配置する場合に利用)
+      category: /app/public_html/d_images/category
+  tmp:
+    ## テンプ絶対パス(テンプファイルを配置する場合に利用)
+    ## 対象 各種画像ファイル/CSVファイルなど
+    path: /app/common/tmp
+## 新着商品画像の表示期間
+## 登録されている期間からこの日数を経過するまでが期間になる。
+whatsnew:
+  view:
+    days: '7'
+auto:
+  ## クーポンコード自動生成設定
+  ##　自動生成するクーポンコードの桁数
+  generation:
+    coupon:
+      code:
+        length: '10'
+  ## カテゴリー入力
+  ## カテゴリー種別は自動の場合、条件項目ー条件式ー条件値の最大件数
+  category:
+    condition:
+      items:
+        length: '60'
+settlement:
+  ## クレジットカード利用可能最大金額
+  amount:
+    max:
+      credit: '9999999'
+  ## クレジット支払期限猶予日数
+  payment:
+    term:
+      day:
+        credit: '30'
+# 非同期処理対象ファイル出力パス
+batch:
+  file:
+    path: /app/common/tmp
+## CSVダウンロードパス
+orderCsvAsynchronous:
+  file:
+    path: /app/common/download/order/
+## CSVダウンロードパス
+orderSalesCsvAsynchronous:
+  file:
+    path: /app/common/download/ordersales/
+## CSVダウンロードパス
+shipmentCsvAsynchronous:
+  file:
+    path: /app/common/download/shipment/
+## CSVダウンロードパス
+soldGoodsCsvAsynchronous:
+  file:
+    path: /app/common/download/soldgoods/
+mail:
+  # メール送信開始期間（日）
+  send:
+    start:
+      period: '14'
+########### HIT-MALL独自設定 ###########
+########### 外部サービス ###########
+gmo:
+  # GMOショップ管理画面リンク(リンク決済の受注キャンセル時の作業メッセージに利用)
+  shop:
+    management:
+      link: https://kt01.mul-pay.jp/mulpayconsole/shop/tshop00065388/
+# Facebook 利用する/しない(true/false)
+facebook:
+  use: 'true'
+  app:
+    id:
+# Line 利用する/しない(true/false)
+line:
+  use: 'true'
+twitter:
+  # Twitter 利用する/しない(true/false)
+  use: 'true'
+  # Twitter アカウント名
+  via:
+########### 外部サービス ###########

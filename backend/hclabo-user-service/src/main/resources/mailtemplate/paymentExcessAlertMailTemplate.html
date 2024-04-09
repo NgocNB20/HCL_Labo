@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+	<title>入金過不足アラート</title>
+</head>
+<body>
+<div>
+	<div th:if="${overFlag}">
+		<span th:text="${systemName} + ' で入金超過を検知しました。'"></span>
+	</div>
+	<div th:if="${!overFlag}">
+		<span th:text="${systemName} + ' で入金不足を検知しました。'"></span>
+	</div>
+	<br>
+	<div>
+		<span>以下の受注をご確認ください。</span>
+	</div>
+	<div>
+		<span>※詳細はGMOショップ管理サイトをご確認ください。。</span>
+	</div>
+	<br>
+	<div>
+		<span>【受注】</span>
+	</div>
+	<div th:each="orderCode, stat : ${orderCodeList}">
+		<span th:text="' 受注番号：' + ${orderCode}"></span>
+	</div>
+	<br>
+	<div>
+		<span>以上</span>
+	</div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

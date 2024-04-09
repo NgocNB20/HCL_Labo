@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="mypage">
+	<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+		<!-- main -->
+		<main class="l-page" th:object="${memberHistoryModel}">
+			<div class="l-breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+				<div class="l-breadcrumbs__inner">
+					<div class="l-breadcrumbs__list">
+						<div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem">
+						    <span class="l-breadcrumbs__link">
+						        <a property="item" typeof="WebPage" title="TOP" th:href="@{/}">TOP</a>
+							    <meta property="position" content="1">
+							</span>
+						</div>
+						<div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem">
+						    <span class="l-breadcrumbs__link">
+						        <a property="item" typeof="WebPage" title="マイページ" th:href="@{/member/}">マイページ</a>
+							    <meta property="position" content="2">
+							</span>
+						</div>
+						<div class="l-breadcrumbs__item" property="itemListElement" typeof="ListItem">
+						    <span class="l-breadcrumbs__current">注文履歴</span>
+							<meta property="position" content="3">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="l-container">
+			    <div class="l-container__inner">
+			        <div th:replace="~{include/sidemenumember :: sidemenumember('history')}"></div>
+			        <div class="l-main">
+                        <h2 class="c-title-page p-mypage__title-page"><strong>注文履歴</strong></h2>
+						<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+							<ul th:each="message : ${allMessages}">
+								<li th:utext="${message}"></li>
+							</ul>
+						</div>
+						<div class="c-history-list c-margin--m c-margin--inline-m">
+						    <p class="c-text--m">注文いただいた履歴を表示します。<br>「詳細を見る」を押すと注文の詳細情報をご確認いただけます。<br>また該当するご注文情報が見つからない場合は窓口までお問い合わせください。</p>
+						    <!-- TODO: ～件中～件目が無い #46 -->
+						    <div class="c-history-list__area c-margin--m">
+
+                                <th:block id="isOrderHistoryEmpty" th:if="*{isOrderHistoryEmpty()}">
+                                    <div class="l-complete">
+                                        <div class="l-complete__inner">
+                                            <p class="l-complete__title">現在、ご注文履歴はございません。</p>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+						        <th:block th:each="item : *{orderHistoryItems}">
+						            <div class="c-history-list__block c-margin--xs">
+                                        <div class="c-history-list__status">
+                                            <!-- TODO: 準備中と入金確認中の色が逆？ #46 -->
+                                            <th:block th:switch="${item.statusValue}">
+                                        	    <div th:case="0" class="c-label-status c-label-status--orange"><p class="c-text--s" th:text="${item.status}"></p></div>
+                                        	    <div th:case="1" class="c-label-status c-label-status--secondary"><p class="c-text--s" th:text="${item.status}"></p></div>
+                                        	    <div th:case="2" class="c-label-status c-label-status--black"><p class="c-text--s" th:text="${item.status}"></p></div>
+                                        	    <div th:case="3" class="c-label-status c-label-status--black"><p class="c-text--s" th:text="${item.status}"></p></div>
+                                            </th:block>
+                                            <div class="c-history-list__button">
+                                                <a class="c-button c-button--primary c-button--width-s" th:href="@{/member/history/detail(ocd=${item.ocd})}">詳細を見る</a>
+                                            </div>
+                                        </div>
+                                        <div class="c-history-list__description">
+                                            <dl class="c-history-list__description-list">
+                                                <dt class="desc__title">ご注文日：</dt>
+                                                <dd class="desc__text" th:text="${#date.convert(item.orderTime, 'yyyy/MM/dd HH:mm')}"></dd>
+                                            </dl>
+                                            <dl class="c-history-list__description-list">
+                                                <dt class="desc__title">ご注文番号：</dt>
+                                                <dd class="desc__text" th:text="${item.orderCode}"></dd>
+                                            </dl>
+                                            <dl class="c-history-list__description-list">
+                                                <dt class="desc__title">お支払い合計（税込）：</dt>
+                                                <!-- TODO: 他では「円」表記なのにここだけ「￥」なのはあってる？ #46 -->
+                                                <dd class="desc__text" th:text="'¥' + ${#number.convert(item.orderPrice)}"></dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+						        </th:block>
+                            </div>
+                        </div>
+						<th:block id="isNotOrderHistoryEmpty-1" th:if="*{!isOrderHistoryEmpty()}">
+							<div class="p-search__count">
+								全 <span class="p-search__count-sum"><th:block th:text="*{pageInfo.total}"></th:block></span> 件
+							</div>
+							<span class="c-pagination--page is-current" th:replace="~{include/pager::pager1(url='/member/history/')}"></span>
+						</th:block>
+                    </div>
+			    </div>
+			</div>
+		</main>
+		<div th:replace="~{include/footer}" ></div>
+	</div>
+	<script src="/assets/js/bundle.js" defer="defer"></script>
+
+
+</body></html>

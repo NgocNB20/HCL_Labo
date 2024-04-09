@@ -1,0 +1,62 @@
+<div class="p-order-confirm__summary c-margin--inline-m" th:fragment="submitFrom(current,name)">
+    <div class="p-order-confirm__button l-lg">
+        <button type="button" class="c-button c-button--primary c-button--width-m" th:attr="onclick=|doSubmitForm('${current}')|" >
+            <p th:text="${name}"></p>
+        </button>
+    </div>
+
+    <div class="p-order-confirm__cart-title c-margin--l"><h3>ご注文内容</h3></div>
+
+    <div th:if="${salesSlip}" class="p-order-confirm__cart-contents">
+        <div class="p-order-confirm__cart-unit">
+            <dl>
+                <dt>商品合計 <small>（税抜）</small></dt>
+                <dd><span th:remove="tag" th:text="${salesSlip.itemSalesPriceTotal eq null ? '―' : #number.convert(salesSlip.itemSalesPriceTotal)}"></span> <span>円</span></dd>
+            </dl>
+            <dl>
+                <dt>配送料 <small>（税抜）</small></dt>
+                <dd><span th:remove="tag" th:text="${salesSlip.carriage == null ? '―' : #number.convert(salesSlip.carriage)}"></span> <span>円</span></dd>
+            </dl>
+            <dl>
+                <dt>手数料 <small>（税抜）</small></dt>
+                <dd><span th:remove="tag" th:text="${salesSlip.commission == null ? '―' : #number.convert(salesSlip.commission)}"></span> <span>円</span></dd>
+            </dl>
+            <dl>
+                <dt>消費税</dt>
+                <dd><span th:remove="tag" th:text="${salesSlip.taxPrice eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.taxPrice)}"></span> <span>円</span></dd>
+            </dl>
+        </div>
+        <div class="p-order-confirm__cart-unit p-order-confirm__cart-unit--tax">
+            <dl>
+                <dt>
+                    <div>10% 対象</div>
+                    <div><span th:remove="tag" class="lb" th:text="${salesSlip.standardTaxTargetPrice eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.standardTaxTargetPrice)}"></span> <span>円</span></div>
+                </dt>
+                <dd><span th:remove="tag" class="value" th:text="${salesSlip.standardTax eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.standardTax)}"></span> <span>円</span></dd>
+            </dl>
+            <dl>
+                <dt>
+                    <div>8% 対象</div>
+                    <div><span th:remove="tag" th:text="${salesSlip.reducedTaxTargetPrice eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.reducedTaxTargetPrice)}"></span> <span>円</span></div>
+                </dt>
+                <dd><span th:remove="tag" class="value" th:text="${salesSlip.reducedTax eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.reducedTax)}"></span> <span>円</span></dd>
+            </dl>
+        </div>
+
+    <div th:if="${salesSlip.isDisplayCouponDiscount()}" class="discount">
+        <div class="lb" th:text="${salesSlip.couponName}"></div>
+        <div class="price">- ¥<span th:text="${#number.convert(salesSlip.couponPaymentPrice)}"></span></div>
+    </div>
+        <div class="p-order-confirm__cart-unit p-order-confirm__cart-unit--sum">
+            <dl>
+                <dt>お支払い額</dt>
+                <dd><span th:remove="tag" class="value" th:text="${salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.billingAmount)}"></span> <span>円</span></dd>
+            </dl>
+        </div>
+    </div>
+    <script>
+        function doSubmitForm(current) {
+            $('#'+current).click();
+        }
+    </script>
+</div>

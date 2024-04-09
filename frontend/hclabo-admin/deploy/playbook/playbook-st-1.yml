@@ -1,0 +1,37 @@
+---
+- hosts: web # Inventoryとして定義されたリモートホスト（granadaサーバ）
+  vars:
+    ansible_become: yes
+    ansible_become_method: sudo
+
+  tasks:
+    - name: hclabo-admin-jar-copy
+      copy:
+        src: ../../target/hclabo-admin-4.0.0-SNAPSHOT.jar
+        dest: /data/hitmall/hclabo/apps/admin
+        mode: '0755'
+    - name: dockerfile-copy
+      copy:
+        src: ../Dockerfile
+        dest: /data/hitmall/hclabo/apps/admin
+        mode: '0755'
+    - name: start-shell-copy
+      copy:
+        src: ../start.sh
+        dest: /data/hitmall/hclabo/apps/admin
+        mode: '0755'
+    - name: env-file-copy
+      copy:
+        src: ../.env
+        dest: /data/hitmall/hclabo/apps/admin
+        mode: '0755'
+    - name: hclabo-admin-start
+      shell: ./start.sh .env
+      args:
+        chdir: /data/hitmall/hclabo/apps/admin
+    - name: unused-docker-images-delete
+      shell: |
+        docker system prune -a -f
+        docker system prune --volumes -f
+      args:
+        chdir: /data/hitmall/hclabo/apps/admin

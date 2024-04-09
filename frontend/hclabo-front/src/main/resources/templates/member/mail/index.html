@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+    <div class="l-mainwrap">
+        <div th:replace="~{include/header}"></div>
+
+        <main class="l-page">
+            <div th:replace="~{include/header_mypage::headermypage('mail')}"></div>
+
+                <div class="l-container">
+                <div class="l-container__inner">
+                    <div th:replace="~{include/sidemenumember :: sidemenumember('mail')}"></div>
+
+                    <div class="l-main">
+                        <h2 class="c-title-page p-mypage__title-page"><strong>メールアドレスの変更</strong></h2>
+                        <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                            <ul th:each="message : ${allMessages}">
+                                <li th:utext="${message}"></li>
+                            </ul>
+                        </div>
+                        <form id="indexForm" th:action="@{/member/mail/}" th:object="${memberMailModel}" method="post">
+                            <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+                              入力内容をご確認ください。
+                            </div>
+                            <div class="l-form">
+                                <div class="l-form__area">
+                                    <p class="c-text--m">変更されるメールアドレスを下の入力欄に入力していただき、「変更する」ボタンを押してください。</p>
+                                    <dl class="l-form__list c-margin--s">
+                                        <dt>現在のメールアドレス</dt>
+                                        <dd>
+                                            <p class="c-text--m" th:text="*{memberInfoMail}"></p>
+                                        </dd>
+                                    </dl>
+                                    <dl class="l-form__list">
+                                        <dt>
+                                            <span>新しいメールアドレス <br class="l-lg"><span class="l-form__list-memo">（半角英数字）</span></span><span class="c-require">必須</span>
+                                        </dt>
+                                        <dd>
+                                            <input id="memberInfoNewMail" type="email" th:field="*{memberInfoNewMail}" th:errorclass="field-error" class="c-input c-input--width-l" autocomplete="email" placeholder="ここに入力してください" maxlength="160">
+                                            <div th:if="${#fields.hasErrors('memberInfoNewMail')}" th:errors="*{memberInfoNewMail}" class="c-field-error"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="c-button-wrap p-mypage__button-wrap">
+                                <button name="doOnceMailAddressSendConfirm" type="submit" class="c-button c-button--primary c-button--width-m">変更する</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <div th:replace="~{include/footer}" ></div>
+    </div>
+    <script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body></html>

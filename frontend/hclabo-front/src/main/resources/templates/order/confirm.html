@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+  <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-order p-order-confirm">
+<div class="l-mainwrap">
+  <div th:replace="~{include/header-small}"></div>
+  <!--/* main */-->
+  <main class="l-page">
+    <div class="l-section">
+      <div class="l-section__inner">
+        <h2 class="c-title-page"><strong>ご注文内容の確認</strong></h2>
+        <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+          <ul th:each="message : ${allMessages}">
+            <li th:utext="${message}"></li>
+          </ul>
+        </div>
+        <div id="isOrderMessage" th:if="${orderMessages}" class="inputError">
+		  <span id="orderMessageItems" th:each="message : ${orderMessages}">
+		    <ul>
+		    <li><span id="message" th:utext="${message}" style="color:red;" ></span></li>
+		    </ul>
+		  </span>
+        </div>
+        <div class="c-margin--inline-m">
+          <p class="c-text--m">ご注文内容を確認の上「注文を確定する」ボタンを押してください。<br/>
+            ご注文の返品・キャンセルについては、<a th:href="@{/guide/order#anchor02}" target="_blank" rel="noopener noreferrer" class="c-inlinelink">こちら</a>をご覧ください。</p>
+          <p class="c-text--m c-margin--xs">商品のお届け予定日にかかわらず、一番遅い発送予定日にまとめて発送いたします。お急ぎの場合は、個別にご注文ください。</p>
+        </div>
+        <form id="confirmForm" th:action="@{/order/confirm}" th:object="${confirmModel}" method="post">
+          <div class="p-order-confirm__contents">
+            <div class="p-order-confirm__detail c-margin--inline-m">
+              <div class="p-order-confirm__list">
+                <dl>
+                  <dt class="p-order-confirm__list-title"><h3>お届け先住所</h3></dt>
+                  <dd class="p-order-confirm__list-detail">
+                    <th:block th:if="*{!isAddressSelected}">
+                        <span class="c-text--note">お届け先住所を選択してください</span>
+                    </th:block>
+                    <th:block th:if="*{isAddressSelected}">
+                      <span th:text="*{addressName+', '+addressKana}" th:remove="tag"></span><br>
+                      <span th:text="'〒' + *{#strings.substring(addressZipCode,0,3)} + '-' + *{#strings.substring(addressZipCode,3,7)}" th:remove="tag"></span><br>
+                      <span th:text="*{address}" th:remove="tag"></span><br>
+                      <span th:text="*{addressTel}" th:remove="tag"></span>
+                      <div class="c-margin--xs">
+                        <span th:utext="*{addressShippingMemo eq null} ? '' : 'ご配送メモ: ' + *{#pre.convert(addressShippingMemo)}" th:remove="tag"></span>
+                      </div>
+                    </th:block>
+                  </dd>
+                  <dd class=" p-order-confirm__list-button">
+                    <th:block th:if="*{!isAddressSelected}">
+                      <a class="c-button c-button--primary c-button--width-s" th:href="@{/order/addressselect}">選 択</a>
+                    </th:block>
+                    <th:block th:if="*{isAddressSelected}">
+                      <a class="c-button c-button--primary-line c-button--width-s" th:href="@{/order/addressselect}">変 更</a>
+                    </th:block>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt class="p-order-confirm__list-title"><h3>ご配送方法</h3></dt>
+                  <dd class="p-order-confirm__list-detail">
+                    <th:block th:if="*{#strings.isEmpty(deliveryMethodName)}">
+                      <span class="c-text--note">ご配送方法を選択してください</span>
+                    </th:block>
+                    <th:block th:if="*{!#strings.isEmpty(deliveryMethodName)}">
+                      <span th:text="*{deliveryMethodName}" th:remove="tag"></span>
+                    </th:block>
+                    <br>
+                    <th:block th:if="*{!#strings.isEmpty(deliveryMethodName)}">
+                      <th:block th:if="*{isExistsDeliveryDate()}">お届け希望日: <span th:text="*{deliveryDate}" th:remove="tag"></span><br/></th:block>
+                      <th:block th:if="*{!isExistsDeliveryDate()}">お届け希望日: 指定なし<br/></th:block>
+                      <th:block th:if="*{isExistsDeliveryTime()}">お届け時間帯: <span th:text="*{deliveryTime}" th:remove="tag"></span></th:block>
+                      <th:block th:if="*{!isExistsDeliveryTime()}">お届け時間帯: 指定なし</span></th:block>
+                      <br>
+                    </th:block>
+                  </dd>
+                  <dd class=" p-order-confirm__list-button">
+                    <th:block th:if="*{#strings.isEmpty(deliveryMethodName)}">
+                      <a class="c-button c-button--primary c-button--width-s" th:href="@{/order/shipselect}">選 択</a>
+                    </th:block>
+                    <th:block th:if="*{!#strings.isEmpty(deliveryMethodName)}">
+                      <a class="c-button c-button--primary-line c-button--width-s" th:href="@{/order/shipselect}">変 更</a>
+                    </th:block>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt class="p-order-confirm__list-title"><h3>お支払い方法</h3></dt>
+                  <dd class="p-order-confirm__list-detail">
+                    <th:block th:if="*{#strings.isEmpty(settlementMethodName)}">
+                      <span class="c-text--note">お支払い方法を選択してください</span>
+                    </th:block>
+                    <th:block th:if="*{!#strings.isEmpty(settlementMethodName)}">
+                      <span th:text="*{settlementMethodName}" th:remove="tag"></span>
+                    </th:block>
+                    <th:block th:if="*{isCreditType}">
+                      <div class="c-text--s c-margin--xs p-order-confirm__list-credit">
+                        <th:block th:if="*{registedCardMaskNo != null && newCardMaskNo == null}">
+                          カード番号：<span th:text="*{registedCardMaskNo}" th:remove="tag"></span>
+                        </th:block>
+                        <th:block th:if="*{newCardMaskNo != null}">
+                          カード番号：<span th:text="*{newCardMaskNo}" th:remove="tag"></span>
+                        </th:block>
+                        <br>有効期限 ： <span th:text="*{expirationDateMonth}" th:remove="tag"></span>月 ／ <span th:text="*{expirationDateYear}" th:remove="tag"></span>年
+                        <th:block th:if="*{securityCode != null}">
+                          <br>セキュリティコード：<span th:text="*{#mask.convert(securityCode)}" th:remove="tag"></span>
+                        </th:block>
+                        <!--/* トークン未利用でセキュリティコードがない場合(保存カード利用時) */-->
+                        <th:block th:if="*{!isToken() && securityCode == null}">
+                          <br>セキュリティコード：
+                          <input class="c-input c-input--error" th:field="*{securityCode}" maxlength="4" size="4" title="セキュリティコード" th:errorclass="field-error" type="text" inputmode="numeric" id="securityCode" name="securityCode" style="border:1px solid #707070;border-radius: 3px;">
+                          <span th:if="${#fields.hasErrors('securityCode')}" th:errors="*{securityCode}" class="c-field-error"></span>
+                        </th:block>
+                        <div th:if="${#fields.hasErrors('expirationDateYear')}" th:errors="*{expirationDateYear}" class="c-field-error"></div>
+                        <br>ご利用方法 ： <span th:text="*{#enumtype.getLabel('HTypePaymentType', paymentType)}" th:remove="tag"></span>
+                        <th:block th:if="*{isDividedPaymentType()}">
+                          <br>お支払い回数 ： <span th:text="*{paymentFrequency}" th:remove="tag"></span>&nbsp;回
+                        </th:block>
+                      </div>
+                    </th:block>
+                    <p th:utext="*{paymentNote}" class="c-text--s"></p>
+                  </dd>
+                  <dd class="p-order-confirm__list-button">
+                    <th:block th:if="*{#strings.isEmpty(settlementMethodName)}">
+                      <a class="c-button c-button--primary c-button--width-s" th:href="@{/order/payselect}">選 択</a>
+                    </th:block>
+                    <th:block th:if="*{!#strings.isEmpty(settlementMethodName)}">
+                      <a class="c-button c-button--primary-line c-button--width-s" th:href="@{/order/payselect}">変 更</a>
+                    </th:block>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt class="p-order-confirm__list-title"><h3>ご請求先住所</h3></dt>
+                  <th:block th:if="*{isEqualAddress}">
+                    <dd class="p-order-confirm__list-detail">
+                      <span th:text="お届け先と同じ" th:remove="tag"></span>
+                    </dd>
+                  </th:block>
+                  <th:block th:if="*{!isEqualAddress}">
+                    <dd class="p-order-confirm__list-detail">
+                      <th:block th:if="*{!isBillingSelected}">
+                        <span class="c-text--note">ご請求先住所を選択してください</span>
+                      </th:block>
+                      <th:block th:if="*{isBillingSelected}">
+                        <span th:text="*{billingName+', '+billingKana}" th:remove="tag"></span>
+                        <br><span th:text="'〒' + *{#strings.substring(billingZipCode,0,3)} + '-' + *{#strings.substring(billingZipCode,3,7)}" th:remove="tag"></span>
+                        <br><span th:text="*{billingAddress}" th:remove="tag"></span>
+                        <br><span th:text="*{billingTel}" th:remove="tag"></span>
+                      </th:block>
+                    </dd>
+                  </th:block>
+                  <dd class=" p-order-confirm__list-button">
+                    <th:block th:if="*{!isBillingSelected}">
+                      <a class="c-button c-button--primary c-button--width-s" th:href="@{/order/billingaddressselect}">選 択</a>
+                    </th:block>
+                    <th:block th:if="*{isBillingSelected}">
+                      <a class="c-button c-button--primary-line c-button--width-s" th:href="@{/order/billingaddressselect}">変 更</a>
+                    </th:block>
+                  </dd>
+                </dl>
+              </div>
+              <div class="p-order-confirm__product c-margin--l">
+                <h3 class="p-order-confirm__product-title">ご注文の商品</h3>
+                <div class="c-product c-product--orderlist c-margin--xs">
+                  <div class="c-product__item" th:each="item : *{goodsDetailDtoList}">
+                    <div class="c-product__item-inner">
+                      <div class="c-product__item-image">
+                        <img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="180" width="180" decoding="async" loading="lazy">
+                      </div>
+                      <div class="c-product__item-overview">
+                        <div class="c-product__item-group">
+                          <div class="c-product__item-description">
+                            <div class="c-product__item-title" th:text="${#strings.toString(item.taxRate) == '8' ? item.goodsGroupName + ' ※' : item.goodsGroupName}"></div>
+                            <div class="c-product__item-text">
+                              <div th:if="${item.unitTitle1}" th:remove="tag">
+                                <span th:text="${item.unitTitle1}" th:remove="tag"></span>：<span th:text="${item.unitValue1}" th:remove="tag"></span>
+                              </div>
+                              <div th:if="${item.unitTitle2}" th:remove="tag">
+                                <br>
+                                <span th:text="${item.unitTitle2}" th:remove="tag"></span>：<span th:text="${item.unitValue2}" th:remove="tag"></span>
+                              </div>
+                            </div>
+                            <div class="c-product__item-price">
+                              <span>単価：</span>
+                              <div class="c-product__item-price-unit">
+                                <span th:text="${#number.convert(item.goodsPrice)}" th:remove="tag"></span>
+                                <span>円（税抜）</span>
+                              </div>
+                            </div>
+                            <div class="c-product__item-text c-product__item-quantity">
+                              個数：<span th:text="${#number.convert(item.orderGoodsCount)}" th:remove="tag"></span>
+                            </div>
+                            <div class="c-product__item-text">
+                              お届け予定日：
+                              <span th:text="${item.deliveryType}" th:remove="tag"></span>
+                              <th:block th:if="${item.saleStartTimePC != null && item.saleEndTimePC != null}">
+                                <br>
+                                販売期間：<span th:text="${#date.convert(item.saleStartTimePC)} + '～' + ${#date.convert(item.saleEndTimePC)}" th:remove="tag"></span>
+                              </th:block>
+                              <th:block th:if="${item.saleEndTimePC != null && item.saleStartTimePC == null}">
+                                <br>
+                                販売終了日：<span th:text="${#date.convert(item.saleEndTimePC)}" th:remove="tag"></span>
+                              </th:block>
+                            </div>
+                            <div class="c-product__item-price">
+                              <span>小計：</span>
+                              <div class="c-product__item-price-unit">
+                                <span th:text="${#number.convert(item.goodsTotalPrice)}" th:remove="tag"></span>
+                                <span>円（税抜）</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="c-margin--xs c-text--xxs c-text--right">※ は軽減税率対象商品です。</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-order-confirm__summary c-margin--inline-m">
+              <nav class="l-form__sender__navigation">
+                <th:block th:if="*{isNextComplete()}">
+                  <div class="p-order-confirm__button l-lg">
+                    <button type="submit" class="c-button c-button--primary c-button--width-m" name="doOnceOrderRegist">
+                      <p>注文を確定する</p>
+                    </button>
+                  </div>
+                </th:block>
+              </nav>
+              <div class="p-order-confirm__cart-title c-margin--l">
+                <h3>ご注文内容</h3>
+              </div>
+              <div class="p-order-confirm__cart-contents">
+                <div class="p-order-confirm__cart-unit">
+                  <dl>
+                    <dt>商品合計 <small>（税抜）</small></dt>
+                    <dd>
+                      <span class="value" th:text="*{salesSlip.itemSalesPriceTotal eq null ? '―' : #number.convert(salesSlip.itemSalesPriceTotal)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>配送料 <small>（税抜）</small></dt>
+                    <dd><span class="value" th:text="*{salesSlip.carriage == null ? '―' : #number.convert(salesSlip.carriage)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>手数料 <small>（税抜）</small></dt>
+                    <dd>
+                      <span class="value" th:text="*{salesSlip.commission == null ? '―' : #number.convert(salesSlip.commission)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>消費税</dt>
+                    <dd>
+                      <span class="value" th:text="*{salesSlip.taxPrice eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.taxPrice)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="p-order-confirm__cart-unit p-order-confirm__cart-unit--tax">
+                  <dl>
+                    <dt>
+                      <div>10% 対象</div>
+                      <div>
+                        <span th:text="*{salesSlip.standardTaxTargetPrice eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.standardTaxTargetPrice)}" th:remove="tag"></span>
+                        <span>円</span>
+                      </div>
+                    </dt>
+                    <dd>
+                      <span th:text="*{salesSlip.standardTax eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.standardTax)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <div>8% 対象</div>
+                      <div>
+                        <span th:text="*{salesSlip.standardTax eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.reducedTaxTargetPrice)}" th:remove="tag"></span>
+                        <span>円</span>
+                      </div>
+                    </dt>
+                    <dd>
+                      <span th:text="*{salesSlip.reducedTax eq null or salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.reducedTax)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="p-order-confirm__cart-unit" th:if="*{salesSlip.isDisplayCouponDiscount()}">
+                  <dl>
+                    <dt>
+                      <span th:text="*{salesSlip.couponName}" th:remove="tag"></span>
+                    </dt>
+                    <dd>
+                     -
+                     <span th:text="*{#number.convert(salesSlip.couponPaymentPrice)}" th:remove="tag"></span>
+                     <span>円</span>
+                   </dd>
+                  </dl>
+                </div>
+                <div class="p-order-confirm__cart-unit p-order-confirm__cart-unit--sum">
+                  <dl>
+                    <dt>お支払い額</dt>
+                    <dd>
+                      <span class="value" th:text="*{salesSlip.billingAmount eq null ? '―' : #number.convert(salesSlip.billingAmount)}" th:remove="tag"></span>
+                      <span>円</span>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <nav class="l-orderitems__navigation">
+            <div class="c-button-wrap">
+              <div>
+                <th:block th:if="*{isNextComplete()}">
+                  <button type="submit" class="c-button c-button--primary c-button--width-l" name="doOnceOrderRegist"><p>注文を確定する</p></button>
+                  <div class="c-button-wrap__memo c-margin--s">
+                    <a th:href="@{/cart/}" class="c-textlink c-textlink--left c-text--size-s"><p>カートへ戻る</p></a>
+                  </div>
+                </th:block>
+              </div>
+            </div>
+          </nav>
+        </form>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{include/footer-small}" ></div>
+</div>
+<script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+</body></html>

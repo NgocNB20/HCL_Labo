@@ -1,0 +1,80 @@
+select
+    goodsgroup.goodsGroupSeq,
+    goodsgroup.goodsGroupCode,
+    goodsgroup.goodsGroupName,
+    goodsgroup.goodsPrice,
+    goods.individualDeliveryType,
+    goods.freeDeliveryFlag,
+    goodsgroupdisplay.deliverytype,
+    goodsgroup.goodsOpenStatusPC,
+    goodsgroup.openStartTimePC,
+    goodsgroup.openEndTimePC,
+    goodsgroup.whatsnewDate,
+    array_to_string(ARRAY(select category.categoryId from category, categorygoods where category.categorySeq = categorygoods.categorySeq AND categorygoods.goodsgroupseq = goodsgroup.goodsgroupseq ORDER BY category.categoryId), '/') as categoryGoodsSetting,
+    array_to_string(ARRAY(select category.categoryName FROM category, categorygoods WHERE category.categorySeq = categorygoods.categorySeq AND categorygoods.goodsgroupseq = goodsgroup.goodsgroupseq ORDER BY category.categoryId ), '/' ) AS categoryName,
+    goodsgroupdisplay.informationIconPC,
+    array_to_string(ARRAY[goodsgroupdisplay.goodstag], '/') as goodsTagSetting,
+    array_to_string(ARRAY(select goodsinformationicon.iconname from goodsinformationicon where goodsinformationicon.iconseq IN (select unnest(string_to_array(goodsgroupdisplay.informationIconPC, '/' ) )::int) ORDER BY goodsinformationicon.iconseq ), '/' ) AS iconName,
+    goodsgroupdisplay.searchkeyword,
+    goodsgroupdisplay.goodsNote1,
+    goodsgroupdisplay.goodsNote2,
+    goodsgroupdisplay.goodsNote3,
+    goodsgroupdisplay.goodsNote4,
+    goodsgroupdisplay.goodsNote5,
+    goodsgroupdisplay.goodsNote6,
+    goodsgroupdisplay.goodsNote7,
+    goodsgroupdisplay.goodsNote8,
+    goodsgroupdisplay.goodsNote9,
+    goodsgroupdisplay.goodsNote10,
+    goodsgroupdisplay.orderSetting1,
+    goodsgroupdisplay.orderSetting2,
+    goodsgroupdisplay.orderSetting3,
+    goodsgroupdisplay.orderSetting4,
+    goodsgroupdisplay.orderSetting5,
+    goodsgroupdisplay.orderSetting6,
+    goodsgroupdisplay.orderSetting7,
+    goodsgroupdisplay.orderSetting8,
+    goodsgroupdisplay.orderSetting9,
+    goodsgroupdisplay.orderSetting10,
+    goodsgroupdisplay.metaDescription,
+    goodsgroupdisplay.metaKeyword,
+    goodsgroupdisplay.unitManagementFlag,
+    goodsgroupdisplay.unitTitle1,
+    goodsgroupdisplay.unitTitle2,
+    goods.goodsCode,
+    goods.orderDisplay,
+    goods.janCode,
+    goods.unitValue1,
+    goods.unitValue2,
+    goods.saleStatusPC,
+    goods.saleStartTimePC,
+    goods.saleEndTimePC,
+    goods.purchasedMax,
+    goods.stockManagementFlag,
+    goodsstockdisplay.remainderFewStock,
+    goodsstockdisplay.orderPointStock,
+    goodsstockdisplay.safetyStock,
+    CASE WHEN goods.stockManagementFlag = '1' THEN goodsstockdisplay.realstock ELSE 0 END AS realstock,
+    goodsstockdisplay.orderreservestock,
+    CASE WHEN goods.stockManagementFlag = '1' THEN (goodsstockdisplay.realStock - goodsstockdisplay.orderreservestock - goodsstockdisplay.safetystock) ELSE 0 END AS salesPossibleStock,
+    array_to_string(ARRAY(select gg.goodsGroupCode from goodsrelation, goodsgroup gg where goodsrelation.goodsRelationGroupSeq = gg.goodsGroupSeq AND goodsrelation.goodsgroupseq = goodsgroup.goodsgroupseq ORDER BY goodsrelation.orderDisplay ASC), '/') as goodsRelationGoodsGroupCode,
+    goodsgroup.snsLinkFlag,
+    goodsgroup.taxRate,
+    goodsgroup.alcoholFlag,
+    goodsgroup.noveltyGoodsType
+
+from
+    GoodsGroup goodsgroup,
+    GoodsGroupDisplay goodsgroupdisplay,
+    Goods goods,
+    GoodsStockDisplay goodsstockdisplay
+where
+        goodsgroup.goodsgroupseq = goodsgroupdisplay.goodsgroupseq
+  AND goodsgroup.goodsgroupseq = goods.goodsgroupseq
+  AND goods.goodsSeq = goodsstockdisplay.goodsSeq
+/*%if goodsSeqList != null*/
+  AND goods.goodsSeq in /*goodsSeqList*/(0)
+/*%end*/
+
+/*************** sort ***************/
+order by goodsgroup.goodsGroupCode ASC, goods.goodsCode ASC

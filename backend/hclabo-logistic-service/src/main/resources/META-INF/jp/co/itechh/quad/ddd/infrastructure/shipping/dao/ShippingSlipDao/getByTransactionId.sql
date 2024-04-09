@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    SHIPPINGSLIP
+WHERE
+        TRANSACTIONID = /*transactionId*/'1001'

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+    xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>問い合わせ分類設定｜店舗管理</title>
+</head>
+
+<body id="shop">
+<div id="inquiryShop" class="l-mainwrap">
+	<!--/* side */-->
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!--/* header */-->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/inquiry/inquirygroup/}" th:object="${inquiryGroupModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">問い合わせ分類設定</h1>
+						<ul>
+							<li><button type="submit" name="doRegist" class="c-btn btn_move">問い合わせ分類登録</button></li>
+						</ul>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div th:if="${#fields.hasErrors('orderDisplay')}" class="global-error-message">
+						<ul>
+							<li th:errors="*{orderDisplay}"></li>
+						</ul>
+					</div>
+					<!-- 問い合わせ分類一覧 -->
+					<div class="l-section">
+						<article class="l-article">
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<table class="c-tbl tbl_inquirygroup_list large60">
+										<thead>
+										<tr>
+											<th class="check"></th>
+											<th class="number">#</th>
+											<th class="inquirygroup_name">問い合わせ分類名</th>
+											<th>公開状態</th>
+											<th class="btn_set">詳細設定</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="item, stat: *{resultItems}">
+											<td class="check"><label class="c-form-control"><input type="radio" name="orderDisplay" th:value="${item.orderDisplayRadio}" th:checked="${item.orderDisplayRadio} == *{orderDisplay}"><i></i></label></td>
+											<td class="number" th:text="${item.orderDisplayRadio}"></td>
+											<td class="inquirygroup_name" th:text="${item.inqueryGroupName}"></td>
+											<td th:text="${item.openStatus.label}"></td>
+											<td class="btn_set">
+												<div class="wrap_flex_center">
+													<a class="c-btn-icon" th:href="@{/inquiry/inquirygroup/registupdate(seq=${item.inquiryGroupSeq})}"><i class="edit"></i></a>
+												</div>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+									<div class="mt20 wrap_flex ai_start" th:if="*{isResult}">
+										<ul class="c-list-left list_sp5 mb10">
+											<li><button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayUp"><i class="material-icons navigate_before"></i>UP</button></li>
+											<li><button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayDown"><i class="material-icons navigate_next"></i>DOWN</button></li>
+											<li><button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayTop"><i class="material-icons first_page"></i>TOP</button></li>
+											<li><button class="c-btn-small c-btn_sort" type="submit" name="doOrderDisplayBottom"><i class="material-icons last_page"></i>BOTTOM</button></li>
+										</ul>
+										<button class="c-btn btn_regular col_left" type="submit" name="doOnceOrderDisplayUpdate">表示順を登録</button>
+									</div>
+								</div>
+							</div>
+						</article>
+					</div>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<a class="c-btn btn_back icon_left" th:href="@{/inquiry/}"><i class="material-icons navigate_before"></i>キャンセル</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--/* footer */-->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

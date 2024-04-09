@@ -1,0 +1,581 @@
+{
+	"info": {
+		"_postman_id": "f84cd11b-dd16-460c-9a28-21e484beafb0",
+		"name": "hclabo-price-planning-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "クーポン情報取得(getByCouponSeq)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByCouponSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/10000017",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"10000017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン情報取得(getByCouponSeq)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByCouponSeq-NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/11111",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"11111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン一覧取得(get)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCoupons-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.couponList).to.have.lengthOf(24);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons?page=1&limit=24&orderBy=couponId&sort=true",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons"
+					],
+					"query": [
+						{
+							"key": "couponName",
+							"value": "500円OFFクーポン",
+							"disabled": true
+						},
+						{
+							"key": "couponId",
+							"value": "coupon111501",
+							"disabled": true
+						},
+						{
+							"key": "couponCode",
+							"value": "18301118",
+							"disabled": true
+						},
+						{
+							"key": "couponStartTimeFrom",
+							"value": "2022-01-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponStartTimeTo",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponEndTimeFrom",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponEndTimeTo",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "targetGoodsCode",
+							"value": "targetGoodsCode",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "24"
+						},
+						{
+							"key": "orderBy",
+							"value": "couponId"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン一覧取得(get)-OK Have Condition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCoupons-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.couponList).to.have.lengthOf(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons?couponName=500円OFFクーポン&page=1&limit=100&orderBy=couponId&sort=true",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons"
+					],
+					"query": [
+						{
+							"key": "couponName",
+							"value": "500円OFFクーポン"
+						},
+						{
+							"key": "couponId",
+							"value": "coupon111501",
+							"disabled": true
+						},
+						{
+							"key": "couponCode",
+							"value": "18301118",
+							"disabled": true
+						},
+						{
+							"key": "couponStartTimeFrom",
+							"value": "2022-01-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponStartTimeTo",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponEndTimeFrom",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "couponEndTimeTo",
+							"value": "2013-10-01T00:00:00.000Z",
+							"disabled": true
+						},
+						{
+							"key": "targetGoodsCode",
+							"value": "targetGoodsCode",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "orderBy",
+							"value": "couponId"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポンコード採番(getCode)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getCode-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/code",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"code"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン登録(regist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.couponSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"couponId\": \"coupon11519\",\r\n  \"couponName\": \"クーポン名\",\r\n  \"couponDisplayNamePC\": \"tuan test1\",\r\n  \"couponCode\": \"x7HChWVV\",\r\n  \"couponStartTime\": \"2022-04-01\",\r\n  \"couponEndTime\": \"2022-04-01\",\r\n  \"discountPrice\": 20000,\r\n  \"discountLowerOrderPrice\": 80000,\r\n  \"useCountLimit\": 10,\r\n  \"targetGoods\": \"chocolate-01001\",\r\n  \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n  \"memo\": \"管理用メモ\",\r\n  \"administratorId\": \"demoadmin0416\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8380/promotions/coupons",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン登録(regist)-BAD REQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"couponId\": \"coupon11518\",\r\n  \"couponName\": \"クーポン名\",\r\n  \"couponDisplayNamePC\": \"tuan test regist\",\r\n  \"couponCode\": \"x7HChWVV\",\r\n  \"couponStartTime\": \"2022-04-01\",\r\n  \"couponEndTime\": \"2022-04-01\",\r\n  \"discountPrice\": 20000,\r\n  \"discountLowerOrderPrice\": 80000,\r\n  \"useCountLimit\": 10,\r\n  \"targetGoods\": \"chocolate-01001\",\r\n  \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n  \"memo\": \"管理用メモ\",\r\n  \"administratorId\": \"demoadmin0416\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8380/promotions/coupons",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン更新(updateCoupon)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.couponSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"couponVersionNo\": 1,\r\n  \"couponId\": \"coupon11519\",\r\n  \"couponName\": \"tuan test update\",\r\n  \"couponDisplayNamePC\": \"tuan test update\",\r\n  \"couponCode\": \"x7HChWVV\",\r\n  \"couponStartTime\": \"2022-05-01\",\r\n  \"couponEndTime\": \"2022-05-01\",\r\n  \"discountPrice\": 20000,\r\n  \"discountLowerOrderPrice\": 80000,\r\n  \"useCountLimit\": 10,\r\n  \"targetGoods\": \"chocolate-01001\",\r\n  \"targetMembers\": \"giang.hahuong@mail.com.vn\",\r\n  \"memo\": \"管理用メモ\",\r\n  \"administratorId\": \"demoadmin0416\",\r\n  \"preUpdateCoupon\": {\r\n    \"couponSeq\": 10000046,\r\n    \"couponVersionNo\": 1,\r\n    \"couponId\": \"coupon1115010\",\r\n    \"couponName\": \"クーポン名\",\r\n    \"couponDisplayName\": \"20000円OFFクーポン\",\r\n    \"couponCode\": \"x7HChWVV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\",\r\n    \"registTime\": \"2022-04-01\"\r\n    },\r\n  \"postUpdateCoupon\": {\r\n    \"couponSeq\": 10000046,\r\n    \"couponVersionNo\": 1,\r\n    \"couponId\": \"coupon111501\",\r\n    \"couponName\": \"tuan test 1602\",\r\n    \"couponDisplayName\": \"tuan test 1602\",\r\n    \"couponCode\": \"x7HChWVV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\",\r\n    \"registTime\": \"2022-04-01\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/10000046",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"10000046"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン更新(updateCoupon)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"couponVersionNo\": 0,\r\n  \"couponId\": \"coupon11150\",\r\n  \"couponName\": \"tuan test update\",\r\n  \"couponDisplayNamePC\": \"tuan test update\",\r\n  \"couponCode\": \"x7HChWJZaV\",\r\n  \"couponStartTime\": \"2022-01-01\",\r\n  \"couponEndTime\": \"2022-01-01\",\r\n  \"discountPrice\": 20000,\r\n  \"discountLowerOrderPrice\": 80000,\r\n  \"useCountLimit\": 10,\r\n  \"targetGoods\": \"chocolate-01001\",\r\n  \"targetMembers\": \"mail@mail.com.vn\",\r\n  \"memo\": \"管理用メモ\",\r\n  \"administratorId\": \"demoadmin0416\",\r\n  \"preUpdateCoupon\": {\r\n    \"couponSeq\": 10000063,\r\n    \"couponVersionNo\": 1,\r\n    \"couponId\": \"coupon111501\",\r\n    \"couponName\": \"クーポン名\",\r\n    \"couponDisplayName\": \"20000円OFFクーポン\",\r\n    \"couponCode\": \"x7HChWJZaV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\"\r\n    },\r\n  \"postUpdateCoupon\": {\r\n    \"couponSeq\": 10000063,\r\n    \"couponVersionNo\": 1,\r\n    \"couponId\": \"coupon111501\",\r\n    \"couponName\": \"tuan test 1602\",\r\n    \"couponDisplayName\": \"tuan test 1602\",\r\n    \"couponCode\": \"x7HChWJZaV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/1000000000",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"1000000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン更新(updateCoupon)-NOTFOUND2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.couponSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"couponVersionNo\": 3,\r\n  \"couponId\": \"coupon11519\",\r\n  \"couponName\": \"tuan test update\",\r\n  \"couponDisplayNamePC\": \"tuan test update\",\r\n  \"couponCode\": \"x7HChWVV\",\r\n  \"couponStartTime\": \"2022-05-01\",\r\n  \"couponEndTime\": \"2022-05-01\",\r\n  \"discountPrice\": 20000,\r\n  \"discountLowerOrderPrice\": 80000,\r\n  \"useCountLimit\": 10,\r\n  \"targetGoods\": \"chocolate-01001\",\r\n  \"targetMembers\": \"giang.hahuong@mail.com.vn\",\r\n  \"memo\": \"管理用メモ\",\r\n  \"administratorId\": \"demoadmin0416\",\r\n  \"preUpdateCoupon\": {\r\n    \"couponSeq\": 10000046,\r\n    \"couponVersionNo\": 3,\r\n    \"couponId\": \"coupon1115010\",\r\n    \"couponName\": \"クーポン名\",\r\n    \"couponDisplayName\": \"20000円OFFクーポン\",\r\n    \"couponCode\": \"x7HChWVV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\",\r\n    \"registTime\": \"2022-04-01\"\r\n    },\r\n  \"postUpdateCoupon\": {\r\n    \"couponSeq\": 10000046,\r\n    \"couponVersionNo\": 3,\r\n    \"couponId\": \"coupon111501\",\r\n    \"couponName\": \"tuan test 1602\",\r\n    \"couponDisplayName\": \"tuan test 1602\",\r\n    \"couponCode\": \"x7HChWVV\",\r\n    \"couponStartTime\": \"2022-04-01\",\r\n    \"couponEndTime\": \"2022-04-10\",\r\n    \"discountPrice\": 20000000000,\r\n    \"discountLowerOrderPrice\": 80000,\r\n    \"useCountLimit\": 10,\r\n    \"targetGoods\": \"chocolate-01001\",\r\n    \"targetMembers\": \"giang.hahuong@vti.com.vn\",\r\n    \"memo\": \"管理用メモ\",\r\n    \"administratorId\": \"demoadmin0416\",\r\n    \"registTime\": \"2022-04-01\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/10000046",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"10000046"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン削除(delete)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/10000042",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"10000042"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "クーポン削除(delete)-NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8380/promotions/coupons/10000000000",
+					"host": [
+						"localhost"
+					],
+					"port": "8380",
+					"path": [
+						"promotions",
+						"coupons",
+						"10000000000"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

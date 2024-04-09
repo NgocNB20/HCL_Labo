@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+  <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-guide">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('member')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>会員について</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="#anchor-guide-member01" class="js-anchor" data-scroll="">会員登録について</a>
+          <a href="#anchor-guide-member02" class="js-anchor" data-scroll="">会員情報の変更方法について</a>
+          <a href="#anchor-guide-member03" class="js-anchor" data-scroll="">メールアドレスの変更について</a>
+          <a href="#anchor-guide-member04" class="js-anchor" data-scroll="">パスワードをお忘れの方</a>
+          <a href="#anchor-guide-member05" class="js-anchor" data-scroll="">お問い合わせ一覧について</a>
+          <a href="#anchor-guide-member06" class="js-anchor" data-scroll="">お気に入りについて</a>
+          <a href="#anchor-guide-member07" class="js-anchor" data-scroll="">アドレス帳について</a>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">会員登録について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text p-guide__text--large"><strong>みんなの郵送検査室のご利用には、会員登録（無料）が必要です。<br>会員登録いただくと、アドレス帳やご注文履歴など会員限定の便利な機能がご利用いただけます。</strong></p>
+
+              <div class="p-guide__flow c-margin--m">
+                <h5 class="p-guide__flow-title"><span>STEP <em>1</em></span><strong>メールアドレスを登録する</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">みんなの郵送検査室では、メールアドレスがログインIDとなります。<br>
+                        ご利用規約をお読みいただき、同意される方は、会員登録されるメールアドレスを入力のうえ「同意して送信する」ボタンを押してください。<br>
+                        入力いただいたメールアドレス宛に会員登録用URLを送信します。</p>
+                      <div class="p-guide__title-inner c-margin--xs">メールが届かない場合は、以下の内容をご確認ください。</div>
+                      <ul class="p-guide__bullet-point">
+                        <li>ご登録メールアドレスに間違いがないか</li>
+                        <li>メールソフトの自動振り分け機能でゴミ箱フォルダー等に振り分けられてないか</li>
+                        <li>携帯電話の場合、ドメイン指定受信の設定で受信制限をかけてないか</li>
+                        <li>携帯電話で受信制限をしている場合は、各種メールが受信できるよう、携帯メールの下記ドメイン指定受信の設定をお願いします。<br>【ドメイン指定：@hc-labo.co.jp】</li>
+                      </ul>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step01-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step01-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>2</em></span><strong>仮登録</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">みんなの郵送検査室から送信される「会員登録用URLのご案内」メールに記載されている、会員登録用URLを押してください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step02-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step02-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>3</em></span><strong>お客様情報入力</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">お客様情報を入力してください。<br>
+                        ご登録いただくお客様の個人情報の利用目的および管理等の取り扱いにつきましては、「みんなの郵送検査室」ご利用規約ならびにご利用ガイド「個人情報のお取り扱いについて」に定めておりますので、必ずご確認ください。
+                      </p>
+                      <p class="p-guide__text c-margin--xs">必要事項をすべて入力して「登録内容を確認する」ボタンを押してください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step03-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step03-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>4</em></span><strong>ご登録内容確認</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">ご登録内容をご確認ください。<br>
+                        登録内容に間違いがなければ、「お客様情報を登録」ボタンを押してください。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step04-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step04-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-guide__flow c-margin--s">
+                <h5 class="p-guide__flow-title"><span>STEP <em>5</em></span><strong>会員登録完了</strong></h5>
+                <div class="p-guide__flow-contents">
+                  <div class="p-guide__column">
+                    <div class="p-guide__column-text">
+                      <p class="p-guide__text">会員登録が完了いたしました。<br>
+                        引き続きお買い物をお楽しみください。<br>
+                        登録完了のメールを、ご登録のメールアドレス宛に送信しております。</p>
+                    </div>
+                    <div class="p-guide__column-figure">
+                      <div class="p-guide__column-figure-img"><img src="/assets/images/guide/capture/img_order01-step05-01.jpg" alt="" class="l-lg"><img src="/assets/images/guide/capture/img_order01-step05-01_sp.jpg" alt="" class="l-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member02">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">会員情報の変更方法について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">すでに会員登録がお済みの方で、登録内容（パスワード・氏名・住所・電話番号等）をご変更の場合は、ページ上部の「マイページ」ボタンを押して、「お客様情報変更」画面よりご変更ください。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member03">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">メールアドレスの変更について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">メールアドレス変更ページから、新しいメールアドレスを入力していただき「変更する」ボタンを押してください。<br>
+                （この時点では変更が完了していません。）
+              </p>
+              <p class="p-guide__text c-margin--xs">新しいメールアドレスに、変更設定用URLをお送りします。そちらを押していただければ、変更が完了します。<br>
+                ※「みんなの郵送検査室」ではメールアドレスが会員様のログインIDとなります。</p>
+              <p class="p-guide__text c-margin--xs">→ メールアドレス変更は<a href="/member/mail/" class="c-textlink c-inlinelink">こちら</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member04">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">パスワードをお忘れの方</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">パスワードをお忘れの場合、パスワード再設定の手続きをお願いします。</p>
+              <p class="p-guide__text c-margin--xs">下記「パスワードをお忘れの方はこちら」を押していただき、表示されたページでご登録のメールアドレスと生年月日を入力後「送信する」を押してください。<br>
+                ご登録メールアドレスにパスワード変更用のURLを記載したメールが自動送信されますので、メール本文のURLからパスワード変更画面を表示して、ご希望のパスワードを2回入力後「設定する」を押してください。</p>
+              <p class="p-guide__text c-margin--xs">→ パスワードをお忘れの方は<a href="/reset/" class="c-textlink c-inlinelink">こちら</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member05">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">お問い合わせ一覧について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">会員のお客様は、お問合せ一覧より、お問合せの内容が確認できます。マイページの「お問合せ一覧を見る」よりご確認ください。<br>
+                ※お問合せは、お客様からのご質問、担当者からの回答などが表示される形でご確認いただけます。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member06">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">お気に入りについて</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">商品詳細ページで、「カートに入れる」ボタン下部にある「お気に入りアイテムに追加」ボタンを押すことで、会員様独自のリストとして登録することができます。<br>
+                追加されたお気に入りアイテムは商品詳細ページ下部、あるいは会員メニューのお気に入りアイテムページより選択いただき、いつでも気に入った商品にアクセスすることができます。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-member07">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">アドレス帳について</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text">あらかじめ住所録に住所を登録しておくことで、ご注文の際のお届け先入力が選択でき、簡単になります。</p>
+              <p class="p-guide__text c-margin--xs">→ <a href="/member/abook/?pnum=1" class="c-textlink c-inlinelink">こちら</a>より住所録をご登録ください。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script th:src="@{/assets/js/bundle.js}" defer="defer"></script>
+
+</body></html>

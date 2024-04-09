@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>配送方法設定 登録更新確認 ｜システム設定 </title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/registupdate/confirm}" th:object="${deliveryRegistUpdateModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">登録更新：確認</h2>
+                    </div>
+    
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+    
+                    <input type="hidden" id="scDeliveryMethodSeq" name="scDeliveryMethodSeq" th:value="*{scDeliveryMethodSeq}"/>
+
+                    <div class="l-section_column">
+                        <div class="l-section_inner">
+                            <!-- 詳細情報 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">詳細情報</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w180px">
+                                            <th:block th:if="*{!isRegistMode}">
+                                                <div>
+                                                    <dt>配送ID</dt>
+                                                    <dd th:text="*{deliveryMethodId}"></dd>
+                                                </div>
+                                            </th:block>
+                                            <div>
+                                                <dt>配送名称</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'deliveryMethodName'})}" th:text="*{deliveryMethodName}"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>配送種別</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'deliveryMethodType'})}" th:text="*{deliveryMethodTypeItems.get(deliveryMethodType)}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 配送追跡設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">配送追跡設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_fn13 dt_w160px">
+                                            <div>
+                                                <dt>URL</dt>
+                                                <dd>
+                                                    <div class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'deliveryChaseURL'})}">
+                                                        <span th:text="*{deliveryChaseURL eq null ? '―' : deliveryChaseURL}"></span>
+                                                    </div>
+                                                    <div class="c-annotation mt5">※｛0｝が伝票番号に置き換わります。</div>
+                                                </dd>
+                                            </div>
+
+                                            <div>
+                                                <dt>表示期間</dt>
+                                                <dd>
+                                                    <div class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'deliveryChaseURLDisplayPeriod'})}">
+                                                        <span th:text="*{deliveryChaseURLDisplayPeriod eq null ? '―' : deliveryChaseURLDisplayPeriod}"></span>
+                                                    </div>
+                                                    <div class="c-annotation mt5">※0は無制限。</div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 表示設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">表示設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_fn13 dt_w160px">
+                                            <div>
+                                                <dt>公開状態</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'openStatusPC'})}" th:text="*{openStatusPCItems.get(openStatusPC)}"></dd>
+                                                <input type="hidden" id="openStatus" th:value="*{openStatusPC}" />
+                                            </div>
+
+                                            <div>
+                                                <dt>説明（HTML可）</dt>
+                                                <dd th:class="*{#style.diff(modifiedList, {'deliveryNotePC'})}" th:utext="*{deliveryNotePC eq null ? '―' : #pre.convert(deliveryNotePC)}"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- 送料設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">送料設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <!--一律送料の場合-->
+                                        <th:block id="isFlatType" th:if="*{isFlatType}">
+                                            <dl class="c-dl-base dt_fn13 dt_w160px">
+                                                <div>
+                                                    <dt>一律送料</dt>
+                                                    <dd class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'equalsCarriage'})}">
+                                                        <th:block th:text="*{#number.convert(equalsCarriage)}"></th:block>
+                                                        <label>円 （税抜）</label>
+                                                    </dd>
+                                                </div>
+    
+                                                <th:block id="isExistLargeAmountDiscount"  th:if="*{isExistLargeAmountDiscount}">
+                                                    <div>
+                                                        <dt>高額割引</dt>
+                                                        <dd class="wrap_flex_center" th:classappend="*{#style.diff(modifiedList, {'largeAmountDiscountPrice', largeAmountDiscountCarriage})}">
+                                                            <div class="c-input-label mr20">
+                                                                <th:block th:text="*{#number.convert(largeAmountDiscountPrice)}"></th:block>
+                                                                <label>円（税抜）以上購入すると</label>
+                                                            </div>
+                                                            <div class="c-input-label">
+                                                                <span class="mr10">送料</span>
+                                                                <th:block th:text="*{#number.convert(largeAmountDiscountCarriage)}"></th:block>
+                                                                <label>円（税抜）</label>
+                                                            </div>
+                                                        </dd>
+                                                    </div>
+                                                </th:block>
+                                            </dl>
+                                        </th:block>
+                                        <!--都道府県別送料の場合-->
+                                        <th:block id="isPrefectureType" th:if="*{isPrefectureType}">
+                                            <div class="l-conttitle_wrap">
+                                                <div class="c-pagetitle_h4 as_end">都道県別送料</div>
+                                            </div>
+                                            <ul class="shipping_fee">
+                                                <th:block th:each="item, stat : *{deliveryPrefectureCarriageItems}">
+                                                    <th:block th:if="${stat.count != stat.size && stat.count != stat.size - 1}">
+                                                        <li th:class="*{#lists.isEmpty(modifiedPrefectureList)} ? '' : *{#style.diff(modifiedPrefectureList.get(__${stat.index}__), {'prefectureCarriage'})}">
+                                                            <div class="select" th:text="${item.prefectureName}"></div>
+                                                            <div class="c-input-label">
+                                                                <th:block th:text="${#number.convert(item.prefectureCarriage)}"></th:block>
+                                                                <label>円</label>
+                                                            </div>
+                                                        </li>
+                                                    </th:block>
+                                                </th:block>
+                                            </ul>
+                                            <ul class="shipping_fee">
+                                                <th:block th:each="item, stat : *{deliveryPrefectureCarriageItems}">
+                                                    <th:block th:if="${stat.count == stat.size || stat.count == stat.size - 1}">
+                                                        <li th:class="*{#lists.isEmpty(modifiedPrefectureList)} ? '' : *{#style.diff(modifiedPrefectureList.get(__${stat.index}__), {'prefectureCarriage'})}">
+                                                            <div class="select" th:text="${item.prefectureName}"></div>
+                                                            <div class="c-input-label">
+                                                                <th:block th:text="${#number.convert(item.prefectureCarriage)}"></th:block>
+                                                                <label>円</label>
+                                                            </div>
+                                                        </li>
+                                                    </th:block>
+                                                </th:block>
+                                            </ul>
+                                            <th:block id="isExistLargeAmountDiscount"  th:if="*{isExistLargeAmountDiscount}">
+                                                <dl class="c-dl-base mt40">
+                                                    <div>
+                                                        <dt class="as_center w160px">高額割引</dt>
+                                                        <dd class="c-input-label" th:classappend="*{#style.diff(modifiedList, {'largeAmountDiscountPrice', largeAmountDiscountCarriage})}">
+                                                            <th:block th:text="*{#number.convert(largeAmountDiscountPrice)}"></th:block>
+                                                            <label class="mr20">円（税抜）以上購入すると</label>
+                                                            <span class="mr10">送料</span>
+                                                            <th:block th:text="*{#number.convert(largeAmountDiscountCarriage)}"></th:block>
+                                                            <label>円（税抜）</label>
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </th:block>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="l-section_side">
+
+                            <!-- エリア -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">エリア</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-base dt_w120px">
+                                            <div>
+                                                <dt>特別料金エリア</dt>
+                                                <dd th:text="*{#number.convert(deliverySpecialChargeAreaCount)} + '件'"></dd>
+                                            </div>
+                                            <div>
+                                                <dt>配送不可能エリア</dt>
+                                                <dd th:text="*{#number.convert(deliveryImpossibleAreaCount)} + '件'"></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- お届け日時設定 -->
+                            <article class="l-article">
+                                <div class="l-article_title">
+                                    <h2 class="c-pagetitle_h3">お届け日時設定</h2>
+                                    <div class="c-open-btn"><i></i></div>
+                                </div>
+                                <div class="l-article_inner">
+                                    <div class="l-inner_wrap">
+                                        <dl class="c-dl-nobase">
+                                            <div>
+                                                <dt>お届け希望日設定</dt>
+                                                <dd class="notification_time">
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label w110px">選択可能日数</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'possibleSelectDays'})}">
+                                                            <span th:text="*{possibleSelectDays}"></span>
+                                                            <span th:if="*{isExistPossibleSelectDays}">日</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wrap_flex_center mt10">
+                                                        <span class="label w110px">リードタイム</span>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'deliveryLeadTime'})}">
+                                                            <span th:text="*{deliveryLeadTime}" title="リードタイム" ></span>
+                                                            <span th:if="*{isExistDeliveryLeadTime}">日</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="c-annotation mt5">※0日の場合、プルダウンは表示されません。</div>
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt>お届け時間帯設定</dt>
+                                                <dd class="notification_time">
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">1.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone1'})}" th:text="*{receiverTimeZone1 eq null ? '―' : receiverTimeZone1}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">2.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone2'})}" th:text="*{receiverTimeZone2 eq null ? '―' : receiverTimeZone2}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">3.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone3'})}" th:text="*{receiverTimeZone3 eq null ? '―' : receiverTimeZone3}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">4.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone4'})}" th:text="*{receiverTimeZone4 eq null ? '―' : receiverTimeZone4}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">5.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone5'})}" th:text="*{receiverTimeZone5 eq null ? '―' : receiverTimeZone5}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">6.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone6'})}" th:text="*{receiverTimeZone6 eq null ? '―' : receiverTimeZone6}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">7.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone7'})}" th:text="*{receiverTimeZone7 eq null ? '―' : receiverTimeZone7}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">8.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone8'})}" th:text="*{receiverTimeZone8 eq null ? '―' : receiverTimeZone8}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">9.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone9'})}" th:text="*{receiverTimeZone9 eq null ? '―' : receiverTimeZone9}"></div>
+                                                    </div>
+                                                    <div class="wrap_flex_center">
+                                                        <div class="label">10.</div>
+                                                        <div class="col" th:classappend="*{#style.diff(modifiedList, {'receiverTimeZone10'})}" th:text="*{receiverTimeZone10 eq null ? '―' : receiverTimeZone10}"></div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" type="submit" name="doIndex"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <th:block th:if="*{isRegistMode}">
+                                    <button class="c-btn btn_regular" type="submit" name="doOnceRegist" onClick="return deleteConfirmByStatus('openStatus', '9');">登録</button>
+                                </th:block>
+                                <th:block th:if="*{!isRegistMode}">
+                                    <button class="c-btn btn_regular" type="submit" name="doOnceUpdate" onClick="return deleteConfirmByStatus('openStatus', '9');">登録</button>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

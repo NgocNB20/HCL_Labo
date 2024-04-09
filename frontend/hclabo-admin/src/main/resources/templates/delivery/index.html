@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>配送方法設定｜システム設定</title>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/}" th:object="${deliveryModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                            <ul>
+                                <li><a class="c-btn btn_move" th:href="@{/delivery/registupdate}">配送方法登録</a></li>
+                            </ul>
+                        </th:block>
+                    </div>
+    
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+    
+                    <div th:if="${#fields.hasErrors('deliveryMethodRadio')}" class="global-error-message">
+                        <ul>
+                            <li th:errors="*{deliveryMethodRadio}"></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 配送方法設定一覧 -->
+                    <div class="l-section">
+                        <div class="l-article" th:if="*{isExist}">
+                            <div class="l-article_title no_slide">
+                                <h4 class="c-pagetitle_h5">※フロント側への表示・・・公開中の配送方法のうち、表示順上位5件のみ</h4>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <table class="c-tbl tbl_delivery_list large60">
+                                        <thead>
+                                            <tr>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <th class="check"></th>
+                                                </th:block>
+                                                <th class="number">#</th>
+                                                <th class="w100px">配送ID</th>
+                                                <th>配送名称</th>
+                                                <th class="w100px">公開状態</th>
+                                                <th class="w150px">配送種別</th>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <th class="w80px">詳細設定</th>
+                                                    <th class="w80px">特別料金<br>エリア</th>
+                                                    <th class="w85px">配送不可能<br>エリア</th>
+                                                    <th class="w80px">倉庫<br>休日設定</th>
+                                                    <th class="w85px">お届け<br>不可日設定</th>
+                                                </th:block>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item, stat: *{deliveryMethodItems}">
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <td class="check"><label class="c-form-control">
+                                                        <input type="radio" name="deliveryMethodRadio" th:value="${item.deliveryMethodRadioValue}" th:checked="${item.deliveryMethodRadioValue} == *{deliveryMethodRadio}">
+                                                        <i></i></label>
+                                                    </td>
+                                                </th:block>
+                                                <td class="number" th:text="${item.orderDisplay}"></td>
+                                                <td class="alphabetic" th:text="${item.deliveryMethodSeq}"></td>
+                                                <td th:text="${item.deliveryMethodName}"></td>
+                                                <td th:text="${item.openStatusPC.label}"></td>
+                                                <td th:text="${item.deliveryMethodType.label}"></td>
+                                                <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <td class="txt_center"><a class="c-btn-icon" th:href="@{/delivery/registupdate(dmcd=${item.deliveryMethodSeq})}"><i class="edit"></i></a></td>
+                                                    <td class="txt_center"><a class="c-btn-icon" th:href="@{/delivery/sca/(dmcd=${item.deliveryMethodSeq})}"><i class="edit"></i></a></td>
+                                                    <td class="txt_center"><a class="c-btn-icon" th:href="@{/delivery/dia/(dmcd=${item.deliveryMethodSeq})}"><i class="edit"></i></a></td>
+                                                    <td class="txt_center"><a class="c-btn-icon" th:href="@{/delivery/holiday/(dmcdParam=${item.deliveryMethodSeq})}"><i class="edit"></i></a></td>
+                                                    <td class="txt_center"><a class="c-btn-icon" th:href="@{/delivery/did/(dmcdParam=${item.deliveryMethodSeq})}"><i class="edit"></i></a></td>
+                                                </th:block>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                        <div class="mt20 wrap_flex ai_start">
+                                            <ul class="c-list-left list_sp5 mb10">
+                                                <li><button class="c-btn-small c-btn_sort" type="submit" name="doMoveOneUp"><i class="material-icons navigate_before"></i>UP</button></li>
+                                                <li><button class="c-btn-small c-btn_sort" type="submit" name="doMoveOneDown"><i class="material-icons navigate_next"></i>DOWN</button></li>
+                                                <li><button class="c-btn-small c-btn_sort" type="submit" name="doMoveHead"><i class="material-icons first_page"></i>TOP</button></li>
+                                                <li><button class="c-btn-small c-btn_sort" type="submit" name="doMoveFoot"><i class="material-icons last_page"></i>BOTTOM</button></li>
+                                            </ul>
+                                            <button class="c-btn btn_regular col_left" type="submit" name="doOnceSave">表示順を登録</button>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="l-article" th:if="*{!isExist}">
+                            <div class="l-article_title no_slide">
+                                <h4 class="c-pagetitle_h4">現在、登録されている配送方法はありません。</h4>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

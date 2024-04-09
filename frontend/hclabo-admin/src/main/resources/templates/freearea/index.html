@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>フリーエリア検索｜店舗管理</title>
+<script>
+jQuery(function($) {
+    // 公開状態-日時タイプの入力切替
+    changePeriod("targetDate", "searchTargetDate", "searchTargetTime");
+    $("#targetDate,#currentDate").click(function() {
+        changePeriod("targetDate", "searchTargetDate", "searchTargetTime");
+    });
+
+    // 日付補助ボタン
+    $("button[id^='targetDate_']").click(function() {
+        var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+        setTargetDate(mode[0], mode[1] + "From", mode[1] + "To");
+    });
+
+    var resultItems = $i("resultItems");
+    if (resultItems != null) {
+        $("#resultItems tr input[type='hidden'][id^='freeAreaOpenStatus']").each(function(i) {
+            var freeAreaStatus = $(this).val();
+            if (!freeAreaStatus) {
+            } else if (freeAreaStatus == "0") {
+                $(this).parent("tr").addClass("end");
+            } else if (freeAreaStatus == "1") {
+                $(this).parent("tr").addClass("release");
+            } else if (freeAreaStatus == "2") {
+                $(this).parent("tr").addClass("estimated");
+            }
+        });
+    }
+});
+
+/**
+ * フリーエリア削除
+ */
+function deleteFreeArea(obj, pnum) {
+    var deleteButton = $(obj);
+    var message = "";
+    // 公開ステータス取得
+    var openstatus = deleteButton.prev("input:hidden[id^='freeAreaOpenStatus']").val();
+    if (openstatus == 1) {
+        message = "このフリーエリアは現在公開中です。\r\n";
+    }
+
+    // 削除確認
+    var confirm = deleteConfirm(message);
+    if (confirm) {
+        var targetSeq = deleteButton.next("input:hidden[id^='freeAreaSeq']").val();
+        $("#deleteFreeAreaSeq").val(targetSeq);
+
+        // 画面再描画時に同じページ番号を表示するため、pageNumberにセット
+        $("#pageNumber").val(pnum);
+    }
+    return confirm
+}
+</script>
+</head>
+
+<body id="shop">
+<div id="freeListShop" class="l-mainwrap">
+    <!--/* side */-->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!--/* header */-->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/freearea/}" th:object="${freeareaModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">フリーエリア検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                            <ul>
+                                <li>
+                                    <input class="c-btn btn_move w150px" type="submit" value = "フリーエリア登録" id="doRegist" name="doRegist"/>
+                                </li>
+                            </ul>
+                        </th:block>
+                        <th:block sec:authorize="!hasAnyAuthority('SHOP:8')">&nbsp;</th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <!-- 検索 -->
+                    <div class="l-section" id="allItemsSearch">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>キー</dt>
+                                            <dd><input type="text" id="searchFreeAreaKey" th:field="*{searchFreeAreaKey}" class="c-form-control w160px" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchFreeAreaKey')}?'error':''" />
+                                            <div th:if="${#fields.hasErrors('searchFreeAreaKey')}" th:errors="*{searchFreeAreaKey}" class="c-error-txt mt5"></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>タイトル</dt>
+                                            <dd>
+                                            	<input type="text" id="searchFreeAreaTitle" th:field="*{searchFreeAreaTitle}" class="c-form-control w480px" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchFreeAreaTitle')}?'error':''" />
+                                            	<div th:if="${#fields.hasErrors('searchFreeAreaTitle')}" th:errors="*{searchFreeAreaTitle}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <div class="flex_grow">
+                                            <dl>
+                                                <dt>公開開始日</dt>
+                                                <dd class="wrap_flex_center">
+                                                    <div class="wrap_flex_center">
+                                                        <label class="c-datepicker w150px">
+                                                            <input maxlength="10" id="searchOpenStartTimeFrom" th:field="*{searchOpenStartTimeFrom}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchOpenStartTimeFrom')}?'error':''">
+                                                        </label>
+                                                        <span class="ml10">〜</span>
+                                                        <label class="ml10 c-datepicker w150px">
+                                                            <input maxlength="10" id="searchOpenStartTimeTo" th:field="*{searchOpenStartTimeTo}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchOpenStartTimeTo')}?'error':''">
+                                                        </label>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <ul class="c-list-left list_sp5 mt10 w100p">
+                                                <li><button class="c-btn-small" id="targetDate_today_searchOpenStartTime" type="button">今日</button></li>
+                                                <li><button class="c-btn-small" id="targetDate_yesterday_searchOpenStartTime" type="button">昨日</button></li>
+                                                <li><button class="c-btn-small" id="targetDate_crrentMonth_searchOpenStartTime" type="button">今月</button></li>
+                                                <li><button class="c-btn-small" id="targetDate_prevMonth_searchOpenStartTime" type="button">先月</button></li>
+                                                <li><button class="c-btn-txt" id="targetDate_clear_searchOpenStartTime" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                            </ul>
+                                               <div th:if="${#fields.hasErrors('searchOpenStartTimeFrom')}" th:errors="*{searchOpenStartTimeFrom}" class="c-error-txt mt5"></div>
+                                               <div th:if="${#fields.hasErrors('searchOpenStartTimeTo')}" th:errors="*{searchOpenStartTimeTo}" class="c-error-txt mt5"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 詳細検索 -->
+                                    <div class="c-detail-warp search mt10">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <dl>
+                                                        <dt>公開状態</dt>
+                                                        <dd class="wrap_flex_wrap">
+                                                            <ul class="c-list-center list_sp20 mr40">
+                                                                <li>
+                                                                    <label class="c-form-control"><input type="radio" name="searchDateType" id="currentDate" value="0" th:field="*{searchDateType}" /><i th:classappend="${#fields.hasErrors('searchDateType')}?'error':''"></i>現在日</label>
+                                                                </li>
+                                                                <li class="wrap_flex_center specified_time">
+                                                                    <label class="c-form-control mr10"><input type="radio" name="searchDateType" id="targetDate" value="1" th:field="*{searchDateType}" /><i th:classappend="${#fields.hasErrors('searchDateType')}?'error':''"></i>指定日</label>
+                                                                    <label class="c-datepicker w150px"><input type="text" id="searchTargetDate" th:field="*{searchTargetDate}" autocomplete="off" maxlength="10" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchTargetDate')}?'error':''"></label>
+                                                                    <input type="text" id="searchTargetTime" th:field="*{searchTargetTime}" maxlength="8" class="c-form-control w100px ml10" placeholder="00:00:00" th:classappend="${#fields.hasErrors('searchTargetTime')}?'error':''" />
+                                                                </li>
+                                                            </ul>
+                                                            <ul class="c-list-center list_sp20">
+                                                                <li th:each="item : *{searchOpenStateArrayItems}">
+                                                                   <label class="c-form-control">
+                                                                       <input type="checkbox" th:field="*{searchOpenStateArray}" th:value="${item.key}" th:checked="${item.key} == *{searchOpenStateArray}">
+                                                                       <i th:classappend="${#fields.hasErrors('searchOpenStateArray')}?'error':''"></i><span th:text="${item.value}" th:remove="tag"></span>
+                                                                   </label>
+                                                                </li>
+                                                            </ul>
+                                                        </dd>
+                                                        <dd class="wrap_flex_wrap">
+                                                            <ul class="w470px">
+                                                                <div th:if="${#fields.hasErrors('searchDateType')}" th:errors="*{searchDateType}" class="c-error-txt mt5"></div>
+                                                                <div th:if="${#fields.hasErrors('searchTargetDate')}" th:errors="*{searchTargetDate}" class="c-error-txt mt5"></div>
+                                                                <div th:if="${#fields.hasErrors('searchTargetTime')}" th:errors="*{searchTargetTime}" class="c-error-txt mt5"></div>
+                                                            </ul>
+                                                            <ul class="ml5">
+                                                                <div th:if="${#fields.hasErrors('searchOpenStateArray')}" th:errors="*{searchOpenStateArray}" class="c-error-txt mt5"></div>
+                                                            </ul>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top">
+                                            <button class="c-btn btn_regular" type="submit" name="doFreeAreaSearch">検索する</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+
+                        <input type="hidden" id="pageNumber" name="pageNumber" />
+                        <input type="hidden" id="orderField" th:field="*{orderField}" />
+                        <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                       	<input type="hidden" id="deleteFreeAreaSeq" name="deleteFreeAreaSeq"/>
+                        <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display: none" value="表示切替" />
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} == 0">
+                                	<div class="l-conttitle_wrap mb25">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} != 0">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true,duplicateSelectFlag=true)}"></div>
+                                    </div>
+                                    <div class="c-contbtn_wrap_btm ai_end">
+                                        <span class="c-status04 ico_blue mr10">公開予定</span>
+                                        <span class="c-status04 ico_orange mr10">公開中</span>
+                                        <span class="c-status04 ico_gray">公開終了</span>
+                                    </div>
+                                    <table id="search_result" class="c-tbl large60 tbl_search_freearea">
+                                        <thead>
+                                        <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                            <th class="number">#</th>
+                                            <th class="w200px">
+                                                <a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerFreeAreaKey">キー<th:block th:if="*{orderField} == 'freeAreaKey'"><span th:text="${sortStr}"></span></th:block></a>
+                                            </th>
+                                            <th><a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerFreeAreaTitle">タイトル<th:block th:if="*{orderField} == 'freeAreaTitle'"><span th:text="${sortStr}"></span></th:block></a></th>
+                                            <th class="times w200px"><a href="#" onClick="sortActionExe(this, 'doDisplayChange');" id="headerOpenStartTime">公開開始日<th:block th:if="*{orderField} == 'openStartTime'"><span th:text="${sortStr}"></span></th:block></a></th>
+                                            <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                <th class="delete"></th>
+                                            </th:block>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="resultItems">
+                                        <tr th:each="item,stat : *{resultItems}">
+                                            <input type="hidden" th:id="'freeAreaOpenStatus-'+${stat.index}" th:value="${item.freeAreaOpenStatus}" />
+                                            <td class="number">
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    <a th:href="@{/freearea/registupdate(freeAreaSeq=${item.freeAreaSeq})}">
+                                                </th:block>
+                                                <span th:text="${item.resultNo}" th:remove="tag"></span>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td class="alphabetic">
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    <a th:href="@{/freearea/registupdate(freeAreaSeq=${item.freeAreaSeq})}">
+                                                </th:block>
+                                                <span th:id="'freeAreaKey-'+${stat.index}" th:text="${item.freeAreaKey}" th:remove="tag"></span>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    <a th:href="@{/freearea/registupdate(freeAreaSeq=${item.freeAreaSeq})}">
+                                                </th:block>
+                                                <span th:id="'freeAreaTitle-'+${stat.index}" th:text="${item.freeAreaTitle}" th:remove="tag"></span>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <td class="times">
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    <a th:href="@{/freearea/registupdate(freeAreaSeq=${item.freeAreaSeq})}">
+                                                </th:block>
+                                                <span th:id="'openStartTime-'+${stat.index}" th:text="${#date.convert(item.openStartTime, 'yyyy/MM/dd HH:mm:ss')}" th:remove="tag"></span>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                    </a>
+                                                </th:block>
+                                            </td>
+                                            <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                <td class="delete">
+                                                    <input type="hidden" th:id="'freeAreaOpenStatus-'+${stat.index}" name="freeAreaOpenStatus" th:value="${item.freeAreaOpenStatus}" />
+                                                    <button class="c-btn-icon" type="submit" th:id="'doFreeAreaDelete-'+${stat.index}" name="doFreeAreaDelete" value="削除" alt="削除" th:onClick="'return deleteFreeArea(this,'+ __(*{pageNumber})__ +');'"><i class="material-icons clear"></i></button>
+                                                    <input type="hidden" th:id="'freeAreaSeq-'+${stat.index}" name="freeAreaSeq" th:value="${item.freeAreaSeq}"/>
+                                                </td>
+                                            </th:block>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

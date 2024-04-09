@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>注文データ作成アラート</title>
+</head>
+<body>
+<div>
+    <div><span>注文処理中に下記のエラーを検出しました。</span></div>
+    <br>
+    <div><span>-----</span></div>
+    <div><span>【システム名】</span></div>
+    <div><span th:text="${mailContentsMap.get('SYSTEM')}"></span></div>
+    <br>
+    <div><span>【決済方法】</span></div>
+    <div><span th:text="${mailContentsMap.get('SETTLEMENTNAME')}"></span></div>
+    <br>
+    <div><span>【取引ID】</span></div>
+    <div><span th:text="${mailContentsMap.get('ACCESSID')}"></span></div>
+    <br>
+    <div><span>【エラー情報】</span></div>
+    <div>
+        <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(mailContentsMap.get('ERROR')),'\n','&lt;br /&gt;'))}"></span>
+    </div>
+    <br>
+    <div><span>以上</span></div>
+</div>
+</body>
+</html>

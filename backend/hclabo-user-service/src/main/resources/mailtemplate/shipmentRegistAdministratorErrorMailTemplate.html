@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>エラー通知</title>
+</head>
+<body>
+<div>
+	<span th:text="${error.get('SYSTEM')} + ' の' + ${error.get('BATCH_NAME')} + 'が終了しました。'"></span>
+	<br>
+	<br>
+	<span>-----</span>
+	<br>
+	<br>
+	<span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(error.get('LIST')),'\n','&lt;br /&gt;'))}"></span>
+	<br>
+	<br>
+	<span>【決済代行会社にて売上実施済の場合】</span>
+	<br>
+	<span>再度「出荷登録」を行ってください。</span>
+	<br>
+	<span>【出荷登録時に請求決済エラーが発生した場合】</span>
+	<br>
+	<span>GMO管理画面より決済状況をご確認ください。</span>
+	<br>
+	<span>正しい受注金額で実売上状態になっている場合、受注修正画面よりGMO連携を解除し、入金登録を行ってください。</span>
+	<br>
+	<span>受注に問題がありましたら、受注修正画面より受注キャンセルいただくか決済方法を変更してください。</span>
+	<br>
+	<span>【請求不整合が発生した場合】</span>
+	<br>
+	<span>別途送付される「請求不整合報告」メールをご確認ください。</span>
+	<br>
+	<span>以上</span>
+</div>
+</body>
+</html>

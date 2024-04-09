@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>クーポン検索｜店舗管理</title>
+    
+    <script>
+jQuery(function($){
+    // 日付補助ボタン
+    $("button[id^='targetDate_']").click(function() {
+        var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+        setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+    });
+
+    var resultItems = $i("resultItems");
+    if(resultItems != null) {
+         $("#resultItems tr input[type='hidden'][id^='couponStatusClass']").each(function(i) {
+            var coponStatus = $(this).val();
+            if (!coponStatus) {
+            } else if (coponStatus == "0") {
+                $(this).parent("tr").addClass("end");
+            } else if (coponStatus == "1") {
+                $(this).parent("tr").addClass("release");
+            } else if (coponStatus == "2") {
+                $(this).parent("tr").addClass("estimated");
+            }
+        });
+    }
+});
+</script>
+</head>
+
+<body id="shop">
+<div id="couponSearchShop" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/coupon/}" th:object="${couponModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">クーポン検索</h1>
+                        <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                            <ul>
+                                <li>
+                                    <a th:href="@{/coupon/registupdate(md=new)}" class="c-btn btn_move">クーポン登録</a>
+                                </li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <!-- 検索 -->
+                    <div id="allItemsSearch" class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl>
+                                            <dt>クーポン名</dt>
+                                            <dd>
+                                              <input type="text" th:field="*{searchCouponName}" class="c-form-control w240px" maxlength="80" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchCouponName')}?'error':''" />
+                                              <div th:if="${#fields.hasErrors('searchCouponName')}" th:errors="*{searchCouponName}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>クーポンID</dt>
+                                            <dd>
+                                              <input type="text" th:field="*{searchCouponId}" class="c-form-control w240px" maxlength="12" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchCouponId')}?'error':''" />
+                                              <div th:if="${#fields.hasErrors('searchCouponId')}" th:errors="*{searchCouponId}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>クーポンコード</dt>
+                                            <dd>
+                                              <input type="text" th:field="*{searchCouponCode}" class="c-form-control w240px" maxlength="20" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchCouponCode')}?'error':''" />
+                                              <div th:if="${#fields.hasErrors('searchCouponCode')}" th:errors="*{searchCouponCode}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+
+                                    <!-- 詳細検索 -->
+                                    <div class="c-detail-warp search mt10">
+                                        <div class="c-btn_add"><i></i><span>詳細検索</span></div>
+                                        <div class="c-detail_inner" id="detailSearch">
+                                            <div class="l-article-un">
+                                                <div class="c-detail-warp search_data_smp c-search_times_warp wrap">
+                                                    <div class="search-date">
+                                                      <dl>
+                                                      <dt>開始日</dt>
+                                                      <dd class="wrap_flex_center">
+                                                        <div class="wrap_flex_center">
+                                                            <label class="c-datepicker w150px">
+                                                                <input maxlength="10" th:field="*{searchCouponStartTimeFrom}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchCouponStartTimeFrom')}?'error':''">
+                                                            </label>
+                                                            <span class="ml10">〜</span>
+                                                            <label class="ml10 c-datepicker w150px">
+                                                                <input maxlength="10" th:field="*{searchCouponStartTimeTo}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchCouponStartTimeTo')}?'error':''">
+                                                            </label>
+                                                        </div>
+                                                      </dd>
+                                                      </dl>
+                                                      <ul class="c-list-left list_sp5 mt10 w100p">
+                                                        <li><button class="c-btn-small" id="targetDate_today_searchCouponStartTime" type="button">今日</button></li>
+                                                        <li><button class="c-btn-small" id="targetDate_yesterday_searchCouponStartTime" type="button">昨日</button></li>
+                                                        <li><button class="c-btn-small" id="targetDate_crrentMonth_searchCouponStartTime" type="button">今月</button></li>
+                                                        <li><button class="c-btn-small" id="targetDate_prevMonth_searchCouponStartTime" type="button">先月</button></li>
+                                                        <li><button class="c-btn-txt" id="targetDate_clear_searchCouponStartTime" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                      </ul>
+                                                      <div th:if="${#fields.hasErrors('searchCouponStartTimeFrom')}" th:errors="*{searchCouponStartTimeFrom}" class="c-error-txt mt5"></div>
+                                                      <div th:if="${#fields.hasErrors('searchCouponStartTimeTo')}" th:errors="*{searchCouponStartTimeTo}" class="c-error-txt mt5"></div>
+                                                    </div>
+                                                <div class="search-date">
+                                                  <dl>
+                                                  <dt>終了日</dt>
+                                                  <dd class="wrap_flex_center">
+                                                    <div class="wrap_flex_center">
+                                                        <label class="c-datepicker w150px">
+                                                            <input maxlength="10" th:field="*{searchCouponEndTimeFrom}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchCouponEndTimeFrom')}?'error':''">
+                                                        </label>
+                                                        <span class="ml10">〜</span>
+                                                        <label class="ml10 c-datepicker w150px">
+                                                            <input maxlength="10" th:field="*{searchCouponEndTimeTo}" autocomplete="off" type="text" class="c-form-control" placeholder="年/月/日" th:classappend="${#fields.hasErrors('searchCouponEndTimeTo')}?'error':''">
+                                                        </label>
+                                                    </div>
+                                                  </dd>
+                                                  </dl>
+                                                  <ul class="c-list-left list_sp5 mt10 w100p">
+                                                    <li><button class="c-btn-small" id="targetDate_today_searchCouponEndTime" type="button">今日</button></li>
+                                                    <li><button class="c-btn-small" id="targetDate_yesterday_searchCouponEndTime" type="button">昨日</button></li>
+                                                    <li><button class="c-btn-small" id="targetDate_crrentMonth_searchCouponEndTime" type="button">今月</button></li>
+                                                    <li><button class="c-btn-small" id="targetDate_prevMonth_searchCouponEndTime" type="button">先月</button></li>
+                                                    <li><button class="c-btn-txt" id="targetDate_clear_searchCouponEndTime" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                  </ul>
+                                                  <div th:if="${#fields.hasErrors('searchCouponEndTimeFrom')}" th:errors="*{searchCouponEndTimeFrom}" class="c-error-txt mt5"></div>
+                                                  <div th:if="${#fields.hasErrors('searchCouponEndTimeTo')}" th:errors="*{searchCouponEndTimeTo}" class="c-error-txt mt5"></div>
+                                                </div>
+                                                </div>
+                                                <div class="c-detail-warp wrap mt20">
+                                                    <dl>
+                                                        <dt>対象商品</dt>
+                                                        <dd>
+                                                            <input type="text" th:field="*{searchTargetGoodsCode}" size="14" maxlength="20" class="c-form-control w480px" placeholder="ここに入力してください" th:classappend="${#fields.hasErrors('searchTargetGoodsCode')}?'error':''" />
+                                                            <div class="c-annotation mt5">※商品番号を入力してください。</div>
+                                                            <div th:if="${#fields.hasErrors('searchTargetGoodsCode')}" th:errors="*{searchTargetGoodsCode}" class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="allItemsSearchKeywordsDiv" class="mb20" style="display: none">
+                                            <p class="as_end" id="allItemsSearchKeywords"></p>
+                                        </div>
+                                        <div class="c-contbtn_wrap_top">
+                                            <button class="c-btn btn_regular" name="doSearch" type="submit">検索する</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+                                <input type="hidden" id="pageNumber" name="pageNumber" />
+                                <input type="hidden" id="orderField" th:field="*{orderField}" />
+                                <input type="hidden" id="orderAsc" th:field="*{orderAsc}"/>
+                                <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} == 0">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultItems.size()} != 0">
+                                    <div class="l-conttitle_wrap mb25">
+                                        <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true,duplicateSelectFlag=true)}"></div>
+                                    </div>
+                                    <div class="c-contbtn_wrap_btm ai_end">
+                                        <span class="c-status04 ico_blue mr10">利用開始前</span>
+                                        <span class="c-status04 ico_orange mr10">利用期間中</span>
+                                        <span class="c-status04 ico_gray">利用終了</span>
+                                    </div>
+                                    <table id="search_result" class="c-tbl large60 tbl_search_coupon">
+                                        <thead>
+                                            <tr th:with="sortStr=*{orderAsc}?'&nbsp;▲':'&nbsp;▼'">
+                                                <th class="number">#</th>
+                                                <th>
+                                                   <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerCouponName">クーポン名<th:block th:if="*{orderField} == 'couponName'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w180px">
+                                                   <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerCouponId">クーポンID<th:block th:if="*{orderField} == 'couponId'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w170px">
+                                                   <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerCouponStartTime">利用開始日時<th:block th:if="*{orderField} == 'couponStartTime'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w170px">
+                                                   <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerCouponEndTime">利用終了日時<th:block th:if="*{orderField} == 'couponEndTime'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w180px">
+                                                <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerCouponCode">クーポンコード<th:block th:if="*{orderField} == 'couponCode'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w150px price">
+                                                   <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerDiscountRate">割引率<th:block th:if="*{orderField} == 'discountRate'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th class="w150px price">
+                                                    <a href="#" onClick="return sortActionExe(this, 'doDisplayChange');" id="headerDiscountPrice">割引金額（税込）<th:block th:if="*{orderField} == 'discountPrice'"><span th:text="${sortStr}"></span></th:block></a>
+                                                </th>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                   <th class="delete"></th>
+                                                   <th class="delete"></th>
+                                                </th:block>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="resultItems">
+                                            <tr class="" th:each="item,stat : *{resultItems}">
+                                                <input type="hidden" th:id="'couponStatusClass-'+${stat.index}" th:value="${item.couponStatusClass}" />
+                                                <td class="number">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.resultNo}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.couponName}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="alphabetic">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.couponId}"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="times">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${#date.convert(item.couponStartTime,'yyyy/MM/dd HH:mm:ss')}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="times">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${#date.convert(item.couponEndTime,'yyyy/MM/dd HH:mm:ss')}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="alphabetic">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.couponCode}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="price">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.discountRate == null ? '―' : #number.convert(item.discountRate) + '&nbsp;&#65285;'}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <td class="price">
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        <a th:href="@{/coupon/registupdate(seq=${item.couponSeq})}">
+                                                    </th:block>
+                                                    <span th:text="${item.couponDiscountPrice == null ? '―' : #number.convert(item.couponDiscountPrice) + '&nbsp;円'}" th:remove="tag"></span>
+                                                    <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                        </a>
+                                                    </th:block>
+                                                </td>
+                                                <th:block sec:authorize="hasAnyAuthority('SHOP:8')">
+                                                  <td>
+                                                	<a class="c-btn-icon" th:href="@{/coupon/registupdate(seq=${item.couponSeq})}"><i class="edit"></i></a>
+                                                  </td>
+                                                  <td class="delete">
+                                                    <a class="c-btn-icon" th:href="@{/coupon/delete/delete(seq=${item.couponSeq})}"><i class="material-icons clear"></i></a>
+                                                  </td>
+                                                </th:block>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div th:replace="~{include/pager::pager1}"></div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

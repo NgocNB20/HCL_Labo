@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+    <title>ニュース登録更新確認｜店舗管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="shop">
+<div id="newsRegistShop" class="l-mainwrap">
+    <!-- side -->
+	<div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/news/registupdate/confirm}" th:object="${newsRegistUpdateModel}" method="post">
+                    <input type="hidden" id="md" />
+					<input type="hidden" id="scNewsSeq" />
+					
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">ニュース登録更新：確認</h1>
+                    </div>
+
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">基本設定</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>ニュース日時</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsTime'})}" class="c-times_inner" th:text="*{newsTime != null ? newsDate + ' ' + newsTime : newsDate}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>タイトル</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'titlePC'})}" th:text="*{titlePC}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>本文（HTML可）</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsBodyPC'})}" th:utext="*{#pre.convert(newsBodyPC)}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>
+                                                URL
+                                            </dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsUrlPC'})}" th:text="*{newsUrlPC}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>ニュース詳細<br>（HTML可）</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsNotePC'})}" th:utext="*{#pre.convert(newsNotePC)}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>公開状態</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsOpenStatusPC'})}" th:text="*{#enumtype.getLabel('HTypeOpenStatus',newsOpenStatusPC)}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>公開開始日時</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsOpenStartTimePC'})}" class="c-times_inner" th:text="*{newsOpenStartTimePC != null ? newsOpenStartDatePC + ' ' + newsOpenStartTimePC : newsOpenStartDatePC}">
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>公開終了日時</dt>
+                                            <dd th:class="*{#style.diff(modifiedList, {'newsOpenEndTimePC'})}" class="c-times_inner" th:text="*{newsOpenEndTimePC != null ? newsOpenEndDatePC + ' ' + newsOpenEndTimePC : newsOpenEndDatePC}">
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" type="submit" name="doCancel" ><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <button class="c-btn btn_regular" type="submit" name="doOnceNewsRegist">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}" ></div>
+    </main>
+</div>
+</body>
+</html>

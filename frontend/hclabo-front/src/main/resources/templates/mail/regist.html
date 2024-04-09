@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+
+<body id="gotop" class="mypage">
+<div class="l-main">
+    <div th:replace="~{include/header}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/header_mypage :: headermypage('mail')}"></div>
+        <div class="l-container">
+            <div class="l-container__inner">
+                <div th:replace="~{include/sidemenumember :: sidemenumember('mail')}"></div>
+                <div class="l-main">
+                    <h2 class="c-title-page p-mypage__title-page"><strong>メールアドレスの変更</strong></h2>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <form id="registForm" th:action="@{/mail/}" th:object="${mailModel}" method="post">
+                        <div id="isNotErrorUrl" th:if="*{!isErrorUrl()}" >
+                            <div class="l-form">
+                                <div class="l-form__area">
+                                    <p>新しいメールアドレスを確認していただき、「変更する」ボタンを押してください。</p>
+                                    <dl class="l-form__list c-margin--s">
+                                        <dt>新しいメールアドレス</dt>
+                                        <dd>
+                                            <p id="memberInfoMail" th:text="*{memberInfoMail}"></p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div class="l-form__area">
+                                    <h3 class="c-title-line">メールマガジンの購読</h3>
+                                    <p>別途メールマガジンの登録お申込ができます。</p>
+                                    <dl class="l-form__list c-margin--s">
+                                        <dt>メールマガジンの購読</dt>
+                                        <dd><label class="c-checkbox"><span class="c-checkbox__box"><input name="" type="checkbox" value="" checked="checked"> <span></span></span>
+                                            <p>希望する</p>
+                                        </label></dd>
+                                    </dl>
+                                    <div class="c-button-wrap p-mypage__button-wrap">
+                                        <button id="doOnceMailUpdate" name="doOnceMailUpdate" type="submit" class="c-button c-button--primary c-button--width-m">変更する</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<div th:replace="~{include/footer}" ></div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body>
+</html>

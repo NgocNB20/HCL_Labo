@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+@use "../Foundation/mixin" as *;
+// margin 5px単位繰り返し
+// ----------------------------------------------------------
+
+//.u-m　で使用可能　例）.u-mt25
+
+.u-m {
+  @for $i from 0 through 12 {
+    &#{$i*5} {
+      margin: 5px * $i !important;
+    }
+    &t#{$i*5} {
+      margin-top: 5px * $i !important;
+    }
+    &r#{$i*5} {
+      margin-right: 5px * $i !important;
+    }
+    &b#{$i*5} {
+      margin-bottom: 5px * $i !important;
+    }
+    &l#{$i*5} {
+      margin-left: 5px * $i !important;
+    }
+    &#{$i*5}--sm {
+      @include media(sm) {
+        margin: 5px * $i !important;
+      }
+    }
+    &t#{$i*5}--sm {
+      @include media(sm) {
+        margin-top: 5px * $i !important;
+      }
+    }
+    &r#{$i*5}--sm {
+      @include media(sm) {
+        margin-right: 5px * $i !important;
+      }
+    }
+    &b#{$i*5}--sm {
+      @include media(sm) {
+        margin-bottom: 5px * $i !important;
+      }
+    }
+    &l#{$i*5}--sm {
+      @include media(sm) {
+        margin-left: 5px * $i !important;
+      }
+    }
+  }
+}

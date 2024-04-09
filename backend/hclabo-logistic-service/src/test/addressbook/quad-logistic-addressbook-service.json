@@ -1,0 +1,452 @@
+{
+	"info": {
+		"_postman_id": "16ee8776-9c9f-49ab-9d86-bf117bcb1eb1",
+		"name": "hclabo-logistic-addressbook-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "アドレス帳情報取得(addressBookSeq)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"addressBookSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "memberInfoSeq",
+							"value": "10000002",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/10000086",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"10000086"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報取得(addressBookSeq)- NOK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"addressBookSeq-NOK\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "memberInfoSeq",
+							"value": "10000002",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報取得(get-Addressbook)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "memberInfoSeq",
+							"value": "10000027",
+							"type": "default"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"type": "default"
+						},
+						{
+							"key": "orderBy",
+							"value": "DESC",
+							"type": "default"
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報取得(get-Addressbook)- NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "memberInfoSeq",
+							"value": "1000002",
+							"type": "default"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"type": "default"
+						},
+						{
+							"key": "orderBy",
+							"value": "DESC",
+							"type": "default"
+						},
+						{
+							"key": "sort",
+							"value": "true",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報登録(regist-Addressbook)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"addressBookSeq\": 10000134,\r\n    \"memberInfoSeq\": 10000085,\r\n    \"addressBookName\": \"adsadsad\",\r\n    \"addressBookLastName\": \"阪神\",\r\n    \"addressBookFirstName\": \"花子\",\r\n    \"addressBookLastKana\": \"ハンシン\",\r\n    \"addressBookFirstKana\": \"ハナコ\",\r\n    \"addressBookTel\": \"123456789\",\r\n    \"addressBookZipCode\": \"0700000\",\r\n    \"addressBookPrefecture\": \"北海道\",\r\n    \"addressBookAddress1\": \"旭川市\",\r\n    \"addressBookAddress2\": \"Ｅｂｉｅ　１－４７\",\r\n    \"addressBookAddress3\": \"「ＨＩＴ－ＭＡＬＬマンション」\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報登録(update-Addressbook)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoSeq\": 10000084,\r\n    \"addressBookName\": \"Kien Nguyen\",\r\n    \"addressBookLastName\": \"阪神\",\r\n    \"addressBookFirstName\": \"花子\",\r\n    \"addressBookLastKana\": \"ハンシン\",\r\n    \"addressBookFirstKana\": \"ハナコ\",\r\n    \"addressBookTel\": \"123456789\",\r\n    \"addressBookZipCode\": \"0700000\",\r\n    \"addressBookPrefecture\": \"北海道\",\r\n    \"addressBookAddress1\": \"旭川市\",\r\n    \"addressBookAddress2\": \"ああ１－４７\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/10000133",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"10000133"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報登録(update-Addressbook)- NOK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update Fail\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoSeq\": 1000001,\r\n    \"addressBookName\": \"手動登録\",\r\n    \"addressBookLastName\": \"阪神\",\r\n    \"addressBookFirstName\": \"花子\",\r\n    \"addressBookLastKana\": \"ハンシン\",\r\n    \"addressBookFirstKana\": \"ハナコ\",\r\n    \"addressBookTel\": \"123456789\",\r\n    \"addressBookZipCode\": \"0700000\",\r\n    \"addressBookPrefecture\": \"北海道\",\r\n    \"addressBookAddress1\": \"旭川市\",\r\n    \"addressBookAddress2\": \"ああ１－４７\",\r\n    \"addressBookAddress3\": \"ＨＩＴ－ＭＡＬＬマンション\",\r\n    \"registTime\": \"2021-12-02 03:25:06\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/1000002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"1000002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報削除(delete-Addressbook)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/10000134?memberInfoSeq=10000085",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"10000134"
+					],
+					"query": [
+						{
+							"key": "memberInfoSeq",
+							"value": "10000085"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "アドレス帳情報削除(delete-Addressbook)- BAD REQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8580/shippings/addressbooks/10000199",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"shippings",
+						"addressbooks",
+						"10000199"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

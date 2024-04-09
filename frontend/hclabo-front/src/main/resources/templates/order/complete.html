@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ja">
+<head>
+
+	<!--/* Google Tag Manager eコマースタグ */-->
+	<!--/* Google Tag Manager タグ より前に、eコマース用データ送信準備を行う */-->
+	<script type="text/javascript" th:inline="javascript" xml:space="preserve">
+	/*<![CDATA[*/
+	var dataLayer = [];
+	// 購入商品
+	var gaData = /*[[${googleAnalyticsInfo}]]*/ {};
+	var	gaDataJSON = JSON.parse(gaData);
+	var goodDetails = gaDataJSON.goodsItemList;
+
+	var items = [];
+
+	// 購入商品情報　（GA4）
+	var ecommerce = {};
+	ecommerce['transaction_id'] = gaDataJSON.orderCode;  // 注文番号
+	ecommerce['affiliation'] = gaDataJSON.shopNamePC; // ショップ名称
+	ecommerce['currency'] = 'JPY'; // 通貨
+	ecommerce['value'] = gaDataJSON.billingAmount; // 受注金額
+	ecommerce['tax'] = gaDataJSON.taxPrice; // 消費税合計金額
+	ecommerce['shipping'] = gaDataJSON.carriage; // 送料
+
+	// 注文情報（GA4）
+	Object.keys(goodDetails).forEach(key => {
+		items.push({
+			'currency': 'JPY', // 通貨
+			'item_id': goodDetails[key].goodsCode, // 商品コード
+			'item_name': goodDetails[key].goodsGroupName + (goodDetails[key].unitValue1 ? '-' + goodDetails[key].unitValue1 : '') + (goodDetails[key].unitValue2 ? '-' + goodDetails[key].unitValue2 : ''), // 商品名
+			'item_category': '', // カテゴリ
+			'price': goodDetails[key].goodsPrice, // 商品単価
+			'quantity': goodDetails[key].orderGoodsCount // 商品数量
+		});
+	});
+
+	ecommerce['items'] = items; // 商品情報
+
+	// TagManagerへデータを転送
+	dataLayer.push({
+		'event' : 'purchase', // イベント名
+		'ecommerce' : ecommerce
+	});
+
+	/*]]>*/
+</script>
+	<!--/* Google Tag Manager eコマースタグ */-->
+	<meta th:replace="~{include/head}"/>
+	<script type="text/javascript" th:src="@{/common/js/sns.js}"></script>
+</head>
+
+<body id="gotop" class="p-order p-order-complete">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header-small}"></div>
+	<!--/* main */-->
+	<main class="l-page l-head__pattern2">
+		<div class="l-section">
+			<div class="l-section__inner">
+				<h2 class="c-title-page"><strong>ご注文完了</strong></h2>
+				<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+					<ul th:each="message : ${allMessages}">
+						<li th:utext="${message}"></li>
+					</ul>
+				</div>
+				<form id="completeForm" th:action="@{/order/complete}" th:object="${confirmModel}">
+				    <div class="l-complete">
+                        <div class="l-complete__inner">
+                            <p class="l-complete__title">ご注文ありがとうございました。</p>
+                            <div class="l-complete__text-unit l-complete--margin-m">
+                                <p class="l-complete__text">
+                                    後ほどご登録メールアドレスにご注文のメール（自動返信）をお送りいたします。<br>
+                                    ご注文確認のメールが届いた場合でもご注文のタイミングやご注文商品によっては店舗の在庫状況より商品をお届けできない場合がございます。<br>
+                                    別途、メールにてご連絡いたしますので、予めご了承ください。
+                                </p>
+                            </div>
+                            <div class="l-complete__result l-complete--margin-m">
+                                <div class="l-complete__result-item">
+								    <div th:if="*{isLogin()}">
+                                        <span class="l-complete__result-title">ご注文番号：</span>
+                                        <strong>
+                                            <a id="goDetailPage" th:href="@{/member/history/detail(ocd=*{orderCode})}" class="c-textlink c-textlink--hover">
+                                                <span id="orderCode" th:text="*{orderCode}"></span>
+                                            </a>
+                                        </strong>
+                                        <p class="c-text--s c-margin--xxs">選択後に注文履歴詳細画面へ遷移いたします</p>
+								    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="p-order-complete__product c-margin--inline-m">
+						<h3 class="p-order-complete__product-title">購入商品</h3>
+						<!--/* PC表示用 商品一覧 */-->
+						<div class="c-product c-product--orderlist c-margin--xs">
+						    <div th:each="item, stat : *{goodsDetailDtoList}" class="c-product__item"><div class="c-product__item-inner">
+                                <div class="c-product__item-image">
+                                    <a th:href="@{/goods/detail(ggcd=${item.goodsGroupCode},cid=${item.goodsCode})}">
+                                        <img th:id="'goodsImage-'+${stat.index}" th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" width="60" height="60"/>
+                                    </a>
+                                </div>
+                                <div class="c-product__item-overview">
+                                    <div class="c-product__item-group">
+                                        <div class="c-product__item-description">
+                                            <div class="c-product__item-title">
+                                                <a th:href="@{/goods/detail(ggcd=${item.goodsGroupCode},cid=${item.goodsCode})}"><span th:text="${item.goodsGroupName}"></span></a>
+                                            </div>
+                                            <div class="c-product__item-text">
+                                                <div th:if="${item.unitTitle1}" th:remove="tag">
+                                                    <span th:text="${item.unitTitle1}" th:remove="tag"></span>：<span th:text="${item.unitValue1}" th:remove="tag"></span>
+                                                </div>
+                                                <br>
+                                                <div th:if="${item.unitTitle2}" th:remove="tag">
+                                                    <span th:text="${item.unitTitle2}" th:remove="tag"></span>：<span th:text="${item.unitValue2}" th:remove="tag"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${item.isSnsLinkFlg()}" class="p-order-complete__product-sns">
+                                            <p class="c-text--s">SNSでシェア</p>
+                                            <ul>
+                                                <li th:if="*{isUseLine()}">
+                                                    <a href="javascript:void(0)" th:attr="onclick='lineShare(\'' + ${item.goodsGroupCode} + '\');'">
+                                                        <img src="/assets/images/common/line.svg" alt="LINE">
+                                                    </a>
+                                                </li>
+                                                <li th:if="*{isUseFacebook()}">
+                                                    <a href="javascript:void(0)" th:attr="onclick='facebookShare(\'' + ${item.goodsGroupCode} + '\');'">
+                                                        <img src="/assets/images/common/facebook.svg" alt="Facebook">
+                                                    </a>
+                                                </li>
+                                                <li th:if="*{isUseTwitter()}">
+                                                    <a href="javascript:void(0)" th:attr="onclick='tweetShare(\'' + ${item.goodsGroupCode} + '\',\''+ *{twitterVia} + '\');'">
+                                                        <img src="/assets/images/common/x.svg" alt="X">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+						</div>
+					</div>
+				    <div class="p-order-complete__contact c-margin--xl c-margin--inline-m">
+                        <p class="c-text--s">メールが届かない場合は、ご記入いただいたメールアドレスが間違っている場合があります。<br>登録内容をもう一度ご確認いただくか下記へお問い合わせください。</p>
+                        <h2 class="p-order-complete__contact-title">商品の発送状況・お問い合わせ先</h2>
+                        <div class="p-order-complete__contact-area">
+                            <div class="c-text--s">
+                                <p>お問い合わせの際は上記ご注文番号をお知らせください。</p>
+                                <div class="c-margin--xxs"></div>
+                                <a th:href="@{/inquiry/}">
+                                    <p class="c-textlink c-textlink--right">お問い合わせフォームへ</p>
+                                </a>
+                            </div>
+                            <div class="c-text--s">
+                                <p>詳しいお支払い方法は、ご利用ガイドをご確認ください。</p>
+                                <div class="c-margin--xxs">
+                                    <a th:href="@{/guide/payment#anchor02}">
+                                        <p class="c-textlink c-textlink--right">ご利用ガイド（お支払い方法）</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="c-margin--xl">
+						<div th:if="*{isPaymentProcedureDisplay()}">
+						    <div id="paymentProcedureCompleteDisplaySrc" th:replace="~{*{paymentProcedureCompleteDisplaySrc}}"></div>
+							<div id="paymentProcedureConfirmDisplaySrc" th:replace="~{*{paymentProcedureConfirmDisplaySrc}}"></div>
+						</div>
+						<th:block th:if="*{isBankTransferAozora()}">
+							<h3 class="c-title--section c-font-bold">銀行振込</h3>
+							<p th:if="*{isBankTransferAozora()}" class="c-text--xs">振込期限までに以下の口座に振込みを行ってください。</p>
+							<div class="c-confirm-list c-text--m c-margin--xxs">
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">決済手段</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{payTypeName}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">振込先銀行名</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{bankName}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">振込先支店名</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{branchName}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">振込先口座種別</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{accountType}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">振込先口座番号</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{accountNumber}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">振込期限</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="*{exprireDate}"></dd>
+									</div>
+								</dl>
+							</div>
+
+						</th:block>
+						<th:block id="isPayEasy" th:if="${confirmModel.isPayEasy()}"><!--/* ペイジー決済 start */-->
+							<h3 class="c-title--section c-font-bold">ペイジー決済</h3>
+							<p class="c-text--xs">インターネットバンキングでペイジー決済サービスをご利用できます。<br/>ご利用の金融機関にインターネットバンキングのIDをお持ちの方は、「金融機関選択」ボタンを押して、金融機関選択画面を表示してください。
+							</p>
+							<div class="c-confirm-list c-text--m c-margin--xxs">
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">収納機関番号</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="${confirmModel.bkCode}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">お客様番号</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="${confirmModel.custId}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">確認番号</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="${confirmModel.confNo}"></dd>
+									</div>
+								</dl>
+								<dl>
+									<dt class="c-confirm-list__title c-font-bold">お支払い期限</dt>
+									<div class="c-confirm-list__detail">
+										<dd th:text="${#date.convert(confirmModel.paymentTimeLimitDate)}"></dd>
+									</div>
+								</dl>
+							</div>
+							<div class="c-before-info c-margin--xs">
+								<h3 class="c-title--line">お支払いの前にお読みください</h3>
+								<ul class="list_note c-text--xs c-font-bold--nomal">
+									<li class="item">・金融機関にあらかじめ口座をお持ちの場合のみご利用いただけます。</li>
+								</ul>
+								<h3 class="step-title c-title--jpen"><strong>お支払い方法</strong></h3>
+								<div class="step c-text--s">
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 01</span></p>
+										<p class="step__text c-font-bold--nomal">ご利用の金融機関の案内に従って、ペイジーでのお支払いにお進みください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 02</span></p>
+										<p class="step__text c-font-bold--nomal">収納機関番号、お客様番号、確認番号を入力してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 03</span></p>
+										<p class="step__text c-font-bold--nomal">お支払い内容を確認のうえ、料金をお支払いください。</p>
+									</div>
+								</div>
+							</div>
+							<div class="c-btn-wrap c-margin--xs">
+								<a class="c-btn--blue c-btn--blue-w" th:href="@{${confirmModel.paymentUrl}}" target="_blank">金融機関選択</a>
+							</div>
+							<div class="c-before-info c-margin--xs">
+								<h3 class="c-title--line">金融機関ATMでのお支払いの前にお読みください</h3>
+								<ul class="list_note c-text--xs c-font-bold--nomal">
+									<li class="item">・お支払いの際、収納機関番号、お客様番号、確認番号が必要です。 メモを取るか、このページを印刷してお持ちください。</li>
+									<li class="item">・ご利用明細票が領収書となりますので、お支払い後必ずお受け取りください。</li>
+								</ul>
+								<ul class="list_note c-text--xs c-font-bold--nomal">
+									<li class="item">※一部時間外手数料が発生する金融機関がございます。詳しくはお取引の金融機関にお問合せください。<br/> ※法令改正のため、2007 年1 月4 日より、ATM から10 万円を超える現金の振込はできなくなりました。
+									</li>
+								</ul>
+								<h3 class="step-title c-title--jpen"><strong>お支払い方法</strong></h3>
+								<div class="step c-text--s">
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 01</span></p>
+										<p class="step__text c-font-bold--nomal">収容機関番号・お客様番号・確認番号をお持ちのうえ、金融機関のATMにお越しください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 02</span></p>
+										<p class="step__text c-font-bold--nomal">「税金・料金払込み」を選択してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 03</span></p>
+										<p class="step__text c-font-bold--nomal">収納機関番号 を入力し、「確認」を選択してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 04</span></p>
+										<p class="step__text c-font-bold--nomal">お客様番号 を入力し、「確認」を選択してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 05</span></p>
+										<p class="step__text c-font-bold--nomal">確認番号 を入力し、「確認」を選択してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 06</span></p>
+										<p class="step__text c-font-bold--nomal">表示される内容を確認のうえ、「確認」を選択してください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 07</span></p>
+										<p class="step__text c-font-bold--nomal">「現金」または「キャッシュカード」を選択し、お支払いください。</p>
+									</div>
+									<div class="step__inner">
+										<p class="step__title c-title--small-blue c-font-bold"><span>STEP 08</span></p>
+										<p class="step__text c-font-bold--nomal">ご利用明細票を必ずお受け取りください。</p>
+									</div>
+								</div>
+							</div>
+						</th:block>
+					</div>
+				</form>
+				<div class="c-button-wrap">
+					<a class="c-button c-button--primary c-button--width-l" th:href="@{/}" type="submit" >トップページへ</a>
+				</div>
+			</div>
+		</div><!--/* l-container--col-1 */-->
+	</main>
+	<div th:replace="~{include/footer-small}"></div>
+</div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+
+
+</body>
+</html>

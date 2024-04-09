@@ -1,0 +1,187 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+
+// l-side-search 検索
+// -----------------------------------------------------------------
+
+.l-side-search {
+
+  &__title {
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px $color-e6;
+    padding-bottom: 20px;
+
+    svg {
+      width: 20px;
+      fill: $color-primary;
+    }
+
+    span {
+      margin-left: 10px;
+      @include font-style(20, 26, 500);
+    }
+  }
+
+  &__contents {
+    border-bottom: solid 1px $color-e6;
+    margin-top: 30px;
+    padding-bottom: 30px;
+
+    &-title {
+      padding-bottom: 10px;
+      @include font-style(16, 21, 500);
+
+      small {
+        @include font-style(12,20);
+        color: $color-70;
+      }
+    }
+
+    .c-input {
+      width: 100%;
+      height: 50px;
+      padding: 0 12px;
+      @include font-style(15,25);
+    }
+
+    .c-select {
+
+      &:before {
+        right: 15px;
+        width: 12px;
+        height: 7px;
+      }
+
+      &__inner {
+        width: 100%;
+        height: 50px;
+        padding: 0 30px 0 12px;
+        @include font-style(15,25);
+      }
+    }
+
+    &-price {
+      align-items: center;
+      display: flex;
+
+      &:nth-of-type(n + 2) {
+        margin-top: 10px;
+      }
+
+      span {
+        margin: 0 8px;
+        @include font-style(13, 19, bold);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  nav {
+    margin-top: 30px;
+
+    .c-button {
+      width: 100%;
+      height: 50px;
+      padding: 0 15px;
+      @include font-style(16, 30, bold);
+
+      svg {
+        fill: $color-fff;
+        margin-right: 10px;
+      }
+    }
+
+    button + button {
+      margin-top: 20px;
+    }
+  }
+}
+
+// l-side-mypage マイページ
+// -----------------------------------------------------------------
+
+.l-side-mypage {
+
+  li {
+    border-bottom: solid 1px $color-e6;
+
+    &:first-of-type {
+      border-top: solid 1px $color-e6;
+    }
+
+    a {
+      align-items: center;
+      display: flex;
+      padding: 20px 20px 20px 0;
+
+      span {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 16px;
+        height: 20px;
+        display: none; // アイコンを非表示
+      }
+
+      p {
+        @include font-style(16, 22, 500);
+      }
+
+      svg {
+
+        fill: $color-bbb;
+
+        &.mypage01 {
+          width: 16px;
+        }
+        &.mypage02 {
+          width: 16px;
+        }
+        &.mypage03 {
+          width: 16px;
+        }
+        &.mypage04 {
+          width: 16px;
+        }
+        &.mypage05 {
+          width: 16px;
+        }
+        &.mypage06 {
+          width: 16px;
+        }
+        &.mypage07 {
+          width: 16px;
+        }
+        &.mypage08 {
+          width: 16px;
+        }
+        &.mypage09 {
+          width: 16px;
+        }
+        &.mypage10 {
+          width: 16px;
+        }
+      }
+    }
+
+
+    &.is-current {
+
+      a {
+        color: $color-ccc;
+      }
+    }
+
+
+  }
+
+}
+
+
+

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>検索キーワード集計｜レポート</title>
+    <script type="text/javascript">
+        jQuery(function($){
+            // 日付補助ボタン
+            $("button[id^='targetDate_']").click(function() {
+                var mode = $(this).attr("id").replace("targetDate_", "").split("_");
+                setTargetDate(mode[0], mode[1]+"From", mode[1]+"To");
+            });
+        });
+    </script>
+</head>
+
+<body id="totaling">
+<div id="searchKeywordAccording" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/searchkeywordaccording/}" th:object="${searchKeywordAccordingModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">検索キーワード集計</h1>
+                    </div>
+    
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <div class="l-section">
+                        <!-- 検索 -->
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl class="w190px">
+                                            <dt>検索キーワード</dt>
+                                            <dd>
+                                                <input type="text" th:field="*{keyword}" maxlength="100" class="c-form-control" placeholder="ここに入力してください">
+                                                <div th:if="${#fields.hasErrors('keyword')}" th:errors="*{keyword}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+    
+                                        <dl>
+                                            <dt>検索開始日</dt>
+                                            <dd class="wrap_flex_wrap">
+                                                <div class="wrap_flex_center">
+                                                    <label class="c-datepicker w150px">
+                                                        <input type="text" class="c-form-control" placeholder="年/月/日"
+                                                               th:field="*{processDateFrom}" maxlength="10" autocomplete="off" th:errorclass="error">
+                                                    </label>
+                                                    <span class="ml10 mr10">〜</span>
+                                                    <label class="c-datepicker w150px">
+                                                        <input type="text" class="c-form-control" placeholder="年/月/日"
+                                                               th:field="*{processDateTo}" maxlength="10" autocomplete="off" th:errorclass="error">
+                                                    </label>
+                                                </div>
+                                            </dd>
+                                            <dd>
+                                                <ul class="c-list-left list_sp5 mt10 w100p">
+                                                    <li><button id="targetDate_today_processDate" class="c-btn-small" type="button">今日</button></li>
+                                                    <li><button id="targetDate_yesterday_processDate" class="c-btn-small" type="button">昨日</button></li>
+                                                    <li><button id="targetDate_crrentMonth_processDate" class="c-btn-small" type="button">今月</button></li>
+                                                    <li><button id="targetDate_prevMonth_processDate" class="c-btn-small" type="button">先月</button></li>
+                                                    <li><button id="targetDate_clear_processDate" class="c-btn-txt" type="button"><i class="material-icons close"></i>クリア</button></li>
+                                                </ul>
+                                                <div th:if="${#fields.hasErrors('processDateFrom')}" th:errors="*{processDateFrom}" class="c-error-txt mt5"></div>
+                                                <div th:if="${#fields.hasErrors('processDateTo')}" th:errors="*{processDateTo}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="mr0">
+                                            <dt>検索回数</dt>
+                                            <dd class="wrap_flex_center">
+                                                <input type="text" class="c-form-control count w80px" placeholder=""
+                                                       th:field="*{searchResultCountFrom}" maxlength="10" th:errorclass="error">
+                                                <label class="sp_label">～</label>
+                                                <input type="text" class="c-form-control count w80px" placeholder=""
+                                                       th:field="*{searchResultCountTo}" maxlength="10" th:errorclass="error">
+                                            </dd>
+                                            <dd>
+                                                <div th:if="${#fields.hasErrors('searchResultCountFrom')}" th:errors="*{searchResultCountFrom}" class="c-error-txt mt5"></div>
+                                                <div th:if="${#fields.hasErrors('searchResultCountTo')}" th:errors="*{searchResultCountTo}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                          </dl>
+                                    </div>
+
+                                    <!-- 詳細検索 -->
+                                    <div class="c-detail-warp search mt20">
+                                        <div class="c-contbtn_wrap_top">
+                                            <button class="c-btn btn_regular" type="submit" name="doReportOutput">検索する</button>
+                                            <th:block sec:authorize="hasAnyAuthority('REPORT:8')">
+                                                <div class="col_left wrap_flex_center">
+                                                    <button class="c-btn btn_back icon ml10" type="submit" name="doCsvOutput"><i class="material-icons save_alt"></i>ダウンロード</button>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article" th:if="*{isResult}">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap" th:if="*{resultDataItems.size() == 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        <span class="as_end">全0件が該当しました</span>
+                                    </div>
+                                </div>
+                                <div class="l-inner_wrap" th:if="*{resultDataItems.size() != 0}">
+                                    <div class="l-conttitle_wrap">
+                                        <div class="col wrap_flex">
+                                            <h2 class="c-pagetitle_h2 mr10">検索結果</h2>
+                                        </div>
+                                    </div>
+                                    <table id="search_result" class="c-tbl tbl_search_keyword">
+                                        <thead>
+                                            <tr>
+                                                <th class="number">#</th>
+                                                <th class="">検索キーワード</th>
+                                                <th class="seach_number">検索回数</th>
+                                                <th class="">検索結果回数</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item, stat: *{resultDataItems}">
+                                                <td class="number" th:utext="${stat.index} + 1"></td>
+                                                <td class="" th:utext="${item.searchKeyword}"></td>
+                                                <td class="seach_number txt_right" th:utext="${#number.convert(item.searchCount)}"></td>
+                                                <td class="txt_right" th:utext="${#number.convert(item.searchResultCount, '#,##0.00')}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/* footer */-->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>お問い合わせ受付のお知らせ</title>
+</head>
+<body>
+<div>
+    <div>
+        <span>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+    <div>
+        <span>■　</span><span th:text="${shopName}"></span>
+    </div>
+    <div>
+        <span>■　お問い合わせ受付のお知らせ</span>
+    </div>
+    <div>
+        <span>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span>みんなの郵送検査室 をご利用いただき</span>
+    </div>
+    <div>
+        <span>誠にありがとうございます。</span>
+    </div>
+    <div>
+        <span>お問い合わせは以下の内容で受付いたしました。</span>
+    </div>
+    <div>
+        <span>内容を確認いたしまして改めて回答いたしますので、</span>
+    </div>
+    <div>
+        <span>しばらくお待ちください。</span>
+    </div>
+</div>
+<br>
+<div>
+    <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+</div>
+<div>
+    <div>
+        <span>【お問い合わせ日時】</span>
+    </div>
+    <div>
+        <th:block th:if="${mailContentsMap.get('I_LAST_USER_INQUIRY_TIME') != ''}">
+            <span th:text="${mailContentsMap.get('I_LAST_USER_INQUIRY_TIME')}"></span>
+        </th:block>
+        <th:block th:if="${mailContentsMap.get('I_LAST_USER_INQUIRY_TIME') == ''}">
+            <span th:text="${mailContentsMap.get('I_FIRST_INQUIRY_TIME')}"></span>
+        </th:block>
+    </div>
+    <br>
+    <div>
+        <span>【お問い合わせ番号】</span>
+    </div>
+    <div>
+        <span th:text="${mailContentsMap.get('I_CODE')}"></span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span>◆以下のURLより、お問い合わせ内容をご確認ください。</span>
+    </div>
+    <th:block th:if="${mailContentsMap.get('I_TYPE') == '1'}">
+        <th:block th:if="${mailContentsMap.get('I_MEMBERINFO_SEQ') == '0'}">
+            <div>
+                <span><a th:href="${hostUrl} + 'guest/history/detail/?icd=' + ${mailContentsMap.get('I_CODE')}" th:text="${hostUrl} + 'guest/history/detail/?icd=' + ${mailContentsMap.get('I_CODE')}"></a></span>
+            </div>
+            <div>
+                <span>※ご注文番号、ご入力いただいた電話番号での認証が必要となります｡</span>
+            </div>
+            <div>
+                <span>ログイン後「お問い合わせはこちらから」をクリックし、問い合わせ内容をご確認ください。</span>
+            </div>
+        </th:block>
+        <th:block th:if="${mailContentsMap.get('I_MEMBERINFO_SEQ') != '0'}">
+            <div>
+                <span><a th:href="${hostUrl} + 'member/history/detail/?icd=' + ${mailContentsMap.get('I_CODE')}" th:text="${hostUrl} + 'member/history/detail/?icd=' + ${mailContentsMap.get('I_CODE')}"></a></span>
+            </div>
+            <div>
+                <span>※会員ID（メールアドレス）とパスワードでログインが必要となります｡</span>
+            </div>
+            <div>
+                <span>ログイン後「お問い合わせはこちらから」をクリックし、問い合わせ内容をご確認ください。</span>
+            </div>
+        </th:block>
+    </th:block>
+    <th:block th:if="${mailContentsMap.get('I_TYPE') == '0'}">
+        <th:block th:if="${mailContentsMap.get('I_MEMBERINFO_SEQ') == '0'}">
+            <div>
+                <span><a th:href="${hostUrl} + 'guest/inquiry/?icd=' + ${mailContentsMap.get('I_CODE')}" th:text="${hostUrl} + 'guest/inquiry/?icd=' + ${mailContentsMap.get('I_CODE')}"></a></span>
+            </div>
+            <div>
+                <span>※お問い合わせ番号、ご入力いただいた電話番号での認証が必要となります｡</span>
+            </div>
+        </th:block>
+        <th:block th:if="${mailContentsMap.get('I_MEMBERINFO_SEQ') != '0'}">
+            <div>
+                <span><a th:href="${hostUrl} + 'member/inquiry/detail/?icd=' + ${mailContentsMap.get('I_CODE')}" th:text="${hostUrl} + 'member/inquiry/detail/?icd=' + ${mailContentsMap.get('I_CODE')}"></a></span>
+            </div>
+            <div>
+                <span>※会員ID（メールアドレス）とパスワードでログインが必要となります｡</span>
+            </div>
+        </th:block>
+    </th:block>
+</div>
+<br>
+<div>
+    <div>
+      <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+    </div>
+    <div>
+      <span>※このメールはご登録いただいたお客様のメールアドレスに自動送信しております｡</span>
+    </div>
+    <div>
+      <span>※本メールに直接返信はできません。</span>
+    </div>
+    <div>
+      <span>※お心当たりのない方は、誠に恐れ入りますが、</span>
+    </div>
+    <div>
+      <span><a th:href="'mailto:' + ${shopInfoMail}" th:text="${shopInfoMail}"></a> までご連絡ください。</span>
+    </div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

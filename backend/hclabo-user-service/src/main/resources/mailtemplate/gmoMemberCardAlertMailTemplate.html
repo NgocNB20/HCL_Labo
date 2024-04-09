@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>GMO会員カードアラート</title>
+</head>
+<body>
+<div>
+    <div><span>GMO会員カード通信中に下記のエラーを検出しました。</span></div>
+    <br>
+    <div><span>【システム名】</span></div>
+    <div><span th:text="${mailContentsMap.get('SYSTEM')} + ' Admin'"></span></div>
+    <br>
+    <div><span>【発生時刻】</span></div>
+    <div><span th:text="${mailContentsMap.get('TIME')}"></span></div>
+    <br>
+    <div><span>【発生サーバ】</span></div>
+    <div><span th:text="${mailContentsMap.get('SERVER')}"></span></div>
+    <br>
+    <div><span>【会員ID】</span></div>
+    <div><span th:text="${mailContentsMap.get('MEMBERID')}"></span></div>
+    <div><span th:text="${mailContentsMap.get('CARDSEQが''でない場合')}"></span></div>
+    <div><span>【カード登録連番】</span></div>
+    <div><span th:text="${mailContentsMap.get('CARDSEQ')}"></span></div>
+    <div><span th:text="${mailContentsMap.get('ここまでCARDSEQが''でない場合')}"></span></div>
+    <br>
+    <div><span>【API】</span></div>
+    <div><span th:text="${mailContentsMap.get('API')}"></span></div>
+    <br>
+    <div><span>【エラー情報】</span></div>
+    <div>
+        <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(mailContentsMap.get('ERROR')),'\n','&lt;br /&gt;'))}"></span>
+    </div>
+    <br>
+    <div><span>以上</span></div>
+</div>
+</body>
+</html>

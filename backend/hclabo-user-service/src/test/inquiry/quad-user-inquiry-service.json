@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "c835743d-cc47-4395-926f-c344f75d3db4",
+		"name": "hclabo-user-inquiry-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "お問い合わせ登録(regist)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.newsSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryGroupSeq\": \"1001\",\r\n    \"inquiryseq\": 10000002,\r\n    \"inquiryType\": \"0\",\r\n    \"firstInquiryTime\": \"2010-10-21\",\r\n    \"inquiryCode\": \"Q20110001172\",\r\n    \"inquiryDetailRequestist\": [\r\n        {\r\n            \"inquirygroupseq\": \"1001\",\r\n            \"inquiryseq\": 10000002,\r\n            \"inquiryVersionNo\": 10,\r\n            \"requestType\": \"0\",\r\n            \"divisionName\": \"12131231223\",\r\n            \"inquiryTime\": \"2022-01-10\",\r\n            \"inquiryBody\": \"thanh vi hong\"\r\n        }\r\n    ],\r\n        \"memberInfoRequest\": {\r\n        \"memberInforSeq\": 10000027,\r\n        \"memberInfoSex\": \"0\",\r\n        \"prefectureType\": \"02\",\r\n        \"paymentCardRegistType\": \"0\"\r\n    },\r\n    \"inquiryGroup\": 1001,\r\n    \"inputInquiryBody\": \"\",\r\n    \"inquiryBody\": \"商品管理番号：ＳＴＧＯＯＤＳ００２商品名：総合・商品②\",\r\n    \"inquiryStatus\": \"0\",\r\n    \"inquiryLastKana\": \"ファン\",\r\n    \"inquiryFirstKana\": \"ファン\",\r\n    \"inquiryLastName\":\"fff\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/inquiries",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ情報取得(getByInquiryCode)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByNewsSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/inquiries/Q00818000005?inquiryTel=0668094831",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"Q00818000005"
+					],
+					"query": [
+						{
+							"key": "inquiryTel",
+							"value": "0668094831"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ情報取得(getByInquiryCodeAndInquiryTel)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByNewsSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/inquiries/Q11112000002?inquiryTel=08029363048",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"Q11112000002"
+					],
+					"query": [
+						{
+							"key": "inquiryTel",
+							"value": "08029363048"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ情報一覧取得(get)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.inquiryList).to.have.lengthOf(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8180/users/inquiries?inquiryStatus=1&page=1&limit=10&sort=true&sortBy=inquirySeq",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries"
+					],
+					"query": [
+						{
+							"key": "inquiryStatus",
+							"value": "1"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						},
+						{
+							"key": "sortBy",
+							"value": "inquirySeq"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": " 会員に紐づく問い合わせの存在チェック(check)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/10000027/inquiries/check",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"10000027",
+						"inquiries",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": " 問い合わせ更新(update)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryCode\": \"Q20110001171\",\r\n    \"inquiryLastName\": \"Thanh bot\",\r\n    \"inquiryFirstName\": \"ddd\",\r\n    \"inquiryMail\": \"thanh.vihong@vti.666666com.vn\",\r\n    \"inquiryTitle\": \"\",\r\n    \"shopSeq\":\"1001\",\r\n    \"inquiryBody\": \"商品管理番号：ｚａｋｋａ－００９商品番号：ｚａｋｋａ－００７０１商品名：アロマレグランス\",\r\n    \"inquiryStatus\": \"1\",\r\n    \"inquiryLastKana\": \"キムラ\",\r\n    \"inquiryFirstKana\": \"シュンスケ\",\r\n    \"inquiryZipCode\": \"\",\r\n    \"inquiryPrefecture\": \"\",\r\n    \"inquiryAddress1\": \"\",\r\n    \"inquiryAddress2\": \"\",\r\n    \"inquiryAddress3\": \"\",\r\n    \"inquiryTel\": \"\",\r\n    \"inquiryMobileTel\": \"06111111111\",\r\n    \"processPersonName\": \"\",\r\n    \"inquiryType\": \"0\",\r\n    \"orderCode\": \"\",\r\n    \"firstInquiryTime\": \"\",\r\n    \"lastUserInquiryTime\": \"\",\r\n    \"lastOperatorInquiryTime\": \"\",\r\n    \"lastRepresentative\": \"\",\r\n    \"memo\": \"\",\r\n    \"inquirySeq\": \"10000002\",\r\n    \"cooperationMemo\": \"\",\r\n    \"memberInfoId\": \"\",\r\n    \"inquiryGroupName\": \"\",\r\n    \"inquiryVersionNo\": \"14\",\r\n    \"inquiryDetailList\": [\r\n        {   \"inquirygroupseq\":\"1001\",\r\n            \"inquiryseq\": 10000002,\r\n            \"inquiryVersionNo\": 49,\r\n            \"requestType\": \"0\",\r\n            \"divisionName\":\"12131231223\",\r\n            \"inquiryTime\": \"2022-01-10\",\r\n            \"inquiryBody\":\"thanh vi hong\"\r\n        }\r\n    ],\r\n    \"memberInfo\": {\r\n        \"memberInforSeq\": 10000084,\r\n        \"memberInfoSex\": \"0\",\r\n        \"prefectureType\": \"01\",\r\n        \"paymentCardRegistType\": \"0\"\r\n    },\r\n    \"mailTemplateType\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/inquiries/10000029",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000029"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ更新(update COMPLETION)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquirySeq\": \"10000003\",\r\n    \"inquiryStatus\": \"2\",\r\n    \"sendMailFlag\": \"true\",\r\n    \"inquiryDetailList\": [\r\n        {   \"inquirygroupseq\":\"1001\",\r\n            \"inquiryseq\": 10000003,\r\n            \"inquiryVersionNo\": 62,\r\n            \"requestType\": \"0\",\r\n            \"divisionName\":\"12131231223\",\r\n            \"inquiryBody\":\"thanh vi hong\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8180/users/inquiries/10000029",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000029"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ状態更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateStatus OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"updateStatus confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.inquirySeq).eql(10000000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inquiryStatus\": \"0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/10000000/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000000",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュ問い合わせ会員紐づけ(update updateRelationMember)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateRelationMember OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoId\": \"y-serai@b-tm.co.jp\",\r\n    \"isRelease\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/10000000/member",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000000",
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ニュ問い合わせ会員紐づけ(update updateRelationMember notRelease)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateRelationMember OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoId\": \"y-serai@b-tm.co.jp\",\r\n    \"isRelease\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/10000000/member",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000000",
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "問い合わせ管理メモ更新(updateMemo)-OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateMemo OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"memo\":\"memo\",\r\n        \"cooperationMemo\":\"memo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/inquiries/10000072/memo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"inquiries",
+						"10000072",
+						"memo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

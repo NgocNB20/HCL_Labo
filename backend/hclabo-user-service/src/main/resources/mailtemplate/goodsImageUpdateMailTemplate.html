@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>結果レポート</title>
+</head>
+<body>
+    <div>
+        <span th:text="${admin.get('SYSTEM')}"></span>
+        <span>の</span>
+        <span th:text="${admin.get('BATCH_NAME')}"></span>
+        <span>が終了しました。</span>
+    </div>
+    <div>
+        <span th:text="${admin.get('WARNING_INFO')}"></span>
+    </div>
+    <br>
+    <div>
+        <span>-----</span>
+    </div>
+    <div>
+        <span>■総処理件数</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_SUM')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_SUM')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■成功件数</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_SUCCESS_SUM')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■失敗件数</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_ERROR_SUM')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>---</span>
+    </div>
+    <div>
+        <span>【成功内訳】</span>
+    </div>
+    <br>
+    <div>
+        <span>■商品画像 追加</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_REGIST')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_REGIST')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■商品画像 削除</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_DELETE')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_DELETE')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■商品画像 更新</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_UPDATE')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_UPDATE')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>【失敗内訳】</span>
+    </div>
+    <br>
+    <div>
+        <span>■商品管理番号が存在しない</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_NOTEXIST')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_NOTEXIST')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■画像ファイル名が不適切</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_FILENAME_NOTMATCH')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_FILENAME_NOTMATCH')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>■商品が削除されている</span>
+    </div>
+    <div>
+        <span>　商品管理番号：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUP_OPENSTATEDEL')}"></span>
+        <span> 件</span>
+    </div>
+    <div>
+        <span>　グループ画像：</span>
+        <span th:text="${admin.get('CNT_GOODSGROUPIMAGE_OPENSTATEDEL')}"></span>
+        <span> 件</span>
+    </div>
+    <br>
+    <div>
+        <span>---</span>
+    </div>
+    <div>
+        <span>■画像配置先</span>
+    </div>
+    <div>
+        <span>・[</span>
+        <span th:text="${admin.get('GOODS_IMAGE_PATH')}"></span>
+        <span>]</span>
+    </div>
+    <br>
+    <div>
+        <span>---</span>
+    </div>
+    <div>
+        <span>goodsImageProc.csvを閲覧する際は、商品管理番号でソートしていただくと</span>
+    </div>
+    <div>
+        <span>より閲覧しやすくなります。</span>
+    </div>
+    <br>
+    <div>
+        <span th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(admin.get('LIST')),'\n','&lt;br /&gt;'))}"></span>
+    </div>
+    <br>
+    <div>
+        <span>以上</span>
+    </div>
+</body>
+</html>

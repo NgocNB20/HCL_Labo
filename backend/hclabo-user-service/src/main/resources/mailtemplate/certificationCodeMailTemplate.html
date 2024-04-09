@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>認証コードのお知らせ</title>
+</head>
+<body>
+<div>
+    <div>
+        <span>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+    <div>
+        <span>■　</span><span th:text="${shopName}"></span>
+    </div>
+    <div>
+        <span>■　認証コードのお知らせ</span>
+    </div>
+    <div>
+        <span>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span th:text="${mailContentsMap.get('O_LAST_NAME')}"></span><span>　</span><span th:text="${mailContentsMap.get('O_FIRST_NAME')}"></span><span> 様</span>
+    </div>
+    <br>
+    <div>
+        <span>みんなの郵送検査室 をご利用いただきありがとうございます。</span>
+    </div>
+    <br>
+    <div>
+        <span>以下の認証コードを入力して、お手続きをお願いいたします。</span>
+    </div>
+    <div>
+        <span th:text="${mailContentsMap.get('CERTIFICATION_CODE')}"></span>
+    </div>
+</div>
+<br>
+<div>
+    <div>
+        <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+    </div>
+    <div>
+        <span>【ご注意ください！】</span>
+    </div>
+    <div>
+        <span>◆認証コードはこのメール発行後、10分間有効です。</span>
+    </div>
+    <div>
+        <span>10分間経過した場合は、お手数ですが、再度操作を</span>
+    </div>
+    <div>
+        <span>やり直していただきますようお願いいたします。</span>
+    </div>
+    <div>
+        <span>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</span>
+    </div>
+    <div>
+        <span>※このメールはご登録いただいたお客様のメールアドレスに自動送信しております｡ </span>
+    </div>
+    <div>
+        <span>※お心当たりのない方は、誠に恐れ入りますが、</span>
+    </div>
+    <div>
+        <span><a th:href="'mailto:' + ${shopInfoMail}" th:text="${shopInfoMail}"></a> までご連絡ください。</span>
+    </div>
+</div>
+<div th:replace="~{common/signature}"></div>
+</body>
+</html>

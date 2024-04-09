@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>運営者更新｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="registAdministrator" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"/>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"/>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/administrator/update/}" th:object="${administratorUpdateModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">運営者更新</h1>
+                    </div>
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- 運営者情報 -->
+                    <article class="l-section" id="mainContainer">
+                        <article class="l-article" >
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">運営者情報</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>ユーザID</dt>
+                                            <dd><span th:text="*{administratorId}" th:remove="tag"/></dd>
+                                        </div>
+                                        <div class="edit">
+                                            <dt>パスワード</dt>
+                                            <dd>
+                                                <input type="password" th:field="*{administratorPassword}"
+                                                       placeholder="入力してください" maxLength="20"
+                                                       class="c-form-control w560px" autocomplete="off"
+                                                       th:errorclass="error"/>
+                                                <div class="c-annotation mt5">※パスワードは入力された場合のみ変更されます。</div>
+                                                <div th:if="${#fields.hasErrors('administratorPassword')}"
+                                                     th:errors="*{administratorPassword}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+                                        <div class="edit">
+                                            <dt>氏名<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <dl class="c-name">
+                                                    <div>
+                                                        <dt>姓</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w160px"
+                                                                   placeholder="入力してください"
+                                                                   th:field="*{administratorLastName}"
+                                                                   th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('administratorLastName')}"
+                                                                 th:errors="*{administratorLastName}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </div>
+                                                    <div>
+                                                        <dt>名</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w160px"
+                                                                   placeholder="入力してください"
+                                                                   th:field="*{administratorFirstName}"
+                                                                   th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('administratorFirstName')}"
+                                                                 th:errors="*{administratorFirstName}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>フリガナ<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <dl class="c-name">
+                                                    <div>
+                                                        <dt>セイ</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w160px"
+                                                                   placeholder="入力してください"
+                                                                   th:field="*{administratorLastKana}"
+                                                                   th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('administratorLastKana')}"
+                                                                 th:errors="*{administratorLastKana}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </div>
+                                                    <div>
+                                                        <dt>メイ</dt>
+                                                        <dd>
+                                                            <input type="text" class="c-form-control w160px"
+                                                                   placeholder="入力してください"
+                                                                   th:field="*{administratorFirstKana}"
+                                                                   th:errorclass="error">
+                                                            <div th:if="${#fields.hasErrors('administratorFirstKana')}"
+                                                                 th:errors="*{administratorFirstKana}"
+                                                                 class="c-error-txt mt5"></div>
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>メールアドレス<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <input type="text" class="c-form-control w560px"
+                                                       placeholder="入力してください" th:field="*{administratorMail}"
+                                                       th:errorclass="error"/>
+                                                <div th:if="${#fields.hasErrors('administratorMail')}"
+                                                     th:errors="*{administratorMail}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>状態<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <select id="administratorStatus" name="administratorStatus" class="c-form-control"
+                                                        th:errorclass="error">
+                                                    <option th:each="item : *{administratorStatusItems}"
+                                                            th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{administratorStatus}">
+                                                    </option>
+                                                </select>
+                                                <div id="administratorStatusError" th:if="${#fields.hasErrors('administratorStatus')}"
+                                                     th:errors="*{administratorStatus}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>利用開始日</dt>
+                                            <dd><span th:text="*{oldUseStartDate==null ? '―' : #date.convert(oldUseStartDate, 'yyyy/MM/dd HH:mm:ss')}"
+                                                      th:remove="tag"/></dd>
+                                        </div>
+                                        <div>
+                                            <dt>利用終了日</dt>
+                                            <dd><span th:text="*{oldUseEndDate==null ? '―' : #date.convert(oldUseEndDate, 'yyyy/MM/dd HH:mm:ss')}"
+                                                      th:remove="tag"/></dd>
+                                        </div>
+
+                                        <div class="edit">
+                                            <dt>権限グループ<span class="ico_required">必須</span></dt>
+                                            <dd>
+                                                <select id="administratorGroupSeq" name="administratorGroupSeq" class="c-form-control"
+                                                        th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{administratorGroupSeqItems}"
+                                                            th:value="${item.key}" th:text="${item.value}"
+                                                            th:selected="${item.key} == *{administratorGroupSeq}">
+                                                        選択してください
+                                                    </option>
+                                                </select>
+                                                <div id="administratorGroupSeqError" th:if="${#fields.hasErrors('administratorGroupSeq')}"
+                                                     th:errors="*{administratorGroupSeq}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </article>
+
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button name="doCancel" type="submit" class="c-btn btn_back icon_left"><i
+                                        class="material-icons navigate_before"></i>戻る
+                                </button>
+                            </div>
+                            <div class="col_left">
+                                <input type="hidden" id="isConfirmBtnClicked" value="false"/>
+                                <button id="doConfirm" name="doConfirm" class="c-btn btn_regular" type="submit">確認</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"/>
+    </main>
+</div>
+</body>
+</html>

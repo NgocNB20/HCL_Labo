@@ -1,0 +1,101 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/icon" as *;
+
+.l-headermenu {
+
+  $this: &;
+  position: relative;
+
+  &__category {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 20;
+    position: absolute;
+    top: 50px;
+    width: 300px;
+    height: 360px;
+    padding: 20px 59px 20px 28px;
+    background-color: $color-fff;
+    background-image: url(/assets/images/common/bg_scroll.jpg);
+    background-position: right top;
+    background-repeat: repeat-y;
+    box-shadow: 0 2px 4px rgba(#999, .2);
+    // ブラウザ固有のスクロールが出てしまう為、非表示
+    //overflow-y: scroll;
+    //overflow-x: hidden;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;  
+    }
+
+    .simplebar-track {
+      width: 19px;
+      border-radius: 10px;
+    }
+    
+    .simplebar-track .simplebar-scrollbar.simplebar-visible::before {
+      opacity: 1;
+    }
+    
+    .simplebar-track .simplebar-scrollbar::before {
+      width: 10px;
+      margin-inline: auto;
+      background: $color-primary;
+    }
+
+    li {
+      padding: 9px 0;
+      @include font-style(16,22);
+
+      a,
+      span {
+        width: 100%;
+        cursor: pointer;
+
+        &:hover {
+          color: $color-primary;
+          font-weight: bold;
+          background-position: right 60%;
+          background-size: 9px auto;
+          padding-right: 16px;
+          @include icon('arrow-right', 'f36b30');
+          opacity: 1;
+        }
+      }
+    }
+
+    &--level1 {
+      top: 40px;
+      width: 210px;
+      transition: opacity $comMS $comES;
+
+      &.is-active {
+        top: 50px;
+      }
+    }
+
+    &--level2 {
+      left: 200px;
+
+      &.is-active {
+        left: 210px;
+        transition: left $comMS $comES;
+      }
+    }
+
+    &--level3 {
+      left: 500px;
+
+      &.is-active {
+        left: 510px;
+        transition: left $comMS $comES;
+      }
+    }
+  }
+}
+
+

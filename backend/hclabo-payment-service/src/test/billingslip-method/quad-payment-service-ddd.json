@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "d7b66d52-cf5e-485f-a4b5-85a25ef6baa0",
+		"name": "hclabo-payment-service-ddd",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET /payments/billing-slips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/payments/billing-slips?transactionId=698176dc-4028-4638-a452-f00bf62a7799",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips"
+					],
+					"query": [
+						{
+							"key": "transactionId",
+							"value": "698176dc-4028-4638-a452-f00bf62a7799"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /payments/billing-slips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "10000000",
+						"type": "text"
+					},
+					{
+						"key": "addressId",
+						"value": "12345",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"transactionId\": \"698176dc-4028-4638-a452-f00bf62a7799\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8580/payments/billing-slips",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /payments/billing-slips/address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updateAddress-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"698176dc-4028-4638-a452-f00bf62a7799\",\r\n    \"billingAddressId\": \"999999\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/billing-slips/address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /payments/billing-slips/methods",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"updatePaymentMethod-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"698176dc-4028-4638-a452-f00bf62a7799\",\r\n    \"paymentMethodId\": \"1001\",\r\n    \"paymentToken\": \"123456789\",\r\n    \"expirationMonth\": \"09\",\r\n    \"expirationYear\": \"2030\",\r\n    \"paymentType\": \"1\",\r\n    \"dividedNumber\": null,\r\n    \"registCardFlag\": true,\r\n    \"useRegistedCardFlag\": false,\r\n    \"conveniCode\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/billing-slips/methods",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips",
+						"methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /payments/billing-slips/check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"billingslip check-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"698176dc-4028-4638-a452-f00bf62a7799\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/billing-slips/check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /payments/billing-slips/draft/revert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"revert-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"698176dc-4028-4638-a452-f00bf62a7799\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/billing-slips/draft/revert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips",
+						"draft",
+						"revert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /payments/billing-slips/payment-agency/entrust",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"revert-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-LOGGED-IN-MEMBER-SEQ",
+						"value": "1000000",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"698176dc-4028-4638-a452-f00bf62a7799\",\r\n    \"httpAccept\": \"text/html,application/xhtml+xml,application/xml\",\r\n    \"httpUserAgent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/xxx (KHTML, like Gecko) Chrome/xxx Safari/xxx\",\r\n    \"securityCode\" : \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/billing-slips/payment-agency/entrust",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"billing-slips",
+						"payment-agency",
+						"entrust"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /payments/methods/selectable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getSelectable-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\":\"6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8580/payments/methods/selectable?transactionId=698176dc-4028-4638-a452-f00bf62a7799",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8580",
+					"path": [
+						"payments",
+						"methods",
+						"selectable"
+					],
+					"query": [
+						{
+							"key": "transactionId",
+							"value": "698176dc-4028-4638-a452-f00bf62a7799"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

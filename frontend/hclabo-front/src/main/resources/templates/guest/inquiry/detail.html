@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+	<script type="text/javascript" th:src="@{/assets/js/charCount.js}"></script>
+	<script language="JavaScript">
+		$(function () {
+			new CharCount(document.getElementById('inputInquiry'), 'limit');
+		})
+	</script>
+</head>
+
+<body id="gotop" class="p-guest-inquiry" th:object="${guestInquiryModel}">
+	<div class="l-mainwrap">
+		<div th:replace="~{include/header}"></div>
+
+		<main class="l-page">
+            <div class="l-breadcrumbs">
+                <div class="l-breadcrumbs__inner">
+                    <div class="l-breadcrumbs__list">
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+                        <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">お問い合わせ履歴詳細</span></div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="l-section">
+				<div class="l-section__inner">
+					<h2 class="c-title-page"><strong>お問い合わせ履歴詳細</strong></h2>
+
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+                    <div class="c-margin--inline-m">
+                        <div class="c-history-info c-history-info--2col c-history-info--wrap">
+                            <div class="c-text--m">
+								<dl>
+									<dt class="c-history-info__title">お問い合わせ日</dt>
+									<dd class="c-history-info__detail" id="firstInquiryTime" th:text="*{#date.convert(firstInquiryTime)} + ' ' + *{#date.convert(firstInquiryTime,'HH:mm')}"></dd>
+									<dt class="c-history-info__title">お問い合わせ状況</dt>
+									<dd class="c-history-info__detail">
+										<th:block th:switch="*{inquiryStatusValue}">
+											<div th:case="0" class="c-label-status c-label-status--secondary"><p class="c-text--s" id="inquiryStatus" th:text="*{inquiryStatus}"></p></div>
+											<div th:case="1" class="c-label-status c-label-status--orange"><p class="c-text--s" id="inquiryStatus" th:text="*{inquiryStatus}"></p></div>
+											<div th:case="2" class="c-label-status c-label-status--black"><p class="c-text--s" id="inquiryStatus" th:text="*{inquiryStatus}"></p></div>
+										</th:block>
+									</dd>
+									<dt class="c-history-info__title">お問い合わせ番号</dt>
+									<dd class="c-history-info__detail" id="inquiryCode" th:text="*{inquiryCode}"></dd>
+									<dt class="c-history-info__title">分類</dt>
+									<dd class="c-history-info__detail" id="inquiryGroupName-1" th:text="*{inquiryGroupName}"></dd>
+        							<dt class="c-history-info__title">お客様情報</dt>
+									<dd class="c-history-info__detail">
+									<span th:remove="tag" th:text="*{inquiryName} + ',' + *{inquiryKana}"></span><br>
+									<span th:remove="tag" th:text="*{inquiryTel}"></span><br>
+									<span th:remove="tag" th:text="*{inquiryMail}"></span></dd>
+								</dl>
+							</div>
+						</div>
+                    </div>
+
+					<section class="c-margin--inline-m">
+						<h3 class="c-title-line">お問い合わせ内容</h3>
+						<th:block id="inquiryPageItems" th:each="item, stat : *{inquiryModelItems}" >
+							<th:block id="isConsumer" th:if="${item.isConsumer()}">
+								<div class="c-history-chat question" th:classappend="${stat.first} ? 'contact-title question' : 'question'">
+									<div class="c-history-chat__inner" th:classappend="${stat.last} ? 'c-history-chat__inner--last'">
+										<div class="post-info">
+										    <th:block th:if="${stat.first}">
+											    <h4 class="post-title" th:id="'inquiryGroupName-'+${stat.index}" th:text="*{inquiryGroupName}"></h4>
+										    </th:block>
+											<span class="icon-question c-text--m c-font-bold" th:text="*{inquiryName} + ' 様'"></span>
+											<span class="post-time c-text--s"><span><svg viewBox="0 0 13 13" style="fill:#393939;"><use xlink:href="/assets/images/icon/time.svg#time"></use></svg></span>
+											<p th:id="'inquiryTime-'+${stat.index}" th:text="${#date.convert(item.inquiryTime)} + ' ' + ${#date.convert(item.inquiryTime,'HH:mm')}"></p></span>
+										</div>
+										<div class="post-txt">
+											<p th:id="'inquiryBody-'+${stat.index}" th:utext="${#pre.convert(item.inquiryBody)}"></p>
+										</div>
+									</div>
+								</div>
+							</th:block>
+							<th:block id="isNotConsumer" th:if="${!item.isConsumer()}">
+								<div class="c-history-chat answer">
+									<div class="c-history-chat__inner" th:classappend="${stat.last} ? 'c-history-chat__inner--last'">
+										<div class="post-info">
+											<span class="icon-question c-text--m c-font-bold" th:id="'representative-'+${stat.index}" th:text="${item.operator}"></span>
+											<span class="post-time c-text--s"><span><svg viewBox="0 0 13 13" style="fill:#393939;"><use xlink:href="/assets/images/icon/time.svg#time"></use></svg></span>
+											<p th:id="'inquiryTime-'+${stat.index}" th:text="${#date.convert(item.inquiryTime)} + ' ' + ${#date.convert(item.inquiryTime,'HH:mm')}"></p></span>
+										</div>
+										<div class="post-txt">
+											<p th:id="'inquiryBody-'+${stat.index}" th:utext="${#pre.convert(item.inquiryBody, false)}"></p>
+										</div>
+									</div>
+								</div>
+							</th:block>
+						</th:block>
+					</section>
+					<!--/*  お問い合わせが完了していない場合は入力フォームを表示  */-->
+					<th:block id="isNotCompletion" th:if="*{!isCompletion()}">
+						<form id="inquiryForm" th:action="@{/guest/inquiry/}" method="post">
+							<div class="c-margin--xl">
+								<div id="inputInquiry" class="c-customer-input">
+									<h4 class="c-customer-input__title">お客様入力欄</h4>
+									<div class="c-text-area__count">
+                                    	<textarea limit="4000" id="inputInquiryBody" th:field="*{inputInquiryBody}" th:errorclass="field-error" class="c-text-area c-text-area--width-l" placeholder="ここに入力してください"></textarea>
+                                    	<div th:if="${#fields.hasErrors('inputInquiryBody')}" th:errors="*{inputInquiryBody}" class="c-field-error"></div>
+									</div>
+									<div class="c-customer-input__button c-margin--s">
+										<button id="doOnceInquiryUpdate" name="doOnceInquiryUpdate" type="submit" class="c-button c-button--primary c-button--width-m">お問い合わせを送信する</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</th:block>
+				</div>
+			</div>
+		</main>
+		<div th:replace="~{include/footer}" ></div>
+	</div>
+
+	<script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body></html>

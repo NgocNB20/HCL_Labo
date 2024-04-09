@@ -1,0 +1,6 @@
+SELECT
+       *
+FROM
+     ORDERSLIPFORREVISION
+WHERE
+      TRANSACTIONREVISIONID = /*transactionRevisionId*/'10001'

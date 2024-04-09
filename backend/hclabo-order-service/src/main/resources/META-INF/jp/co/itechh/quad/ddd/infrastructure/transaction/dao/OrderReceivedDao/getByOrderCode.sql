@@ -1,0 +1,1 @@
+select * from orderReceived where orderCode = /*orderCode*/'1001'

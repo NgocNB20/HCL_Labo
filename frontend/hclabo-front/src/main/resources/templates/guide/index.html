@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+
+<head>
+    <meta th:replace="~{include/head}"/>
+</head>
+
+<body id="gotop" class="p-guide">
+<div class="l-mainwrap">
+    <div th:replace="~{include/header}"/>
+
+    <main class="l-page p-guide-top">
+      <div class="l-breadcrumbs">
+        <div class="l-breadcrumbs__inner">
+          <div class="l-breadcrumbs__list">
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__link"><a href="/" class="c-textlink c-textlink--hover">TOP</a></span></div>
+            <div class="l-breadcrumbs__item"><span class="l-breadcrumbs__current">ご利用ガイド</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>ご利用ガイド</strong></h2>
+
+          <div class="p-guide-top__contents">
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/shop"><svg viewBox="0 0 21 30" class="first" width="21">
+                <use xlink:href="/assets/images/icon/first.svg#first"></use>
+              </svg>初めての方へ</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/shop#anchor-guide-shop01" class="p-guide-top__link">郵送検査とは</a></li>
+                  <li><a href="/guide/shop#anchor-guide-shop02" class="p-guide-top__link">郵送検査の流れ</a></li>
+                </ul>
+              </dd>
+            </dl>
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/environment"><svg viewBox="0 0 23.9 23.3" class="shop" width="30">
+                <use xlink:href="/assets/images/icon/shop-logo.svg#shop-logo"></use>
+              </svg>サイトについて</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/environment#anchor-guide-shop01" class="p-guide-top__link">推奨環境について</a></li>
+                  <li><a href="/guide/agreement#anchor-guide-shop01" class="p-guide-top__link">ご利用規約</a></li>
+                  <li><a href="/guide/law#anchor-guide-shop01" class="p-guide-top__link">特定商取引法に基づく表記</a></li>
+                  <li><a href="/guide/privacy#anchor-guide-shop01" class="p-guide-top__link">プライバシーポリシー</a></li>
+                  <li><a href="/inquiry/" class="p-guide-top__link">お問い合わせ</a></li>
+                </ul>
+              </dd>
+            </dl>
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/order"><svg viewBox="0 0 33.9 30"  class="order" width="34">
+                <use xlink:href="/assets/images/icon/cart.svg#cart"></use>
+              </svg>ご注文について</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/order#anchor-guide-order01" class="p-guide-top__link">ご注文方法</a></li>
+                  <li><a href="/guide/order#anchor-guide-order02" class="p-guide-top__link">ご注文の確認について</a></li>
+                  <li><a href="/guide/order#anchor-guide-order03" class="p-guide-top__link">商品の返品について</a></li>
+                </ul>
+              </dd>
+            </dl>
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/payment"><svg viewBox="0 0 35.8 30" class="payment" width="36">
+                <use xlink:href="/assets/images/icon/payment.svg#payment"></use>
+              </svg>お支払い・配送について</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/payment#anchor-guide-payment01" class="p-guide-top__link">お支払い金額について</a></li>
+                  <li><a href="/guide/payment#anchor-guide-payment02" class="p-guide-top__link">お支払い方法について</a></li>
+                  <li><a href="/guide/payment#anchor-guide-payment03" class="p-guide-top__link">配送について</a></li>
+                  <li><a href="/guide/payment#anchor-guide-payment04" class="p-guide-top__link">送料について</a></li>
+                  <li><a href="/guide/payment#anchor-guide-payment05" class="p-guide-top__link">商品の外装について</a></li>
+                  <li><a href="/guide/payment#anchor-guide-payment06" class="p-guide-top__link">商品のキャンセル・返品について</a></li>
+                </ul>
+              </dd>
+            </dl>
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/member"><svg viewBox="0 0 29.2 30" class="member" width="29">
+                <use xlink:href="/assets/images/icon/member.svg#member"></use>
+              </svg>会員について</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/member#anchor-guide-member01" class="p-guide-top__link">会員登録について</a></li>
+                  <li><a href="/guide/member#anchor-guide-member02" class="p-guide-top__link">会員情報の変更方法について</a></li>
+                  <li><a href="/guide/member#anchor-guide-member03" class="p-guide-top__link">メールアドレスの変更について</a></li>
+                  <li><a href="/guide/member#anchor-guide-member04" class="p-guide-top__link">パスワードをお忘れの方</a></li>
+                  <li><a href="/guide/member#anchor-guide-member05" class="p-guide-top__link">お問い合わせ一覧について</a></li>
+                  <li><a href="/guide/member#anchor-guide-member06" class="p-guide-top__link">お気に入りについて</a></li>
+                  <li><a href="/guide/member#anchor-guide-member07" class="p-guide-top__link">アドレス帳について</a></li>
+                </ul>
+              </dd>
+            </dl>
+            <dl class="p-guide-top__unit">
+              <dt class="p-guide-top__title"><a href="/guide/faq"><svg viewBox="0 0 23.6 24" width="26" class="faq">
+                <use xlink:href="/assets/images/icon/faq.svg#faq"></use>
+              </svg>よくある質問</a></dt>
+              <dd class="p-guide-top__menu">
+                <ul>
+                  <li><a href="/guide/faq#anchor-guide-faq01" class="p-guide-top__link">ご注文・お支払いについて</a></li>
+                  <li><a href="/guide/faq#anchor-guide-faq02" class="p-guide-top__link">商品の発送・受取方法について</a></li>
+                  <li><a href="/guide/faq#anchor-guide-faq03" class="p-guide-top__link">検体採取について</a></li>
+                  <li><a href="/guide/faq#anchor-guide-faq04" class="p-guide-top__link">商品のキャンセル・返品について</a></li>
+                  <li><a href="/guide/faq#anchor-guide-faq05" class="p-guide-top__link">検査容器・検体の返送について</a></li>
+                  <li><a href="/guide/faq#anchor-guide-faq06" class="p-guide-top__link">検査結果ログインについて</a></li>
+                </ul>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+	</div>
+	<script src="/assets/js/bundle.js" defer="defer"></script>
+</body>
+</html>

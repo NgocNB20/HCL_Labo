@@ -1,0 +1,967 @@
+{
+	"info": {
+		"_postman_id": "3ec3f2fb-8eac-4339-9644-29487b7d1c6b",
+		"name": "hclabo-user-customer-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "会員一覧取得(get)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.customerList).to.have.lengthOf(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "demoadmin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers?page=1&limit=10&orderBy=memberInfoStatus&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "orderBy",
+							"value": "memberInfoStatus"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員一覧取得(get)- OK-Have Condition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：Conditions\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.customerList).to.have.lengthOf(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers?page=1&limit=10&orderBy=memberInfoStatus&sort=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "orderBy",
+							"value": "memberInfoStatus"
+						},
+						{
+							"key": "sort",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員情報取得(getByMemberInfoSeq)-",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"getByMemberInfoSeq-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "本会員登録処理(regist) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.memberinfoSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\": \"testok2@itec.hankyu-hanshin.co.jp\",\r\n    \"memberInfoLastName\": \"安藤\",\r\n    \"memberInfoFirstName\": \"創史\",\r\n    \"memberInfoLastKana\": \"アンド\",\r\n    \"memberInfoFirstKana\": \"ソウシ\",\r\n    \"memberInfoPrefecture\": \"1\",\r\n    \"memberInfoAddress1\": \"大阪市区\",\r\n    \"memberInfoAddress2\": \"海老江\",\r\n    \"memberInfoAddress3\": \"test\",\r\n    \"memberInfoTel\": \"09000000000\",\r\n    \"memberInfoContactTel\": \"123412\",\r\n    \"memberInfoFax\": \"0000001\",\r\n    \"memberInfoPassword\": \"PassOK123\",\r\n    \"memberInfoSex\": \"1\",\r\n    \"memberInfoBirthdayYear\": \"2000\",\r\n    \"memberInfoBirthdayMonth\": \"12\",\r\n    \"memberInfoBirthdayDay\": \"10\",\r\n    \"memberInfoZipCode1\": \"060\",\r\n    \"memberInfoZipCode2\": \"0001\",\r\n    \"accessUid\": \"1013211111194138\",\r\n    \"mid\": \"mid\",\r\n    \"mailMagazine\": true,\r\n    \"preMailMagazine\": true,\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"mail1@gmail.com\",\r\n    \"preMail\": \"premail1@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "本会員登録処理(regist) - BadRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist BADREQUEST\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\": \"testok@itec.hankyu-hanshin.co.jp\",\r\n    \"memberInfoLastName\": \"安藤\",\r\n    \"memberInfoFirstName\": \"創史\",\r\n    \"memberInfoLastKana\": \"アンド\",\r\n    \"memberInfoFirstKana\": \"ソウシ\",\r\n    \"memberInfoPrefecture\": \"1\",\r\n    \"memberInfoAddress1\": \"大阪市区\",\r\n    \"memberInfoAddress2\": \"海老江\",\r\n    \"memberInfoAddress3\": \"test\",\r\n    \"memberInfoTel\": \"09000000000\",\r\n    \"memberInfoContactTel\": \"123412\",\r\n    \"memberInfoFax\": \"0000001\",\r\n    \"memberInfoPassword\": \"PassOK123\",\r\n    \"memberInfoSex\": \"1\",\r\n    \"memberInfoBirthdayYear\": \"2000\",\r\n    \"memberInfoBirthdayMonth\": \"12\",\r\n    \"memberInfoBirthdayDay\": \"10\",\r\n    \"memberInfoZipCode1\": \"060\",\r\n    \"memberInfoZipCode2\": \"0001\",\r\n    \"mid\": \"mid\",\r\n    \"mailMagazine\": true,\r\n    \"preMailMagazine\": true,\r\n    \"mailTemplateType\": \"1\",\r\n    \"mail\": \"mail@gmail.com\",\r\n    \"preMail\": \"premail@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員情報更新(update)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"updated confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.title).eql(\"title\");\r",
+							"    pm.expect(jsonData.newsBody).eql(\"Body\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerInfo\": {},\r\n    \"memberInfoLastName\": \"安藤\",\r\n    \"memberInfoFirstName\": \"創史\",\r\n    \"memberInfoLastKana\": \"アンド\",\r\n    \"memberInfoFirstKana\": \"ソウシ\",\r\n    \"memberInfoPrefecture\": \"1\",\r\n    \"memberInfoAddress1\": \"大阪市区\",\r\n    \"memberInfoAddress2\": \"海老江\",\r\n    \"memberInfoAddress3\": \"test\",\r\n    \"memberInfoTel\": \"09000000000\",\r\n    \"memberInfoContactTel\": \"123412\",\r\n    \"memberInfoFax\": \"0000001\",\r\n    \"memberInfoSex\": \"1\",\r\n    \"memberInfoBirthdayYear\": \"2000\",\r\n    \"memberInfoBirthdayMonth\": \"12\",\r\n    \"memberInfoBirthdayDay\": \"10\",\r\n    \"memberInfoZipCode1\": \"060\",\r\n    \"memberInfoZipCode2\": \"0001\",\r\n    \"mid\": \"mid\",\r\n    \"mailMagazine\": true,\r\n    \"preMailMagazine\": true,\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"mail@gmail.com\",\r\n    \"preMail\": \"premail@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000023",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000023"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員情報更新(update)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerInfo\": {},\r\n    \"memberInfoLastName\": \"安藤\",\r\n    \"memberInfoFirstName\": \"創史\",\r\n    \"memberInfoLastKana\": \"アンド\",\r\n    \"memberInfoFirstKana\": \"ソウシ\",\r\n    \"memberInfoPrefecture\": \"1\",\r\n    \"memberInfoAddress1\": \"大阪市区\",\r\n    \"memberInfoAddress2\": \"海老江\",\r\n    \"memberInfoAddress3\": \"test\",\r\n    \"memberInfoTel\": \"09000000000\",\r\n    \"memberInfoContactTel\": \"123412\",\r\n    \"memberInfoFax\": \"0000001\",\r\n    \"memberInfoSex\": \"1\",\r\n    \"memberInfoBirthdayYear\": \"2000\",\r\n    \"memberInfoBirthdayMonth\": \"12\",\r\n    \"memberInfoBirthdayDay\": \"10\",\r\n    \"memberInfoZipCode1\": \"060\",\r\n    \"memberInfoZipCode2\": \"0001\",\r\n    \"mid\": \"mid\",\r\n    \"mailMagazine\": true,\r\n    \"preMailMagazine\": true,\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"mail@gmail.com\",\r\n    \"preMail\": \"premail@gmail.com\"\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/9999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワードリセット更新(password-reset) -BADREQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"put BADREQUEST\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"confirmMailPassword\": \"password\",       \r\n    \"memberInfoNewPassword\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000023/password-reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000023",
+						"password-reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワードリセット更新(password-reset)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"password-reset OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.globals.unset(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"confirmMailPassword\": \"fac46ad90093dc07a9d755dce5960598\",       \r\n    \"memberInfoNewPassword\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000023/password-reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000023",
+						"password-reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員登録解除(delete)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000022?memberInfoId=kimura-sh+miseinen@itec.hankyu-hanshin.co.jp&memberInfoPassWord=password&accessUid=1013211111194138",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000022"
+					],
+					"query": [
+						{
+							"key": "memberInfoId",
+							"value": "kimura-sh+miseinen@itec.hankyu-hanshin.co.jp"
+						},
+						{
+							"key": "memberInfoPassWord",
+							"value": "password"
+						},
+						{
+							"key": "accessUid",
+							"value": "1013211111194138"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員登録解除(delete)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\" BADREQUEST\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/users/customers/123456789?memberInfoId=ando-ss@itec.hankyu-hanshin.co.jp&memberInfoPassWord=password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"123456789"
+					],
+					"query": [
+						{
+							"key": "memberInfoId",
+							"value": "ando-ss@itec.hankyu-hanshin.co.jp"
+						},
+						{
+							"key": "memberInfoPassWord",
+							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員メールアドレス変更(update-Mail)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.title).eql(\"title\");\r",
+							"    pm.expect(jsonData.newsBody).eql(\"Body\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"preMailMagazine\" : true,\r\n    \"mailMagazine\" : true,\r\n    \"mid\" : \"bb522fae8a4c2f0086c1a7f1cbca2217\",\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"kien.nguyenxuan+100@vti.com.vn\",\r\n    \"preMail\": \"kien.nguyenxuan+8@vti.com.vn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000045/mailaddresses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000045",
+						"mailaddresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員メールアドレス変更(update-Mail)- DUPLICATE MAIL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"preMailMagazine\" : true,\r\n    \"mailMagazine\" : true,\r\n    \"mid\" : \"bb522fae8a4c2f0086c1a7f1cbca2217\",\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"kien.nguyenxuan+100@vti.com.vn\",\r\n    \"preMail\": \"kien.nguyenxuan+8@vti.com.vn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000000/mailaddresses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000000",
+						"mailaddresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員メールアドレス変更(update-Mail)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"preMailMagazine\" : \"true\",\r\n    \"mailMagazine\" : \"true\",\r\n    \"mid\" : \"8da092838db2683218b3b2c3a3637b01\",\r\n    \"mailTemplateType\": \"0\",\r\n    \"mail\": \"kien.nguyenxuan+100@vti.com.vn\",\r\n    \"preMail\": \"thang.doan@vti.com.vn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/users/customers/10000196/mailaddresses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"users",
+						"customers",
+						"10000196",
+						"mailaddresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワード変更(update-password)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update OK\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"update confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.title).eql(\"title\");\r",
+							"    pm.expect(jsonData.newsBody).eql(\"Body\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoPassword\" : \"password\",\r\n    \"memberInfoNewPassWord\" : \"password1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/users/customers/10000136/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"users",
+						"customers",
+						"10000136",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワード変更(update-password)- NOTFOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoPassword\" : \"password1234\",\r\n    \"memberInfoNewPassWord\" : 1234\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8880/users/customers/10000987/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"users",
+						"customers",
+						"10000987",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "パスワード変更(update-password)- PASSWORD NOT MATCH",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"update NOTFOUND\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoPassword\" : \"password_not_match\",\r\n    \"memberInfoNewPassWord\" : 1234\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000987/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000987",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員CSVDL(get)- OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get-OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"get-OK：AllItems\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.customerList).to.have.lengthOf(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "demoadmin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoSeqList\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/csv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員メールアドレス変更メール送信(send) - OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.memberinfoSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\": \"thai.laiduc@vti.com.vn\",\r\n    \"memberInfoNewMail\": \"thai.laiduc+346@vti.com.vn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000024/mailaddresses/change-mail/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000024",
+						"mailaddresses",
+						"change-mail",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "会員メールアドレス変更メール送信(send) - OK BAD REQUEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"regist OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"registed confirm\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.memberinfoSeq).not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"memberInfoMail\": \"\",\r\n    \"memberInfoNewMail\": \"thai.laiduc+346@vti.com.vn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/users/customers/10000024/mailaddresses/change-mail/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"users",
+						"customers",
+						"10000024",
+						"mailaddresses",
+						"change-mail",
+						"send"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

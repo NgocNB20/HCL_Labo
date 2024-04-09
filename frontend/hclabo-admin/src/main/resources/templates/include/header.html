@@ -1,0 +1,18 @@
+<div class="l-content-header">
+	<div class="l-content-header_inner">
+		<div class="c-usermenu">
+			<div class="name">
+				<span th:text="${session.commonInfo.CommonInfoAdministrator.administratorLastName} + ' ' + ${session.commonInfo.CommonInfoAdministrator.administratorFirstName}"></span>
+			</div>
+			<div class="open_inner">
+				<ul>
+					<li><a th:href="@{/logout/}"><i class="material-icons logout"></i>ログアウト</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<input id="appComplementUrl" type="hidden" th:value="${@environment.getProperty('app.complement.url')}" />
+<input id="staticComplementUrl" type="hidden" th:value="${@environment.getProperty('static.complement.url')}" />
+<input id="goodsImagePath" type="hidden" th:value="${@environment.getProperty('images.path.goods')}" />
+

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>クーポン登録更新確認｜店舗管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript">
+        function updateConfirm() {
+            return confirm("利用期間中のクーポンです\r\n変更してよろしいですか？");
+        };
+    </script>
+</head>
+
+<body id="shop">
+<div id="couponRegistShop" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/coupon/registupdate/confirm}" th:object="${couponRegistUpdateModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">クーポン登録更新：確認</h1>
+                    </div>
+
+                    <!--/* エラーメッセージ */-->
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+    
+                    <div th:if="*{changeEndTime}">
+                        <p class="notice">※現在より過去の日付を指定することは出来ません。有効期限終了日時を現在の日付で変更します。</p>
+                    </div>
+
+                    <!-- クーポン登録 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">基本設定</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>クーポンID</dt>
+                                            <dd th:text="*{couponId}"></dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>クーポンコード</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'couponCode'})}" th:text="*{couponCode}"></dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>クーポン名</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'couponName'})}" th:text="*{couponName}"></dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>利用期間</dt>
+                                            <dd class="c-times_inner" th:class="*{#style.diff(modifiedItemNameList, {'couponStartTime', 'couponEndTime'})}">
+                                                <span th:text="*{#date.convert(couponStartDate, 'yyyy/MM/dd')}" th:remove="tag"></span>
+                                                <span th:text="*{#date.convert(couponStartTime, 'HH:mm:ss')}" th:remove="tag"></span>
+                                                &nbsp;～&nbsp;
+                                                <span th:text="*{#date.convert(couponEndDate, 'yyyy/MM/dd')}" th:remove="tag"></span>
+                                                <span th:text="*{#date.convert(couponEndTime, 'HH:mm:ss')}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>割引種別</dt>
+                                            <dd class="c-input-label" th:switch="*{discountDetailsType}" th:class="*{#style.diff(modifiedItemNameList, {'discountDetailsType'})}">
+                                                <span th:case="0" th:text="パーセント割引" th:remove="tag"></span><label></label>
+                                                <span th:case="1" th:text="金額割引" th:remove="tag"></span><label></label>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>割引率</dt>
+                                            <dd class="c-input-label" th:class="*{#style.diff(modifiedItemNameList, {'discountRate'})}">
+                                                <span th:text="*{discountRate == null ? '―' : #number.convert(discountRate) + '&nbsp; &#65285;'}" th:remove="tag"></span><label></label>
+                                            </dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>割引金額</dt>
+                                            <dd class="c-input-label" th:class="*{#style.diff(modifiedItemNameList, {'discountPrice'})}">
+                                                <span th:text="*{discountPrice == null ? '―' : #number.convert(discountPrice) + '円 （税込）'}" th:remove="tag"></span><label></label>
+                                            </dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>適用金額</dt>
+                                            <dd class="c-input-label" th:class="*{#style.diff(modifiedItemNameList, {'discountLowerOrderPrice'})}">
+                                                <span th:text="*{#number.convert(discountLowerOrderPrice)}" th:remove="tag"></span><label> 円 （税抜）</label>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">制限情報</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>利用回数</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'useCountLimit'})}" th:text="*{#number.convert(useCountLimit)}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>商品制限種別</dt>
+                                            <dd class="c-input-label" th:switch="*{targetGoodsType}" th:class="*{#style.diff(modifiedItemNameList, {'targetGoodsType'})}">
+                                                <span th:case="0" th:text="除外指定" th:remove="tag"></span><label></label>
+                                                <span th:case="1" th:text="絞込指定" th:remove="tag"></span><label></label>
+                                            </dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>対象商品</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'targetGoods'})}" th:utext="*{targetGoods eq null ? '―' : #pre.convert(targetGoods)}"></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>会員制限種別</dt>
+                                            <dd class="c-input-label" th:switch="*{targetMembersType}" th:class="*{#style.diff(modifiedItemNameList, {'targetMembersType'})}">
+                                                <span th:case="0" th:text="除外指定" th:remove="tag"></span><label></label>
+                                                <span th:case="1" th:text="絞込指定" th:remove="tag"></span><label></label>
+                                            </dd>
+                                        </div>
+                                        
+                                        <div>
+                                            <dt>対象会員</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'targetMembers'})}" th:utext="*{targetMembers eq null ? '―' : #pre.convert(targetMembers)}"></dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">管理メモ</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>管理メモ</dt>
+                                            <dd th:class="*{#style.diff(modifiedItemNameList, {'memo'})}" th:utext="*{memo eq null ? '―' : #pre.convert(memo)}"></dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button class="c-btn btn_back icon_left" name="doBack" type="submit"><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                            <div class="col_left">
+                                <th:block th:unless="*{open}">
+                                    <button class="c-btn btn_regular" name="doOnceRegist" type="submit">登録</button>
+                                </th:block>
+                                <th:block th:if="*{open}">
+                                    <button class="c-btn btn_regular" name="doOnceRegist" type="submit" onClick="return updateConfirm();">登録</button>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

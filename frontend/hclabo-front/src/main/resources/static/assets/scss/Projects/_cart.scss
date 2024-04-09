@@ -1,0 +1,335 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+.p-cart {
+
+  // templete 
+  .l-footer {
+    margin-top: 80px;
+
+    @include media(sm) {
+      margin-top: vwset(20);
+    }
+  }
+
+  // カート内メニュー
+  &__control {
+    $this: &;
+    
+    display: inline-grid;
+    grid-auto-flow: column;
+    gap: 35px;
+    margin-top: 20px;
+
+    &-quantity {
+      @include font-style(16, 24);
+      transition: opacity $comMS $comES;
+
+      input {
+        width: 80px;
+        height: 45px;
+        margin-right: 10px;
+        text-align: center;
+        line-height: 45px;
+      }
+
+    }
+
+    @include media(lg) {
+
+      .c-textlink--delete2 {
+        margin-top: 14px;
+        align-items: inherit;
+      }
+      .c-button--add-fav {
+        margin-top: 5px;
+      }
+    }
+  
+    @include media(sm) {
+  
+      display: flex;
+      flex-wrap: wrap;
+      gap: vwset(20);
+      margin-top: vwset(15);
+  
+      &-quantity {
+        width: 100%;
+  
+        input {
+          width: vwset(65);
+          height: vwset(40);
+          margin-right: vwset(10);
+          line-height: vwset(40);
+        }
+      }
+
+      .c-textlink--delete2 {
+        @include font-style(15,24);
+      }
+  
+    }
+  }
+
+  // 一覧
+  &__list {
+    margin-bottom: 70px;
+
+    &-total {
+      width: 100%;
+      margin-bottom: 30px;
+
+      tr {
+        &:nth-of-type(n + 2) {
+          border-top: solid 2px #fff;
+        }
+      }
+
+      th,
+      td {
+        background-color: $color-orange-lightGray;
+        padding: 25px;
+        vertical-align: middle;
+      }
+
+      th {
+        @include font-style(17,21,500);
+        text-align: left;
+        padding-left: 53%;
+        white-space: nowrap;
+      }
+
+      td {
+        @include font-style(22,27,bold);
+        text-align: right;
+        white-space: nowrap;
+
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+
+    aside {
+      @include font-style(15,30);
+    }
+
+    @include media(sm) {
+
+      margin: 0 vwset(20) vwset(40);
+
+      &-total {
+        margin-bottom: vwset(30);
+
+        th,
+        td {
+          padding: vwset(15);
+        }
+
+        th {
+          width: vwset(200);
+          @include font-sp-style(14);
+        }
+
+        td {
+          @include font-sp-style(20);
+        }
+      }
+
+      aside {
+        @include font-sp-style(14,28);
+      }
+    }
+  }
+
+  // ナビゲーション
+  &__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-block: 40px 80px;
+
+    @include media(lg) {
+
+      > div:last-child a {
+        margin-left: 20px;
+      }
+
+    }
+
+    @include media(sm) {
+      flex-direction: column-reverse;
+      text-align: center;
+      margin-top: vwset(30);
+
+      > div {
+        width: 100%;
+      }
+
+      &-next .c-button:not(:first-of-type) {
+        margin-top: vwset(25);
+      }
+    }
+  }
+
+
+
+
+
+
+  // 商品一覧
+  .product-detail__list {
+
+    &.cart__related {
+      margin-top: 120px;
+    }
+
+    @include media(sm) {
+
+      &.cart__related {
+        margin-top: vwset(96);
+      }
+    }
+  }
+
+  .c-product--relation {
+
+    @include media(lg) {
+      .swiper-wrapper {
+
+        .swiper-slide {
+          margin-right: 38px;
+
+          &:nth-of-type(5n) {
+            margin-right: 38px;
+          }
+
+          &:nth-of-type(6n) {
+            margin-right: 0;
+          }
+        }
+
+        .c-product__item {
+
+          width: 100%;
+
+          .c-product__item-image {
+            height: 168px;
+            margin-bottom: 18px;
+          }
+        }
+      }
+    }
+
+  }
+
+  // 未ログイン
+  &__nologin {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 35px 60px 60px;
+
+    & > p {
+      @include font-style(13, 17, 400);
+      margin-top: 17px;
+    }
+
+    ul {
+      @include font-style(13, 17, 400);
+      list-style: none;
+      margin-top: 26px;
+
+      li {
+        padding-left: 1em;
+        position: relative;
+
+        &:before {
+          content: '・';
+          left: 0;
+          position: absolute;
+          top: 0;
+        }
+      }
+    }
+
+    strong {
+      display: block;
+      margin-top: 17px;
+      @include font-style(16, 21, bold);
+    }
+
+    ol {
+      display: flex;
+      margin-top: 10px;
+      @include font-style(13, 17, 400);
+
+      li {
+
+        &:nth-of-type(n + 2) {
+          @include icon('arrow-right', '4aa2db');
+          background-position: left center;
+          background-size: 6px auto;
+          margin-left: 20px;
+          padding-left: 20px;
+        }
+      }
+    }
+
+    nav {
+      margin-top: 40px;
+      text-align: center;
+
+      .c-button--blue {
+        @include font-style(16, 21, bold);
+        margin: 0 15px;
+      }
+    }
+
+    @include media(sm) {
+      border-radius: vwset(5);
+      padding: vwset(20);
+
+      & > p {
+        @include font-style(12);
+        margin-top: vwset(15);
+      }
+
+      ul {
+        @include font-style(12);
+        margin-top: vwset(20);
+      }
+
+      strong {
+        @include font-style(14);
+        margin-top: vwset(15);
+      }
+
+      ol {
+        display: block;
+        margin-top: vwset(10);
+        @include font-style(12);
+
+        li {
+
+          &:nth-of-type(n + 2) {
+            background: none;
+            margin-left: 0;
+            padding-left: 0;
+          }
+        }
+      }
+
+      nav {
+        margin-top: vwset(20);
+      }
+    }
+  }
+
+
+
+}

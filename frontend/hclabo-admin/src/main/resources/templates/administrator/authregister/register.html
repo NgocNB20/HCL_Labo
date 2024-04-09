@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+	<title>権限グループ登録｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="registAuth" class="l-mainwrap">
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/administrator/authregister/}" th:object="${authRegisterModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">権限グループ登録</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<article class="l-section" id="mainContainer">
+						<!-- 権限グループ情報 編集 -->
+						<article class="l-article">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">権限グループ情報</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<dl class="c-dl-base dt_w160_more">
+										<div class="edit">
+											<dt>権限グループ名称<span class="ico_required">必須</span></dt>
+											<dd>
+												<input th:field="*{authGroupDisplayName}" maxlength="40" type="text" th:classappend="${#fields.hasErrors('authGroupDisplayName') ? 'error' : ''}" class="c-form-control w400px" placeholder="入力してください">
+												<div th:if="${#fields.hasErrors('authGroupDisplayName')}" th:errors="*{authGroupDisplayName}" class="c-error-txt mt5"></div>
+											</dd>
+										</div>
+									</dl>
+									<table class="c-tbl large mt30">
+										<thead>
+											<tr>
+												<th class="w150px">権限種別</th>
+												<th>権限レベル</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="auth, stat: *{authItems}">
+												<td th:text="${auth.typeDisplayName}"></td>
+												<td>
+													<ul class="c-list-left list_sp45">
+														<li th:each="item, statsub : ${auth.levelItems}">
+															<label class="c-form-control">
+																<input th:name="'authItems' + '[' + ${stat.index} +']' + '.' +'level'" type="radio" th:value="${item.get('value')}" th:checked="${item.get('value')} == ${auth.level}"><i></i><span th:remove="tag" th:text="${item.get('label')}"></span>
+															</label>
+														</li>
+													</ul>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</article>
+					</article>
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button type="submit" name="doCancel" class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>戻る</button>
+							</div>
+							<div class="col_left">
+								<input type="hidden" id="isConfirmBtnClicked" value="false"/>
+								<button class="c-btn btn_regular" type="submit" id="doConfirm" name="doConfirm">確認</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer -->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

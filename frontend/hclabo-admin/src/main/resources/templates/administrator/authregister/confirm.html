@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+ 	<title>権限グループ登録確認 ｜ システム設定 </title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="registAuth" class="l-mainwrap">
+	<div th:replace="~{include/sidemenu}"></div>
+	<main class="l-page">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+		<div class="l-container">
+			<!-- contents -->
+			<div class="l-main">
+				<form th:action="@{/administrator/authregister/confirm/}" th:object="${authRegisterModel}" method="post">
+					<div class="l-pagetitle_wrap">
+						<h1 class="c-pagetitle_h1">権限グループ登録：確認</h1>
+					</div>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+					<div class="l-section">
+						<!-- 権限グループ情報確認 -->
+						<article class="l-article">
+							<div class="l-article_title no_slide">
+								<h2 class="c-pagetitle_h3">権限グループ情報</h2>
+							</div>
+							<div class="l-article_inner">
+								<div class="l-inner_wrap">
+									<dl class="c-dl-base dt_w160_more">
+										<div>
+											<dt>権限グループ名称</dt>
+											<dd th:text="*{authGroupDisplayName}"></dd>
+										</div>
+									</dl>
+									<table class="c-tbl large mt30">
+										<thead>
+										<tr>
+											<th class="w150px">権限種別</th>
+											<th>権限レベル</th>
+										</tr>
+										</thead>
+										<tbody>
+											<tr th:each="it: *{authItems}">
+												<td th:text="${it.typeDisplayName}"></td>
+												<td th:text="${it.levelName}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</article>
+					</div>
+
+					<!-- 追尾ボタン -->
+					<div class="l-pagebtn-nav">
+						<div class="l-pagebtn-nav_inner">
+							<div class="c-back">
+								<button class="c-btn btn_back icon_left" type="submit" name="doGoBack"><i class="material-icons navigate_before"></i>戻る</button>
+							</div>
+							<div class="col_left">
+								<button class="c-btn btn_regular" type="submit" name="doOnceRegister">登録</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer -->
+		<div th:replace="~{include/footer}"></div>
+	</main>
+</div>
+</body>
+</html>

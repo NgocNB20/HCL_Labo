@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+
+    <main class="l-page">
+
+        <div th:replace="~{include/header_mypage::headermypage('delete')}"></div>
+
+        <div class="l-container">
+            <div class="l-container__inner">
+
+                <div th:replace="~{include/sidemenumember :: sidemenumember('delete')}"></div>
+
+                <div class="l-main">
+                    <h2 class="c-title-page p-mypage__title-page"><strong>退会手続き</strong></h2>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <form id="indexForm" th:action="@{/member/delete/}" th:object="${memberDeleteModel}" method="post">
+                        <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+                          入力内容をご確認ください。
+                        </div>
+                        <div class="l-form">
+                            <div class="l-form__area">
+                                <p class="c-text--m">みんなの郵送検査室の会員から退会いたします。<br />
+                                    下の入力欄にご登録メールアドレスとパスワードを入力していただき、「退会する」ボタンを押してください。<br>
+                                    退会すると、カード情報も削除されます。それでもよろしい方のみ、ご退会ください。
+                                </p>
+                                <dl class="l-form__list c-margin--s">
+                                    <dt>
+                                        <span>ご登録メールアドレス <br class="l-lg"><span class="l-form__list-memo">（半角英数字）</span></span><span class="c-require">必須</span>
+                                    </dt>
+                                    <dd>
+                                        <input id="memberInfoId" type="email" th:field="*{memberInfoId}" th:errorclass="field-error" class="c-input c-input--width-l" autocomplete="email" placeholder="ここに入力してください" maxlength="160">
+                                        <div th:if="${#fields.hasErrors('memberInfoId')}" th:errors="*{memberInfoId}" class="c-field-error"></div>
+                                    </dd>
+                                </dl>
+                                <dl class="l-form__list">
+                                    <dt>
+                                        <span>パスワード</span><span class="c-require">必須</span>
+                                    </dt>
+                                    <dd >
+                                        <div class="password-wrap">
+                                            <input id="memberInfoPassWord" th:field="*{memberInfoPassWord}" th:errorclass="field-error" type="password" class="c-input js-password-input" autocomplete="off" placeholder="ここに入力してください"  value="" maxlength="20" >
+                                            <button name="" type="button" class="l-form__password js-password-btn">
+                                                <span></span><p>パスワードを表示</p>
+                                            </button>
+                                            <div th:if="${#fields.hasErrors('memberInfoPassWord')}" th:errors="*{memberInfoPassWord}" class="c-field-error"></div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <div class="c-button-wrap p-mypage__button-wrap">
+                                    <button name="doOnceMemberInfoDelete" type="submit" class="c-button c-button--primary c-button--width-m">退会する</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+</div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+
+</body>
+</html>

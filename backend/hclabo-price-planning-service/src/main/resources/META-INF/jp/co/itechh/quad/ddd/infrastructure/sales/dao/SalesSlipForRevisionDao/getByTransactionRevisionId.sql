@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    SALESSLIPFORREVISION
+WHERE
+        TRANSACTIONREVISIONID = /*transactionRevisionId*/'1001'

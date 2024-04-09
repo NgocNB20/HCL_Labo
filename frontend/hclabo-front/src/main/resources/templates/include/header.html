@@ -1,0 +1,101 @@
+<!-- freeArea -->
+<hm:freearea key="header_top"/>
+<!-- // freeArea -->
+
+<header class="l-header">
+    <script type="text/javascript" th:src="@{/common/js/headerMenuCategory.js}" defer="defer"></script>
+	<div class="l-header__common">
+        <div class="l-header__inner">
+            <div class="l-header__main">
+                <h1 class="l-header__logo">
+                    <a th:href="@{/}">
+                        <img th:src="@{/assets/images/common/shop-logo.svg}" width="12%" alt="HCL 兵庫県臨床検査研究所" class="l-header__logo-icon">
+                        <img th:src="@{/assets/images/common/shop-logo-text.svg}" width="84%" alt="みんなの郵送検査室" class="l-header__logo-text">
+                    </a>
+                </h1>
+                <div class="l-header__search l-lg">
+                    <form method="GET" th:action="@{/search/}">
+                        <input type="hidden" name="fromView" value="header" />
+                        <input type="text" name="keyword" maxlength="100" placeholder="">
+                        <button name="doSearch" type="submit"><svg viewBox="0 0 23 23" style="23">
+                            <use th:attr="'xlink:href'=@{/assets/images/icon/search.svg#search}"></use>
+                        </svg></button>
+                    </form>
+                </div>
+                <div class="l-header__links l-lg">
+                    <a th:href="@{/member/history/}">
+                        <svg viewBox="0 0 20.6 28.2" width="20">
+                            <use th:attr="'xlink:href'=@{/assets/images/icon/result.svg#result}"></use>
+                        </svg>
+                        <p>検査結果を見る</p>
+                    </a>
+                </div>
+
+                <form id="logoutForm" th:action="@{/logout}" method="POST"></form>
+                <nav class="l-header__button">
+                    <th:block sec:authorize="${!@commonInfoUtility.isAuthenticated()}" >
+                        <a th:href="@{/interim/}" class="l-header__button-member">
+                            <span><svg viewBox="0 0 37.4 37.2" class="newmember" width="37">
+                                <use xlink:href="/assets/images/icon/regist-header.svg#regist-header"></use>
+                            </svg></span>
+                            <p class="l-lg">会員登録</p>
+                        </a>
+                        <a th:href="@{/login/}" class="l-header__button-login">
+                            <span><svg viewBox="0 0 36.3 36.3" class="login" width="36">
+                                <use th:attr="'xlink:href'=@{/assets/images/icon/login.svg#login}"></use>
+                            </svg></span>
+                            <p class="l-lg">ログイン</p>
+                        </a>
+                    </th:block>
+                    <th:block sec:authorize="${@commonInfoUtility.isAuthenticated()}" >
+                        <a th:href="@{/member/}" class="l-header__button-member">
+                            <span><svg viewBox="0 0 37.4 34.7" class="member" width="37">
+                                <use xlink:href="/assets/images/icon/mypage-header.svg#mypage-header"></use>
+                            </svg></span>
+                            <p class="l-lg">マイページ</p>
+                        </a>
+                        <a href="javascript:logoutForm.submit()" class="l-header__button-login">
+                            <span><svg viewBox="0 0 50.3 36.3" class="logout" width="36">
+                                <use th:attr="'xlink:href'=@{/assets/images/icon/logout.svg#logout}"></use>
+                            </svg></span>
+                            <p class="l-lg">ログアウト</p>
+                        </a>
+                    </th:block>
+
+                    <a th:href="@{/cart/}" id="countSum" class="l-header__button-cart">
+                        <span><svg viewBox="0 0 47.1 41.6" class="cart" width="43">
+                            <use th:attr="'xlink:href'=@{/assets/images/icon/cart-header.svg#cart}"></use>
+                        </svg></span>
+                        <p class="l-lg">カート</p>
+                        <th:block th:with="baseInfo=${session.commonInfo.commonInfoBase}">
+                            <em id="sumCount" class="c-baloon c-baloon--number" th:text="${baseInfo.cartGoodsSumCount > 1000?'999+':baseInfo.cartGoodsSumCount}"
+                            th:if="${baseInfo} != null and ${baseInfo.cartGoodsSumCount} != null and ${baseInfo.cartGoodsSumCount} != 0"></em>
+                        </th:block>
+                    </a>
+                    <button type="button" class="l-hamburger l-header__button-sm-menu l-sm">
+                        <span><svg viewBox="0 0 21 18" class="menu">
+                            <use th:attr="'xlink:href'=@{/assets/images/icon/menu.svg#menu}"></use>
+                        </svg></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- freeArea -->
+    <hm:freearea key="header_global_menu"/>
+    <!-- // freeArea -->
+
+</header>
+
+<!-- for sm only //////////////////// -->
+<div class="l-hamburger__container l-sm">
+    <button type="button" class="l-hamburger__close"><span></span> <span></span></button>
+    <div th:replace="~{include/sidemenu_sp::category('3')}"></div>
+</div>
+    <!-- // for sm only //////////////////// -->
+
+<input id="appComplementUrl" type="hidden" th:value="${@environment.getProperty('app.complement.url')}" />
+<input id="staticComplementUrl" type="hidden" th:value="${@environment.getProperty('static.complement.url')}" />
+<input id="goodsImagePath" type="hidden" th:value="${@environment.getProperty('images.path.goods')}" />
+<input id="goodsImageResizePrefixSrc" type="hidden" th:value="${@environment.getProperty('images.path.goods.resize.p1')}" />
+<input id="goodsImageResizePrefixSrcset" type="hidden" th:value="${@environment.getProperty('images.path.goods.resize.p1x2')}" />

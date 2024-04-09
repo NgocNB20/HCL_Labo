@@ -1,0 +1,438 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+## エラーメッセージにエラーコードを含める判定にも利用
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+server:
+  tomcat:
+    remoteip:
+      # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+      # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  ### Spring Web/MVC用プロパティファイル
+  # --------------------
+  # サーバポート
+  # --------------------
+  port: ${SERVER_PORT:8180}
+  servlet:
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/user-service}
+    session:
+      # サーブレットセッションタイムアウト
+      timeout: 15m
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    # ファイル（CSV・ZIP等）アップロード時の制御
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  # 非同期リクエスト処理がタイムアウトするまでの時間
+  # DEBUGのために制限していないが、本番環境では、1～３分などを予想している
+  # spring.mvc.async.request-timeout=3m
+  mvc:
+    async:
+      request-timeout: '-1'
+  thymeleaf:
+    ### Thymeleaf用プロパティファイル
+    # テンプレートキャッシュは行わない（html修正が即画面反映される）
+    cache: false
+    # 新デザイン組み込を実施する際にThymeleaf上のcheckboxが上手くレンダリングできない事象を解決するための設定
+    render-hidden-markers-before-checkboxes: true
+  datasource:
+    hikari:
+      # 新しいconnectionが生成され、Poolに追加される前に実行されるSQL query
+      connection-init-sql: SELECT 1
+      # connection Poolで使用する最大のconnection数
+      maximum-pool-size: 15
+      # コネクションタイムアウト（ミリ秒）
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      ### Spring JDBC用プロパティファイル
+      # Connect To PostgreSQL Setting
+      # ------------------------------
+      # その他設定
+      # ------------------------------
+      # 読み取り専用モードでオープンするか否か（true=する／false=しない）
+      read-only: false
+      # ------------------------------
+      # コネクションタイム設定
+      # ------------------------------
+      # アイドルタイムアウト（ミリ秒）
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # コネクション 最大ライフタイム（ミリ秒）
+      # onnection Poolによって確保されたconnectionの最大Life Time
+      max-lifetime: 1800000
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+    ### Spring JDBC用プロパティファイル
+    # Connect To PostgreSQL Setting
+    # ------------------------------
+    # DB接続基本設定
+    # ------------------------------
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_user}
+    username: ${POSTGRESQL_USER:hclabo_user}
+    password: ${POSTGRESQL_PASS:password}
+    # ------------------------------
+    # Rabbit Message Queue configuration
+    # ------------------------------
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  ### Spring Mail用プロパティファイル
+  # 新メール送信サービスの検証用
+  mail:
+    default-encoding: UTF-8
+    protocol: smtp
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:25}
+  sleuth:
+    # ログにユニークIDのコンフィグレーション
+    enabled: true
+    # Zipkin（分散ログトレーシングのツール）の導入
+    sampler:
+      rate: 10
+      probability: 1.0
+    # ログにユニークIDのコンフィグレーション
+    async:
+      enabled: false
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: true
+    sender:
+      type: web
+    base-url: http://localhost:9411/
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  dialect: postgres
+  sql-file-repository: NO_CACHE
+  fetch-size: 100
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 物流サービス
+base-path-logistic-service: http://localhost:18080/logistic-service
+# 受注サービス
+base-path-order-service: http://localhost:18080/order-service
+# 決済サービス
+base-path-payment-service: http://localhost:18080/payment-service
+# 販売企画サービス
+base-path-price-planning-service: http://localhost:18080/price-planning-service
+# ユーザーサービス
+base-path-user-service: http://localhost:18080/user-service
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: http://localhost:18080/customize-service
+# 通知サブドメイン
+queue:
+  mail-magazine-process-complete:
+    routing: user-mail-magazine-process-complete-routing
+  settlement-mismatch:
+    routing: user-settlement-mismatch-routing
+  inquiry:
+    routing: user-inquiry-routing
+  linkpay-cancel-reminder:
+    routing: linkpay-cancel-reminder-routing
+  notification:
+    direct: user-notification-direct
+  category-goods-regist-update-error:
+    routing: category-goods-regist-update-error-routing
+    direct: category-goods-regist-update-error-direct
+  goods-image-update:
+    routing: user-goods-image-update-routing
+  memberinfo-process-complete:
+    routing: user-memberinfo-process-complete-routing
+  shipment-regist:
+    routing: user-shipment-regist-routing
+  stock-status:
+    routing: user-stock-status-routing
+  mq-error-notification:
+    routing: mq-error-notification-routing
+  auth-time-limit-error:
+    routing: user-auth-time-limit-error-routing
+  payment-excess-alert:
+    routing: payment-excess-alert-routing
+  payment-deposited:
+    routing: payment-deposited-routing
+    direct: payment-deposited-direct
+  member-preregistration:
+    routing: user-member-preregistration-routing
+  gmo-member-card-alert:
+    routing: user-gmo-member-card-alert-routing
+  credit-line-report:
+    routing: user-credit-line-report-routing
+  credit-line-report-error:
+    routing: user-credit-line-report-error-routing
+  download-csv:
+    routing: user-download-csv-routing
+  mulpay-notification-recovery-administrator-error:
+    routing: user-mulpay-notification-recovery-administrator-error-routing
+  goods-image-update-error:
+    routing: user-goods-image-update-error-routing
+  mulpay-notification-recovery-administrator:
+    routing: user-mulpay-notification-recovery-administrator-routing
+  shipment-notification:
+    routing: user-shipment-notification-routing
+  stock-report:
+    routing: user-stock-report-routing
+  clear-result:
+    routing: user-clear-result-routing
+  email-modification:
+    routing: user-email-modification-routing
+  settlement-reminder:
+    routing: user-settlement-reminder-routing
+  auth-time-limit:
+    routing: user-auth-time-limit-routing
+  download-csv-error:
+    routing: user-download-csv-error-routing
+  password-notification:
+    routing: user-password-notification-routing
+  zipcode-update:
+    routing: user-zipcode-update-routing
+  tag-clear:
+    direct: tag-clear-direct
+    routing: tag-clear-routing
+  clear-result-error:
+    routing: user-clear-result-error-routing
+  goods-asynchronous-error:
+    routing: user-goods-asynchronous-error-routing
+  settlement-administrator:
+    routing: user-settlement-administrator-routing
+  stock-release:
+    routing: user-stock-release-routing
+  goods-asynchronous:
+    routing: user-goods-asynchronous-routing
+  multi-payment-alert:
+    routing: user-multi-payment-alert-routing
+  order-regist-alert:
+    routing: user-order-regist-alert-routing
+  order-confirmation:
+    routing: user-order-confirmation-routing
+  settlement-administrator-error:
+    routing: user-settlement-administrator-error-routing
+  settlement-expiration-notification:
+    routing: user-settlement-expiration-notification-routing
+  certification-code:
+    routing: user-certification-code-routing
+  examkit-received-entry:
+    routing: user-examkit-received-entry-routing
+  exam-results-entry:
+    routing: user-exam-results-entry-routing
+  exam-results-notice:
+    routing: user-exam-results-notice-routing
+#
+# Log用プロパティファイル
+#
+logging:
+  config: classpath:config/hitmall/log/logback-lo.xml
+# システム名称
+system:
+  name: みんなの郵送検査室
+# 運営者　パスワード有効期限日数（パスワード登録日に指定日数をプラス）
+admin:
+  password:
+    expiry:
+      days: '90'
+# プレビューアクセス制御有効期限加算時間(分)
+preview:
+  access:
+    effectivetime:
+      add:
+        minute: '15'
+# 認証コード
+certification-code:
+  # 有効期限（秒） 60 * 10
+  expiry: 600
+#サイトURL
+web:
+  site:
+    url: https://localhost/
+## 商品画像相対パス(HTML・JSONで表示する場合に利用)
+images:
+  path:
+    goods: /g_images
+    goods.resize:
+      # パターン②の高解像度：商品詳細の大画像（2倍）
+      p2x2: /resize/p2x2
+      # パターン①の高解像度：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像（2倍）
+      p1x2: /resize/p1x2
+      # パターン①：TOP、商品一覧、商品検索、カート、ご注文確認、ご注文完了、マイリスト、注文履歴詳細の画像
+      p1: /resize/p1
+      # パターン②：商品詳細の大画像
+      p2: resize/p2
+## 新着商品画像の表示期間
+## 登録されている期間からこの日数を経過するまでが期間になる。
+whatsnew:
+  view:
+    days: '7'
+##　CSVダウンロード関係
+downloadCsvAsynchronous:
+  retention:
+    period: 30
+  url: https://localhost/admin/
+## 送信確認メールの有効期限の設定 時間(h) デフォルト24時間
+effective:
+  time: '24'
+mail:
+  # メール送受信先のプロパティ内部参照用アドレス設定
+  default:
+    address:
+      from: 自分のiTECメールアドレス（itec.hankyu-hanshin.co.jp）に修正
+      receivers: 自分のiTECメールアドレス（itec.hankyu-hanshin.co.jp）に修正
+  # システムメール送受信先アドレス設定 必要に応じてアドレスを個別指定する
+  setting:
+    clear:
+      mail:
+        from: ${mail.default.address.from}
+        receivers: ${mail.default.address.receivers}
+    payment:
+      excess:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    tag:
+      clear:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    settlementadministrator:
+      mail:
+        from: ${mail.default.address.from}
+        receivers: ${mail.default.address.receivers}
+    downloadCsvAsynchronous:
+      mail:
+        from: ${mail.default.address.from}
+    creditline:
+      report:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    stock:
+      release:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+      report:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+      status:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    mulpaynotificationrecoveryadministrator:
+      mail:
+        from: ${mail.default.address.from}
+        receivers: ${mail.default.address.receivers}
+    shipment:
+      regist:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    goodsimage:
+      upload:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    categorygoods:
+      registupdate:
+        mail:
+          from: ${mail.default.address.from}
+          receivers: ${mail.default.address.receivers}
+    auth:
+      time:
+        limit:
+          order:
+            mail:
+              from: ${mail.default.address.from}
+              receivers: ${mail.default.address.receivers}
+    zipcode:
+      mail:
+        from: ${mail.default.address.from}
+        receivers: ${mail.default.address.receivers}
+    gmo:
+      cancel:
+        forget:
+          mail:
+            from: ${mail.default.address.from}
+            receivers: ${mail.default.address.receivers}
+    examkit:
+      received:
+        entry:
+          mail:
+            from: ${mail.default.address.from}
+            receivers: ${mail.default.address.receivers}
+    exam:
+      results:
+        entry:
+          mail:
+            from: ${mail.default.address.from}
+            receivers: ${mail.default.address.receivers}
+  # メール送信者アドレス
+  from:
+    address: ${mail.default.address.from}
+# SMTPサーバ
+mail_server: ${MAIL_HOST:localhost}
+# メール送信者
+mail_from: ${mail.default.address.from}
+# メール受信者
+recipient: ${mail.default.address.receivers}
+#
+# 請求不整合報告メール送信設定
+#
+# メールシステム
+mail_system: みんなの郵送検査室
+# ショップInfoメールアドレス
+shop:
+  info:
+    mail: 自分のiTECメールアドレス（itec.hankyu-hanshin.co.jp）に修正
+  name: 【みんなの郵送検査室】
+# メール件名ショップ名
+subject:
+  shop:
+    name: 【みんなの郵送検査室】
+#
+# GMO会員カード通信エラー時のアラートメール送信設定
+#
+# SMTPサーバ
+gmoMember_mail_server: ${mail_server}
+# メール送信者
+gmoMember_mail_from: ${mail_from}
+# メール受信者
+gmoMember_recipient: ${recipient}
+# メールシステム
+gmoMember_mail_system: ${mail_system}
+#
+# マルチペイメント通信エラー時のアラートメール送信設定
+#
+# SMTPサーバ
+mulpay_mail_server: ${mail_server}
+# メール送信者
+mulpay_mail_from: ${mail_from}
+# メール受信者
+mulpay_recipient: ${recipient}
+# メールシステム
+mulpay_mail_system: ${mail_system}
+########### HIT-MALL独自設定 ###########

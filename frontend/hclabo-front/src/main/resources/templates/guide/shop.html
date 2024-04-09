@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="ja">
+<head>
+   <meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-guide">
+  <div class="l-mainwrap">
+    <div th:replace="~{include/header}"></div>
+
+    <main class="l-page p-guide-shop">
+      <div th:replace="~{include/breadcrumb_guide::breadcrumbguide('shop')}"/>
+
+      <div class="l-section p-guide__title-page">
+        <div class="l-section__inner">
+          <h2 class="c-title-page"><strong>初めての方へ</strong></h2>
+          <div class="p-guide__title-page-button"><a th:href="@{/guide/}" class="c-button c-button--primary-line"><p>ご利用ガイドトップ</p></a></div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__localmenu">
+        <div class="l-section__inner p-guide__localmenu-inner">
+          <a href="#anchor-guide-shop01" class="js-anchor" data-scroll="">郵送検査とは</a>
+          <a href="#anchor-guide-shop02" class="js-anchor" data-scroll="">郵送検査の流れ</a>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-shop01">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">郵送検査とは</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide__text p-guide__text--large"><strong>性感染症に対する不安を解消、誰にも知られず手軽に検査が受けられます。</strong></p>
+              <p class="p-guide__text c-margin--xxs">性病かもしれない、病院に行くのが怖い、誰にも相談できない、など自分が性病ではないか？と不安な気持ちで心配をされている方、ご安心下さい。<br>
+                当検査室をご利用いただき、まずはご自宅で検査し、陽性時は少しでも早く医療機関での治療につなげることが大切です。</p>
+              <div class="p-guide-shop__symptom c-margin--m">
+                <div class="p-guide-shop__symptom-button p-guide-shop__symptom-men"><a href="/special?fkey=symptoms_men&menu=no" class="c-button c-button--secondary-line"><p>男性の症状</p></a></div>
+                <div class="p-guide-shop__symptom-button p-guide-shop__symptom-women"><a href="/special?fkey=symptoms_women&menu=no" class="c-button c-button--primary-line"><p>女性の症状</p></a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide__title-section" id="anchor-guide-shop02">
+        <div class="l-section__inner p-guide__title-section-inner">
+          <h3 class="p-guide__title-section-text">郵送検査の流れ</h3>
+        </div>
+      </div>
+      <div class="l-section">
+        <div class="l-section__inner">
+          <div class="p-guide__contents">
+            <div class="p-guide__unit">
+              <p class="p-guide-shop__description">自宅で採取しポストに投函、結果はWEBで簡単確認。周りに知られずに郵送、検査ができます。</p>
+
+              <h4 class="p-guide__title-unit c-margin--m">ご注文から検査結果までの目安</h4>
+              <div class="p-guide__unit-nest">
+                <div class="p-guide-shop__result">
+                  <div class="p-guide-shop__resultflow">
+                    <dl class="p-guide-shop__resultflow-step p-guide-shop__resultflow-step1">
+                      <dt>ご注文 ～ お届け</dt>
+                      <dd>
+                        <div class="p-guide-shop__resultflow-date">
+                          <h5><em>平日15時まで</em>にご注文・ご入金確認</h5>
+                          <div><strong>当日発送</strong><br><span>ご注文から<em>最短<em>1</em>日</em></span></div>
+                        </div>
+                        <p class="p-guide-shop__resultflow-memo">※土日祝を含む場合は、もう少し日数がかかります。<br>※沖縄・離島からのご注文は、日数がかかる場合がございます。</p>
+                      </dd>
+                    </dl>
+                    <dl class="p-guide-shop__resultflow-step p-guide-shop__resultflow-step2">
+                      <dt>検査物のご返送 ～ 検査受付</dt>
+                      <dd>
+                        <div class="p-guide-shop__resultflow-date">
+                          <p>郵便事情により</p>
+                          <div><strong>2</strong>日～<strong>5</strong>日</div>
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl class="p-guide-shop__resultflow-step p-guide-shop__resultflow-step3">
+                      <dt>当社ラボの検査実施</dt>
+                      <dd>
+                        <div class="p-guide-shop__resultflow-date">
+                          <p>検査項目によって異なります</p>
+                          <div><strong>1</strong>日～<strong>7</strong>日<small>※</small></div>
+                        </div>
+                        <p class="p-guide-shop__resultflow-memo">※検査内容によっては、別の検査機関で実施する場合があります。</p>
+                      </dd>
+                    </dl>
+                  </div>
+                  <div class="p-guide-shop__resulttotal"><span>検査結果</span><br class="l-sm">ご注文から検査結果まで<br class="l-sm"><strong>最短<strong>4</strong>日～<strong>10</strong>日前後</strong></div>
+                </div>
+                <div class="p-guide-shop__flow">
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step01" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>1</em></div>
+                      <div class="p-guide-shop__flow-title">お申し込み<br class="l-lg">商品購入</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step1.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">ホームページから、ご希望の検査をお選びください。</div>
+                    </a>
+                  </div>
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step02" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>2</em></div>
+                      <div class="p-guide-shop__flow-title">検査キット<br class="l-lg">受け取り</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step2.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">ご指定の住所へ発送いたします。<br><small>※郵便局留めでの受取もできます。</small></div>
+                    </a>
+                  </div>
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step03" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>3</em></div>
+                      <div class="p-guide-shop__flow-title">検体採取</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step3.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">同封の説明書を参考に検体を採取。</div>
+                    </a>
+                  </div>
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step04" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>4</em></div>
+                      <div class="p-guide-shop__flow-title">検査物ご返送</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step4.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">検体をポストに投函。</div>
+                    </a>
+                  </div>
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step05" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>5</em></div>
+                      <div class="p-guide-shop__flow-title">検査実施</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step5.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">当社ラボ（登録衛生検査所）にて検査実施。</div>
+                    </a>
+                  </div>
+                  <div class="p-guide-shop__flow-step">
+                    <a href="#anchor-guide-step06" class="js-anchor" data-scroll="">
+                      <div class="p-guide-shop__flow-number">STEP <em>6</em></div>
+                      <div class="p-guide-shop__flow-title">結果確認</div>
+                      <div class="p-guide-shop__flow-illust"><img src="/assets/images/guide/shop/step6.svg" alt=""></div>
+                      <div class="p-guide-shop__flow-text">検査物到着から最短翌日で結果の確認ができます。</div>
+                    </a>
+                  </div>
+                </div>
+                <div class="c-margin--l">
+                  <div class="p-guide__flow" id="anchor-guide-step01">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>1</em></span><strong>お申し込み商品購入</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <p class="p-guide__text">症状・気になる行動・病名などから、検査キットをお選びください。<br>検査キットの内容をご確認の上、【カートに入れる】ボタンを押し、お申し込み手続きへ進んでください。</p>
+                        <p class="p-guide__text  p-guide__text--small">※お申し込みには、<a href="/interim/" class="c-textlink c-inlinelink">会員登録</a>が必要となります。</p>
+                        <div class="p-guide-linklist c-margin--xs">
+                          <svg viewBox="0 0 43 32" width="43"><use xlink:href="/assets/images/icon/guide.svg#guide"></use></svg>
+                          <ul>
+                            <li><a href="/guide/order" class="c-textlink c-textlink--text">ご注文について</a></li>
+                            <li><a href="/guide/member#anchor-guide-member01" class="c-textlink c-textlink--text">会員登録について</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="p-guide__flow-inner">
+                        <div class="p-guide__title-flow">お支払い方法</div>
+                        <div class="p-guide__indent">
+                          <p class="p-guide__text">お支払いには、「クレジットカード決済」「PayPay決済」「コンビニ決済」がご利用いただけます。<br>お支払方法の詳しい内容は下記のお支払い方法についてをご確認ください。</p>
+                        </div>
+                        <div class="p-guide-linklist c-margin--xs">
+                          <svg viewBox="0 0 43 32" width="43"><use xlink:href="/assets/images/icon/guide.svg#guide"></use></svg>
+                          <ul>
+                            <li><a href="/guide/payment#anchor-guide-payment02" class="c-textlink c-textlink--text">お支払い方法について</a></li>
+                          </ul>
+                        </div>
+                        <div class="p-guide-shop__payment-point c-margin--m">
+                          <dl>
+                            <dt>15時までのご注文で当日発送</dt>
+                            <dd>平日の15時までにお申し込み・ご入金確認ができましたら、<br class="l-lg">当日発送いたします。</dd>
+                          </dl>
+                          <dl>
+                            <dt>同居の方に知られず受け取れます</dt>
+                            <dd>郵便局留めを利用することで、<br>同居の方に知られず受け取れます。</dd>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-guide__flow c-margin--s" id="anchor-guide-step02">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>2</em></span><strong>検査キット受け取り</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <div class="p-guide__title-flow">ご指定住所でのお受け取り</div>
+                        <div class="p-guide__indent">
+                          <p class="p-guide__text">日本郵便よりお届けいたします。</p>
+                          <p class="p-guide__text p-guide__text--small">※ゆうパケットは、原則ポストに投函した時点で配達完了となります。<br>ポストに入りきらない場合は、配達員が持ち帰ります。<br>その場合は、郵便局からの通知をご確認のうえ、ご対応いただくようお願いします。</p>
+                        </div>
+                      </div>
+                      <div class="p-guide__flow-inner">
+                        <div class="p-guide__title-flow">郵便局でのお受け取り（郵便局留め）</div>
+                        <div class="p-guide__indent">
+                          <p class="p-guide__text">ご指定の郵便局窓口・ゆうゆう窓口にて「荷物お問い合わせ番号・本人確認証」をお持ちのうえお受取りください。<br><strong>本人確認証：運転免許証、健康保険証、パスポートなど（氏名・住所の明記必須）</strong></p>
+                          <p class="p-guide__text p-guide__text--small c-margin--xxs">※お受け取り郵便局の窓口営業時間をご確認のうえ、お受け取りください。<br>郵便局窓口営業時間は<a href="https://map.japanpost.jp/p/search/" target="_blank" class="c-textlink c-inlinelink">こちら</a></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-guide__flow c-margin--s" id="anchor-guide-step03">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>3</em></span><strong>検体採取</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <p class="p-guide__text">各検査商品に付属されている採取方法説明書を参考に、ご自身で簡単に採取していただきます。</p>
+                        <div class="p-guide__button-next c-margin--xs"><a href="/guide/faq#anchor-guide-faq03" class="c-button c-button--secondary-line"><p>採取方法はこちら</p></a></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-guide__flow c-margin--s" id="anchor-guide-step04">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>4</em></span><strong>検査物ご返送</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <p class="p-guide__text">採取できましたら、速やかに採取検体と検査申込書を、同封のレターパックライトに入れて、郵便ポストまたは郵便局の窓口よりご返送ください。</p>
+                        <p class="p-guide__text p-guide__text--small c-margin--xxs">※複数項目の検査セットの場合、採取した検体をまとめて一度にご返送してください。<br>※ご返送時の気温等が検査結果に影響することはございません。</p>
+                        <div class="p-guide__flow-nest c-margin--xs">
+                          <h6 class="p-guide__flow-nest-title"><em>検査結果をお急ぎの場合</em></h6>
+                          <p class="p-guide__text">午前中に郵便局窓口へ差出、もしくは大きな郵便局に設置されているポスト投函でのご返送をおすすめしております。</p>
+                          <p class="p-guide__text p-guide__text--small">※検体の受付状況・検査状況によりましては、早急な結果を希望されても必ずしも確約することは致しかねますので、ご了承ください。</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-guide__flow c-margin--s" id="anchor-guide-step05">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>5</em></span><strong>検査実施</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <p class="p-guide__text">当社ラボにて検査を実施します。</p>
+                        <div class="p-guide__button-next c-margin--xs"><a href="" class="c-button c-button--secondary-line"><p>検査精度について</p></a></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-guide__flow c-margin--s" id="anchor-guide-step06">
+                    <h5 class="p-guide__flow-title"><span>STEP <em>6</em></span><strong>検査結果の確認方法</strong></h5>
+                    <div class="p-guide__flow-contents">
+                      <div class="p-guide__flow-inner">
+                        <p class="p-guide__text">WEB上の検査結果確認ページにて、検査結果のPDFデータをダウンロードしていただけます。<br>
+                          ※個人情報保護の観点から、メール文面での結果通知は行っておりません。予めご了承ください。<br>検索結果確認は<a href="/member/history/" class="c-textlink c-inlinelink">こちら</a>から</p>
+                        <div class="p-guide__button-next c-margin--xs"><a href="/guide/faq#anchor-guide-faq06" class="c-button c-button--secondary-line"><p>検査結果の確認方法について</p></a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-section p-guide-shop__about">
+        <div class="l-section__inner p-guide-shop__about-inner">
+          <h3 class="p-guide-shop__about-title">検査結果について</h3>
+          <h4 class="p-guide-shop__about-subtitle"><span>結果が陰性（－）の場合</span></h4>
+          <p class="p-guide-shop__about-text">引き続き予防に努め、定期的な検査も取り入れ確認しましょう。<br>
+            陰性であっても、症状が気になる方は医療機関の受診をおすすめします。</p>
+          <h4 class="p-guide-shop__about-subtitle"><span>結果が陽性（＋）の場合</span></h4>
+          <p class="p-guide-shop__about-text">医療機関を受診し、適切な治療を受けてください。その際、弊社が発行する<br class="l-lg">検査結果報告書（検査結果ページより、PDFがダウンロードでき、印刷が可能です）を<br class="l-lg">お持ちいただければスムーズな治療につながります。</p>
+        </div>
+      </div>
+
+    </main>
+    <div th:replace="~{include/footer}" ></div>
+  </div>
+  <script src="/assets/js/bundle.js" defer="defer"></script>
+</body></html>

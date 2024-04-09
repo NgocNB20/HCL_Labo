@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>配送方法設定 倉庫休日｜システム管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+<script>
+/**
+* 初期表示で不可日入力の部分が自動閉める
+*/
+$(function() {
+    if ($('div.c-btn_add').hasClass('close') && $('div.c-detail_inner').hasClass('active')){
+    	$('div.c-btn_add').removeClass('close');
+    	$('div.c-detail_inner').removeClass('active').css({'display':'none'});
+    }
+});
+
+/**
+ * 休日削除
+ */
+function deleteHoliday(obj) {
+	var deleteButton = $(obj);
+	var message = "";
+
+	// 削除確認
+	var confirm = deleteConfirm(message);
+	if (confirm) {
+		var targetDate = deleteButton.next("input:hidden[id^='date']").val();
+		$("#deleteDate").val(targetDate);
+	}
+	return confirm
+}
+</script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/holiday/}" th:object="${deliveryHolidayModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">倉庫休日</h2>
+                        <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                        <ul>
+                            <li><button class="c-btn btn_move" type="submit" name="doUpload">休日CSV登録</button></li>
+                        </ul>
+                        </th:block>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="limit" value="100"/>
+                    <span id="csvLimit" limit="-1" ></span>
+                    <input type="submit" id="doDisplayChange" name="doDisplayChange" style="display:none" value="表示切替" />
+                    
+                    <!-- 検索 -->
+                    <div class="l-section" id="mainContainer">
+                        <article class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap pb20">
+                                    <div class="wrap_flex_equivalent">
+                                        <div class="col mr20">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="w190px">配送ID</th>
+                                                        <td th:text="*{dmcd}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w190px">公開状態</th>
+                                                        <td th:text="*{openStatusPC.label}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="w190px">配送名称</th>
+                                                        <td th:text="*{deliveryMethodName}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w190px">配送種別</th>
+                                                        <td th:text="*{deliveryMethodType.label}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                    <!-- 休日入力 -->
+                                    <div class="c-detail-warp search mt40">
+                                        <div class="c-btn_add close"><i></i><span>休日入力</span></div>
+                                        <div class="c-detail_inner active" id="detailSearch">
+                                            <div class="l-article-un mb20">
+                                                <div class="c-detail-warp search_data_smp wrap">
+                                                    <dl>
+                                                        <dt>年月日 <span class="ico_required">必須</span></dt>
+                                                        <dd>
+                                                            <label class="c-datepicker w150px"><input type="text" th:field="*{inputDate}" maxlength="10" class="c-form-control" placeholder="年/月/日" autocomplete="off" th:errorclass="error"></label>
+                                                        </dd>
+                                                        <div id="inputDateError" th:if="${#fields.hasErrors('inputDate')}" th:errors="*{inputDate}" class="c-error-txt mt5"></div>
+                                                    </dl>
+                                                    <dl class="flex_grow mr0">
+                                                        <dt>名前 <span class="ico_required">必須</span></dt>
+                                                        <dd class="wrap_flex_center">
+                                                            <div class="mr20 flex_grow">
+                                                                <input type="text" th:field="*{inputName}" maxlength="20" class="c-form-control" placeholder="入力してください" th:errorclass="error">
+                                                            </div>
+                                                            <input type="hidden" id="isRegistUpdateBtnClicked" value="false"/>
+                                                            <button class="c-btn btn_regular" type="submit" id="doRegistUpdate" name="doRegistUpdate">登録する</button>
+                                                        </dd>
+                                                        <div id="inputNameError" th:if="${#fields.hasErrors('inputName')}" th:errors="*{inputName}" class="c-error-txt mt5"></div>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- 検索結果 -->
+                        <article class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_w180px">
+                                       <div class="edit">
+                                           <input type="hidden" id="isSearchBtnClicked" value="false"/>
+                                           <button class="c-btn btn_regular mr10" type="submit" id="doSearch" name="doSearch">検索する</button>
+                                           <dd>
+                                              <select id="year" class="c-form-control w160px" th:field="*{year}" th:errorclass="error">
+                                                    <option value="">選択してください</option>
+                                                    <option th:each="item : *{yearItems}" th:value="${item.key}" th:text="${item.value}"
+                                                       th:selected="${item.key} == *{year}">
+                                                    </option>
+                                              </select>
+                                              <label>年</label>
+                                              <div id="yearError" th:if="${#fields.hasErrors('year')}" th:errors="*{year}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                      </div>
+                                    </dl>
+                                    <div class="mt30" >
+                                        <div class="l-conttitle_wrap">
+                                            <div th:replace="~{include/pager::pager2(totalCountDisplayFlag=true,duplicateSelectFlag=true)}"></div>
+                                            <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                            <div class="col_left">
+                                                <button class="c-btn btn_back icon ml10" type="submit" name="doCsvDownload"><i class="material-icons save_alt"></i>ダウンロード</button>
+                                            </div>
+                                            </th:block>
+                                        </div>
+                                        <input type="hidden" id="pageNumber" name="pageNumber" />
+                                        <input type="hidden" id="deleteDate" name="deleteDate"/>
+                                        <th:block th:if="*{isResult}">
+                                        <table class="c-tbl large">
+                                            <thead>
+                                                <tr>
+                                                    <th class="w160px">年月日</th>
+                                                    <th>倉庫名</th>
+                                                    <th:block sec:authorize="hasAnyAuthority('SETTING:8')"><th class="delete"></th></th:block>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="item, stat: *{resultItems}">
+                                                    <td class="times" th:text="${#date.convert(item.date, 'yyyy/MM/dd')}"></td>
+                                                    <td th:text="${item.name}"></td>
+                                                    <th:block sec:authorize="hasAnyAuthority('SETTING:8')">
+                                                    <td class="delete">
+                                                        <button class="c-btn-icon" type="submit" name="doDelete" onClick="return deleteHoliday(this);"><i class="material-icons clear"></i></button>
+                                                        <input type="hidden" th:id="'date-'+${stat.index}" name="date" th:value="${#date.convert(item.date, 'yyyy/MM/dd')}" />
+                                                    </td>
+                                                    </th:block>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div th:replace="~{include/pager::pager1}"></div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <a class="c-btn btn_back icon_left" th:href="@{/delivery/}"><i class="material-icons navigate_before"></i>戻る</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

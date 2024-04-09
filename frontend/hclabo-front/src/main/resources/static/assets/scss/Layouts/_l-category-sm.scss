@@ -1,0 +1,239 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  l-category-sm
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+@use "../Foundation/icon" as *;
+
+.l-category-sm {
+  $this: &;
+ 
+  @include media(sm) {
+
+    border-top: solid 1px $color-bbb;
+
+    &__button {
+
+      &-accordion,
+      &-anchor {
+        display: grid;
+        align-items: center;
+        cursor: pointer;
+      }
+    }
+
+    &__block {
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: height $comMS $comES, opacity $comMS $comES, visibility $comMS $comES;
+      visibility: hidden;
+      border-top: solid 1px $color-e6;
+
+  
+      &.is-opened {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    // 第1階層
+    &__level1 {
+      border-bottom: solid 1px $color-bbb;
+      @include font-sp-style(16,22,500);
+
+      > #{$this}__button #{$this}__button-accordion {
+
+          min-height: vwset(65);
+          padding: vwset(20) vwset(37) vwset(20) vwset(18);
+          position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: vwset(17);
+          top: 50%;
+          transform: translateY(-50%);
+          display: block;
+          width: vwset(13);
+          height: vwset(13);
+          @include icon('arrow-down', 'bbbbbb');
+          background-position: center center;
+          background-size: vwset(13) auto;
+        }
+      }
+
+      > #{$this}__button.is-opened #{$this}__button-accordion {
+
+        &::after {
+          @include icon('arrow-up', 'bbbbbb');
+          background-position: center center;
+          background-size: vwset(13) auto;
+        }
+      }
+
+      > #{$this}__button #{$this}__button-anchor {
+        min-height: vwset(65);
+        padding: vwset(20) vwset(37) vwset(20) vwset(18);
+        @include icon('arrow-right', 'bbbbbb');
+        background-position: right vwset(20) top 50%;
+        background-size: vwset(7) auto;
+      }
+
+      svg {
+        margin-right: vwset(13);
+        fill: $color-primary;
+      }
+    }
+
+    // 第2階層
+    &__level2wrap {
+
+      > li {
+        margin: 0 vwset(20);
+      }
+    }
+
+    &__level2 {
+      border-bottom: solid 1px $color-e6;
+      @include font-sp-style(15, 22, normal);
+  
+      > #{$this}__button #{$this}__button-accordion {
+        padding: vwset(18) vwset(20) vwset(18) vwset(10);
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: vwset(4);
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 7px auto;
+          @include icon('arrow-down', '333333');
+        }
+      }
+
+      > #{$this}__button.is-opened #{$this}__button-accordion {
+
+        &::after {
+          @include icon('arrow-up', '333333');
+          background-size: 7px auto;
+        }
+      }
+
+
+      > #{$this}__button #{$this}__button-anchor {
+        padding: vwset(18) vwset(20) vwset(18) vwset(10);
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: vwset(4);
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 4px auto;
+          @include icon('arrow-right', '333333');
+        }
+
+      }
+
+
+    }
+
+    // 第3階層
+    &__level3wrap {
+
+      > li {
+        background: $color-orange-lightGray;
+      }
+    }
+
+    &__level3 {
+      border-bottom: solid 1px $color-e6;
+      @include font-sp-style(15, 22, normal);
+  
+      #{$this}__button-accordion {
+        padding: vwset(18) vwset(15);
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          right: vwset(10);
+          top: 50%;
+          display: block;
+          transform: translateY(-50%);
+          width: 17px;
+          height: 17px;
+          background: $color-orange-lightGray;
+          border-radius: 50%;
+          background-position: center center;
+          background-size: 7px auto;
+          @include icon('arrow-down', '333333');
+        }
+      }
+
+      > #{$this}__button.is-opened #{$this}__button-accordion {
+
+        &::after {
+          @include icon('arrow-up', '333333');
+          background-size: 7px auto;
+        }
+      }
+
+      #{$this}__button-anchor {
+        padding: vwset(18) vwset(15);
+      }
+    }
+
+    // 第4階層
+    &__level4wrap {
+
+      padding: vwset(20) vwset(25);
+      background: $color-orange-lightGray;
+    }
+
+    &__level4 {
+      @include font-sp-style(15, 22, normal);
+  
+      #{$this}__button-anchor {
+        padding: vwset(10) 0;
+
+        p::before {
+          content: "・";
+          display: inline-block;
+          margin-right: vwset(5);
+        }
+      }
+    }
+
+    &--footer {
+      margin-top: vwset(75);
+    }
+
+    
+
+  }
+
+
+
+
+
+}

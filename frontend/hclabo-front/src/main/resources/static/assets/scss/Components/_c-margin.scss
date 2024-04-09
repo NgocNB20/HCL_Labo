@@ -1,0 +1,72 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+.c-margin {
+
+  &--xxl {
+    margin-top: 100px;
+    @include media(sm) {
+      margin-top: vwset(60);
+    }
+  }
+  &--xl {
+    margin-top: 80px;
+    @include media(sm) {
+      margin-top: vwset(64);
+    }
+  }
+  &--l {
+    margin-top: 60px;
+    @include media(sm) {
+      margin-top: vwset(48);
+    }
+  }
+
+  // 子ユニット間など
+  &--m {
+    margin-top: 40px;
+    @include media(sm) {
+      margin-top: vwset(32);
+    }
+  }
+
+  &--s {
+    margin-top: 30px;
+    @include media(sm) {
+      margin-top: vwset(24);
+    }
+  }
+  
+  &--xs {
+    margin-top: 20px;
+    @include media(sm) {
+      margin-top: vwset(16);
+    }
+  }
+
+  &--xxs {
+    margin-top: 10px;
+    @include media(sm) {
+      margin-top: vwset(6);
+    }
+  }
+
+  // SPのみ 左右余白
+  &--inline-m {
+    @include media(sm) {
+      margin-inline: vwset(20);
+    }
+  }
+ 
+  // l-container用
+  &--container {
+    margin-top: 50px;
+    @include media(sm) {
+      margin-top: vwset(50);
+    }
+  }
+
+}

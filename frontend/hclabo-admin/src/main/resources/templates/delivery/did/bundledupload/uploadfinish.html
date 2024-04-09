@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall" lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title>配送方法設定 お届け不可日CSV登録結果｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="searchDeliveryMethod" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <!-- header -->
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/delivery/did/bundledupload/uploadfinish/}" th:object="${deliveryDidBundledUploadModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">配送方法設定</h1>
+                        <h2 class="c-pagetitle_h2">お届け不可日CSV登録結果</h2>
+                    </div>
+                    <!-- 検索 -->
+                    <div class="l-section">
+                        <div class="l-article">
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="fwb mb25" th:text="*{year + '年'}"></div>
+                                    <div class="wrap_flex_equivalent">
+                                        <div class="col mr20">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="w190px">配送ID</th>
+                                                    <td th:text="*{dmcd}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="w190px">公開状態</th>
+                                                    <td th:text="*{openStatusPC.label}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col">
+                                            <table class="c-tbl-base th_fntnormal">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="w190px">配送名称</th>
+                                                    <td th:text="*{deliveryMethodName}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="w190px">配送種別</th>
+                                                    <td th:text="*{deliveryMethodType.label}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <th:block th:if="*{!isErrMsgTable}">
+                                        <div class="mt40">
+                                            <div class="fwb">お届け不可日アップロード処理を完了しました。</div>
+                                            <div class="wrap_flex_equivalent mt30">
+                                                <div class="col max_w50p pr10">
+                                                    <table class="c-tbl-base th_fntnormal">
+                                                        <tbody>
+                                                        <tr>
+                                                            <th class="w190px">件数</th>
+                                                            <td th:text="*{uploadCount + '件'}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="*{isErrMsgTable}">
+                                        <div class="mt40">
+                                            <div class="fwb">お届け不可日アップロード処理を中止しました。（データの登録・更新は行っておりません。）<br />以下のエラーが発生しました。</div>
+                                            <div class="mt30">
+                                                <table class="c-tbl c-tbl-upload-error">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>エラー内容</th>
+                                                    </tr>
+                                                    <tr th:each="item: *{resultItems}">
+                                                        <td>CSV:<span th:text="${item.row}" ></span>行目&nbsp;<span th:if="${item.isColumn}" >項目名:<span th:text="${item.columnName}">名称</span>&nbsp;</span><span th:utext="${item.message}">不正です</span>&nbsp;</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <th:block th:if="*{isValidLimitFlg()}">
+                                                <div class="fwb mt15">※エラーが規定数を超えたので処理を打ち切りました</div>
+                                            </th:block>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" name="doFinish" class="c-btn btn_back icon_left"><i class="material-icons navigate_before"></i>お届け不可日へ戻る</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

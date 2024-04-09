@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+<meta th:replace="~{include/head}" />
+</head>
+
+<body id="gotop" class="p-mypage">
+	<div class="l-mainwrap">
+		<!-- header -->
+		<div th:replace="~{include/header}"></div>
+    	<!-- main -->
+		<main class="l-page">
+			<div th:replace="~{include/header_mypage::headermypage('pass')}"></div>
+
+			<div class="l-container">
+				<div class="l-container__inner">
+					<!-- sidemenu -->
+					<div th:replace="~{include/sidemenumember :: sidemenumember('pass')}"></div>
+					<div class="l-main">
+						<h2 class="c-title-page p-mypage__title-page"><strong>パスワードの変更</strong></h2>
+						<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+							<ul th:each="message : ${allMessages}">
+								<li th:utext="${message}"></li>
+							</ul>
+						</div>
+
+						<form id="indexForm" th:action="@{/member/pass/}" th:object="${memberPassModel}" method="post">
+                            <div th:if="*{#fields.detailedErrors().size() != 0}" class="c-global-error c-global-error--margin-m">
+                              入力内容をご確認ください。
+                            </div>
+							<div class="l-form">
+								<div class="l-form__area">
+									<p class="c-text--m">現在のパスワードと変更する新しいパスワードの両方をご入力の上、｢変更する｣ボタンを押すと、パスワードが変更されます。</p>
+									<dl class="l-form__list c-margin--s">
+										<dt>
+											<span>現在のパスワード</span><span class="c-require">必須</span>
+										</dt>
+										<dd>
+											<div class="password-wrap">
+												<input type="password" id="memberInfoPassWord" th:field="*{memberInfoPassWord}" th:errorclass="field-error" placeholder="ここに入力してください" maxlength="20" class="c-input js-password-input">
+												<button name="" type="button" class="l-form__password js-password-btn">
+													<span></span><p>パスワードを表示</p>
+												</button>
+											</div>
+											<th:block th:if="${#fields.hasErrors('memberInfoPassWord')}">
+												<div th:errors="*{memberInfoPassWord}" class="c-field-error"></div>
+											</th:block>
+										</dd>
+									</dl>
+									<dl class="l-form__list">
+										<dt>
+											<span>新しいパスワード <br class="l-lg"><span class="l-form__list-memo">（半角英数記号7~20文字）</span></span><span class="c-require">必須</span>
+										</dt>
+										<dd>
+											<p class="c-text--s">半角の英字・数字・記号を2種類以上混在させた7文字以上20文字以内（推奨8文字以上）<br>※数字のみ、同じ文字の連続を避け、第三者に推測されにくいものを設定してください。</p>
+											<div class="password-wrap c-margin--xs">
+												<input type="password" id="memberInfoNewPassWord" th:field="*{memberInfoNewPassWord}" th:errorclass="field-error" placeholder="ここに入力してください" maxlength="20" class="c-input js-password-input">
+												<button name="" type="button" class="l-form__password js-password-btn">
+													<span></span><p>パスワードを表示</p>
+												</button>
+											</div>
+											<th:block th:if="${#fields.hasErrors('memberInfoNewPassWord')}">
+												<div th:errors="*{memberInfoNewPassWord}" class="c-field-error"></div>
+											</th:block>
+										</dd>
+									</dl>
+								</div>
+							</div>
+							<div class="c-button-wrap p-mypage__button-wrap">
+								<button name="doOncePassWordUpdate" type="submit" class="c-button c-button--primary c-button--width-m">変更する</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- footer -->
+		<div th:replace="~{include/footer}" ></div>
+	</div>
+	<script src="/assets/js/bundle.js" defer="defer"></script>
+</body></html>

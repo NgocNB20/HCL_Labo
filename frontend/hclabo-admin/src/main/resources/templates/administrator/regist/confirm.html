@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}"/>
+    <title> 運営者登録確認 ｜システム設定</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+</head>
+
+<body id="system">
+<div id="registAdministrator" class="l-mainwrap">
+    <!-- side -->
+    <div th:replace="~{include/sidemenu}"/>
+    <main class="l-page">
+        <!-- header -->
+        <div th:include="~{include/header}"/>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form th:action="@{/administrator/regist/confirm/}" th:object="${administratorRegistModel}" method="post">
+                    <div class="l-pagetitle_wrap">
+                        <h2 class="c-pagetitle_h2">運営者登録：確認</h2>
+                    </div>
+                    <div th:if="${allMessages}"
+                         th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+                    <!-- 運営者情報 -->
+                    <div class="l-section">
+                        <article class="l-article">
+                            <div class="l-article_title no_slide">
+                                <h2 class="c-pagetitle_h3">運営者情報</h2>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <dl class="c-dl-base dt_fn13 dt_w160px">
+                                        <div>
+                                            <dt>ユーザID</dt>
+                                            <dd><span th:text="*{administratorId}" th:remove="tag"></span></dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>氏名</dt>
+                                            <dd>
+                                                <span th:text="*{administratorLastName}" th:remove="tag"></span>
+                                                <span th:text="*{administratorFirstName}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>フリガナ</dt>
+                                            <dd>
+                                                <span th:text="*{administratorLastKana}" th:remove="tag"></span>
+                                                <span th:text="*{administratorFirstKana}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>メールアドレス</dt>
+                                            <dd>
+                                                <span th:text="*{administratorMail}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt>状態</dt>
+                                            <dd>
+                                                <span th:text="*{#enumtype.getLabel('HTypeAdministratorStatus',administratorStatus)}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt>権限グループ</dt>
+                                            <dd>
+                                                <span th:text="*{administratorGroupName}" th:remove="tag"></span>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- 追尾ボタン -->
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" name="doIndex" class="c-btn btn_back icon_left"><i
+                                        class="material-icons navigate_before"></i>戻る
+                                </button>
+                            </div>
+                            <div class="col_left">
+                                <button name="doOnceFinishRegist" class="c-btn btn_regular" type="submit">登録</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:include="~{include/footer}"/>
+    </main>
+</div>
+</body>
+</html>

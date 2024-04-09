@@ -1,0 +1,221 @@
+########### 変更指標 ###########
+## デバッグモード
+## エラー画面（error.html）でスタックトレースを表示する／しない（true/false）
+debug: false
+########### 変更指標 ###########
+########### サーバー設定 ###########
+# コンテキストパス
+server:
+  tomcat:
+    # プロキシサーバーの背後で実行する時にHTTPSを有効にする
+    # 特にSpring-Securityによるリダイレクト時にこちらの設定がないと上手く動けない
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
+  # サーバポート
+  port: ${SERVER_PORT:8280}
+  servlet:
+    # URL上のコンテキストパス
+    context-path: ${CONTEXT_PATH:/product-service}
+    # セッションタイムアウト（分）
+    # PCIDSS準拠対象外の場合は15分でなくてもOK
+    session:
+      timeout: 15m
+########### サーバー設定 ###########
+########### Spring設定 ###########
+spring:
+  servlet:
+    # ファイル（CSV・ZIP等）アップロード時の制御
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  mvc:
+    async:
+      request-timeout: -1
+  ### Thymeleaf用プロパティファイル
+  # テンプレートキャッシュは行わない（html修正が即画面反映される）
+  thymeleaf:
+    cache: false
+    render-hidden-markers-before-checkboxes: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # コネクション処理終了時、トランザクションを自動でコミットするか否か（true=する／false=しない）
+      auto-commit: true
+      # connection Poolで維持する最小限のconnection数
+      connection-init-sql: SELECT 1
+      # ※connectionが接続される時のtimeout out時間
+      connection-timeout: 30000
+      # ※connection Poolによって確保されたconnectionの最大アイドル時間
+      idle-timeout: 600000
+      # connection Poolによって確保されたconnectionの最大Life Time
+      max-lifetime: 1800000
+      # connection Poolで使用する最大のconnection数
+      maximum-pool-size: 35
+      # connection Poolで維持する最小限のconnection数
+      minimum-idle: 1
+      # 読み取り専用モードでオープンするか否か（true=する／false=しない）
+      read-only: false
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${POSTGRESQL_PORT:5432}/${POSTGRESQL_NAME:hclabo_product}
+    username: ${POSTGRESQL_USER:hclabo_product}
+    password: ${POSTGRESQL_PASS:password}
+  # Rabbit MQ config
+  rabbitmq:
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+    host: ${DATABASE_HOST:localhost}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:}
+    port: ${RABBITMQ_PORT:5672}
+  sleuth:
+    async:
+      enabled: false
+    enabled: true
+    sampler:
+      probability: 1.0
+      rate: 10
+  # Zipkin（分散ログトレーシングのツール）の導入
+  zipkin:
+    enabled: false
+    base-url: http://host.docker.internal:9411/
+    sender:
+      type: web
+# Spring Boot Actuator の必要なプロパティ定義
+# デフォルトで/infoと/healthしか公開されない
+# すべてのエンドポイントを公開したい場合、以下の設定が必要
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+########### Spring設定 ###########
+###########データソース関連設定 ###########
+# Doma用設定
+doma:
+  dialect: postgres
+  fetch-size: 100
+  sql-file-repository: NO_CACHE
+###########データソース関連設定 ###########
+########### HIT-MALL独自設定 ###########
+#
+# 各サービスのベースパス定義
+#
+# 分析サービス
+base-path-analytics-service: ${BASE_PATH_ANALYTICS_SERVICE}
+# 物流サービス
+base-path-logistic-service: ${BASE_PATH_LOGISTIC_SERVICE}
+# 商品サービス
+base-path-product-service: ${BASE_PATH_PRODUCT_SERVICE}
+# ユーザーサービス
+base-path-user-service: ${BASE_PATH_USER_SERVICE}
+# 兵庫臨床カスタマイズサービス
+base-path-customize-service: ${BASE_PATH_CUSTOMIZE_SERVICE}
+queue:
+  # 商品画像更新
+  imageupdate:
+    direct: product-image-update-direct
+    routing: product-image-update-routing
+  # 人気商品ランキング集計バッチ
+  productPopularityTotalingBatch:
+    direct: product-popularity-totaling-batch-direct
+    routing: product-popularity-totaling-batch-routing
+  # 商品登録非同期
+  registasynchronous:
+    direct: product-regist-asynchronous-direct
+    routing: product-regist-asynchronous-routing
+  # 在庫状況確認メール送信
+  stockreport:
+    direct: product-stock-report-direct
+    routing: product-stock-report-routing
+  # 商品グループ在庫状態更新
+  stockstatusdisplayupdate:
+    direct: product-stock-display-direct
+    routing: product-stock-display-routing
+  # カテゴリ商品更新
+  syncUpdateCategoryProductBatch:
+    direct: sync-update-category-product-batch-direct
+    routing: sync-update-category-product-batch-routing
+  # 商品在庫表示テーブルアップサート非同期
+  syncUpsertGoodsStockDisplay:
+    direct: sync-upsert-goods-stock-display-direct
+    routing: sync-upsert-goods-stock-display-routing
+  # タグクリアバッチ
+  tagClear:
+    direct: product-tag-clear-direct
+    routing: product-tag-clear-routing
+#
+# Log用プロパティファイル
+#
+logging:
+  config: classpath:config/hitmall/log/logback-pr.xml
+product:
+  # 人気商品ランキング集計期間(何か月前から集計するか)
+  popularity:
+    period:
+      from:
+        month: -1
+  ## クリア基準日時
+  tags:
+    clear: 60
+#
+# batch-pc用 本番環境用設定ファイル
+#
+#
+# ショップ識別子
+#
+shopId: 'hitmall4'
+# テンプ相対パス(HTMLで表示する場合に利用)
+tmp:
+  path: /tmp
+## トップカテゴリID
+category:
+  id:
+    top: top
+# 関連商品最大設定数
+goods:
+  relation:
+    amount: 10
+goodsimage:
+  directory:
+    uri: https://minken.hc-labo.co.jp/g_images
+  csv:
+    # CSV出力用backup ディレクトリ
+    # 処理結果のCSVをバックアップするディレクトリ（クリーンバッチにも設定する。）
+    backup:
+      directory: /app/common/backup/g_imagesUpdate
+    # CSV出力用backup ディレクトリ
+    # 処理結果のCSVをバックアップするディレクトリ（クリーンバッチにも設定する。）
+    work:
+      directory: /app/common/work/g_imagesUpdate
+  # デザイン画像アップロード先絶対パス(ZIP画像ファイルアップロードの場合に利用)
+  d_images:
+    directory: /app/public_html/d_images
+  # errorディレクトリ
+  error:
+    directory: /app/common/g_images_input/error
+  # 商品画像アップロード先絶対パス(ZIP画像ファイルアップロードの場合に利用)
+  input:
+    directory: /app/common/g_images_input
+  max:
+    count: 10
+images:
+  path:
+    # カテゴリ画像相対パス(HTMLで表示する場合に利用)
+    category: /d_images/category
+    # 商品画像相対パス(HTML, JSONで表示する場合に利用)
+    goods: /g_images
+# 商品画像絶対パス(画像を配置する場合に利用)
+real:
+  images:
+    path:
+      goods: /app/public_html/g_images
+##カテゴリ 条件値の最大件数
+auto:
+  category:
+    condition:
+      items:
+        length: 60
+# 非同期処理対象ファイル出力パス
+batch:
+  file:
+    path: /app/common/tmp
+########### HIT-MALL独自設定 ###########

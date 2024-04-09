@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="ja">
+<head>
+	<meta th:replace="~{include/head}" />
+
+	<script type="text/javascript" th:src="@{/assets/js/jquery-ui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/ajaxcartadd.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/goodsIcon.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+jQuery(function($){
+
+	//ajaxcartadd.js用 初期化処理
+	ACTION_METHOD_ADD_CART = "/ajaxCartAdd";
+	TIME_OUT = 30000;
+	ERROR_PAGE_URL = /*[[@{/error}]]*/;
+	// ロード完了前にカート追加ボタンを押下した場合、Ajaxリクエストが出来ず、ボタンが非活性のままになるケース対応
+	allowClick();
+
+	// カート追加成功ダイアログの初期設定
+	$("#cartMessage").dialog({
+		title		: false,
+		bgiframe	: true,
+		autoOpen	: false,
+		dialogClass: 'TitleDialog',
+		height		: 'auto',
+		width		: 600,
+		modal		: true,
+		draggable	: true,
+		closeText	: '',
+		close		: false,
+		resizable	: false,
+		position  : {
+			my: 'top',
+			at: 'top+50'
+		},
+		close             : function(event) {
+			$("#keepShopping").click();
+		}
+	});
+
+	$('[data-target="modal-delete"]').click(function() {
+		var goodsGroupName = $(this).data('ggn');
+		$('#modal-delete span:first').text(goodsGroupName);
+		var gcd = $(this).data('gcd');
+		var pnum= $(this).data('pnum');
+		var url = '/member/wishlist/?gcd=' + encodeURIComponent(gcd) + '&pnum=' + encodeURIComponent(pnum) + '&md=d';
+		$('#modal-delete a:first').attr("href",url);
+  });
+});
+function dialogClose() {
+	$("#cartMessage").dialog("close");
+}
+</script>
+</head>
+
+<body id="gotop" class="p-mypage">
+<div class="l-mainwrap">
+	<div th:replace="~{include/header}"></div>
+	<!-- main -->
+	<main class="l-page l-head__pattern1">
+		<div th:replace="~{include/header_mypage::headermypage('wishlist')}"></div>
+
+		<div class="l-container">
+			<div class="l-container__inner">
+				<div th:replace="~{include/sidemenumember :: sidemenumember('wishlist')}"></div>
+
+				<div class="l-main" th:object="${memberWishlistModel}">
+					<h2 class="c-title-page p-mypage__title-page"><strong>お気に入り</strong></h2>
+					<div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'c-global-error c-global-error--margin-m'}">
+						<ul th:each="message : ${allMessages}">
+							<li th:utext="${message}"></li>
+						</ul>
+					</div>
+
+					<div id="errorMessages" class="c-global-error c-global-error--margin-m" style="display: none"></div>
+
+					<th:block id="isNotWishlistEmpty" th:if="*{!isWishlistEmpty()}">
+						<div class="p-mypage__favorite-list">
+							<p class="c-text--m">お気に入り商品を登録して、いつでも簡単に一覧でチェックできます。</p>
+							<div class="c-product c-product--orderlist c-margin--m">
+								<th:block id="wishlistItems" th:each="item : *{wishlistItems}" >
+									<!--/* 販売中 */-->
+									<th:block id="isGoodsOpen" th:if="${item.isGoodsOpen()}">
+										<div class="c-product__item"><div class="c-product__item-inner">
+											<div class="c-product__item-image">
+												<a th:href="@{/goods/detail(gcd=${item.gcd})}">
+													<img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="180" width="180" decoding="async" loading="lazy">
+												</a>
+											</div>
+											<div class="c-product__item-overview">
+												<div class="c-product__item-group">
+													<div class="c-product__item-description">
+														<div class="c-product__item-icon">
+															<th:block th:if="${item.isNewDate()}">
+																<span style="background: #F5AF24; color: #ffffff;">NEW</span>
+															</th:block>
+															<th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+																<span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+															</th:block>
+														</div>
+														<div class="c-product__item-title"><a th:href="@{/goods/detail(gcd=${item.gcd})}" th:text="${item.goodsGroupName}"></a></div>
+														<div class="c-product__item-text">
+															<th:block id="isUnit1" th:if="${item.isUnit1()}"><span th:remove="tag" th:text="${item.unitTitle1} + ' : ' + ${item.unitValue1}"></span></th:block>
+															<br>
+															<th:block id="isUnit2" th:if="${item.isUnit2()}"><span th:remove="tag" th:text="${item.unitTitle2} + ' : ' + ${item.unitValue2}"></span></th:block>
+														</div>
+														<div class="c-product__item-price">
+															<div class="c-product__item-price-unit"><span th:remove="tag" th:text="(${#number.convert(item.goodsPriceInTax)})"></span><span>円 (税込)</span></div>
+														</div>
+														<!-- TODO:いずれか当てはまる場合だけタグを出せるように -->
+														<div class="c-product__item-stock" th:if="${item.isStockNoOpenIconDisp()} or ${item.isStockOpenEndIconDisp()} or ${item.isStockBeforeOpenIconDisp()} or ${item.isStockNoSaleIconDisp()} or ${item.isStockSoldOutIconDisp()} or ${item.isStockBeforeSaleIconDisp()} or ${item.isStockNoStockIconDisp()} or ${item.isStockFewIconDisp()}">
+															<!--/* 非公開 */-->
+															<th:block id="isStockNoOpenIconDisp" th:if="${item.isStockNoOpenIconDisp()}"><p class="font-format__status u-mb15">取り扱っておりません</p></th:block>
+															<!--/* 公開期間終了 */-->
+															<th:block id="isStockOpenEndIconDisp" th:if="${item.isStockOpenEndIconDisp()}"><p class="font-format__status u-mb15">取扱終了しました</p></th:block>
+															<!--/* 公開前 */-->
+															<th:block id="isStockBeforeOpenIconDisp" th:if="${item.isStockBeforeOpenIconDisp()}"><p class="font-format__status u-mb15">取扱開始前</p></th:block>
+															<!--/* 非販売 */-->
+															<th:block id="isStockNoSaleIconDisp" th:if="${item.isStockNoSaleIconDisp()}"><p class="font-format__status u-mb15">販売しておりません</p></th:block>
+															<!--/* 販売期間終了 */-->
+															<th:block id="isStockSoldOutIconDisp" th:if="${item.isStockSoldOutIconDisp()}"><p class="font-format__status u-mb15">販売終了しました</p></th:block>
+															<!--/* 販売前 */-->
+															<th:block id="isStockBeforeSaleIconDisp" th:if="${item.isStockBeforeSaleIconDisp()}"><p class="font-format__status u-mb15">販売開始前</p></th:block>
+															<!--/* 在庫切れ */-->
+															<th:block id="isStockNoStockIconDisp" th:if="${item.isStockNoStockIconDisp()}"><p class="font-format__status u-mb15">完売しました</p></th:block>
+															<!--/* 残りわずか */-->
+															<th:block id="isStockFewIconDisp" th:if="${item.isStockFewIconDisp()}"><p class="font-format__status--red u-mb15">残りわずか</p></th:block>
+															<!--/* 在庫あり コメント化
+                                                            表示させたい場合は、コメントを解除してください。
+                                                            <th:block id="isStockPossibleSalesIconDisp"  th:if="${item.isStockPossibleSalesIconDisp()}">在庫あり</th:block>
+                                                             */-->
+														</div>
+													</div>
+													<form th:action="@{/member/wishlist/}" method="POST">
+														<div class="c-product__item-state p-mypage__favorite-button">
+															<th:block id="isViewCartIn" th:if="${item.isViewCartIn()}">
+																<div class="c-product__item-button">
+																	<button type="button" class="c-button c-button--primary c-button--width-s js-modal" onclick="ajaxCartAddWishlist(this);return false;" data-target="modal-cart">
+																		カートに入れる
+																		<input type="hidden" id="gcd" th:value="${item.gcd}" />
+																		<input type="hidden" id="gcnt" value="1" />
+																		<input type="hidden" id="ggname" th:value="${item.goodsGroupName}" />
+																	</button>
+																</div>
+															</th:block>
+															<button type="submit" class="c-textlink c-textlink--delete2 js-modal" data-target="modal-delete" th:data-gcd="${item.gcd}" th:data-ggn="${item.goodsGroupName}" th:data-pnum="${pageInfo.pnum}"><p>削除</p></button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div></div>
+									</th:block>
+
+									<!--/* 非販売（商品詳細不可） */-->
+									<th:block id="isNotGoodsOpen" th:if="${!item.isGoodsOpen()}">
+										<div class="c-product__item"><div class="c-product__item-inner">
+											<div class="c-product__item-image">
+												<img th:src="@{${#image.convert(item.goodsImageItems, 0, 'p1')}}" th:attr="srcset=${#image.convert(item.goodsImageItems, 0, 'p1x2')} + ' 2x'" th:alt="${item.goodsGroupName}" height="180" width="180" decoding="async" loading="lazy">
+											</div>
+											<div class="c-product__item-overview">
+												<div class="c-product__item-group">
+													<div class="c-product__item-description">
+														<div class="c-product__item-icon">
+															<th:block th:if="${item.isNewDate()}">
+																<span style="background: #F5AF24; color: #ffffff;">NEW</span>
+															</th:block>
+															<th:block th:each="goodsIconItem : ${item.goodsIconItems}">
+																<span name="iconDisp" th:style="|background-color: ${goodsIconItem.iconColorCode}|" th:text="${goodsIconItem.iconName}"></span>
+															</th:block>
+														</div>
+														<div class="c-product__item-title"><span th:remove="tag" th:text="${item.goodsGroupName}"></span></div>
+														<div class="c-product__item-text">
+															<th:block id="isUnit1" th:if="${item.isUnit1()}"><span th:remove="tag" th:text="${item.unitTitle1} + ' : ' + ${item.unitValue1}"></span></th:block>
+															<br>
+															<th:block id="isUnit2" th:if="${item.isUnit2()}"><span th:remove="tag" th:text="${item.unitTitle2} + ' : ' + ${item.unitValue2}"></span></th:block>
+														</div>
+														<div class="c-product__item-price">
+															<div class="c-product__item-price-unit">
+																<span th:remove="tag" th:text="(${#number.convert(item.goodsPriceInTax)})"></span><span>円 (税込)</span>
+															</div>
+														</div>
+														<div class="c-product__item-stock" th:if="${item.isStockNoOpenIconDisp()} or ${item.isStockOpenEndIconDisp()} or ${item.isStockBeforeOpenIconDisp()} or ${item.isStockNoSaleIconDisp()} or ${item.isStockSoldOutIconDisp()} or ${item.isStockBeforeSaleIconDisp()} or ${item.isStockNoStockIconDisp()} or ${item.isStockFewIconDisp()}">
+															<!--/* 非公開 */-->
+															<th:block id="isStockNoOpenIconDisp" th:if="${item.isStockNoOpenIconDisp()}"><p class="font-format__status u-mb15">取り扱っておりません</p></th:block>
+															<!--/* 公開期間終了 */-->
+															<th:block id="isStockOpenEndIconDisp" th:if="${item.isStockOpenEndIconDisp()}"><p class="font-format__status u-mb15">取扱終了しました</p></th:block>
+															<!--/* 公開前 */-->
+															<th:block id="isStockBeforeOpenIconDisp" th:if="${item.isStockBeforeOpenIconDisp()}"><p class="font-format__status u-mb15">取扱開始前</p></th:block>
+															<!--/* 非販売 */-->
+															<th:block id="isStockNoSaleIconDisp" th:if="${item.isStockNoSaleIconDisp()}"><p class="font-format__status u-mb15">販売しておりません</p></th:block>
+															<!--/* 販売期間終了 */-->
+															<th:block id="isStockSoldOutIconDisp" th:if="${item.isStockSoldOutIconDisp()}"><p class="font-format__status u-mb15">販売終了しました</p></th:block>
+															<!--/* 販売前 */-->
+															<th:block id="isStockBeforeSaleIconDisp" th:if="${item.isStockBeforeSaleIconDisp()}"><p class="font-format__status u-mb15">販売開始前</p></th:block>
+															<!--/* 在庫切れ */-->
+															<th:block id="isStockNoStockIconDisp" th:if="${item.isStockNoStockIconDisp()}"><p class="font-format__status u-mb15">完売しました</p></th:block>
+															<!--/* 残りわずか */-->
+															<th:block id="isStockFewIconDisp" th:if="${item.isStockFewIconDisp()}"><p class="font-format__status--red u-mb15">残りわずか</p></th:block>
+															<!--/* 在庫あり コメント化
+															表示させたい場合は、コメントを解除してください。
+															<th:block id="isStockPossibleSalesIconDisp"  th:if="${item.isStockPossibleSalesIconDisp()}">在庫あり</th:block>
+															 */-->
+														</div>
+													</div>
+													<form th:action="@{/member/wishlist/}" method="POST">
+														<div class="c-product__item-state p-mypage__favorite-button">
+															<button type="submit" class="c-textlink c-textlink--delete2 js-modal" data-target="modal-delete" th:data-gcd="${item.gcd}" th:data-ggn="${item.goodsGroupName}" th:data-pnum="${pageInfo.pnum}"><p>削除</p></button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div></div>
+									</th:block>
+								</th:block>
+							</div>
+							<div class="p-search__count">全 <span class="p-search__count-sum" th:text="*{pageInfo.total}"></span> 商品</div>
+							<span class="c-pagination--page is-current" th:replace="~{include/pager::pager1(url='/member/wishlist/')}"></span>
+						</div>
+						<div style="display: none">
+							<span type="text" class="goods_lst" th:each="item : *{wishlistItems}" th:text="${item.gcd + ',' + item.goodsSeq}"></span>
+						</div>
+					</th:block>
+
+					<th:block th:if="*{isWishlistEmpty()}">
+						<div class="l-complete">
+							<div class="l-complete__inner">
+								<p class="l-complete__title">お気に入りの登録がありません。</p>
+							</div>
+						</div>
+					</th:block>
+
+				</div>
+			</div>
+		</div>
+	</main>
+	<!--/* カート追加ダイアログ */-->
+	<div id="modal-cart" class="c-modal">
+		<div class="c-modal__overlay js-modal-close">
+			<div class="c-modal__contents c-modal__contents--alert">
+				<div>
+					<p class="c-text--l">カートに「<strong><span id="cartMessageGoodsName"></span></strong>」を追加しました。</p>
+					<p class="c-text--m c-margin--xs">商品はまだ確保されていません。<br>お早めにご注文手続きをお済ませ下さい。</p>
+					<div class="c-modal__button c-margin--s">
+						<a th:href="@{/cart/}" class="c-button c-button--primary c-button--width-m" id="goCartPage2">ご購入手続きへ</a>
+					</div>
+					<a href="" class="c-textlink c-textlink--left c-text--size-s js-modal-close c-margin--s"><p>お買い物を続ける</p></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal-delete" class="c-modal">
+		<div class="c-modal__overlay js-modal-close">
+			<div class="c-modal__contents c-modal__contents--alert">
+				<div>
+					<p class="c-text--l">「<strong><span th:text="${goodsGroupName}"></span></strong>」を削除しますか？</p>
+					<div class="c-modal__button c-margin--s">
+						<a href="" class="c-button c-button--primary c-button--width-m">はい</a>
+						<a href="" class="c-button c-button--primary-line c-button--width-m js-modal-close">いいえ</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{include/footer}" ></div>
+</div>
+<script src="/assets/js/bundle.js" defer="defer"></script>
+
+
+</body></html>

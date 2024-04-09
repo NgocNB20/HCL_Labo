@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:hm="http://www.itec.hankyu-hanshin.co.jp/hitmall"
+      lang="ja">
+<head>
+    <meta th:replace="~{include/head}" />
+    <title>検査キット受領登録｜受注管理</title>
+    <script type="text/javascript" th:src="@{/assets/js/multiTab.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery-confirm.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/jquery-confirm.min.css}">
+</head>
+
+<body id="order">
+<div id="examkitreceivedupload" class="l-mainwrap">
+    <div th:replace="~{include/sidemenu}"></div>
+    <main class="l-page">
+        <div th:replace="~{include/header}"></div>
+        <div class="l-container">
+            <!-- contents -->
+            <div class="l-main">
+                <form enctype="multipart/form-data" th:action="@{/order/examkitReceivedUpload/}" th:object="${examkitReceivedUploadModel}" method="post" onsubmit="return errorCheckOnclickConfirmButton();">
+                    <div class="l-pagetitle_wrap">
+                        <h1 class="c-pagetitle_h1">検査キット受領登録</h1>
+                    </div>
+                    <div th:if="${allMessages}" th:class="${allMessages.allInfo()?'global-info-message':'global-error-message'}">
+                        <ul th:each="message : ${allMessages}">
+                            <li th:utext="${message}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="l-section" id="mainContainer">
+                        <article class="l-article">
+                            <div class="l-article_title">
+                                <h2 class="c-pagetitle_h3">アップロードする検査キット受領登録CSV</h2>
+                                <div class="c-open-btn"><i></i></div>
+                            </div>
+                            <div class="l-article_inner">
+                                <div class="l-inner_wrap">
+                                    <div class="c-detail-warp search_data_smp wrap">
+                                        <dl class="mr0">
+                                            <dt>検査キット受領登録データ</dt>
+                                            <dd>
+                                                <div class="wrap_flex_center fileinputs">
+                                                    <input type="file" accept=".csv" id="registUploadFile" name="registUploadFile" th:value="*{registUploadFile}" class="c-form-control w625px mr10 file" title="検査キット受領登録データ" onchange="uploadfileViewPath(this.id, this.value);" />
+                                                    <div class="fakefile">
+                                                        <input type="text" name="registUploadFile_path" class="c-input-file" th:classappend="${#fields.hasErrors('registUploadFile')}?'error':''"/>
+                                                        <button class="c-btn-small_over mr20" type="button">参照</button>
+                                                    </div>
+                                                </div>
+                                                <div id="registUploadFileError" th:if="${#fields.hasErrors('registUploadFile')}" th:errors="*{registUploadFile}" class="c-error-txt mt5"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <input type="hidden" id="isOnceUploadBtnClicked" value="false"/>
+                                    <button class="c-btn btn_back icon mt30" type="submit" id="doOnceFileUpload" name="doOnceFileUpload"><i class="c-btn-icon upload"></i>アップロード</button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="l-pagebtn-nav">
+                        <div class="l-pagebtn-nav_inner">
+                            <div class="c-back">
+                                <button type="submit" class="c-btn btn_back icon_left" name="doReturn" ><i class="material-icons navigate_before"></i>戻る</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- footer -->
+        <div th:replace="~{include/footer}"></div>
+    </main>
+</div>
+</body>
+</html>

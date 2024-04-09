@@ -1,0 +1,130 @@
+@charset "utf-8";
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+
+.c-text {
+
+  //font-size 12px
+  &--xxs {
+    @include font-style(12,24);
+
+    @include media(sm) {
+      @include font-sp-style(12,24);
+    }
+  }
+
+  //font-size 14px / 13px
+  &--xs {
+    @include font-style(14,26);
+
+    @include media(sm) {
+      @include font-sp-style(13,26);
+    }
+  }
+
+  //font-size 15px / 14px
+  &--s {
+    @include font-style(15,30);
+
+    @include media(sm) {
+      @include font-sp-style(14,28);
+    }
+  }
+
+  //font-size 16px / 15px
+  &--m {
+    @include font-style(16,32);
+
+    @include media(sm) {
+      @include font-sp-style(15,30);
+    }
+  }
+
+  //font-size 18px / 17px
+  &--l {
+    @include font-style(18,34);
+
+    @include media(sm) {
+      @include font-sp-style(17,32);
+    }
+
+  }
+
+  // only font-size  15px / 14px
+  &--size-s {
+    @include font-style(15);
+    @include media(sm) {
+      @include font-sp-style(14);
+    }
+  }
+
+  // PC/SP 右寄せ
+  &--left {
+    text-align: left !important;
+  }
+
+  // PC/SP 右寄せ
+  &--right {
+    text-align: right !important;
+  }
+
+  // PC/SP 中央寄せ
+  &--center {
+    text-align: center !important;
+  }
+
+  // 警告文 赤文字
+  &--note {
+    color: $color-f00;
+  }
+
+  // 警告文 赤文字L
+  &--note-l {
+    color: $color-f00;
+    @include font-style(18,34,500);
+    @include letterSpacing(50);
+
+    @include media(sm) {
+      @include font-style(16,28);
+    }
+  }
+
+  // 注意書き エリア&テキスト
+
+  &--caution {
+
+    background-color: $color-orange-lightGray;
+    padding: 30px;
+
+    strong {
+      color: $color-f00;
+      display: block;
+      @include font-style(16,32,500);
+      @include letterSpacing(50);
+    }
+
+    p {
+      @include font-style(15,30);
+      @include letterSpacing(50);
+      margin-top: 10px;
+    }
+
+    @include media(sm) {
+      padding: vwset(25) vwset(20);
+
+      strong {
+        @include font-style(14, 26, 300);
+      }
+
+      p {
+        @include font-style(13);
+        line-height: 1.8;
+        @include letterSpacing(100);
+        margin-top: vwset(13);
+      }
+    }
+  }
+
+
+}

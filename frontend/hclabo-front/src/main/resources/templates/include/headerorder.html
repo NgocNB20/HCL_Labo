@@ -1,0 +1,31 @@
+<th:block id="header_order" th:fragment="headerorder(screen)">
+    <div class="c-step">
+        <div class="c-step__list">
+            <span th:class="${'c-step__item ' + ((screen eq 'cart') ? 'is-finished' : '')}">ショッピングカート</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'sender') ? 'is-finished' : '')}">お客様情報入力</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'receiver') ? 'is-finished' : '')}">お届け先入力</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'delivery') ? 'is-finished' : '')}">配送方法選択</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'payment') ? 'is-finished' : '')}">お支払い方法選択</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'confirm') ? 'is-finished' : '')}">ご注文内容確認</span>
+            <svg viewBox="0 0 10.1 18.2" style="fill:#a0a0a0;">
+                <use th:attr="'xlink:href'=@{/assets/images/icon/arrow-right.svg#arrow-right}"></use>
+            </svg>
+            <span th:class="${'c-step__item ' + ((screen eq 'complete') ? 'is-finished' : '')}">ご注文完了</span>
+        </div>
+    </div>
+</th:block>

@@ -1,0 +1,703 @@
+@charset "UTF-8";
+
+/*-----------------------------------------------------------
+index:
+	Tags
+	Button
+	Folder Tree
+	Carender
+-----------------------------------------------------------*/
+
+/* Tags
+---------------------------------------------------- */
+input,
+select,
+option {
+	font-size: 12px;
+}
+textarea {
+	font-size: 12px;
+}
+input.w20 {
+	width: 20px;
+}
+input.w30 {
+	width: 30px;
+}
+input.w40 {
+	width: 40px;
+}
+input.w45 {
+	width: 45px;
+}
+input.w50 {
+	width: 50px;
+}
+input.w60 {
+	width: 60px;
+}
+input.w70 {
+	width: 70px;
+}
+input.w80 {
+	width: 80px;
+}
+input.w100 {
+	width: 100px;
+}
+input.w110 {
+	width: 110px;
+}
+input.w120 {
+	width: 120px;
+}
+input.w130 {
+	width: 130px;
+}
+input.w140 {
+	width: 140px;
+
+}
+input.w150 {
+	width: 150px;
+}
+input.w160 {
+	width: 160px;
+}
+input.w180 {
+	width: 180px;
+}
+input.w200 {
+	width: 200px;
+}
+input.w250 {
+	width: 250px;
+}
+input.w300 {
+	width: 300px;
+}
+input.w400 {
+	width: 400px;
+}
+input.w500 {
+	width: 500px;
+}
+input.w600 {
+	width: 600px;
+}
+/* IE8、9 対応 */
+input[type="text"][disabled]{
+  background-color: #dcdcdc !important;
+  color: #808080 !important;
+}
+
+textarea.w80 {
+	width: 80px;
+}
+textarea.w100 {
+	width: 100px;
+}
+textarea.w200 {
+	width: 200px;
+}
+textarea.w300 {
+	width: 300px;
+}
+textarea.w400 {
+	width: 400px;
+}
+textarea.w500 {
+	width: 500px;
+}
+textarea.w600 {
+	width: 600px;
+}
+input.textField,
+textarea.textField,
+input.file {
+	padding: 3px;
+	border: 1px solid #888888;
+}
+p.notice {
+	margin: 10px 0;
+	font-weight: bold;
+}
+#table dl.form {
+	padding: 0.3em 0 0 0;
+	margin: 0 0 0 0;
+}
+#container dl.form dt {
+	float: left;
+	width: 4.3em;
+	padding: 0.5em 0 0 0;
+	margin: 0;
+	color: #333;
+}
+#container dl.form dd {
+	padding: 0.1em 0em;
+	margin: 0 0 0 4.5em;
+}
+#container dl.layout2 dt {
+	width: 4.2em;
+}
+#container dl.layout2 dd {
+	margin: 0 0 0 4.4em;
+}
+#container dl.form dt,
+#container dl.form dd,
+#container label {
+	font-size: 12px;
+}
+
+
+/* font
+---------------------------------------------------- */
+.must {
+	font-weight: bold;
+	color: #990000;
+}
+
+.discount {
+	font-weight: bold;
+	color: #990000;
+}
+
+
+/* Button
+---------------------------------------------------- */
+.buttons1 {
+	padding: 15px 0;
+	margin-top: 30px;
+	text-align: center;
+	background: #E2EAF0;
+}
+.buttons1 input {
+	margin: 0 10px !important;
+}
+.buttons2 {
+	padding: 15px 20px;
+	background: #B1C9D7;
+}
+.buttons2 .next {
+	display: inline;
+	float: right;
+}
+.buttons3 {
+	padding: 15px 20px;
+	background: #B1C9D7;
+	text-align: center;
+}
+.buttons4 {
+	padding: 15px 20px;
+	background: #B1C9D7;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+/* ZipCode Search Button
+---------------------------------------------------- */
+input.postCode
+{
+	border-bottom: 0px;
+	border-left: 0px;
+	text-indent: -9999px;
+	width: 41px;
+	background: url(@app.complement.url@/images/button/search3.gif) no-repeat center center;
+	height: 23px;
+	border-top: 0px;
+	cursor: pointer;
+	border-right: 0px;
+}
+
+
+/* File Reference Button
+---------------------------------------------------- */
+div.fileinputs {
+	position: relative;
+}
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 11;
+}
+input.file {
+	width: 255px;
+	position: relative;
+	text-align: right;
+	-moz-opacity:0;
+	filter:alpha(opacity);
+	opacity: 0;
+	z-index: 12;
+}
+
+
+/* Modified
+---------------------------------------------------- */
+span.modified {
+	color: #FF0000 !important;
+}
+img.modified {
+	border: 3px solid #FF0000 !important;
+}
+
+/* Folder Tree
+---------------------------------------------------- */
+.treeview,
+.treeview ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.treeview ul {
+	margin-top: 4px;
+	background-color: white;
+}
+.treeview li {
+	padding: 0 0 0 20px;
+	margin: 0;
+	font-size: 11px;
+}
+.treeview a.selected {
+	background-color: #eee;
+}
+#treecontrol {
+	margin: 1em 0;
+	display: none;
+}
+.treeview .hover {
+	background-color: #BBDDFF !important;
+	cursor: pointer;
+}
+.treeview li.collapsable,
+.treeview li.expandable {
+	background-position: 0 -176px;
+}
+.treeview .expandable-hitarea {
+	background-position: -80px -3px;
+}
+.treeview li.last {
+	background-position: 0 -1766px
+}
+.treeview li.lastCollapsable, .treeview li.lastExpandable {
+	background-image: url(@app.complement.url@/images/icon/treeview-default.gif);
+}
+.treeview li.lastCollapsable {
+	background-position: 0 -111px;
+}
+.treeview li.lastExpandable {
+	background-position: -32px -67px;
+}
+.treeview div.lastCollapsable-hitarea,
+.treeview div.lastExpandable-hitarea {
+	background-position: 0;
+}
+.filetree li {
+	padding: 0 0 0 20px;
+	line-height: 18px;
+}
+.filetree span.folder,
+.filetree span.file {
+	padding: 1px 0 1px 20px;
+	display: block;
+}
+.filetree span.folder {
+	background: url(@app.complement.url@/images/icon/tree_dir_o.png) 0 0 no-repeat;
+}
+.filetree li.expandable span.folder {
+	background: url(@app.complement.url@/images/icon/tree_dir.png) 0 0 no-repeat;
+}
+.filetree span.file {
+	background: url(@app.complement.url@/images/icon/tree_file.png) 0 0 no-repeat;
+}
+/*
+---------------------------------------------------- */
+.ui-draggable {
+	z-index: 100;
+}
+
+.LB_overlay {
+	z-index: 110;
+}
+.LB_window {
+	z-index: 111;
+}
+
+/* Calender
+---------------------------------------------------- */
+/* Main Style Sheet for jQuery UI date picker */
+#ui-datepicker-div,
+.ui-datepicker-inline {
+	width: 200px;
+	padding: 0;
+	margin: 0;
+	font-size: 12px;
+	background: #ddd;
+}
+#ui-datepicker-div {
+	d\\isplay: none;
+	border: 1px solid #999999;
+	z-index: 100; /*must have*/
+}
+.ui-datepicker-inline {
+	float: left;
+	border: 0;
+	display: block;
+}
+.ui-datepicker-rtl {
+	direction: rtl;
+}
+.ui-datepicker-dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+.ui-datepicker-disabled {
+	position: absolute;
+	z-index: 100;
+	background-color: white;
+	opacity: 0.5;
+}
+button.ui-datepicker-trigger {
+	width: 25px;
+}
+img.ui-datepicker-trigger {
+	margin: 2px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.ui-datepicker-prompt {
+	float: left;
+	padding: 2px;
+	color: #000;
+	background: #ddd;
+}
+* html .ui-datepicker-prompt {
+	width: 185px;
+}
+.ui-datepicker-control,
+.ui-datepicker-links,
+.ui-datepicker-header,
+.ui-datepicker {
+	float: left;
+	clear: both;
+	width: 100%;
+	color: #000000;
+}
+.ui-datepicker-control {
+	padding: 2px 0px;
+	background: #EEF4F9;
+}
+.ui-datepicker-links {
+	padding: 2px 0px;
+	background: #B1C9D7;
+}
+.ui-datepicker-control,
+.ui-datepicker-links {
+	font-size: 80%;
+	font-weight: bold;
+}
+.ui-datepicker-links label { /* disabled links */
+	padding: 2px 5px;
+	color: #888;
+}
+.ui-datepicker-clear,
+.ui-datepicker-prev {
+	float: left;
+	width: 34%;
+}
+.ui-datepicker-rtl .ui-datepicker-clear,
+.ui-datepicker-rtl .ui-datepicker-prev {
+	float: right;
+	text-align: right;
+}
+.ui-datepicker-current {
+	float: left;
+	width: 30%;
+	text-align: center;
+}
+.ui-datepicker-close,
+.ui-datepicker-next {
+	float: right;
+	width: 34%;
+	text-align: right;
+}
+.ui-datepicker-rtl .ui-datepicker-close,
+.ui-datepicker-rtl .ui-datepicker-next {
+	float: left;
+	text-align: left;
+}
+.ui-datepicker-header {
+	height: 1.3em;
+	padding: 1px 0 3px;
+	font-weight: bold;
+	text-align: center;
+	background: #EEF4F9;
+}
+.ui-datepicker-header select,
+.ui-datepicker-header select option {
+	border: 0px;
+	font-weight: bold;
+	color: #333333;
+	background: #EEF4F9;
+}
+.ui-datepicker {
+	font-size: 100%;
+	text-align: center;
+	background: #ccc;
+}
+.ui-datepicker th,
+.ui-datepicker td {
+	padding: 2px 5px;
+}
+.ui-datepicker a {
+	width: 100%;
+	display: block;
+}
+.ui-datepicker-title-row {
+	background: #777;
+}
+.ui-datepicker-days-row {
+	color: #666;
+	background: #eee;
+}
+.ui-datepicker-week-col {
+	color: #FFFFFF;
+	background: #777;
+}
+.ui-datepicker-days-cell {
+	border: 1px solid #ddd;
+	color: #000;
+}
+.ui-datepicker-days-cell a {
+	display: block;
+}
+.ui-datepicker-week-end-cell {
+	background: #ddd;
+}
+.ui-datepicker-title-row
+.ui-datepicker-week-end-cell {
+	background: #777;
+}
+.ui-datepicker-days-cell-over {
+	border: 1px solid #999999;
+	background: #FFFFFF;
+}
+.ui-datepicker-unselectable {
+	color: #888;
+}
+.ui-datepicker-today {
+	background: #fcc !important;
+}
+.ui-datepicker-current-day {
+	background: #999 !important;
+}
+.ui-datepicker-status {
+	width: 100%;
+	font-size: 80%;
+	text-align: center;
+	background: #ddd;
+}
+/* ________ Datepicker Links _______
+** Reset link properties and then override them with !important */
+#ui-datepicker-div a, .ui-datepicker-inline a {
+	padding: 0;
+	margin: 0;
+	color: #000;
+	background: none;
+	cursor: pointer;
+}
+.ui-datepicker-inline .ui-datepicker-links a {
+	padding: 0 5px !important;
+}
+.ui-datepicker-control a,
+.ui-datepicker-links a {
+	padding: 2px 5px !important;
+	color: #000000 !important;
+}
+.ui-datepicker-title-row a {
+	color: #eee !important;
+}
+.ui-datepicker-control a:hover {
+	color: #333 !important;
+	background: #fdd !important;
+}
+.ui-datepicker-links a:hover,
+.ui-datepicker-title-row a:hover {
+	color: #333 !important;
+	background: #ddd !important;
+}
+/* ___________ MULTIPLE MONTHS _________*/
+.ui-datepicker-multi .ui-datepicker {
+	border: 1px solid #777;
+}
+.ui-datepicker-one-month {
+	float: left;
+	width: 185px;
+}
+.ui-datepicker-new-row {
+	clear: left;
+}
+/* ___________ IE6 IFRAME FIX ________ */
+.ui-datepicker-cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}
+
+td.w100 {
+	width: 100px;
+}
+
+div.settingInfo {
+    float:left;
+    margin-right:10px;
+}
+
+/* 日付補助ボタン */
+.targetDateStyle {
+    width:40px;
+    height:25px;
+    margin-bottom:5px;
+}
+
+/* ___________ PREVIEW MODAL WINDOW ________ */
+.previewButton input {
+	background-color:#F9F9F9;
+	line-height: 20px;
+	padding: 0 15px;
+}
+#previewScreen {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width:500px;
+	height:320px;
+	background-color:white;
+	border-radius:10px;
+	box-sizing:border-box;
+	border:1px solid #111111;
+	display:none;
+	z-index: 2;
+}
+#previewScreen h1 {
+	color:black;
+	font-size: 35px;
+	width: 84%;
+	height: 15%;
+	margin: 7% 8% 3% 8%;
+	line-height: normal;
+	text-align: left;
+	box-sizing: border-box;
+	border-bottom:2px solid #B1C9D7;
+}
+#previewTime {
+	width: 84%;
+	height: 50%;
+	margin: 0 8%;
+	border: #C9D9E3 solid 1px;
+	box-sizing:border-box;
+}
+#previewTime p {
+	width: 100%;
+	height: 33%;
+	text-align: initial;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	background-color:#F4F8FB;
+	font-size: 12px;
+    color: #27343C;
+    font-weight: bold;
+    position:relative;
+}
+#previewTime p #previewTimeError {
+	position:absolute;
+	bottom:0;
+	color:red;
+	font-size:10px;
+}
+#previewTime p:first-of-type {
+	background-color:#B1C9D7;
+}
+#previewTime input{
+	padding: 3px;
+	border: 1px solid #888888;
+	font-size: 12px;
+	width:100px;
+}
+#previewBg {
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background-color: rgba(0,0,0,0.1);
+	z-index: 1;
+}
+#previewClose{
+	width:70px;
+	height:70px;
+	position:absolute;
+	top:0;
+	right:0;
+	border-radius:50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#previewClose:hover{
+	cursor:pointer;
+}
+#previewClose span{
+	font-size:45px;
+}
+/* ___________ PREVIEW MODAL WINDOW TIMEPICKER ________ */
+#ui-timepicker-div{
+	background-color:#F4F8FB;
+	border:1px solid #C9D9E3;
+	box-sizing: border-box;
+}
+#ui-timepicker-div .ui-timepicker-title{
+	background-color:#B1C9D7 !important;
+    color: black;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.ui-timepicker-table td {
+    padding: 0.1em;
+    width: 2.2em;
+}
+.ui-state-default {
+    border: 1px solid #ccc;
+    background-color: #f6f6f6;
+    font-weight: bold;
+    color: #1c94c4;
+}
+.ui-state-default:hover {
+    border: 1px solid #fbcb09;
+    background: #fdf5ce ;
+    font-weight: bold;
+    color: #c77405;
+}
+.ui-timepicker-table td a {
+    display: block;
+    padding: 0.2em 0.3em 0.2em 0.5em;
+    width: 1.2em;
+    cursor: pointer;
+    text-align: right;
+    text-decoration: none;
+}
+.ui-timepicker .ui-timepicker-buttonpane {
+    margin:0!important;
+}
+.ui-timepicker .ui-timepicker-buttonpane button {
+    margin: .0em .2em!important;
+}

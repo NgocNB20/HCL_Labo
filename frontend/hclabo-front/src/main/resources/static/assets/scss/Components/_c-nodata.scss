@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+// ==========================================================================
+//  _c-error
+// ==========================================================================
+
+@use "../Foundation/variables" as *;
+@use "../Foundation/mixin" as *;
+@use "../Foundation/functions" as *;
+
+// c-nodata 商品がない場合
+// -----------------------------------------------------------------
+
+.c-nodata {
+  margin-block: 70px;
+  text-align: center;
+  @include font-style(20,38,500);
+
+  @include media(sm) {
+    margin: vwset(50) vwset(20);
+    @include font-style(18,36);
+
+
+  }
+}
